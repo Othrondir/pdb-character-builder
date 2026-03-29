@@ -35,7 +35,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 3 plans
 
 Plans:
-- [ ] 01-01: Freeze canonical schema, IDs, and source precedence
+- [x] 01-01: Freeze canonical schema, IDs, and source precedence
 - [ ] 01-02: Define dataset manifest, provenance, and override registry
 - [ ] 01-03: Define unsupported/conflict handling for ambiguous rules
 

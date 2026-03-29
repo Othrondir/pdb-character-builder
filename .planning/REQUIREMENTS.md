@@ -64,7 +64,7 @@
 - [ ] **VALI-01**: El planner bloquea builds ilegales en lugar de permitirlas con simples avisos.
 - [ ] **VALI-02**: El usuario recibe explicaciones precisas y legibles cuando una eleccion es invalida.
 - [ ] **VALI-03**: El planner recalcula automaticamente la build completa cuando cambia cualquier decision.
-- [ ] **VALI-04**: El planner evita marcar una build como valida cuando falten datos o exista conflicto entre fuentes de reglas.
+- [x] **VALI-04**: El planner evita marcar una build como valida cuando falten datos o exista conflicto entre fuentes de reglas.
 
 ### Resumen y comparticion
 
@@ -138,7 +138,7 @@
 | VALI-01 | Phase 7 | Pending |
 | VALI-02 | Phase 7 | Pending |
 | VALI-03 | Phase 7 | Pending |
-| VALI-04 | Phase 1 | Pending |
+| VALI-04 | Phase 1 | Complete |
 | SHAR-01 | Phase 8 | Pending |
 | SHAR-02 | Phase 8 | Pending |
 | SHAR-03 | Phase 8 | Pending |
