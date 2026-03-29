@@ -1,0 +1,15 @@
+{
+  "name": "nwn1-character-builder",
+  "private": true,
+  "packageManager": "pnpm@10.0.0",
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.base.json --noEmit",
+    "test": "vitest run",
+    "test:phase-01": "vitest run tests/phase-01 --reporter=dot"
+  },
+  "devDependencies": {
+    "typescript": "5.9.2",
+    "vitest": "4.0.16",
+    "zod": "4.3.5"
+  }
+}
