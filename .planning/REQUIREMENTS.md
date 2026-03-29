@@ -105,51 +105,51 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| LANG-01 | Phase ? | Pending |
-| LANG-02 | Phase ? | Pending |
-| LANG-03 | Phase ? | Pending |
-| FLOW-01 | Phase ? | Pending |
-| FLOW-02 | Phase ? | Pending |
-| FLOW-03 | Phase ? | Pending |
-| CHAR-01 | Phase ? | Pending |
-| CHAR-02 | Phase ? | Pending |
-| CHAR-03 | Phase ? | Pending |
-| CHAR-04 | Phase ? | Pending |
-| ABIL-01 | Phase ? | Pending |
-| ABIL-02 | Phase ? | Pending |
-| PROG-01 | Phase ? | Pending |
-| PROG-02 | Phase ? | Pending |
-| PROG-03 | Phase ? | Pending |
-| CLAS-01 | Phase ? | Pending |
-| CLAS-02 | Phase ? | Pending |
-| CLAS-03 | Phase ? | Pending |
-| CLAS-04 | Phase ? | Pending |
-| SKIL-01 | Phase ? | Pending |
-| SKIL-02 | Phase ? | Pending |
-| SKIL-03 | Phase ? | Pending |
-| FEAT-01 | Phase ? | Pending |
-| FEAT-02 | Phase ? | Pending |
-| FEAT-03 | Phase ? | Pending |
-| FEAT-04 | Phase ? | Pending |
-| MAGI-01 | Phase ? | Pending |
-| MAGI-02 | Phase ? | Pending |
-| MAGI-03 | Phase ? | Pending |
-| MAGI-04 | Phase ? | Pending |
-| VALI-01 | Phase ? | Pending |
-| VALI-02 | Phase ? | Pending |
-| VALI-03 | Phase ? | Pending |
-| VALI-04 | Phase ? | Pending |
-| SHAR-01 | Phase ? | Pending |
-| SHAR-02 | Phase ? | Pending |
-| SHAR-03 | Phase ? | Pending |
-| SHAR-04 | Phase ? | Pending |
-| SHAR-05 | Phase ? | Pending |
+| LANG-01 | Phase 2 | Pending |
+| LANG-02 | Phase 7 | Pending |
+| LANG-03 | Phase 8 | Pending |
+| FLOW-01 | Phase 2 | Pending |
+| FLOW-02 | Phase 2 | Pending |
+| FLOW-03 | Phase 4 | Pending |
+| CHAR-01 | Phase 3 | Pending |
+| CHAR-02 | Phase 3 | Pending |
+| CHAR-03 | Phase 3 | Pending |
+| CHAR-04 | Phase 3 | Pending |
+| ABIL-01 | Phase 3 | Pending |
+| ABIL-02 | Phase 4 | Pending |
+| PROG-01 | Phase 4 | Pending |
+| PROG-02 | Phase 4 | Pending |
+| PROG-03 | Phase 4 | Pending |
+| CLAS-01 | Phase 4 | Pending |
+| CLAS-02 | Phase 4 | Pending |
+| CLAS-03 | Phase 4 | Pending |
+| CLAS-04 | Phase 4 | Pending |
+| SKIL-01 | Phase 5 | Pending |
+| SKIL-02 | Phase 5 | Pending |
+| SKIL-03 | Phase 5 | Pending |
+| FEAT-01 | Phase 6 | Pending |
+| FEAT-02 | Phase 6 | Pending |
+| FEAT-03 | Phase 6 | Pending |
+| FEAT-04 | Phase 6 | Pending |
+| MAGI-01 | Phase 7 | Pending |
+| MAGI-02 | Phase 7 | Pending |
+| MAGI-03 | Phase 7 | Pending |
+| MAGI-04 | Phase 7 | Pending |
+| VALI-01 | Phase 7 | Pending |
+| VALI-02 | Phase 7 | Pending |
+| VALI-03 | Phase 7 | Pending |
+| VALI-04 | Phase 1 | Pending |
+| SHAR-01 | Phase 8 | Pending |
+| SHAR-02 | Phase 8 | Pending |
+| SHAR-03 | Phase 8 | Pending |
+| SHAR-04 | Phase 8 | Pending |
+| SHAR-05 | Phase 8 | Pending |
 
 **Coverage:**
 - v1 requirements: 39 total
-- Mapped to phases: 0
-- Unmapped: 39 ⚠️
+- Mapped to phases: 39
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-03-29*
-*Last updated: 2026-03-29 after initial definition*
+*Last updated: 2026-03-29 after roadmap traceability mapping*

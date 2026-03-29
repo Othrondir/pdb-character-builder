@@ -4,7 +4,7 @@
 
 A static web-based character planner for Neverwinter Nights 1 Enhanced Edition, tailored to the Puerta de Baldur server rules and custom content. It mirrors the workflow and main screens of the NWN2DB builder, but with a visual identity inspired by NWN1 and a deployment model that works as a GitHub-rendered site with no backend.
 
-The planner is primarily for personal use, but it must also make it easy to hand builds to other players as a preconfigured character sheet via shareable links and importable/exportable files.
+The planner is primarily for personal use, but it must also make it easy to hand builds to other players as a preconfigured character sheet via shareable links and importable/exportable files. The product should be Spanish-first because the target server, its custom feats, and its rules material are in Spanish.
 
 ## Core Value
 
@@ -45,6 +45,7 @@ The product is intended first as a personal planning tool and second as a way to
 - **Platform**: Static web app only — must build into HTML/CSS/JS assets that can be hosted on GitHub Pages.
 - **Reference UX**: Match NWN2DB flow and main planner screens — same mental model, but not the same aesthetic.
 - **Visual Direction**: NWN1-inspired look and feel — the UI should feel native to NWN1 rather than generic web tooling.
+- **Language**: Spanish-first product surface — interface, custom content names, and shared build presentation should prioritize Spanish.
 - **Rules Fidelity**: Strict validation — illegal server builds must be blocked, not merely warned about.
 - **Game Scope**: Neverwinter Nights 1 Enhanced Edition — data model and terminology must align with NWN1 EE, not NWN2.
 - **Server Scope**: Puerta de Baldur rules and custom content — planner must support custom domains, feats, spells, classes, and other server-specific logic.
@@ -61,6 +62,7 @@ The product is intended first as a personal planning tool and second as a way to
 | Limit initial scope to the planner only | The user wants a character planner, not a broader encyclopedia product in v1 | — Pending |
 | Support both shareable URLs and JSON files | The tool is for personal planning plus handing builds to other players | — Pending |
 | Use an NWN1 visual identity instead of copying NWN2DB styling | UX parity is required, but the product should feel like NWN1 | — Pending |
+| Make the product Spanish-first | The target server and its custom gameplay vocabulary are Spanish-speaking | — Pending |
 
 ## Evolution
 
