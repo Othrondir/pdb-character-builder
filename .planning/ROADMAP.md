@@ -12,7 +12,7 @@ This roadmap starts by freezing a compiler-first, versioned Puerta rules contrac
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Canonical Puerta Dataset** - Freeze the versioned rules contract, source precedence, and static-runtime data boundary.
+- [x] **Phase 1: Canonical Puerta Dataset** - Freeze the versioned rules contract, source precedence, and static-runtime data boundary.
 - [ ] **Phase 2: Spanish-First Planner Shell** - Deliver the NWN2DB-style screen flow as a static NWN1-themed shell in Spanish.
 - [ ] **Phase 3: Character Origin & Base Attributes** - Let players define race, alignment, deity, and starting stats with immediate restriction feedback.
 - [ ] **Phase 4: Level Progression & Class Path** - Build the editable level 1-16 progression timeline and class legality backbone.
@@ -36,8 +36,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 Plans:
 - [x] 01-01: Freeze canonical schema, IDs, and source precedence
-- [ ] 01-02: Define dataset manifest, provenance, and override registry
-- [ ] 01-03: Define unsupported/conflict handling for ambiguous rules
+- [x] 01-02: Define dataset manifest, provenance, and override registry
+- [x] 01-03: Define unsupported/conflict handling for ambiguous rules
 
 ### Phase 2: Spanish-First Planner Shell
 **Goal**: Users can navigate a static Spanish-first planner shell that mirrors NWN2DB's main screens with an NWN1 visual identity.
@@ -160,7 +160,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Canonical Puerta Dataset | 0/3 | Not started | - |
+| 1. Canonical Puerta Dataset | 3/3 | Complete | 2026-03-30 |
 | 2. Spanish-First Planner Shell | 0/3 | Not started | - |
 | 3. Character Origin & Base Attributes | 0/2 | Not started | - |
 | 4. Level Progression & Class Path | 0/3 | Not started | - |

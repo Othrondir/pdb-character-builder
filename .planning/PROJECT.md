@@ -14,7 +14,7 @@ A player can build a Puerta de Baldur character from level 1 to 16 with strict s
 
 ### Validated
 
-(None yet — ship to validate)
+- [x] Versioned, provenance-aware Puerta rules contracts compile into public-safe planner datasets with fail-closed blocked states — Phase 1
 
 ### Active
 
@@ -40,6 +40,8 @@ Character creation and progression must model server-specific restrictions, not 
 
 The product is intended first as a personal planning tool and second as a way to pass finished builds to third parties. That means sharing fidelity matters as much as on-screen usability: a shared build must reproduce the same decisions and validation state on another machine.
 
+Phase 1 locked the compiler-first contract layer: canonical IDs, public-safe dataset manifests, repo-scoped override registry inputs, and fail-closed legality outcomes now exist as reviewed TypeScript and JSON contracts before extractor or UI-heavy work begins.
+
 ## Constraints
 
 - **Platform**: Static web app only — must build into HTML/CSS/JS assets that can be hosted on GitHub Pages.
@@ -63,6 +65,10 @@ The product is intended first as a personal planning tool and second as a way to
 | Support both shareable URLs and JSON files | The tool is for personal planning plus handing builds to other players | — Pending |
 | Use an NWN1 visual identity instead of copying NWN2DB styling | UX parity is required, but the product should feel like NWN1 | — Pending |
 | Make the product Spanish-first | The target server and its custom gameplay vocabulary are Spanish-speaking | — Pending |
+| Use kind-prefixed stable canonical IDs instead of localized display labels | Shared builds, manifests, and validation need language-agnostic identifiers that do not drift with Spanish naming | Adopted in Phase 1 |
+| Resolve mechanical truth as manual override > Puerta snapshot > base-game, with forum material preserved as evidence-only | Runtime legality must fail closed and never silently promote forum prose into trusted data | Adopted in Phase 1 |
+| Reject absolute machine-local paths from manifests and override payloads | Published planner datasets must stay public-safe and portable across machines | Adopted in Phase 1 |
+| Keep missing-source and mechanically conflicting rules blocked by default | Illegal or unverifiable Puerta rules must never appear legal in the planner | Adopted in Phase 1 |
 
 ## Evolution
 
@@ -82,4 +88,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-03-29 after initialization*
+*Last updated: 2026-03-30 after Phase 1*
