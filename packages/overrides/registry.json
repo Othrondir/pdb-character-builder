@@ -1,0 +1,25 @@
+{
+  "registryVersion": "1",
+  "entries": [
+    {
+      "id": "text:custom-domain-labels",
+      "kind": "text",
+      "targetIds": [],
+      "operation": "append-values",
+      "evidence": [
+        {
+          "type": "manual-reconciliation",
+          "reference": "Seed text override artifact for future Puerta domain labels.",
+          "capturedAt": "2026-03-30T00:00:00Z"
+        }
+      ],
+      "rationale": "Reserve a public-safe text override payload without asserting mechanical rules.",
+      "confidence": "medium",
+      "appliesTo": {
+        "datasetRange": "*"
+      },
+      "reviewStatus": "needs-review",
+      "payloadFile": "packages/overrides/text/custom-domain-labels.json"
+    }
+  ]
+}

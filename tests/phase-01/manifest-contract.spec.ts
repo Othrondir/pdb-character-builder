@@ -2,6 +2,9 @@ import { describe, expect, it } from 'vitest';
 
 import { datasetCatalogSchema } from '../../packages/data-extractor/src/contracts/dataset-catalog';
 import { datasetManifestSchema } from '../../packages/data-extractor/src/contracts/dataset-manifest';
+import { overrideRegistryEntrySchema, overrideRegistrySchema } from '../../packages/data-extractor/src/contracts/override-registry';
+import overrideRegistry from '../../packages/overrides/registry.json';
+import customDomainLabels from '../../packages/overrides/text/custom-domain-labels.json';
 
 const validDatasetId = 'puerta-ee-2026-03-29+cf6e8aad';
 
@@ -117,6 +120,35 @@ describe('dataset catalog contract', () => {
         availableDatasetIds: [validDatasetId],
         lastPromotedAt: '2026-03-30T08:45:57Z',
         lastPromotedBy: 'manual',
+      }).success,
+    ).toBe(false);
+  });
+});
+
+describe('override registry contract', () => {
+  it('accepts the committed seed registry and keeps payloads repo-relative', () => {
+    expect(overrideRegistrySchema.safeParse(overrideRegistry).success).toBe(true);
+    expect(overrideRegistry.entries[0]?.payloadFile.startsWith('packages/overrides/')).toBe(
+      true,
+    );
+    expect(customDomainLabels).toEqual({
+      locale: 'es',
+      records: [],
+    });
+  });
+
+  it('rejects override payload paths that leak local machines or raw sqlite files', () => {
+    expect(
+      overrideRegistryEntrySchema.safeParse({
+        ...overrideRegistry.entries[0],
+        payloadFile: 'C:\\Users\\pzhly\\Documents\\Neverwinter Nights\\nwsync\\nwsyncmeta.sqlite3',
+      }).success,
+    ).toBe(false);
+
+    expect(
+      overrideRegistryEntrySchema.safeParse({
+        ...overrideRegistry.entries[0],
+        payloadFile: 'packages/overrides/raw/nwsyncmeta.sqlite3',
       }).success,
     ).toBe(false);
   });
