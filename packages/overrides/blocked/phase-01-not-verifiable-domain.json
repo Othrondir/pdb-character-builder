@@ -1,0 +1,8 @@
+{
+  "id": "blocked:phase-01-not-verifiable-domain",
+  "status": "blocked",
+  "blockKind": "not-verifiable",
+  "code": "RULE_NOT_VERIFIABLE",
+  "canonicalId": "domain:phase-01-not-verifiable",
+  "reason": "Missing authoritative Puerta source"
+}
