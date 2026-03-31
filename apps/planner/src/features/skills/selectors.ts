@@ -9,6 +9,12 @@ import {
   type SkillEvaluationStatus,
   type SkillLevelInput,
 } from '@rules-engine/skills/skill-allocation';
+import {
+  deriveSkillStatsView,
+  type SkillStatsCapCostRow,
+  type SkillStatsPenalty,
+  type SkillStatsView,
+} from '@rules-engine/skills/skill-derived-stats';
 import { revalidateSkillSnapshotAfterChange } from '@rules-engine/skills/skill-revalidation';
 
 import { shellCopyEs } from '@planner/lib/copy/es';
@@ -93,6 +99,44 @@ export interface SkillSheetRowView {
   status: SkillEvaluationStatus;
   step: number;
   trainedOnly: boolean;
+}
+
+export interface SkillStatsTotalsItemView {
+  key: string;
+  label: string;
+  value: string;
+}
+
+export interface SkillStatsCapsCostsRowView {
+  capLabel: string;
+  costTypeLabel: string;
+  currentTotalLabel: string;
+  key: string;
+  label: string;
+  nextCostLabel: string;
+  status: SkillEvaluationStatus;
+}
+
+export interface SkillStatsPenaltyView {
+  key: string;
+  label: string;
+  status: SkillEvaluationStatus;
+  text: string;
+}
+
+export interface SkillStatsViewModel {
+  activeLevel: number;
+  emptyStateBody: string | null;
+  penalties: SkillStatsPenaltyView[];
+  penaltiesHeading: string;
+  status: SkillEvaluationStatus;
+  summary: SkillSummaryStripView;
+  technicalDescription: string;
+  title: string;
+  totals: SkillStatsTotalsItemView[];
+  totalsHeading: string;
+  capsAndCosts: SkillStatsCapsCostsRowView[];
+  capsAndCostsHeading: string;
 }
 
 export interface SkillSheetGroupView {
@@ -208,6 +252,32 @@ function createIssueText(
   return shellCopyEs.skills.invalidRankHint;
 }
 
+function formatNumericValue(value: number) {
+  return Number.isInteger(value) ? String(value) : value.toFixed(1).replace('.', ',');
+}
+
+function formatPointLabel(value: number) {
+  const numericValue = formatNumericValue(value);
+
+  return `${numericValue} punto${value === 1 ? '' : 's'}`;
+}
+
+function formatNextCostLabel(costType: SkillCostType, value: number) {
+  if (costType === 'cross-class') {
+    return `${formatPointLabel(value)} / 0,5 rango`;
+  }
+
+  return formatPointLabel(value);
+}
+
+function formatCapLabel(value: number) {
+  return `${shellCopyEs.skills.capLabel}: ${formatNumericValue(value)}`;
+}
+
+function formatCurrentTotalLabel(value: number) {
+  return `${shellCopyEs.skills.rankLabel}: ${formatNumericValue(value)}`;
+}
+
 function compareStatuses(left: SkillEvaluationStatus, right: SkillEvaluationStatus) {
   return STATUS_ORDER[left] - STATUS_ORDER[right];
 }
@@ -232,6 +302,82 @@ function selectBoardArtifacts(
     revalidated,
     skillInputs,
   };
+}
+
+function getActiveArtifacts(
+  skillState: SkillStoreState,
+  progressionState: LevelProgressionStoreState,
+  foundationState: CharacterFoundationStoreState,
+) {
+  const artifacts = selectBoardArtifacts(skillState, progressionState, foundationState);
+  const activeIndex = skillState.levels.findIndex(
+    (entry) => entry.level === skillState.activeLevel,
+  );
+
+  return {
+    ...artifacts,
+    activeIndex,
+    activeInput: artifacts.skillInputs[activeIndex] ?? null,
+    activeLevel: artifacts.evaluation.levels[activeIndex] ?? null,
+    activeRepair: artifacts.revalidated[activeIndex] ?? null,
+  };
+}
+
+function mapSkillStatsPenalty(
+  penalty: SkillStatsPenalty,
+  capsAndCosts: SkillStatsCapCostRowView[],
+): SkillStatsPenaltyView {
+  const rowLabel =
+    capsAndCosts.find((row) => row.key === penalty.skillId)?.label ??
+    shellCopyEs.sections.stats.label;
+  const evidenceLabel =
+    penalty.issue.evidence.find((entry) => entry.label)?.label ??
+    penalty.issue.evidence.find((entry) => entry.evidenceId)?.evidenceId ??
+    null;
+  const text =
+    penalty.source === 'repair'
+      ? shellCopyEs.skills.repairCallout
+      : evidenceLabel ??
+        (penalty.issue.status === 'blocked'
+          ? shellCopyEs.skills.errorState
+          : shellCopyEs.skills.invalidRankHint);
+
+  return {
+    key: penalty.key,
+    label: penalty.skillId ? rowLabel : shellCopyEs.sections.stats.label,
+    status: penalty.status,
+    text,
+  };
+}
+
+function mapSkillStatsCapsCosts(rows: SkillStatsCapCostRow[]): SkillStatsCapsCostsRowView[] {
+  return rows.map((row) => ({
+    capLabel: formatCapLabel(row.cap),
+    costTypeLabel:
+      row.costType === 'class'
+        ? shellCopyEs.skills.classSkillLabel
+        : shellCopyEs.skills.crossClassSkillLabel,
+    currentTotalLabel: formatCurrentTotalLabel(row.currentTotal),
+    key: row.skillId,
+    label: row.label,
+    nextCostLabel: formatNextCostLabel(row.costType, row.nextCost),
+    status: row.status,
+  }));
+}
+
+function mapSkillStatsTotals(statsView: SkillStatsView): SkillStatsTotalsItemView[] {
+  return statsView.totals.map((item) => ({
+    key: item.key,
+    label:
+      item.key === 'availablePoints'
+        ? shellCopyEs.skills.availablePointsLabel
+        : item.key === 'spentPoints'
+          ? shellCopyEs.skills.spentPointsLabel
+          : item.key === 'remainingPoints'
+            ? shellCopyEs.skills.remainingPointsLabel
+            : shellCopyEs.skills.statsAllocatedSkillsLabel,
+    value: formatNumericValue(item.value),
+  }));
 }
 
 export function selectSkillRail(
@@ -336,7 +482,7 @@ function buildActiveSkillRows(
         label: skill.label,
         maxAssignableRank,
         nextCost: 1,
-        nextCostLabel: '1 punto',
+        nextCostLabel: formatNextCostLabel(costType, 1),
         skillId: skill.id as CanonicalId,
         status,
         step,
@@ -430,5 +576,59 @@ export function selectSkillBoardView(
       progressionState,
       foundationState,
     ),
+  };
+}
+
+export function selectSkillStatsView(
+  skillState: SkillStoreState,
+  progressionState: LevelProgressionStoreState,
+  foundationState: CharacterFoundationStoreState,
+): SkillStatsViewModel {
+  const { activeInput, activeLevel, activeRepair } = getActiveArtifacts(
+    skillState,
+    progressionState,
+    foundationState,
+  );
+  const summary = selectSkillSummaryStrip(skillState, progressionState, foundationState);
+  const progressionHasClass = progressionState.levels.some((level) => level.classId !== null);
+
+  if (!activeInput || !activeLevel || !activeInput.classId) {
+    return {
+      activeLevel: skillState.activeLevel,
+      capsAndCosts: [],
+      capsAndCostsHeading: shellCopyEs.skills.statsCapsCostsHeading,
+      emptyStateBody: progressionHasClass ? shellCopyEs.skills.emptyStateBody : shellCopyEs.skills.lockedBody,
+      penalties: [],
+      penaltiesHeading: shellCopyEs.skills.statsPenaltiesHeading,
+      status: 'pending',
+      summary,
+      technicalDescription: shellCopyEs.sections.stats.description,
+      title: shellCopyEs.sections.stats.heading,
+      totals: [],
+      totalsHeading: shellCopyEs.skills.statsTotalsHeading,
+    };
+  }
+
+  const statsView = deriveSkillStatsView({
+    catalog: compiledSkillCatalog,
+    evaluatedLevel: activeLevel,
+    levelInput: activeInput,
+    revalidatedLevel: activeRepair,
+  });
+  const capsAndCosts = mapSkillStatsCapsCosts(statsView.capsAndCosts);
+
+  return {
+    activeLevel: skillState.activeLevel,
+    capsAndCosts,
+    capsAndCostsHeading: shellCopyEs.skills.statsCapsCostsHeading,
+    emptyStateBody: null,
+    penalties: statsView.penalties.map((penalty) => mapSkillStatsPenalty(penalty, capsAndCosts)),
+    penaltiesHeading: shellCopyEs.skills.statsPenaltiesHeading,
+    status: statsView.status,
+    summary,
+    technicalDescription: shellCopyEs.skills.statsDescription,
+    title: shellCopyEs.sections.stats.heading,
+    totals: mapSkillStatsTotals(statsView),
+    totalsHeading: shellCopyEs.skills.statsTotalsHeading,
   };
 }

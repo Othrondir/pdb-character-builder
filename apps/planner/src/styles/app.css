@@ -498,6 +498,75 @@ a {
   gap: var(--space-lg);
 }
 
+.skill-stats-board__layout {
+  display: grid;
+  gap: var(--space-lg);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.skill-stats-board__panel {
+  display: grid;
+  gap: var(--space-md);
+}
+
+.skill-stats-board__panel:last-child {
+  grid-column: 1 / -1;
+}
+
+.skill-stats-board__panel h2,
+.skill-stats-board__row h3,
+.skill-stats-board__issue h3 {
+  font-family: var(--font-display);
+  margin: 0;
+}
+
+.skill-stats-board__totals {
+  gap: var(--space-sm);
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+.skill-stats-board__rows,
+.skill-stats-board__issues {
+  display: grid;
+  gap: var(--space-sm);
+}
+
+.skill-stats-board__row,
+.skill-stats-board__issue {
+  background: rgba(32, 24, 18, 0.98);
+  border: 1px solid rgba(159, 122, 49, 0.3);
+  border-radius: 18px;
+  color: var(--color-parchment);
+  display: grid;
+  gap: var(--space-sm);
+  padding: 14px 16px;
+}
+
+.skill-stats-board__row.is-blocked,
+.skill-stats-board__issue.is-blocked {
+  background: rgba(93, 68, 27, 0.26);
+  border-color: rgba(159, 122, 49, 0.7);
+}
+
+.skill-stats-board__row.is-illegal,
+.skill-stats-board__issue.is-illegal {
+  background: rgba(70, 18, 18, 0.34);
+  border-color: rgba(122, 31, 31, 0.78);
+}
+
+.skill-stats-board__row p,
+.skill-stats-board__issue p {
+  color: rgba(227, 216, 193, 0.8);
+  margin: 0;
+}
+
+.skill-stats-board__facts {
+  color: rgba(227, 216, 193, 0.84);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
 .skill-summary-strip .planner-summary__grid dd,
 .skill-sheet__summary-grid dd {
   color: var(--color-parchment);
@@ -806,6 +875,14 @@ a {
 
   .progression-board {
     grid-template-columns: 1fr;
+  }
+
+  .skill-stats-board__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .skill-stats-board__panel:last-child {
+    grid-column: auto;
   }
 
   .skill-sheet__row-main,

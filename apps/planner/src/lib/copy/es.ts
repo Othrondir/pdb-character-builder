@@ -107,6 +107,12 @@ export const shellCopyEs = {
     repairRailLabel: 'Depende del nivel',
     sheetHeading: 'Hoja de habilidades',
     spentPointsLabel: 'Puntos gastados',
+    statsAllocatedSkillsLabel: 'Habilidades con rangos',
+    statsCapsCostsHeading: 'Topes y costes',
+    statsDescription:
+      'Lectura técnica del snapshot activo de habilidades: totales, topes, costes y bloqueos sin edición.',
+    statsPenaltiesHeading: 'Penalizaciones y bloqueos',
+    statsTotalsHeading: 'Totales',
     trainedOnlyLabel: 'Solo entrenada',
   },
   emptyStateHeading: 'La hoja aún está vacía',
@@ -143,9 +149,9 @@ export const shellCopyEs = {
     },
     stats: {
       description:
-        'Resumen técnico preparado para estadísticas derivadas y estado general.',
+        'Vista técnica de solo lectura para seguir topes, costes y bloqueos del snapshot de habilidades.',
       heading: 'Estadísticas técnicas',
-      highlights: ['Resumen técnico', 'Estado derivado', 'Preparado para cálculos'],
+      highlights: ['Totales', 'Topes y costes', 'Penalizaciones activas'],
       label: 'Estadísticas',
     },
     summary: {
