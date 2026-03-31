@@ -139,6 +139,15 @@ export interface SkillStatsViewModel {
   capsAndCostsHeading: string;
 }
 
+export interface SkillSummaryView {
+  blockedLevels: number[];
+  highestConfiguredLevel: number;
+  planState: string;
+  remainingPoints: number;
+  spentPoints: number;
+  summaryStatus: SkillEvaluationStatus;
+}
+
 export interface SkillSheetGroupView {
   category: string;
   heading: string;
@@ -630,5 +639,77 @@ export function selectSkillStatsView(
     title: shellCopyEs.sections.stats.heading,
     totals: mapSkillStatsTotals(statsView),
     totalsHeading: shellCopyEs.skills.statsTotalsHeading,
+  };
+}
+
+export function selectSkillSummary(
+  skillState: SkillStoreState,
+  progressionState: LevelProgressionStoreState,
+  foundationState: CharacterFoundationStoreState,
+): SkillSummaryView {
+  const highestProgressionLevel = progressionState.levels.reduce(
+    (highestLevel, record) => (record.classId ? Math.max(highestLevel, record.level) : highestLevel),
+    0,
+  );
+  const highestConfiguredLevel = skillState.levels.reduce(
+    (highestLevel, record) =>
+      record.allocations.length > 0 ? Math.max(highestLevel, record.level) : highestLevel,
+    0,
+  );
+
+  if (highestConfiguredLevel === 0) {
+    return {
+      blockedLevels: [],
+      highestConfiguredLevel: 0,
+      planState: shellCopyEs.skills.planStates.empty,
+      remainingPoints: 0,
+      spentPoints: 0,
+      summaryStatus: 'pending',
+    };
+  }
+
+  const { evaluation, revalidated } = selectBoardArtifacts(
+    skillState,
+    progressionState,
+    foundationState,
+  );
+  const relevantLevels = skillState.levels
+    .filter((record) => record.level <= highestConfiguredLevel)
+    .map((record) => record.level);
+  const blockedLevels = relevantLevels.filter((level) => {
+    const index = level - 1;
+    const status = revalidated[index]?.status ?? evaluation.levels[index]?.status ?? 'pending';
+    return status === 'blocked' || status === 'illegal';
+  });
+  const spentPoints = relevantLevels.reduce(
+    (total, level) => total + (evaluation.levels[level - 1]?.spentPoints ?? 0),
+    0,
+  );
+  const remainingPoints = relevantLevels.reduce(
+    (total, level) => total + (evaluation.levels[level - 1]?.remainingPoints ?? 0),
+    0,
+  );
+  const hasIllegal = relevantLevels.some(
+    (level) => (revalidated[level - 1]?.status ?? evaluation.levels[level - 1]?.status) === 'illegal',
+  );
+  const hasBlocked = relevantLevels.some(
+    (level) => (revalidated[level - 1]?.status ?? evaluation.levels[level - 1]?.status) === 'blocked',
+  );
+  const summaryStatus: SkillEvaluationStatus =
+    hasIllegal ? 'illegal' : hasBlocked ? 'blocked' : 'legal';
+  const planState =
+    summaryStatus === 'illegal' || summaryStatus === 'blocked'
+      ? shellCopyEs.skills.planStates.repair
+      : highestConfiguredLevel < highestProgressionLevel
+        ? shellCopyEs.skills.planStates.inProgress
+        : shellCopyEs.skills.planStates.ready;
+
+  return {
+    blockedLevels,
+    highestConfiguredLevel,
+    planState,
+    remainingPoints,
+    spentPoints,
+    summaryStatus,
   };
 }

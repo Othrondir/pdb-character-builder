@@ -116,6 +116,6 @@ describe('phase 05 skill allocation flow', () => {
     expect(screen.getByDisplayValue('1')).toBeInTheDocument();
 
     const summaryPanel = screen.getByLabelText('Resumen del personaje');
-    expect(within(summaryPanel).getByText('Inválida')).toBeInTheDocument();
+    expect(within(summaryPanel).getByText('Habilidades en reparacion')).toBeInTheDocument();
   });
 });

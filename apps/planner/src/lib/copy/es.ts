@@ -10,6 +10,10 @@ export const shellCopyEs = {
     character: 'Personaje',
     targetLevel: 'Nivel objetivo',
     dataset: 'Conjunto de datos',
+    skillBlockedLevels: 'Niveles bloqueados',
+    skillConfiguredLevel: 'Habilidades hasta',
+    skillRemainingPoints: 'Restantes en habilidades',
+    skillSpentPoints: 'Gastados en habilidades',
     validation: 'Validación',
     planState: 'Estado del plan',
   },
@@ -114,6 +118,12 @@ export const shellCopyEs = {
     statsPenaltiesHeading: 'Penalizaciones y bloqueos',
     statsTotalsHeading: 'Totales',
     trainedOnlyLabel: 'Solo entrenada',
+    planStates: {
+      empty: 'Sin reparto de habilidades',
+      inProgress: 'Habilidades en curso',
+      ready: 'Habilidades listas',
+      repair: 'Habilidades en reparacion',
+    },
   },
   emptyStateHeading: 'La hoja aún está vacía',
   emptyStateBody:

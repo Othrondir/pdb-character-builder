@@ -99,4 +99,34 @@ describe('phase 05 skill stats synchronization', () => {
     ).toBeInTheDocument();
   });
 
+  it('projects shell summary repair and ready states from the shared skill selector', async () => {
+    primeFoundation();
+
+    act(() => {
+      const progressionStore = useLevelProgressionStore.getState();
+      const skillStore = useSkillStore.getState();
+
+      progressionStore.setLevelClassId(1, 'class:rogue');
+      progressionStore.setLevelClassId(2, 'class:rogue');
+      skillStore.setSkillRank(1, 'skill:hide', 4);
+      skillStore.setSkillRank(2, 'skill:listen', 1);
+      skillStore.setActiveLevel(2);
+    });
+
+    await renderRoute('/skills');
+
+    act(() => {
+      useLevelProgressionStore.getState().setLevelClassId(1, 'class:fighter');
+    });
+
+    const summaryPanel = screen.getByLabelText('Resumen del personaje');
+    expect(within(summaryPanel).getByText('Habilidades en reparacion')).toBeInTheDocument();
+
+    act(() => {
+      useSkillStore.getState().setSkillRank(1, 'skill:hide', 2);
+    });
+
+    expect(within(summaryPanel).getByText('Habilidades listas')).toBeInTheDocument();
+  });
+
 });

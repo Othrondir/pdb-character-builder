@@ -3,7 +3,7 @@ import { selectFoundationSummary } from '@planner/features/character-foundation/
 import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
 import { selectProgressionSummary } from '@planner/features/level-progression/selectors';
 import { useLevelProgressionStore } from '@planner/features/level-progression/store';
-import { selectSkillRail } from '@planner/features/skills/selectors';
+import { selectSkillSummary } from '@planner/features/skills/selectors';
 import { useSkillStore } from '@planner/features/skills/store';
 import { usePlannerShellStore } from '@planner/state/planner-shell';
 
@@ -18,11 +18,6 @@ const progressionPlanStateLabels = {
   invalid: 'Ruta inválida',
   ready: 'Lista para habilidades',
   repair: 'Progresión en reparación',
-} as const;
-
-const skillPlanStateLabels = {
-  illegal: 'Habilidades inválidas',
-  repair: 'Habilidades en reparación',
 } as const;
 
 interface SummaryPanelProps {
@@ -42,22 +37,22 @@ export function SummaryPanel({ isOpen }: SummaryPanelProps) {
     progressionState,
     foundationState,
   );
-  const skillRail = selectSkillRail(skillState, progressionState, foundationState);
+  const skillSummary = selectSkillSummary(skillState, progressionState, foundationState);
   const datasetId = foundationSummary.datasetId || fallbackDatasetId;
   const progressionHasSelections = progressionSummary.highestConfiguredLevel > 0;
-  const skillHasSelections = skillState.levels.some((level) => level.allocations.length > 0);
-  const skillHasIllegal = skillRail.some((entry) => entry.status === 'illegal');
-  const skillHasBlocked = skillRail.some((entry) => entry.status === 'blocked');
-  const skillSummaryStatus =
-    skillHasIllegal ? 'illegal' : skillHasBlocked ? 'blocked' : 'legal';
+  const progressionIsBlocking =
+    progressionSummary.summaryStatus === 'blocked' ||
+    progressionSummary.summaryStatus === 'illegal';
   const validationStatus =
     foundationSummary.summaryStatus !== 'legal'
       ? foundationSummary.summaryStatus
-      : skillHasSelections
-        ? skillSummaryStatus
-        : progressionHasSelections
+      : progressionIsBlocking
         ? progressionSummary.summaryStatus
-        : foundationSummary.summaryStatus ?? fallbackValidationStatus;
+        : skillSummary.highestConfiguredLevel > 0
+          ? skillSummary.summaryStatus
+          : progressionHasSelections
+            ? progressionSummary.summaryStatus
+            : foundationSummary.summaryStatus ?? fallbackValidationStatus;
   const validationStatusClass =
     validationStatus === 'blocked'
       ? 'summary-status summary-status--blocked'
@@ -66,15 +61,11 @@ export function SummaryPanel({ isOpen }: SummaryPanelProps) {
         : 'summary-status';
   const planState =
     foundationSummary.summaryStatus === 'legal'
-      ? skillHasSelections
-        ? validationStatus === 'illegal'
-          ? skillPlanStateLabels.illegal
-          : validationStatus === 'blocked'
-            ? skillPlanStateLabels.repair
-            : progressionSummary.planState === progressionPlanStateLabels.ready
-              ? progressionPlanStateLabels.ready
-              : progressionSummary.planState
-        : progressionSummary.planState === progressionPlanStateLabels.ready
+      ? progressionIsBlocking
+        ? progressionSummary.planState
+        : skillSummary.highestConfiguredLevel > 0
+          ? skillSummary.planState
+          : progressionSummary.planState === progressionPlanStateLabels.ready
           ? progressionPlanStateLabels.ready
           : progressionSummary.planState === progressionPlanStateLabels.repair
             ? progressionPlanStateLabels.repair
@@ -121,6 +112,30 @@ export function SummaryPanel({ isOpen }: SummaryPanelProps) {
         <div>
           <dt>{shellCopyEs.summaryFields.planState}</dt>
           <dd>{planState}</dd>
+        </div>
+        <div>
+          <dt>{shellCopyEs.summaryFields.skillConfiguredLevel}</dt>
+          <dd>
+            {skillSummary.highestConfiguredLevel > 0
+              ? `${skillSummary.highestConfiguredLevel}/16`
+              : shellCopyEs.skills.planStates.empty}
+          </dd>
+        </div>
+        <div>
+          <dt>{shellCopyEs.summaryFields.skillSpentPoints}</dt>
+          <dd>{skillSummary.spentPoints}</dd>
+        </div>
+        <div>
+          <dt>{shellCopyEs.summaryFields.skillRemainingPoints}</dt>
+          <dd>{skillSummary.remainingPoints}</dd>
+        </div>
+        <div>
+          <dt>{shellCopyEs.summaryFields.skillBlockedLevels}</dt>
+          <dd>
+            {skillSummary.blockedLevels.length > 0
+              ? skillSummary.blockedLevels.join(', ')
+              : '—'}
+          </dd>
         </div>
       </dl>
     </aside>
