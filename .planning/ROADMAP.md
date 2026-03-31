@@ -102,7 +102,7 @@ Plans:
 Plans:
 - [x] 05-01-PLAN.md — Define the compiled skill catalog, rules helpers, and raw skill store
 - [x] 05-02-PLAN.md — Build the routed `Habilidades` editor over the shared skill selectors
-- [ ] 05-03-PLAN.md — Synchronize `Estadísticas` and the shell summary with skill evaluation
+- [x] 05-03-PLAN.md — Synchronize `Estadísticas` and the shell summary with skill evaluation
 **UI hint**: yes
 
 ### Phase 6: Feats & Proficiencies

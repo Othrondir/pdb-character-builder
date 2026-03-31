@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: executing
-stopped_at: Completed 05-02-PLAN.md
-last_updated: "2026-03-31T11:45:57.150Z"
+status: verifying
+stopped_at: Completed 05-03-PLAN.md
+last_updated: "2026-03-31T12:01:35.501Z"
 last_activity: 2026-03-31
 progress:
   total_phases: 8
-  completed_phases: 4
+  completed_phases: 5
   total_plans: 14
-  completed_plans: 13
+  completed_plans: 14
   percent: 55
 ---
 
@@ -27,7 +27,7 @@ See: .planning/PROJECT.md (updated 2026-03-30)
 
 Phase: 05 (skills-derived-statistics) — EXECUTING
 Plan: 3 of 3
-Status: Ready to execute
+Status: Phase complete — ready for verification
 Last activity: 2026-03-31
 
 Progress: [█████░░░░░] 55%
@@ -60,6 +60,7 @@ Progress: [█████░░░░░] 55%
 
 | Phase 05 P01 | 6 min | 2 tasks | 8 files |
 | Phase 05 P02 | 12min | 2 tasks | 11 files |
+| Phase 05 P03 | 12 min | 2 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -83,6 +84,8 @@ Recent decisions affecting current work:
 - [Phase 05]: Skill legality and repair status are recomputed from raw per-level allocations instead of being stored in UI state.
 - [Phase 05]: The Habilidades route now projects all editable skill state through shared selectors over the compiled catalog and rules helpers.
 - [Phase 05]: Shell summary severity now reflects skill repair state once the user has entered skill allocations.
+- [Phase 05]: Estadisticas now projects the active skill snapshot through shared selectors instead of route-local math.
+- [Phase 05]: Shell summary skill severity now comes from a dedicated Phase 5 summary selector and only yields to progression when progression is blocked or illegal.
 
 ### Pending Todos
 
@@ -96,6 +99,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-31T11:45:57.146Z
-Stopped at: Completed 05-02-PLAN.md
+Last session: 2026-03-31T12:01:35.497Z
+Stopped at: Completed 05-03-PLAN.md
 Resume file: None
