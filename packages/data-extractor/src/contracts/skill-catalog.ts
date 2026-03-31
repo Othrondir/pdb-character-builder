@@ -34,6 +34,11 @@ export const skillRestrictionProvenanceSchema = z.object({
 
 export const skillRestrictionMetadataSchema = z.object({
   code: z.string().min(1),
+  condition: z
+    .object({
+      armorCategory: z.enum(['light', 'medium', 'heavy']).optional(),
+    })
+    .optional(),
   description: z.string().min(1),
   outcome: z.enum(SKILL_RESTRICTION_OUTCOMES),
   provenance: z.array(skillRestrictionProvenanceSchema).min(1),
@@ -53,6 +58,11 @@ export const compiledSkillSchema = z.object({
 export const skillRestrictionOverrideSchema = z.object({
   affectedClassIds: z.array(z.string().regex(canonicalIdRegex)).optional(),
   code: z.string().min(1),
+  condition: z
+    .object({
+      armorCategory: z.enum(['light', 'medium', 'heavy']).optional(),
+    })
+    .optional(),
   description: z.string().min(1),
   outcome: z.enum(SKILL_RESTRICTION_OUTCOMES),
   provenance: z.array(skillRestrictionProvenanceSchema).min(1),

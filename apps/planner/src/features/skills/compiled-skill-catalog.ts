@@ -8,6 +8,9 @@ export const compiledSkillCatalog: SkillCatalog = skillCatalogSchema.parse({
   restrictionOverrides: [
     {
       code: 'puerta.skill.tumble-heavy-armor',
+      condition: {
+        armorCategory: 'heavy',
+      },
       description:
         'Acrobacias queda bloqueada mientras el personaje use armadura pesada.',
       outcome: 'blocked',
@@ -60,6 +63,9 @@ export const compiledSkillCatalog: SkillCatalog = skillCatalogSchema.parse({
       restrictionMetadata: [
         {
           code: 'puerta.skill.tumble-heavy-armor',
+          condition: {
+            armorCategory: 'heavy',
+          },
           description:
             'No se puede aprovechar Acrobacias con armadura pesada en Puerta.',
           outcome: 'blocked',
