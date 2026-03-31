@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 05-01-PLAN.md
-last_updated: "2026-03-31T11:30:23.517Z"
+stopped_at: Completed 05-02-PLAN.md
+last_updated: "2026-03-31T11:45:57.150Z"
 last_activity: 2026-03-31
 progress:
   total_phases: 8
   completed_phases: 4
   total_plans: 14
-  completed_plans: 12
+  completed_plans: 13
   percent: 55
 ---
 
@@ -26,7 +26,7 @@ See: .planning/PROJECT.md (updated 2026-03-30)
 ## Current Position
 
 Phase: 05 (skills-derived-statistics) — EXECUTING
-Plan: 2 of 3
+Plan: 3 of 3
 Status: Ready to execute
 Last activity: 2026-03-31
 
@@ -59,6 +59,7 @@ Progress: [█████░░░░░] 55%
 - Trend: Stable
 
 | Phase 05 P01 | 6 min | 2 tasks | 8 files |
+| Phase 05 P02 | 12min | 2 tasks | 11 files |
 
 ## Accumulated Context
 
@@ -80,6 +81,8 @@ Recent decisions affecting current work:
 - [Phase 05]: Runtime skill truth now comes from a compiled catalog payload parsed against the extractor contract.
 - [Phase 05]: Skill restriction overrides now carry condition metadata so server exceptions stay data-driven.
 - [Phase 05]: Skill legality and repair status are recomputed from raw per-level allocations instead of being stored in UI state.
+- [Phase 05]: The Habilidades route now projects all editable skill state through shared selectors over the compiled catalog and rules helpers.
+- [Phase 05]: Shell summary severity now reflects skill repair state once the user has entered skill allocations.
 
 ### Pending Todos
 
@@ -93,6 +96,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-31T11:30:23.514Z
-Stopped at: Completed 05-01-PLAN.md
+Last session: 2026-03-31T11:45:57.146Z
+Stopped at: Completed 05-02-PLAN.md
 Resume file: None
