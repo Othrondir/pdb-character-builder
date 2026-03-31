@@ -337,7 +337,7 @@ function buildActiveSkillRows(
         maxAssignableRank,
         nextCost: 1,
         nextCostLabel: '1 punto',
-        skillId: skill.id,
+        skillId: skill.id as CanonicalId,
         status,
         step,
         trainedOnly: skill.trainedOnly,
