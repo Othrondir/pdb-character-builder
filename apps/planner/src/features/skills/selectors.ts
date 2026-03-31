@@ -334,7 +334,7 @@ function getActiveArtifacts(
 
 function mapSkillStatsPenalty(
   penalty: SkillStatsPenalty,
-  capsAndCosts: SkillStatsCapCostRowView[],
+  capsAndCosts: SkillStatsCapsCostsRowView[],
 ): SkillStatsPenaltyView {
   const rowLabel =
     capsAndCosts.find((row) => row.key === penalty.skillId)?.label ??

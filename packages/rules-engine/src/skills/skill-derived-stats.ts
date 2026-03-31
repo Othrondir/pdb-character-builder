@@ -152,7 +152,7 @@ export function deriveSkillStatsView(input: {
     penalties.push({
       issue,
       key: buildPenaltyKey('level', null, issue, index),
-      skillId: issue.affectedIds[0] ?? null,
+      skillId: (issue.affectedIds[0] as CanonicalId | undefined) ?? null,
       source: 'level',
       status: input.evaluatedLevel.status,
     });
@@ -161,8 +161,13 @@ export function deriveSkillStatsView(input: {
   input.revalidatedLevel?.issues.forEach((issue, index) => {
     penalties.push({
       issue,
-      key: buildPenaltyKey('repair', issue.affectedIds[0] ?? null, issue, index),
-      skillId: issue.affectedIds[0] ?? null,
+      key: buildPenaltyKey(
+        'repair',
+        (issue.affectedIds[0] as CanonicalId | undefined) ?? null,
+        issue,
+        index,
+      ),
+      skillId: (issue.affectedIds[0] as CanonicalId | undefined) ?? null,
       source: 'repair',
       status: input.revalidatedLevel?.status ?? 'blocked',
     });
