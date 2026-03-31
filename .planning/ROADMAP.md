@@ -13,9 +13,9 @@ This roadmap starts by freezing a compiler-first, versioned Puerta rules contrac
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Canonical Puerta Dataset** - Freeze the versioned rules contract, source precedence, and static-runtime data boundary.
-- [ ] **Phase 2: Spanish-First Planner Shell** - Deliver the NWN2DB-style screen flow as a static NWN1-themed shell in Spanish.
-- [ ] **Phase 3: Character Origin & Base Attributes** - Let players define race, alignment, deity, and starting stats with immediate restriction feedback.
-- [ ] **Phase 4: Level Progression & Class Path** - Build the editable level 1-16 progression timeline and class legality backbone.
+- [x] **Phase 2: Spanish-First Planner Shell** - Deliver the NWN2DB-style screen flow as a static NWN1-themed shell in Spanish.
+- [x] **Phase 3: Character Origin & Base Attributes** - Let players define race, alignment, deity, and starting stats with immediate restriction feedback.
+- [x] **Phase 4: Level Progression & Class Path** - Build the editable level 1-16 progression timeline and class legality backbone.
 - [ ] **Phase 5: Skills & Derived Statistics** - Add per-level skill allocation with server-specific enforcement and synchronized stats.
 - [ ] **Phase 6: Feats & Proficiencies** - Model Puerta feat choices, proficiencies, and exact prerequisite failures.
 - [ ] **Phase 7: Magic & Full Legality Engine** - Complete domains, spells, Spanish rules text, and full-build recomputation.
@@ -51,9 +51,9 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 02-01: Build the SPA shell and route or state skeleton
-- [ ] 02-02: Implement Spanish-first navigation and screen framing
-- [ ] 02-03: Establish the NWN1 visual system for the shell
+- [x] 02-01: Build the SPA shell and route or state skeleton
+- [x] 02-02: Implement Spanish-first navigation and screen framing
+- [x] 02-03: Establish the NWN1 visual system for the shell
 **UI hint**: yes
 
 ### Phase 3: Character Origin & Base Attributes
@@ -68,8 +68,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 03-01: Deliver identity selectors and base character state
-- [ ] 03-02: Enforce origin restrictions and starting-ability rules
+- [x] 03-01: Deliver identity selectors and base character state
+- [x] 03-02: Enforce origin restrictions and starting-ability rules
 **UI hint**: yes
 
 ### Phase 4: Level Progression & Class Path
@@ -84,9 +84,9 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 04-01: Build the level timeline and editable progression state
-- [ ] 04-02: Implement class catalogs, prerequisites, and per-level gains
-- [ ] 04-03: Enforce multiclass and progression-specific Puerta rules
+- [x] 04-01: Build the level timeline and editable progression state
+- [x] 04-02: Implement class catalogs, prerequisites, and per-level gains
+- [x] 04-03: Enforce multiclass and progression-specific Puerta rules
 **UI hint**: yes
 
 ### Phase 5: Skills & Derived Statistics
@@ -100,8 +100,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 05-01: Implement per-level skill allocation and legality checks
-- [ ] 05-02: Wire derived stats views to the progression and skill state
+- [ ] 05-01-PLAN.md — Build the skill allocation contracts, rules helpers, and `Habilidades` editor
+- [ ] 05-02-PLAN.md — Synchronize `Estadísticas` and the shell summary with skill evaluation
 **UI hint**: yes
 
 ### Phase 6: Feats & Proficiencies
@@ -161,9 +161,9 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Canonical Puerta Dataset | 3/3 | Complete | 2026-03-30 |
-| 2. Spanish-First Planner Shell | 0/3 | Not started | - |
-| 3. Character Origin & Base Attributes | 0/2 | Not started | - |
-| 4. Level Progression & Class Path | 0/3 | Not started | - |
+| 2. Spanish-First Planner Shell | 3/3 | Complete | 2026-03-30 |
+| 3. Character Origin & Base Attributes | 2/2 | Complete | 2026-03-30 |
+| 4. Level Progression & Class Path | 3/3 | Complete | 2026-03-30 |
 | 5. Skills & Derived Statistics | 0/2 | Not started | - |
 | 6. Feats & Proficiencies | 0/2 | Not started | - |
 | 7. Magic & Full Legality Engine | 0/3 | Not started | - |
