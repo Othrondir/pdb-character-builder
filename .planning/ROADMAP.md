@@ -97,11 +97,12 @@ Plans:
   1. User can assign skill ranks at each level using the selected class and current build state.
   2. The planner enforces class or cross-class costs, caps, and Puerta skill restrictions, including known heavy-armor or equivalent exceptions.
   3. Stats and derived totals remain synchronized with skill and progression changes.
-**Plans**: 2 plans
+**Plans**: 3 plans
 
 Plans:
-- [ ] 05-01-PLAN.md — Build the skill allocation contracts, rules helpers, and `Habilidades` editor
-- [ ] 05-02-PLAN.md — Synchronize `Estadísticas` and the shell summary with skill evaluation
+- [x] 05-01-PLAN.md — Define the compiled skill catalog, rules helpers, and raw skill store
+- [ ] 05-02-PLAN.md — Build the routed `Habilidades` editor over the shared skill selectors
+- [ ] 05-03-PLAN.md — Synchronize `Estadísticas` and the shell summary with skill evaluation
 **UI hint**: yes
 
 ### Phase 6: Feats & Proficiencies
@@ -164,7 +165,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | 2. Spanish-First Planner Shell | 3/3 | Complete | 2026-03-30 |
 | 3. Character Origin & Base Attributes | 2/2 | Complete | 2026-03-30 |
 | 4. Level Progression & Class Path | 3/3 | Complete | 2026-03-30 |
-| 5. Skills & Derived Statistics | 0/2 | Not started | - |
+| 5. Skills & Derived Statistics | 0/3 | Not started | - |
 | 6. Feats & Proficiencies | 0/2 | Not started | - |
 | 7. Magic & Full Legality Engine | 0/3 | Not started | - |
 | 8. Summary, Persistence & Shared Builds | 0/2 | Not started | - |

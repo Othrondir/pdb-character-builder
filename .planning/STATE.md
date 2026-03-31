@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: verifying
-stopped_at: Phase 5 context gathered
-last_updated: "2026-03-31T10:38:42.522Z"
-last_activity: 2026-03-30 -- Phase 4 completed and verified
+status: executing
+stopped_at: Completed 05-01-PLAN.md
+last_updated: "2026-03-31T11:30:23.517Z"
+last_activity: 2026-03-31
 progress:
   total_phases: 8
   completed_phases: 4
-  total_plans: 11
-  completed_plans: 11
+  total_plans: 14
+  completed_plans: 12
   percent: 55
 ---
 
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-30)
 
 **Core value:** A player can build a Puerta de Baldur character from level 1 to 16 with strict server-valid validation and share that exact build reliably.
-**Current focus:** Phase 05 — skills-&-derived-statistics
+**Current focus:** Phase 05 — skills-derived-statistics
 
 ## Current Position
 
-Phase: 05 (skills-&-derived-statistics) — READY
-Plan: No plan file yet
-Status: Phase 04 completed and verified; ready to discuss or plan Phase 05
-Last activity: 2026-03-30 -- Phase 4 completed and verified
+Phase: 05 (skills-derived-statistics) — EXECUTING
+Plan: 2 of 3
+Status: Ready to execute
+Last activity: 2026-03-31
 
 Progress: [█████░░░░░] 55%
 
@@ -58,6 +58,8 @@ Progress: [█████░░░░░] 55%
 - Last 3 plans: 04-01, 04-02, 04-03 completed in one verified shell pass
 - Trend: Stable
 
+| Phase 05 P01 | 6 min | 2 tasks | 8 files |
+
 ## Accumulated Context
 
 ### Decisions
@@ -75,6 +77,9 @@ Recent decisions affecting current work:
 - [Phase 4] `Construcción` remains a single route, with the origin summarized and the level progression taking over as the main editor.
 - [Phase 4] Earlier-level changes preserve later levels and mark them blocked or invalid until the user repairs the affected progression.
 - [Phase 4] Progression severity is projected from shared legality helpers into the rail, active sheet, summary strip, and shell summary.
+- [Phase 05]: Runtime skill truth now comes from a compiled catalog payload parsed against the extractor contract.
+- [Phase 05]: Skill restriction overrides now carry condition metadata so server exceptions stay data-driven.
+- [Phase 05]: Skill legality and repair status are recomputed from raw per-level allocations instead of being stored in UI state.
 
 ### Pending Todos
 
@@ -88,6 +93,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-31T10:38:42.518Z
-Stopped at: Phase 5 context gathered
-Resume file: .planning/phases/05-skills-derived-statistics/05-CONTEXT.md
+Last session: 2026-03-31T11:30:23.514Z
+Stopped at: Completed 05-01-PLAN.md
+Resume file: None

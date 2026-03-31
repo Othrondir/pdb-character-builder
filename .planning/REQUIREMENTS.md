@@ -7,43 +7,43 @@
 
 ### Idioma e identidad del producto
 
-- [ ] **LANG-01**: El usuario puede usar toda la interfaz principal del planner en espanol.
+- [x] **LANG-01**: El usuario puede usar toda la interfaz principal del planner en espanol.
 - [ ] **LANG-02**: El usuario ve en espanol los nombres y descripciones de clases, dotes, conjuros, dominios y reglas custom de Puerta de Baldur.
 - [ ] **LANG-03**: El usuario puede identificar que una build esta ligada a un conjunto concreto de datos/reglas del servidor.
 
 ### Flujo del planner
 
-- [ ] **FLOW-01**: El usuario puede navegar un flujo de pantallas equivalente al builder de NWN2DB para construir su personaje.
-- [ ] **FLOW-02**: El usuario puede trabajar con vistas separadas al menos para build, habilidades, conjuros, caracteristicas, estadisticas y resumen.
-- [ ] **FLOW-03**: El usuario puede volver a cualquier decision previa sin perder coherencia en la build.
+- [x] **FLOW-01**: El usuario puede navegar un flujo de pantallas equivalente al builder de NWN2DB para construir su personaje.
+- [x] **FLOW-02**: El usuario puede trabajar con vistas separadas al menos para build, habilidades, conjuros, caracteristicas, estadisticas y resumen.
+- [x] **FLOW-03**: El usuario puede volver a cualquier decision previa sin perder coherencia en la build.
 
 ### Identidad del personaje
 
-- [ ] **CHAR-01**: El usuario puede elegir raza y subraza de entre las soportadas por el servidor.
-- [ ] **CHAR-02**: El usuario puede elegir alineamiento de forma compatible con las restricciones del servidor.
-- [ ] **CHAR-03**: El usuario puede elegir deidad cuando la build lo requiera.
-- [ ] **CHAR-04**: El usuario puede ver restricciones o incompatibilidades provocadas por raza, subraza, alineamiento o deidad.
+- [x] **CHAR-01**: El usuario puede elegir raza y subraza de entre las soportadas por el servidor.
+- [x] **CHAR-02**: El usuario puede elegir alineamiento de forma compatible con las restricciones del servidor.
+- [x] **CHAR-03**: El usuario puede elegir deidad cuando la build lo requiera.
+- [x] **CHAR-04**: El usuario puede ver restricciones o incompatibilidades provocadas por raza, subraza, alineamiento o deidad.
 
 ### Caracteristicas y progresion base
 
-- [ ] **ABIL-01**: El usuario puede definir las caracteristicas iniciales segun las reglas de creacion soportadas por el planner.
-- [ ] **ABIL-02**: El usuario puede asignar aumentos de caracteristica en los niveles que correspondan.
-- [ ] **PROG-01**: El usuario puede construir una progresion completa desde nivel 1 hasta nivel 16.
-- [ ] **PROG-02**: El usuario puede subir y bajar niveles sin romper el estado interno de la build.
-- [ ] **PROG-03**: El usuario puede ver la progresion nivel a nivel de su personaje.
+- [x] **ABIL-01**: El usuario puede definir las caracteristicas iniciales segun las reglas de creacion soportadas por el planner.
+- [x] **ABIL-02**: El usuario puede asignar aumentos de caracteristica en los niveles que correspondan.
+- [x] **PROG-01**: El usuario puede construir una progresion completa desde nivel 1 hasta nivel 16.
+- [x] **PROG-02**: El usuario puede subir y bajar niveles sin romper el estado interno de la build.
+- [x] **PROG-03**: El usuario puede ver la progresion nivel a nivel de su personaje.
 
 ### Clases y clases de prestigio
 
-- [ ] **CLAS-01**: El usuario puede elegir clases basicas y clases de prestigio soportadas por Puerta de Baldur.
-- [ ] **CLAS-02**: El usuario puede ver y cumplir los prerrequisitos de entrada de cada clase o clase de prestigio.
-- [ ] **CLAS-03**: El planner bloquea selecciones ilegales segun las reglas de multiclase del servidor, incluidos bloques minimos por clase y excepciones conocidas.
-- [ ] **CLAS-04**: El usuario puede ver que aptitudes, hitos o elecciones relevantes gana en cada nivel de clase.
+- [x] **CLAS-01**: El usuario puede elegir clases basicas y clases de prestigio soportadas por Puerta de Baldur.
+- [x] **CLAS-02**: El usuario puede ver y cumplir los prerrequisitos de entrada de cada clase o clase de prestigio.
+- [x] **CLAS-03**: El planner bloquea selecciones ilegales segun las reglas de multiclase del servidor, incluidos bloques minimos por clase y excepciones conocidas.
+- [x] **CLAS-04**: El usuario puede ver que aptitudes, hitos o elecciones relevantes gana en cada nivel de clase.
 
 ### Habilidades
 
-- [ ] **SKIL-01**: El usuario puede asignar rangos de habilidad por nivel segun la clase elegida y las reglas del servidor.
-- [ ] **SKIL-02**: El planner calcula y hace cumplir maximos, costes y restricciones de habilidades clase/transclase cuando aplique.
-- [ ] **SKIL-03**: El planner bloquea excepciones de habilidades del servidor, como las restricciones conocidas por armadura pesada u otras reglas explicitadas.
+- [x] **SKIL-01**: El usuario puede asignar rangos de habilidad por nivel segun la clase elegida y las reglas del servidor.
+- [x] **SKIL-02**: El planner calcula y hace cumplir maximos, costes y restricciones de habilidades clase/transclase cuando aplique.
+- [x] **SKIL-03**: El planner bloquea excepciones de habilidades del servidor, como las restricciones conocidas por armadura pesada u otras reglas explicitadas.
 
 ### Dotes y competencias
 
@@ -105,28 +105,28 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| LANG-01 | Phase 2 | Pending |
+| LANG-01 | Phase 2 | Complete |
 | LANG-02 | Phase 7 | Pending |
 | LANG-03 | Phase 8 | Pending |
-| FLOW-01 | Phase 2 | Pending |
-| FLOW-02 | Phase 2 | Pending |
-| FLOW-03 | Phase 4 | Pending |
-| CHAR-01 | Phase 3 | Pending |
-| CHAR-02 | Phase 3 | Pending |
-| CHAR-03 | Phase 3 | Pending |
-| CHAR-04 | Phase 3 | Pending |
-| ABIL-01 | Phase 3 | Pending |
-| ABIL-02 | Phase 4 | Pending |
-| PROG-01 | Phase 4 | Pending |
-| PROG-02 | Phase 4 | Pending |
-| PROG-03 | Phase 4 | Pending |
-| CLAS-01 | Phase 4 | Pending |
-| CLAS-02 | Phase 4 | Pending |
-| CLAS-03 | Phase 4 | Pending |
-| CLAS-04 | Phase 4 | Pending |
-| SKIL-01 | Phase 5 | Pending |
-| SKIL-02 | Phase 5 | Pending |
-| SKIL-03 | Phase 5 | Pending |
+| FLOW-01 | Phase 2 | Complete |
+| FLOW-02 | Phase 2 | Complete |
+| FLOW-03 | Phase 4 | Complete |
+| CHAR-01 | Phase 3 | Complete |
+| CHAR-02 | Phase 3 | Complete |
+| CHAR-03 | Phase 3 | Complete |
+| CHAR-04 | Phase 3 | Complete |
+| ABIL-01 | Phase 3 | Complete |
+| ABIL-02 | Phase 4 | Complete |
+| PROG-01 | Phase 4 | Complete |
+| PROG-02 | Phase 4 | Complete |
+| PROG-03 | Phase 4 | Complete |
+| CLAS-01 | Phase 4 | Complete |
+| CLAS-02 | Phase 4 | Complete |
+| CLAS-03 | Phase 4 | Complete |
+| CLAS-04 | Phase 4 | Complete |
+| SKIL-01 | Phase 5 | Complete |
+| SKIL-02 | Phase 5 | Complete |
+| SKIL-03 | Phase 5 | Complete |
 | FEAT-01 | Phase 6 | Pending |
 | FEAT-02 | Phase 6 | Pending |
 | FEAT-03 | Phase 6 | Pending |
@@ -152,4 +152,4 @@
 
 ---
 *Requirements defined: 2026-03-29*
-*Last updated: 2026-03-29 after roadmap traceability mapping*
+*Last updated: 2026-03-30 after Phase 4 verification*
