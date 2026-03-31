@@ -3,7 +3,7 @@ import {
   type ValidationOutcome,
   resolveValidationOutcome,
 } from '../contracts/validation-outcome';
-import type { SkillCatalog } from '../../data-extractor/src/contracts/skill-catalog';
+import type { SkillCatalog } from '@data-extractor/contracts/skill-catalog';
 import {
   evaluateSkillSnapshot,
   type SkillLevelInput,

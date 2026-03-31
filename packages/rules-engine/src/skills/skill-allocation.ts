@@ -6,7 +6,7 @@ import {
 import type {
   SkillCatalog,
   SkillRestrictionOverride,
-} from '../../data-extractor/src/contracts/skill-catalog';
+} from '@data-extractor/contracts/skill-catalog';
 
 export type SkillEvaluationStatus = 'blocked' | 'illegal' | 'legal' | 'pending';
 export type SkillCostType = 'class' | 'cross-class';
@@ -176,7 +176,10 @@ export function evaluateSkillLevel(
     };
   }
 
-  const allocations = input.level.allocations.map((allocation) => {
+  const classId = input.level.classId;
+
+  const allocations: EvaluatedSkillAllocation[] = input.level.allocations.map(
+    (allocation): EvaluatedSkillAllocation => {
     const skillRecord =
       input.catalog.skills.find((entry) => entry.id === allocation.skillId) ?? null;
 
@@ -204,7 +207,11 @@ export function evaluateSkillLevel(
       };
     }
 
-    const costType = getCostType(allocation.skillId, input.level.classId, input.catalog);
+    const costType = getCostType(
+      allocation.skillId,
+      classId,
+      input.catalog,
+    );
 
     if (!costType) {
       const issues = [
@@ -269,7 +276,8 @@ export function evaluateSkillLevel(
       spentPoints,
       status: getStatusFromIssues(issues),
     };
-  });
+    },
+  );
 
   const spentPoints = allocations.reduce(
     (total, allocation) => total + allocation.spentPoints,
