@@ -122,9 +122,9 @@ export const shellCopyEs = {
     },
     skills: {
       description:
-        'Vista preparada para el reparto de habilidades por nivel y sus límites.',
+        'Editor por nivel para repartir rangos, revisar topes y reparar bloqueos sin salir de la hoja activa.',
       heading: 'Habilidades',
-      highlights: ['Rangos por nivel', 'Límites de clase', 'Sincronía futura'],
+      highlights: ['Habilidades 1-16', 'Hoja de habilidades', 'Reparación preservada'],
       label: 'Habilidades',
     },
     spells: {
@@ -144,7 +144,7 @@ export const shellCopyEs = {
     stats: {
       description:
         'Resumen técnico preparado para estadísticas derivadas y estado general.',
-      heading: 'Estadísticas',
+      heading: 'Estadísticas técnicas',
       highlights: ['Resumen técnico', 'Estado derivado', 'Preparado para cálculos'],
       label: 'Estadísticas',
     },
