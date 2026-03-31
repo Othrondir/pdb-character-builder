@@ -124,7 +124,7 @@ Declared values (must be multiples of 4):
 | 2xl | 48px | Major split between rail cluster and active sheet on wide layouts |
 | 3xl | 64px | Outer page breathing room only |
 
-Exceptions: `44px` minimum touch target for icon-only or stepper controls, matching the existing shell action treatment.
+Exceptions: `44px` minimum touch target for icon-only or stepper controls, matching the existing shell action treatment. Any icon-only increment or decrement control must expose an adjacent text label or an accessible name that preserves the action meaning for touch users and screen readers.
 
 ---
 
@@ -135,7 +135,7 @@ Exceptions: `44px` minimum touch target for icon-only or stepper controls, match
 | Body | 16px | 400 | 1.5 |
 | Label | 14px | 600 | 1.3 |
 | Heading | 30px | 600 | 1.2 |
-| Display | 42px | 700 | 1.1 |
+| Display | 42px | 600 | 1.1 |
 
 Notes:
 - Section headings, group titles, and rail emphasis use `Cormorant Garamond`.
