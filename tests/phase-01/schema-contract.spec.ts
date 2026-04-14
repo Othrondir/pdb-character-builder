@@ -23,6 +23,9 @@ describe('VALI-04 canonical schema contract', () => {
       'feat:289',
       'class:5',
       'rule:heavy-armor-tumble-block',
+      'subrace:moon-elf',
+      'alignment:neutral-good',
+      'deity:none',
     ];
 
     for (const id of acceptedIds) {

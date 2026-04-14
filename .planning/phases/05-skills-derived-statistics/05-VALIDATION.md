@@ -19,7 +19,7 @@ created: 2026-03-31
 |----------|-------|
 | **Framework** | Vitest 4.x + React Testing Library |
 | **Config file** | `vitest.config.ts` |
-| **Quick run command** | `corepack pnpm vitest --run tests/phase-05` |
+| **Quick run command** | `corepack pnpm vitest --run tests/phase-05 --reporter=dot` |
 | **Full suite command** | `corepack pnpm vitest --run` |
 | **Estimated runtime** | ~30 seconds |
 
@@ -27,7 +27,7 @@ created: 2026-03-31
 
 ## Sampling Rate
 
-- **After every task commit:** Run `corepack pnpm vitest --run tests/phase-05`
+- **After every task commit:** Run `corepack pnpm vitest --run tests/phase-05 --reporter=dot`
 - **After every plan wave:** Run `corepack pnpm vitest --run`
 - **Before `$gsd-verify-work`:** Full suite must be green
 - **Max feedback latency:** 30 seconds
@@ -38,9 +38,10 @@ created: 2026-03-31
 
 | Task ID | Plan | Wave | Requirement | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|-----------|-------------------|-------------|--------|
-| 05-01-01 | 01 | 1 | SKIL-01 | unit + component | `corepack pnpm vitest --run tests/phase-05/skills-board.spec.tsx` | ❌ W0 | ⬜ pending |
-| 05-01-02 | 01 | 1 | SKIL-02 | unit | `corepack pnpm vitest --run tests/phase-05/skill-legality.spec.ts` | ❌ W0 | ⬜ pending |
-| 05-02-01 | 02 | 2 | SKIL-03 | unit + component | `corepack pnpm vitest --run tests/phase-05/derived-stats.spec.tsx` | ❌ W0 | ⬜ pending |
+| 05-01-01 | 01 | 1 | SKIL-01, SKIL-03 | contract | `corepack pnpm vitest --run tests/phase-05/skill-dataset-contract.spec.ts` | ❌ W0 | ⬜ pending |
+| 05-01-02 | 01 | 1 | SKIL-02, SKIL-03 | unit | `corepack pnpm vitest --run tests/phase-05/skill-rules.spec.ts tests/phase-05/skill-revalidation.spec.ts --reporter=dot` | ❌ W0 | ⬜ pending |
+| 05-02-01 | 02 | 2 | SKIL-01, SKIL-02 | component | `corepack pnpm vitest --run tests/phase-05/skill-allocation-flow.spec.tsx --reporter=dot` | ❌ W0 | ⬜ pending |
+| 05-03-01 | 03 | 3 | SKIL-02, SKIL-03 | component + integration | `corepack pnpm vitest --run tests/phase-05/skill-stats-sync.spec.tsx --reporter=dot` | ❌ W0 | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
@@ -48,9 +49,11 @@ created: 2026-03-31
 
 ## Wave 0 Requirements
 
-- [ ] `tests/phase-05/skills-board.spec.tsx` — route-owned skill-sheet coverage for level rail, active level editing, and preserved repair state
-- [ ] `tests/phase-05/skill-legality.spec.ts` — class/cross-class cap, point-cost, and blocked-rule evaluator coverage
-- [ ] `tests/phase-05/derived-stats.spec.tsx` — synchronized `Habilidades` and `Estadísticas` read-model coverage
+- [ ] `tests/phase-05/skill-dataset-contract.spec.ts` — compiled catalog schema coverage proving runtime truth comes from a dataset payload, not a five-skill fixture
+- [ ] `tests/phase-05/skill-rules.spec.ts` — class/transclase cap, point-cost, and override-driven legality coverage
+- [ ] `tests/phase-05/skill-revalidation.spec.ts` — preserved downstream repair after upstream progression or INT changes
+- [ ] `tests/phase-05/skill-allocation-flow.spec.tsx` — routed `Habilidades` rail and active sheet behavior over the shared selector pipeline
+- [ ] `tests/phase-05/skill-stats-sync.spec.tsx` — synchronized `Habilidades`, `Estadísticas`, and shell-summary coverage
 
 ---
 

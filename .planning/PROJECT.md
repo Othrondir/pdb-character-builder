@@ -15,6 +15,9 @@ A player can build a Puerta de Baldur character from level 1 to 16 with strict s
 ### Validated
 
 - [x] Versioned, provenance-aware Puerta rules contracts compile into public-safe planner datasets with fail-closed blocked states — Phase 1
+- [x] Users can navigate a static Spanish-first planner shell across the main builder areas with an NWN1-inspired presentation baseline — Phase 2
+- [x] Users can define a legal character foundation with origin restrictions, deity requirements, and budget-led starting attributes before later planning phases — Phase 3
+- [x] Users can build and repair a stable level 1-16 class path with prerequisite feedback, multiclass legality, and per-level gains — Phase 4
 
 ### Active
 
@@ -69,6 +72,14 @@ Phase 1 locked the compiler-first contract layer: canonical IDs, public-safe dat
 | Resolve mechanical truth as manual override > Puerta snapshot > base-game, with forum material preserved as evidence-only | Runtime legality must fail closed and never silently promote forum prose into trusted data | Adopted in Phase 1 |
 | Reject absolute machine-local paths from manifests and override payloads | Published planner datasets must stay public-safe and portable across machines | Adopted in Phase 1 |
 | Keep missing-source and mechanically conflicting rules blocked by default | Illegal or unverifiable Puerta rules must never appear legal in the planner | Adopted in Phase 1 |
+| Build the planner shell as a dedicated `apps/planner` SPA with stable routed sections | The shell needs one persistent frame and deep-linkable section entries before feature phases start filling screens | Adopted in Phase 2 |
+| Ship visible shell copy in Spanish from the first frontend pass | Spanish-first framing is a product requirement, not later polish | Adopted in Phase 2 |
+| Encode the NWN1 shell identity through reusable fonts and CSS tokens instead of generic utility styling | The product must feel intentional and distinct without copying NWN2DB's skin | Adopted in Phase 2 |
+| Keep Phase 3 legality in pure rules-engine helpers projected through selectors | The routed origin board, attributes board, and summary panel need one consistent legality source instead of duplicated JSX conditionals | Adopted in Phase 3 |
+| Gate the attribute board behind a coherent origin and expose budget feedback inline | Players should see server-facing restrictions before later progression screens consume invalid foundation state | Adopted in Phase 3 |
+| Keep `Construcción` as one screen with the origin summarized above the progression editor | The locked UX decision was one Build route, but Phase 4 still needed inline origin editing and progression ownership in the same place | Adopted in Phase 4 |
+| Preserve downstream levels after upstream edits and project repair state instead of truncating progression | Players should not lose later planning work when revisiting an earlier class choice | Adopted in Phase 4 |
+| Share progression severity through pure legality and revalidation helpers | The rail, active sheet, summary strip, and shell summary must not drift on blocked versus invalid states | Adopted in Phase 4 |
 
 ## Evolution
 
@@ -88,4 +99,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-03-30 after Phase 1*
+*Last updated: 2026-03-30 after Phase 4*

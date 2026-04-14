@@ -9,12 +9,16 @@
     ],
     "module": "ESNext",
     "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
     "strict": true,
     "noEmit": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "baseUrl": ".",
     "paths": {
+      "@planner/*": [
+        "apps/planner/src/*"
+      ],
       "@data-extractor/*": [
         "packages/data-extractor/src/*"
       ],
@@ -24,6 +28,8 @@
     }
   },
   "include": [
+    "apps/**/*.ts",
+    "apps/**/*.tsx",
     "packages/**/*.ts",
     "tests/**/*.ts"
   ]

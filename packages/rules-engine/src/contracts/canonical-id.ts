@@ -4,6 +4,9 @@ export const ENTITY_KINDS = [
   'spell',
   'skill',
   'race',
+  'subrace',
+  'alignment',
+  'deity',
   'domain',
   'rule',
 ] as const;
