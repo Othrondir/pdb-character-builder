@@ -101,7 +101,7 @@ None yet.
 
 | # | Description | Date | Commit | Directory |
 |---|-------------|------|--------|-----------|
-| 260414-gxx | ignorar artefactos locales del workspace | 2026-04-14 | pending | [260414-gxx-ignorar-artefactos-locales-del-workspace](./quick/260414-gxx-ignorar-artefactos-locales-del-workspace/) |
+| 260414-gxx | ignorar artefactos locales del workspace | 2026-04-14 | 089881b | [260414-gxx-ignorar-artefactos-locales-del-workspace](./quick/260414-gxx-ignorar-artefactos-locales-del-workspace/) |
 
 ## Session Continuity
 
