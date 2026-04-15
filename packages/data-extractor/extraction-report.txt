@@ -5,7 +5,7 @@
 PROVENANCE
   Dataset ID:    puerta-ee-2026-04-15+cf6e8aad
   Manifest SHA1: cf6e8aad5751930e345266b84a3be31d9d67f3b1
-  Extracted:     2026-04-15T13:09:06.502Z
+  Extracted:     2026-04-15T14:20:45.963Z
 
 ------------------------------------------------------------
 CATALOGS
@@ -18,7 +18,7 @@ CATALOGS
   domains                  27 items
 
 ------------------------------------------------------------
-WARNINGS (135)
+WARNINGS (143)
 ------------------------------------------------------------
   [races] subraces.2da not found in nwsync or base game; subrace list will be empty
   [skills] cls_skill table 'cls_skill_blkgrd' has no matching PlayerClass=1 in classes.2da
@@ -106,6 +106,14 @@ WARNINGS (135)
   [feats] Feat row 81: no display label, skipping
   [feats] Feat row 119: no display label, skipping
   [feats] Feat row 405: no display label, skipping
+  [feats] Feat row 1811 (WeapFocSap): Name strref 16827517 resolved to empty
+  [feats] Feat row 1812 (WeapSpeSap): Name strref 16827518 resolved to empty
+  [feats] Feat row 1813 (FEAT_EPIC_WEAPON_FOCUS_Sap): Name strref 16827520 resolved to empty
+  [feats] Feat row 1814 (FEAT_EPIC_WEAPON_SPECIALIZATION_Sap): Name strref 16827521 resolved to empty
+  [feats] Feat row 1815 (ImpCritSap): Name strref 16827522 resolved to empty
+  [feats] Feat row 1816 (FEAT_WEAPON_OF_CHOICE_Sap): Name strref 16827519 resolved to empty
+  [feats] Feat row 1817 (FEAT_EPIC_DEVASTATING_CRITICAL_Sap): Name strref 16827523 resolved to empty
+  [feats] Feat row 1818 (FEAT_EPIC_OVERWHELMING_CRITICAL_Sap): Name strref 16827524 resolved to empty
   [spells] Spell row 484: missing Label, skipped
   [spells] Spell row 540: missing Label, skipped
   [spells] Spell row 550: missing Label, skipped
@@ -157,5 +165,5 @@ WARNINGS (135)
   [deities] No deity 2DA found in nwsync or base game. Deity data requires manual overrides from server documentation. The Puerta de Baldur server manages deity restrictions through scripting and forum rules, not through a 2DA table.
 
 ============================================================
-  TOTAL: 2016 items | 135 warnings | 0 skipped
+  TOTAL: 2016 items | 143 warnings | 0 skipped
 ============================================================

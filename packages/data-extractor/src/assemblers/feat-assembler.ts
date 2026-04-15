@@ -207,8 +207,9 @@ export function assembleFeatCatalog(
     if (!id) continue;
 
     // Resolve Spanish name and description via TLK
-    const nameStrref = parseIntOrNull(row.Name);
-    const descStrref = parseIntOrNull(row.Description);
+    // feat.2da uses FEAT and DESCRIPTION as column names (not Name/Description)
+    const nameStrref = parseIntOrNull(row.FEAT ?? row.Name);
+    const descStrref = parseIntOrNull(row.DESCRIPTION ?? row.Description);
     const resolvedName = nameStrref != null ? tlkResolver.resolve(nameStrref) : '';
     const resolvedDesc = descStrref != null ? tlkResolver.resolve(descStrref) : '';
 

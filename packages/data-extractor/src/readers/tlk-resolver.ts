@@ -25,6 +25,19 @@ import { CUSTOM_TLK_OFFSET, CUSTOM_TLK_RESREF, CUSTOM_TLK_RESTYPE } from '../con
 import type { NwsyncReader } from './nwsync-reader';
 
 /**
+ * Strip NWN engine color markup tags from a string.
+ *
+ * NWN uses `<c{3 raw bytes}>text</c>` to colorize in-game text.
+ * The 3 bytes after `<c` are binary RGB values (not hex), so they
+ * appear as arbitrary characters when decoded as Latin-1/UTF-8.
+ * We strip both the opening `<c...>` tag and the closing `</c>`.
+ */
+function stripNwnColorCodes(text: string): string {
+  // <c followed by exactly 3 arbitrary characters, then >
+  return text.replace(/<c.{3}>/g, '').replace(/<\/c>/g, '');
+}
+
+/**
  * Resolves NWN string references to Spanish text using the dual-TLK system.
  */
 export class TlkResolver {
@@ -55,10 +68,10 @@ export class TlkResolver {
 
     if (strref >= CUSTOM_TLK_OFFSET) {
       const customIndex = strref - CUSTOM_TLK_OFFSET;
-      return this.customTlk.getString(customIndex);
+      return stripNwnColorCodes(this.customTlk.getString(customIndex));
     }
 
-    return this.baseTlk.getString(strref);
+    return stripNwnColorCodes(this.baseTlk.getString(strref));
   }
 
   /**
