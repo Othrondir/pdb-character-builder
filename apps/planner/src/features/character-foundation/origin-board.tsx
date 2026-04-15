@@ -1,220 +1,114 @@
-import type { ComponentPropsWithoutRef } from 'react';
 import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
 import { shellCopyEs } from '@planner/lib/copy/es';
+import { SelectionScreen } from '@planner/components/ui/selection-screen';
+import { OptionList, type OptionItem } from '@planner/components/ui/option-list';
+import { DetailPanel } from '@planner/components/ui/detail-panel';
+import { ActionBar } from '@planner/components/ui/action-bar';
 import {
   selectFoundationSummary,
   selectFoundationValidation,
   selectOriginOptions,
 } from '@planner/features/character-foundation/selectors';
 import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
-
-const BLOCKED_CHOICE_COPY: 'Elección bloqueada: completa el paso anterior o cambia la opción marcada para continuar.' =
-  shellCopyEs.foundation.blockedChoice;
-
-interface OriginStepProps {
-  emptyLabel?: string;
-  hint?: string;
-  issue?: string | null;
-  issueStatus?: 'blocked' | 'illegal' | 'legal' | null;
-  onSelect: (id: CanonicalId) => void;
-  options: Array<{
-    blocked: boolean;
-    disabled: boolean;
-    id: CanonicalId;
-    label: string;
-    selected: boolean;
-  }>;
-  title: string;
-}
-
-function OriginOptionButton({
-  children,
-  className,
-  ...props
-}: ComponentPropsWithoutRef<'button'>) {
-  return (
-    <button
-      className={`planner-chip foundation-option${className ? ` ${className}` : ''}`}
-      type="button"
-      {...props}
-    >
-      {children}
-    </button>
-  );
-}
-
-function OriginStep({
-  emptyLabel,
-  hint,
-  issue,
-  issueStatus,
-  onSelect,
-  options,
-  title,
-}: OriginStepProps) {
-  return (
-    <section className="planner-panel planner-panel--inner foundation-step">
-      <h2>{title}</h2>
-      {hint ? <p className="planner-section-view__description">{hint}</p> : null}
-      {issue ? (
-        <p
-          className={`foundation-step__issue${
-            issueStatus === 'illegal' ? ' is-illegal' : ''
-          }`}
-        >
-          {issue}
-        </p>
-      ) : null}
-      <div className="planner-section-view__highlights">
-        {options.length > 0 ? (
-          options.map((option) => (
-            <OriginOptionButton
-              aria-pressed={option.selected}
-              className={[
-                option.selected ? 'is-selected' : '',
-                option.blocked ? 'is-blocked' : '',
-              ]
-                .filter(Boolean)
-                .join(' ')}
-              disabled={option.disabled}
-              key={option.id}
-              onClick={() => onSelect(option.id)}
-            >
-              {option.label}
-            </OriginOptionButton>
-          ))
-        ) : (
-          <span className="planner-chip">{emptyLabel}</span>
-        )}
-      </div>
-    </section>
-  );
-}
+import { usePlannerShellStore } from '@planner/state/planner-shell';
 
 interface OriginBoardProps {
-  embedded?: boolean;
+  activeStep?: 'race' | 'alignment' | 'deity';
 }
 
-export function OriginBoard({ embedded = false }: OriginBoardProps) {
+export function OriginBoard({ activeStep = 'race' }: OriginBoardProps) {
   const foundationState = useCharacterFoundationStore();
-  const foundationSummary = selectFoundationSummary(foundationState);
   const foundationValidation = selectFoundationValidation(foundationState);
   const originOptions = selectOriginOptions(foundationState);
   const setAlignment = useCharacterFoundationStore((state) => state.setAlignment);
   const setDeity = useCharacterFoundationStore((state) => state.setDeity);
   const setRace = useCharacterFoundationStore((state) => state.setRace);
   const setSubrace = useCharacterFoundationStore((state) => state.setSubrace);
+  const setActiveOriginStep = usePlannerShellStore((state) => state.setActiveOriginStep);
+
+  const stepConfig = {
+    race: {
+      title: shellCopyEs.stepper.stepTitles.race,
+      options: originOptions.races,
+      onSelect: (id: CanonicalId) => setRace(id),
+      nextStep: 'alignment' as const,
+      issue: foundationValidation.controlMessages.race,
+      issueStatus: foundationValidation.controlStatuses.race,
+    },
+    alignment: {
+      title: shellCopyEs.stepper.stepTitles.alignment,
+      options: originOptions.alignments,
+      onSelect: (id: CanonicalId) => setAlignment(id),
+      nextStep: 'deity' as const,
+      issue: foundationValidation.controlMessages.alignment,
+      issueStatus: foundationValidation.controlStatuses.alignment,
+    },
+    deity: {
+      title: shellCopyEs.stepper.stepTitles.deity,
+      options: originOptions.deities,
+      onSelect: (id: CanonicalId) => setDeity(id),
+      nextStep: 'attributes' as const,
+      issue: foundationValidation.controlMessages.deity,
+      issueStatus: foundationValidation.controlStatuses.deity,
+    },
+  };
+
+  const config = stepConfig[activeStep];
+  const selectedOption = config.options.find((o) => o.selected);
+
+  const items: OptionItem[] = config.options.map((o) => ({
+    blocked: o.blocked,
+    disabled: o.disabled,
+    id: o.id,
+    label: o.label,
+    selected: o.selected,
+  }));
+
+  const hasSubraces = activeStep === 'race' && originOptions.subraces.length > 0;
 
   return (
-    <section
-      className={`planner-section-view foundation-board section-fade${
-        embedded ? ' is-embedded' : ''
-      }`}
+    <SelectionScreen
+      title={config.title}
+      actionBar={
+        <ActionBar
+          acceptDisabled={!selectedOption}
+          acceptLabel="Aceptar"
+          cancelLabel="Cancelar"
+          onAccept={() => setActiveOriginStep(config.nextStep)}
+          onCancel={() => config.onSelect('' as CanonicalId)}
+        />
+      }
     >
-      {embedded ? null : (
-        <header className="planner-panel planner-panel--inner">
-          <p className="planner-section-view__eyebrow">{shellCopyEs.subtitle}</p>
-          <h1>{shellCopyEs.sections.build.heading}</h1>
-          <p className="planner-section-view__description">
-            {shellCopyEs.sections.build.description}
-          </p>
-        </header>
-      )}
-
-      <div className="foundation-board__layout">
-        <div className="foundation-board__steps">
-          <OriginStep
-            issue={foundationValidation.controlMessages.race}
-            issueStatus={foundationValidation.controlStatuses.race}
-            onSelect={setRace}
-            options={originOptions.races}
-            title={shellCopyEs.foundation.steps.race}
-          />
-          <OriginStep
-            emptyLabel="No hay subrazas disponibles para esta raza."
-            hint={
-              originOptions.locks.subrace
-                ? shellCopyEs.foundation.stepHints.subraceLocked
-                : undefined
-            }
-            issue={foundationValidation.controlMessages.subrace}
-            issueStatus={foundationValidation.controlStatuses.subrace}
-            onSelect={setSubrace}
-            options={originOptions.subraces}
-            title={shellCopyEs.foundation.steps.subrace}
-          />
-          <OriginStep
-            hint={
-              originOptions.locks.alignment
-                ? shellCopyEs.foundation.stepHints.alignmentLocked
-                : undefined
-            }
-            issue={foundationValidation.controlMessages.alignment}
-            issueStatus={foundationValidation.controlStatuses.alignment}
-            onSelect={setAlignment}
-            options={originOptions.alignments}
-            title={shellCopyEs.foundation.steps.alignment}
-          />
-          <OriginStep
-            hint={
-              originOptions.locks.deity
-                ? shellCopyEs.foundation.stepHints.deityLocked
-                : undefined
-            }
-            issue={foundationValidation.controlMessages.deity}
-            issueStatus={foundationValidation.controlStatuses.deity}
-            onSelect={setDeity}
-            options={originOptions.deities}
-            title={shellCopyEs.foundation.steps.deity}
-          />
-        </div>
-
-        <aside className="planner-panel planner-panel--inner foundation-sheet">
-          <h2>{shellCopyEs.foundation.currentStateHeading}</h2>
-          <p className="planner-section-view__description">
-            {shellCopyEs.foundation.currentStateBody}
-          </p>
-
-          <dl className="planner-summary__grid">
-            <div>
-              <dt>{shellCopyEs.foundation.steps.race}</dt>
-              <dd>{foundationSummary.selectedRaceLabel ?? 'Sin elegir'}</dd>
-            </div>
-            <div>
-              <dt>{shellCopyEs.foundation.steps.subrace}</dt>
-              <dd>{foundationSummary.selectedSubraceLabel ?? 'Sin elegir'}</dd>
-            </div>
-            <div>
-              <dt>{shellCopyEs.foundation.steps.alignment}</dt>
-              <dd>{foundationSummary.selectedAlignmentLabel ?? 'Sin elegir'}</dd>
-            </div>
-            <div>
-              <dt>{shellCopyEs.foundation.steps.deity}</dt>
-              <dd>{foundationSummary.selectedDeityLabel ?? 'Sin elegir'}</dd>
-            </div>
-          </dl>
-
-          {foundationValidation.summaryStatus !== 'legal' ? (
-            <p
-              className={`foundation-step__issue${
-                foundationValidation.summaryStatus === 'illegal'
-                  ? ' is-illegal'
-                  : ''
-              }`}
-            >
-              {BLOCKED_CHOICE_COPY}
-            </p>
-          ) : null}
-
-          <OriginOptionButton
-            aria-disabled={foundationSummary.summaryStatus !== 'legal'}
-            className="planner-shell__cta"
-            disabled={foundationSummary.summaryStatus !== 'legal'}
-          >
-            {shellCopyEs.foundation.confirmOrigin}
-          </OriginOptionButton>
-        </aside>
-      </div>
-    </section>
+      <OptionList
+        items={items}
+        onSelect={(id) => config.onSelect(id as CanonicalId)}
+      />
+      <DetailPanel
+        title={selectedOption?.label}
+        body={
+          config.issue
+            ? config.issue
+            : selectedOption
+              ? `${selectedOption.label} seleccionado.`
+              : 'Selecciona una opcion para ver su descripcion.'
+        }
+      >
+        {hasSubraces && (
+          <div className="origin-subraces">
+            <h4>{shellCopyEs.foundation.steps.subrace}</h4>
+            <OptionList
+              items={originOptions.subraces.map((s) => ({
+                blocked: s.blocked,
+                disabled: s.disabled,
+                id: s.id,
+                label: s.label,
+                selected: s.selected,
+              }))}
+              onSelect={(id) => setSubrace(id as CanonicalId)}
+            />
+          </div>
+        )}
+      </DetailPanel>
+    </SelectionScreen>
   );
 }

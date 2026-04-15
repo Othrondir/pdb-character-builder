@@ -109,6 +109,31 @@ a {
   max-width: 320px;
 }
 
+/* ── Attributes editor ── */
+.attributes-editor { display: flex; flex-direction: column; gap: var(--space-sm); overflow-y: auto; padding: var(--space-md); }
+.attributes-editor__header { color: var(--color-text-muted); font-size: 14px; padding-bottom: var(--space-sm); border-bottom: 1px solid var(--color-panel-edge); }
+.attributes-editor__row {
+  align-items: center;
+  display: flex;
+  gap: var(--space-sm);
+  padding: var(--space-xs) 0;
+}
+.attributes-editor__label { color: var(--color-text); flex: 1; font-size: 14px; }
+.attributes-editor__value {
+  color: var(--color-text);
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 600;
+  min-width: 32px;
+  text-align: center;
+}
+.attributes-editor__mod { color: var(--color-text-muted); font-size: 14px; min-width: 40px; text-align: right; }
+.attributes-editor__actions { margin-top: var(--space-md); }
+.attributes-editor__summary { display: flex; flex-direction: column; gap: var(--space-xs); margin-top: var(--space-md); }
+.attributes-editor__summary > div { display: flex; justify-content: space-between; }
+.attributes-editor__summary dt { color: var(--color-text-muted); font-size: 14px; }
+.attributes-editor__summary dd { color: var(--color-text); font-family: var(--font-display); font-size: 16px; font-weight: 600; margin: 0; }
+
 /* ── Panel ────────────────────────────────────────────────── */
 
 .planner-panel {

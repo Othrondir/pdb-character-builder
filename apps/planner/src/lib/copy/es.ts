@@ -164,6 +164,16 @@ export const shellCopyEs = {
     jugarLabel: 'Jugar',
     reiniciarLabel: 'Reiniciar',
     cancelarLabel: 'Cancelar',
+    stepTitles: {
+      race: 'Selecciona la raza de tu personaje',
+      alignment: 'Selecciona el alineamiento del personaje',
+      deity: 'Selecciona la deidad del personaje',
+      attributes: 'Ajusta las caracteristicas iniciales',
+      class: 'Selecciona la clase del nivel',
+      skills: 'Distribuir puntos de habilidad',
+      feats: 'Selecciona las dotes del nivel',
+      spells: 'Selecciona los conjuros del nivel',
+    },
   },
   emptyStateHeading: 'La hoja aún está vacía',
   emptyStateBody:

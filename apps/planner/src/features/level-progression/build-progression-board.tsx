@@ -1,45 +1,57 @@
-import { useState } from 'react';
+import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
+import type { ProgressionLevel } from '@planner/lib/sections';
 import { shellCopyEs } from '@planner/lib/copy/es';
-import { OriginBoard } from '@planner/features/character-foundation/origin-board';
-import { selectOriginReadyForAbilities } from '@planner/features/character-foundation/selectors';
+import { SelectionScreen } from '@planner/components/ui/selection-screen';
+import { OptionList, type OptionItem } from '@planner/components/ui/option-list';
+import { DetailPanel } from '@planner/components/ui/detail-panel';
+import { selectActiveLevelSheet } from './selectors';
 import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
-
-import { FoundationSummaryStrip } from './foundation-summary-strip';
-import { LevelRail } from './level-rail';
-import { LevelSheet } from './level-sheet';
+import { useLevelProgressionStore } from './store';
 
 export function BuildProgressionBoard() {
-  const foundationReady = useCharacterFoundationStore(selectOriginReadyForAbilities);
-  const [editingOrigin, setEditingOrigin] = useState(false);
+  const progressionState = useLevelProgressionStore();
+  const foundationState = useCharacterFoundationStore();
+  const activeSheet = selectActiveLevelSheet(progressionState, foundationState);
+  const setLevelClassId = useLevelProgressionStore((s) => s.setLevelClassId);
 
-  if (!foundationReady) {
-    return <OriginBoard />;
-  }
+  const classItems: OptionItem[] = activeSheet.classOptions.map((c: { id: string; label: string; selected: boolean; status: string }) => ({
+    blocked: c.status === 'blocked' || c.status === 'illegal',
+    id: c.id,
+    label: c.label,
+    selected: c.selected,
+  }));
+
+  const selectedClass = activeSheet.classOptions.find((c: { selected: boolean }) => c.selected);
+
+  const title = `${shellCopyEs.stepper.stepTitles.class} ${activeSheet.level}`;
 
   return (
-    <section className="planner-section-view progression-shell section-fade">
-      <header className="planner-panel planner-panel--inner">
-        <p className="planner-section-view__eyebrow">{shellCopyEs.subtitle}</p>
-        <h1>{shellCopyEs.sections.build.heading}</h1>
-        <p className="planner-section-view__description">
-          {shellCopyEs.sections.build.description}
-        </p>
-      </header>
-
-      <FoundationSummaryStrip
-        onToggleOrigin={() => setEditingOrigin((current) => !current)}
+    <SelectionScreen title={title}>
+      <OptionList
+        items={classItems}
+        onSelect={(id) => {
+          setLevelClassId(activeSheet.level as ProgressionLevel, id as CanonicalId);
+        }}
       />
-
-      {editingOrigin ? (
-        <div className="progression-origin-editor">
-          <OriginBoard embedded />
-        </div>
-      ) : null}
-
-      <div className="progression-board">
-        <LevelRail />
-        <LevelSheet />
-      </div>
-    </section>
+      <DetailPanel
+        title={selectedClass?.label}
+        body={
+          selectedClass
+            ? `Clase seleccionada: ${selectedClass.label}`
+            : activeSheet.placeholderBody
+        }
+      >
+        {activeSheet.gains.length > 0 && (
+          <div className="level-gains">
+            <h4>Ganancias del nivel</h4>
+            <ul>
+              {activeSheet.gains.map((gain: string, i: number) => (
+                <li key={i}>{gain}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </DetailPanel>
+    </SelectionScreen>
   );
 }
