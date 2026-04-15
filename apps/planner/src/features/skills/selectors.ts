@@ -273,10 +273,10 @@ function formatPointLabel(value: number) {
 
 function formatNextCostLabel(costType: SkillCostType, value: number) {
   if (costType === 'cross-class') {
-    return `${formatPointLabel(value)} / 0,5 rango`;
+    return `${formatPointLabel(value * 2)} / 1 rango`;
   }
 
-  return formatPointLabel(value);
+  return `${formatPointLabel(value)} / 1 rango`;
 }
 
 function formatCapLabel(value: number) {
@@ -467,9 +467,9 @@ function buildActiveSkillRows(
         allocation?.cap ??
         (costType === 'class'
           ? levelInput.level + 3
-          : (levelInput.level + 3) / 2);
+          : Math.floor((levelInput.level + 3) / 2));
       const maxAssignableRank = Math.max(0, cap - priorRank);
-      const step = costType === 'class' ? 1 : 0.5;
+      const step = 1;
       const status = allocation?.status ?? 'pending';
 
       return {
@@ -490,7 +490,7 @@ function buildActiveSkillRows(
           })) ?? [],
         label: skill.label,
         maxAssignableRank,
-        nextCost: 1,
+        nextCost: costType === 'class' ? 1 : 2,
         nextCostLabel: formatNextCostLabel(costType, 1),
         skillId: skill.id as CanonicalId,
         status,

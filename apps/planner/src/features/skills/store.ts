@@ -114,7 +114,7 @@ export const useSkillStore = create<SkillStoreState>((set) => ({
           state.levels,
           level,
           skillId,
-          Math.max(0, currentRank - step),
+          Math.max(0, Math.round(currentRank - step)),
         ),
       };
     }),
@@ -124,14 +124,14 @@ export const useSkillStore = create<SkillStoreState>((set) => ({
 
       return {
         lastEditedLevel: level,
-        levels: updateLevelSkillRank(state.levels, level, skillId, currentRank + step),
+        levels: updateLevelSkillRank(state.levels, level, skillId, Math.round(currentRank + step)),
       };
     }),
   resetSkillAllocations: () => set(createInitialSkillState()),
   setSkillRank: (level, skillId, rank) =>
     set((state) => ({
       lastEditedLevel: level,
-      levels: updateLevelSkillRank(state.levels, level, skillId, Math.max(0, rank)),
+      levels: updateLevelSkillRank(state.levels, level, skillId, Math.max(0, Math.round(rank))),
     })),
   setActiveLevel: (activeLevel) => set({ activeLevel }),
   setLevelSkillRank: (level, skillId, rank) =>

@@ -9,7 +9,7 @@
   --color-foundation-panel: #17120f;
   --color-panel-edge: rgba(63, 45, 32, 0.65);
   --color-panel-glow: rgba(159, 122, 49, 0.18);
-  --color-selection-fill: #41506a;
+  --color-selection-fill: rgba(159, 122, 49, 0.28);
   --font-display: "Cormorant Garamond", "Times New Roman", serif;
   --font-body: "Spectral", Georgia, serif;
   --space-xs: 4px;
