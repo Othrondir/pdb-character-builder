@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { compressSync } from 'fzstd';
+import { zstdCompressSync } from 'node:zlib';
 import { decompressNsyc } from '@data-extractor/parsers/nsyc-decompress';
 
 /**
@@ -9,7 +9,7 @@ import { decompressNsyc } from '@data-extractor/parsers/nsyc-decompress';
  *         + zstd-compressed payload.
  */
 function buildNsycBlob(payload: Buffer, version = 3): Buffer {
-  const compressed = Buffer.from(compressSync(payload));
+  const compressed = zstdCompressSync(payload);
   const header = Buffer.alloc(24);
   header.write('NSYC', 0, 4, 'ascii');
   header.writeUInt32LE(version, 4);
