@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 05.1-03-PLAN.md
-last_updated: "2026-04-15T12:46:14.534Z"
+stopped_at: Completed 05.1-04-PLAN.md
+last_updated: "2026-04-15T12:59:21.283Z"
 last_activity: 2026-04-15
 progress:
   total_phases: 9
   completed_phases: 5
   total_plans: 19
-  completed_plans: 17
-  percent: 89
+  completed_plans: 18
+  percent: 95
 ---
 
 # Project State
@@ -26,7 +26,7 @@ See: .planning/PROJECT.md (updated 2026-03-30)
 ## Current Position
 
 Phase: 05.1 (data-extractor-pipeline) — EXECUTING
-Plan: 4 of 5
+Plan: 5 of 5
 Status: Ready to execute
 Last activity: 2026-04-15
 
@@ -64,6 +64,7 @@ Progress: [█████░░░░░] 55%
 | Phase 05.1 P01 | 6min | 2 tasks | 11 files |
 | Phase 05.1 P02 | 6min | 2 tasks | 9 files |
 | Phase 05.1 P03 | 13min | 2 tasks | 10 files |
+| Phase 05.1 P04 | 10min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -97,6 +98,7 @@ Recent decisions affecting current work:
 - [Phase 05.1]: Saving throw progressions derived from SavingThrowTable naming convention (tables not in nwsync)
 - [Phase 05.1]: Race size resolved from appearance.2da SIZECATEGORY via Appearance index lookup
 - [Phase 05.1]: Spanish character transliteration via shared slug-utils for canonical ID generation from 2DA Labels
+- [Phase 05.1]: Feat assembler accepts composable classRows map; spell assembler accepts spellColumnName per class; Zod v4 enum-key records require all keys populated
 
 ### Pending Todos
 
@@ -121,6 +123,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-15T12:46:14.530Z
-Stopped at: Completed 05.1-03-PLAN.md
+Last session: 2026-04-15T12:59:21.280Z
+Stopped at: Completed 05.1-04-PLAN.md
 Resume file: None

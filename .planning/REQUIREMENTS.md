@@ -47,17 +47,17 @@
 
 ### Dotes y competencias
 
-- [ ] **FEAT-01**: El usuario puede elegir dotes generales, dotes custom y dotes de clase disponibles en el servidor.
+- [x] **FEAT-01**: El usuario puede elegir dotes generales, dotes custom y dotes de clase disponibles en el servidor.
 - [ ] **FEAT-02**: El usuario puede ver prerrequisitos incumplidos y razones exactas por las que una dote no es legal.
 - [ ] **FEAT-03**: El planner modela las competencias con armas, armaduras y escudos segun la version custom del servidor.
 - [ ] **FEAT-04**: El planner modela divisiones o cambios custom de competencias y dotes que difieren del NWN base.
 
 ### Conjuros y dominios
 
-- [ ] **MAGI-01**: El usuario puede elegir dominios de clerigo soportados por Puerta de Baldur, incluidos los custom.
+- [x] **MAGI-01**: El usuario puede elegir dominios de clerigo soportados por Puerta de Baldur, incluidos los custom.
 - [ ] **MAGI-02**: El usuario puede ver como los dominios, clases y progreso del personaje afectan a los conjuros disponibles.
 - [ ] **MAGI-03**: El usuario puede elegir conjuros, conjuros conocidos u otras selecciones magicas relevantes segun su clase y nivel.
-- [ ] **MAGI-04**: El planner usa la lista de conjuros custom y revisados del servidor en lugar de limitarse al NWN base.
+- [x] **MAGI-04**: El planner usa la lista de conjuros custom y revisados del servidor en lugar de limitarse al NWN base.
 
 ### Validacion y explicaciones
 
@@ -127,14 +127,14 @@
 | SKIL-01 | Phase 5 | Complete |
 | SKIL-02 | Phase 5 | Complete |
 | SKIL-03 | Phase 5 | Complete |
-| FEAT-01 | Phase 6 | Pending |
+| FEAT-01 | Phase 6 | Complete |
 | FEAT-02 | Phase 6 | Pending |
 | FEAT-03 | Phase 6 | Pending |
 | FEAT-04 | Phase 6 | Pending |
-| MAGI-01 | Phase 7 | Pending |
+| MAGI-01 | Phase 7 | Complete |
 | MAGI-02 | Phase 7 | Pending |
 | MAGI-03 | Phase 7 | Pending |
-| MAGI-04 | Phase 7 | Pending |
+| MAGI-04 | Phase 7 | Complete |
 | VALI-01 | Phase 7 | Pending |
 | VALI-02 | Phase 7 | Pending |
 | VALI-03 | Phase 7 | Pending |
