@@ -6,6 +6,11 @@
  */
 
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+/** Project root directory (2 levels up from packages/data-extractor/src/). */
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const PROJECT_ROOT = path.resolve(__dirname, '..', '..', '..');
 
 // ---------------------------------------------------------------------------
 // nwsync database paths (D-01)
@@ -95,4 +100,4 @@ export const CUSTOM_TLK_OFFSET = 0x01000000; // 16777216
 // ---------------------------------------------------------------------------
 
 /** Output directory for compiled TypeScript catalog files. */
-export const OUTPUT_DIR = path.resolve('apps', 'planner', 'src', 'data');
+export const OUTPUT_DIR = path.resolve(PROJECT_ROOT, 'apps', 'planner', 'src', 'data');

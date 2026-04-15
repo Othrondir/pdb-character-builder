@@ -50,8 +50,8 @@ describe('phase 05 skill stats synchronization', () => {
 
       progressionStore.setLevelClassId(1, 'class:rogue');
       progressionStore.setLevelClassId(2, 'class:rogue');
-      skillStore.setSkillRank(1, 'skill:hide', 4);
-      skillStore.setSkillRank(2, 'skill:listen', 1);
+      skillStore.setSkillRank(1, 'skill:esconderse', 4);
+      skillStore.setSkillRank(2, 'skill:escuchar', 1);
       skillStore.setActiveLevel(2);
     });
 
@@ -108,8 +108,8 @@ describe('phase 05 skill stats synchronization', () => {
 
       progressionStore.setLevelClassId(1, 'class:rogue');
       progressionStore.setLevelClassId(2, 'class:rogue');
-      skillStore.setSkillRank(1, 'skill:hide', 4);
-      skillStore.setSkillRank(2, 'skill:listen', 1);
+      skillStore.setSkillRank(1, 'skill:esconderse', 4);
+      skillStore.setSkillRank(2, 'skill:escuchar', 1);
       skillStore.setActiveLevel(2);
     });
 
@@ -123,7 +123,7 @@ describe('phase 05 skill stats synchronization', () => {
     expect(within(summaryPanel).getByText('Habilidades en reparacion')).toBeInTheDocument();
 
     act(() => {
-      useSkillStore.getState().setSkillRank(1, 'skill:hide', 2);
+      useSkillStore.getState().setSkillRank(1, 'skill:esconderse', 2);
     });
 
     expect(within(summaryPanel).getByText('Habilidades listas')).toBeInTheDocument();

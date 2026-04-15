@@ -72,15 +72,18 @@ describe('phase 05 skill allocation flow', () => {
 
     render(createElement(RouterProvider, { router }));
 
-    const tumbleRow = screen.getByRole('heading', { name: 'Acrobacias' }).closest('article');
-    expect(tumbleRow).not.toBeNull();
-    expect(within(tumbleRow as HTMLElement).getByText('Clase')).toBeInTheDocument();
+    // After Phase 05.1 extraction, skill labels come from the Puerta 2DA:
+    //   "Acrobacias" is now "Piruetas" (Tumble)
+    //   "Persuadir" is now "Diplomacia" (Persuade)
+    const piruetasRow = screen.getByRole('heading', { name: 'Piruetas' }).closest('article');
+    expect(piruetasRow).not.toBeNull();
+    expect(within(piruetasRow as HTMLElement).getByText('Clase')).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: /Nivel 2 Legal/ }));
 
-    const persuadeRow = screen.getByRole('heading', { name: 'Persuadir' }).closest('article');
-    expect(persuadeRow).not.toBeNull();
-    expect(within(persuadeRow as HTMLElement).getByText('Transclase')).toBeInTheDocument();
+    const diplomaciaRow = screen.getByRole('heading', { name: 'Diplomacia' }).closest('article');
+    expect(diplomaciaRow).not.toBeNull();
+    expect(within(diplomaciaRow as HTMLElement).getByText('Transclase')).toBeInTheDocument();
   });
 
   it('preserves downstream allocations when an upstream class change breaks legality', async () => {
@@ -92,8 +95,8 @@ describe('phase 05 skill allocation flow', () => {
 
       progressionStore.setLevelClassId(1, 'class:rogue');
       progressionStore.setLevelClassId(2, 'class:rogue');
-      skillStore.setSkillRank(1, 'skill:hide', 4);
-      skillStore.setSkillRank(2, 'skill:listen', 1);
+      skillStore.setSkillRank(1, 'skill:esconderse', 4);
+      skillStore.setSkillRank(2, 'skill:escuchar', 1);
       skillStore.setActiveLevel(2);
     });
 

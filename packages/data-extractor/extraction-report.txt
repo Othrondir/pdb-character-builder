@@ -1,0 +1,161 @@
+============================================================
+  Puerta de Baldur Data Extraction Report
+============================================================
+
+PROVENANCE
+  Dataset ID:    puerta-ee-2026-04-15+cf6e8aad
+  Manifest SHA1: cf6e8aad5751930e345266b84a3be31d9d67f3b1
+  Extracted:     2026-04-15T13:09:06.502Z
+
+------------------------------------------------------------
+CATALOGS
+------------------------------------------------------------
+  classes                  41 items
+  races                    46 items
+  skills                   39 items
+  feats                  1487 items
+  spells                  376 items
+  domains                  27 items
+
+------------------------------------------------------------
+WARNINGS (135)
+------------------------------------------------------------
+  [races] subraces.2da not found in nwsync or base game; subrace list will be empty
+  [skills] cls_skill table 'cls_skill_blkgrd' has no matching PlayerClass=1 in classes.2da
+  [skills] cls_skill table 'cls_skill_orcus' has no matching PlayerClass=1 in classes.2da
+  [skills] cls_skill table 'cls_skill_pdk' has no matching PlayerClass=1 in classes.2da
+  [skills] cls_skill table 'cls_skill_sol' has no matching PlayerClass=1 in classes.2da
+  [feats] Feat row 81: missing LABEL, using row index as ID
+  [feats] Feat row 86: missing LABEL, using row index as ID
+  [feats] Feat row 119: missing LABEL, using row index as ID
+  [feats] Feat row 124: missing LABEL, using row index as ID
+  [feats] Feat row 157: missing LABEL, using row index as ID
+  [feats] Feat row 162: missing LABEL, using row index as ID
+  [feats] Feat row 176: missing LABEL, using row index as ID
+  [feats] Feat row 191: missing LABEL, using row index as ID
+  [feats] Feat row 205: missing LABEL, using row index as ID
+  [feats] Feat row 210: missing LABEL, using row index as ID
+  [feats] Feat row 218: missing LABEL, using row index as ID
+  [feats] Feat row 220: missing LABEL, using row index as ID
+  [feats] Feat row 282: missing LABEL, using row index as ID
+  [feats] Feat row 283: missing LABEL, using row index as ID
+  [feats] Feat row 287: missing LABEL, using row index as ID
+  [feats] Feat row 288: missing LABEL, using row index as ID
+  [feats] Feat row 295: missing LABEL, using row index as ID
+  [feats] Feat row 298: missing LABEL, using row index as ID
+  [feats] Feat row 341: missing LABEL, using row index as ID
+  [feats] Feat row 376: missing LABEL, using row index as ID
+  [feats] Feat row 403: duplicate ID detected, using 'feat:deleted-403'
+  [feats] Feat row 405: missing LABEL, using row index as ID
+  [feats] Feat row 432: missing LABEL, using row index as ID
+  [feats] Feat row 480: missing LABEL, using row index as ID
+  [feats] Feat row 481: missing LABEL, using row index as ID
+  [feats] Feat row 482: missing LABEL, using row index as ID
+  [feats] Feat row 483: missing LABEL, using row index as ID
+  [feats] Feat row 484: missing LABEL, using row index as ID
+  [feats] Feat row 485: missing LABEL, using row index as ID
+  [feats] Feat row 486: missing LABEL, using row index as ID
+  [feats] Feat row 487: missing LABEL, using row index as ID
+  [feats] Feat row 489: missing LABEL, using row index as ID
+  [feats] Feat row 866: missing LABEL, using row index as ID
+  [feats] Feat row 899: missing LABEL, using row index as ID
+  [feats] Feat row 1031: missing LABEL, using row index as ID
+  [feats] Feat row 1089: missing LABEL, using row index as ID
+  [feats] Feat row 1090: missing LABEL, using row index as ID
+  [feats] Feat row 1091: missing LABEL, using row index as ID
+  [feats] Feat row 1092: missing LABEL, using row index as ID
+  [feats] Feat row 1093: missing LABEL, using row index as ID
+  [feats] Feat row 1094: missing LABEL, using row index as ID
+  [feats] Feat row 1106: missing LABEL, using row index as ID
+  [feats] Feat row 1107: missing LABEL, using row index as ID
+  [feats] Feat row 1108: missing LABEL, using row index as ID
+  [feats] Feat row 1120: duplicate ID detected, using 'feat:dotedivina-acelerarexpulsion-1120'
+  [feats] Feat row 1547: duplicate ID detected, using 'feat:damagereduction5-1547'
+  [feats] Feat row 1557: duplicate ID detected, using 'feat:feat-undead-graft-1-1557'
+  [feats] Feat row 1558: duplicate ID detected, using 'feat:feat-undead-graft-2-1558'
+  [feats] Feat row 1568: missing LABEL, using row index as ID
+  [feats] Feat row 1582: duplicate ID detected, using 'feat:feat-weapon-of-choice-sspear-1582'
+  [feats] Feat row 1585: missing LABEL, using row index as ID
+  [feats] Feat row 1594: missing LABEL, using row index as ID
+  [feats] Feat row 1603: missing LABEL, using row index as ID
+  [feats] Feat row 1612: missing LABEL, using row index as ID
+  [feats] Feat row 1621: missing LABEL, using row index as ID
+  [feats] Feat row 1630: missing LABEL, using row index as ID
+  [feats] Feat row 1639: missing LABEL, using row index as ID
+  [feats] Feat row 1648: missing LABEL, using row index as ID
+  [feats] Feat row 1657: missing LABEL, using row index as ID
+  [feats] Feat row 1666: missing LABEL, using row index as ID
+  [feats] Feat row 1675: missing LABEL, using row index as ID
+  [feats] Feat row 1684: missing LABEL, using row index as ID
+  [feats] Feat row 1693: missing LABEL, using row index as ID
+  [feats] Feat row 1702: missing LABEL, using row index as ID
+  [feats] Feat row 1711: missing LABEL, using row index as ID
+  [feats] Feat row 1720: missing LABEL, using row index as ID
+  [feats] Feat row 1729: missing LABEL, using row index as ID
+  [feats] Feat row 1735: duplicate ID detected, using 'feat:reservadopaladines-1735'
+  [feats] Feat row 1736: duplicate ID detected, using 'feat:reservadopaladines-1736'
+  [feats] Feat row 1737: duplicate ID detected, using 'feat:reservadopaladines-1737'
+  [feats] Feat row 1738: duplicate ID detected, using 'feat:reservadopaladines-1738'
+  [feats] Feat row 1739: missing LABEL, using row index as ID
+  [feats] Feat row 1786: duplicate ID detected, using 'feat:mmf-reserved-1786'
+  [feats] Feat row 1789: duplicate ID detected, using 'feat:mmf-reserved-1789'
+  [feats] Feat row 1792: duplicate ID detected, using 'feat:mmf-reserved-1792'
+  [feats] Feat row 1795: duplicate ID detected, using 'feat:mmf-reserved-1795'
+  [feats] Feat row 1798: duplicate ID detected, using 'feat:mmf-reserved-1798'
+  [feats] Feat row 1801: duplicate ID detected, using 'feat:mmf-reserved-1801'
+  [feats] Feat row 81: no display label, skipping
+  [feats] Feat row 119: no display label, skipping
+  [feats] Feat row 405: no display label, skipping
+  [spells] Spell row 484: missing Label, skipped
+  [spells] Spell row 540: missing Label, skipped
+  [spells] Spell row 550: missing Label, skipped
+  [spells] Spell row 642: missing Label, skipped
+  [spells] Spell row 699: missing Label, skipped
+  [spells] Spell row 728: missing Label, skipped
+  [spells] Spell row 730: missing Label, skipped
+  [spells] Spell row 812: missing Label, skipped
+  [spells] Spell row 813: missing Label, skipped
+  [spells] Spell row 814: missing Label, skipped
+  [spells] Spell row 815: missing Label, skipped
+  [spells] Spell row 816: missing Label, skipped
+  [spells] Spell row 817: missing Label, skipped
+  [spells] Spell row 1527: missing Label, skipped
+  [spells] Spell gain table 'cls_spgn_bard' loaded from base game for class 'class:bard'
+  [spells] Spell gain table 'cls_spgn_cler' loaded from base game for class 'class:cleric'
+  [spells] Spell gain table 'cls_spgn_rang' loaded from base game for class 'class:ranger'
+  [spells] Spell gain table 'cls_spgn_sorc' loaded from base game for class 'class:sorcerer'
+  [spells] Spell gain table 'cls_spgn_wiz' loaded from base game for class 'class:wizard'
+  [spells] Spell known table 'cls_spkn_bard' loaded from base game for class 'class:bard'
+  [spells] Spell known table 'cls_spkn_sorc' loaded from base game for class 'class:sorcerer'
+  [domains] Domain row 0 (Aire): GrantedFeat=311 not found in feat catalog
+  [domains] Domain row 1 (Animal): GrantedFeat=312 not found in feat catalog
+  [domains] Domain row 2 (Suerte): GrantedFeat=1286 not found in feat catalog
+  [domains] Domain row 3 (Muerte): GrantedFeat=310 not found in feat catalog
+  [domains] Domain row 4 (Destrucción): GrantedFeat=313 not found in feat catalog
+  [domains] Domain row 5 (Tierra): GrantedFeat=314 not found in feat catalog
+  [domains] Domain row 6 (Mal): GrantedFeat=315 not found in feat catalog
+  [domains] Domain row 7 (Fuego): GrantedFeat=316 not found in feat catalog
+  [domains] Domain row 8 (Bien): GrantedFeat=317 not found in feat catalog
+  [domains] Domain row 9 (Curación): GrantedFeat=318 not found in feat catalog
+  [domains] Domain row 10 (Saber): GrantedFeat=319 not found in feat catalog
+  [domains] Domain row 11 (Ley): GrantedFeat=1288 not found in feat catalog
+  [domains] Domain row 12 (Caos): GrantedFeat=1287 not found in feat catalog
+  [domains] Domain row 13 (Magia): GrantedFeat=320 not found in feat catalog
+  [domains] Domain row 14 (Vegetal): GrantedFeat=321 not found in feat catalog
+  [domains] Domain row 15 (Protección): GrantedFeat=308 not found in feat catalog
+  [domains] Domain row 16 (Fuerza): GrantedFeat=307 not found in feat catalog
+  [domains] Domain row 17 (Sol): GrantedFeat=322 not found in feat catalog
+  [domains] Domain row 18 (Viaje): GrantedFeat=323 not found in feat catalog
+  [domains] Domain row 19 (Superchería): GrantedFeat=324 not found in feat catalog
+  [domains] Domain row 20 (Guerra): GrantedFeat=306 not found in feat catalog
+  [domains] Domain row 21 (Agua): GrantedFeat=325 not found in feat catalog
+  [domains] Domain row 22 (Enano): GrantedFeat=1298 not found in feat catalog
+  [domains] Domain row 23 (Élfico): GrantedFeat=1299 not found in feat catalog
+  [domains] Domain row 24 (Gnomo): GrantedFeat=1300 not found in feat catalog
+  [domains] Domain row 25 (Mediano): GrantedFeat=1301 not found in feat catalog
+  [domains] Domain row 26 (Orco): GrantedFeat=1302 not found in feat catalog
+  [deities] No deity 2DA found in nwsync or base game. Deity data requires manual overrides from server documentation. The Puerta de Baldur server manages deity restrictions through scripting and forum rules, not through a 2DA table.
+
+============================================================
+  TOTAL: 2016 items | 135 warnings | 0 skipped
+============================================================

@@ -21,14 +21,20 @@ function createLevel(
 }
 
 describe('phase 05 skill rules', () => {
+  // Skill IDs now use Spanish canonical names from the extracted 2DA data:
+  //   skill:hide -> skill:esconderse
+  //   skill:spellcraft -> skill:conocimientoconjuros
+  //   skill:persuade -> skill:diplomacia
+  //   skill:tumble -> skill:piruetas
+
   it('prices class and cross-class ranks differently against the compiled catalog', () => {
     const evaluation = evaluateSkillSnapshot({
       catalog: compiledSkillCatalog,
       levels: [
         createLevel(1, {
           allocations: [
-            { rank: 4, skillId: 'skill:hide' },
-            { rank: 1.5, skillId: 'skill:spellcraft' },
+            { rank: 4, skillId: 'skill:esconderse' },
+            { rank: 1.5, skillId: 'skill:conocimientoconjuros' },
           ],
           classId: 'class:ranger',
           intelligenceModifier: 1,
@@ -43,12 +49,12 @@ describe('phase 05 skill rules', () => {
       expect.arrayContaining([
         expect.objectContaining({
           costType: 'class',
-          skillId: 'skill:hide',
+          skillId: 'skill:esconderse',
           spentPoints: 4,
         }),
         expect.objectContaining({
           costType: 'cross-class',
-          skillId: 'skill:spellcraft',
+          skillId: 'skill:conocimientoconjuros',
           spentPoints: 3,
         }),
       ]),
@@ -60,7 +66,7 @@ describe('phase 05 skill rules', () => {
       catalog: compiledSkillCatalog,
       levels: [
         createLevel(1, {
-          allocations: [{ rank: 2.5, skillId: 'skill:persuade' }],
+          allocations: [{ rank: 2.5, skillId: 'skill:diplomacia' }],
           classId: 'class:fighter',
         }),
       ],
@@ -74,12 +80,34 @@ describe('phase 05 skill rules', () => {
     });
   });
 
-  it('blocks compiled heavy-armor tumble restrictions without UI-local constants', () => {
+  it('blocks compiled heavy-armor tumble restrictions when override is present', () => {
+    // The extracted catalog does not include restriction overrides (those
+    // require manual curation from server rules). This test verifies the
+    // mechanism works by injecting the override into the catalog.
+    const catalogWithOverride = {
+      ...compiledSkillCatalog,
+      restrictionOverrides: [
+        {
+          code: 'puerta.skill.tumble-heavy-armor',
+          condition: { armorCategory: 'heavy' as const },
+          description: 'Piruetas queda bloqueada mientras el personaje use armadura pesada.',
+          outcome: 'blocked' as const,
+          provenance: [{
+            evidence: 'packages/overrides/skills/heavy-armor-tumble.json',
+            note: 'Override curado del servidor para la restriccion de armadura pesada.',
+            source: 'manual-override' as const,
+          }],
+          scope: 'equipment' as const,
+          skillId: 'skill:piruetas',
+        },
+      ],
+    };
+
     const evaluation = evaluateSkillSnapshot({
-      catalog: compiledSkillCatalog,
+      catalog: catalogWithOverride,
       levels: [
         createLevel(1, {
-          allocations: [{ rank: 2, skillId: 'skill:tumble' }],
+          allocations: [{ rank: 2, skillId: 'skill:piruetas' }],
           armorCategory: 'heavy',
           classId: 'class:rogue',
           intelligenceModifier: 2,

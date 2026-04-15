@@ -5,6 +5,12 @@ import {
 } from '@rules-engine/skills/skill-revalidation';
 import type { SkillLevelInput } from '@rules-engine/skills/skill-allocation';
 
+// Skill IDs now use Spanish canonical names from the extracted 2DA data:
+//   skill:hide -> skill:esconderse
+//   skill:move-silently -> skill:moversesigilosamente
+//   skill:listen -> skill:escuchar
+//   skill:tumble -> skill:piruetas
+
 function createLevel(
   level: number,
   overrides: Partial<SkillLevelInput> = {},
@@ -26,21 +32,21 @@ describe('phase 05 skill revalidation', () => {
       catalog: compiledSkillCatalog,
       levels: [
         createLevel(1, {
-          allocations: [{ rank: 4, skillId: 'skill:hide' }],
+          allocations: [{ rank: 4, skillId: 'skill:esconderse' }],
           classId: 'class:rogue',
           intelligenceModifier: 1,
         }),
         createLevel(2, {
           allocations: [
-            { rank: 4, skillId: 'skill:hide' },
-            { rank: 4, skillId: 'skill:move-silently' },
+            { rank: 4, skillId: 'skill:esconderse' },
+            { rank: 4, skillId: 'skill:moversesigilosamente' },
           ],
           classId: 'class:fighter',
           intelligenceModifier: -1,
           skillPointsBase: 2,
         }),
         createLevel(3, {
-          allocations: [{ rank: 1, skillId: 'skill:listen' }],
+          allocations: [{ rank: 1, skillId: 'skill:escuchar' }],
           classId: 'class:rogue',
         }),
       ],
@@ -58,16 +64,37 @@ describe('phase 05 skill revalidation', () => {
     });
   });
 
-  it('preserves downstream rows after a compiled restriction blocks an earlier level', () => {
+  it('preserves downstream rows after a restriction blocks an earlier level', () => {
+    // The extracted catalog has no restriction overrides. To test the
+    // blocking mechanism, inject the heavy-armor tumble override.
+    const catalogWithOverride = {
+      ...compiledSkillCatalog,
+      restrictionOverrides: [
+        {
+          code: 'puerta.skill.tumble-heavy-armor',
+          condition: { armorCategory: 'heavy' as const },
+          description: 'Piruetas queda bloqueada con armadura pesada.',
+          outcome: 'blocked' as const,
+          provenance: [{
+            evidence: 'packages/overrides/skills/heavy-armor-tumble.json',
+            note: 'Override curado del servidor.',
+            source: 'manual-override' as const,
+          }],
+          scope: 'equipment' as const,
+          skillId: 'skill:piruetas',
+        },
+      ],
+    };
+
     const revalidated = revalidateSkillSnapshotAfterChange({
-      catalog: compiledSkillCatalog,
+      catalog: catalogWithOverride,
       levels: [
         createLevel(1, {
-          allocations: [{ rank: 2, skillId: 'skill:tumble' }],
+          allocations: [{ rank: 2, skillId: 'skill:piruetas' }],
           armorCategory: 'heavy',
         }),
         createLevel(2, {
-          allocations: [{ rank: 1, skillId: 'skill:listen' }],
+          allocations: [{ rank: 1, skillId: 'skill:escuchar' }],
         }),
       ],
     });
