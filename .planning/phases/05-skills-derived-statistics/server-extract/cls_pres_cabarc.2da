@@ -1,0 +1,30 @@
+2DA V2.0
+
+    LABEL                               ReqType   ReqParam1      ReqParam2
+0   Arcane                              ARCSPELL  5              ****
+1   CompetenciaArmaMarcial_EspCorta     FEAT      1169           ****
+2   CompetenciaArmaMarcial_HachArr      FEAT      1170           ****
+3   CompetenciaArmaMarcial_HachaDeMano  FEAT      1171           ****
+4   CompetenciaArmaMarcial_Kukri        FEAT      1172           ****
+5   CompetenciaArmaMarcial_MartLig      FEAT      1173           ****
+6   CompetenciaArmaMarcial_Cimitarra    FEAT      1174           ****
+7   CompetenciaArmaMarcial_EspLarga     FEAT      1175           ****
+8   CompetenciaArmaMarcial_Estoque      FEAT      1176           ****
+9   CompetenciaArmaMarcial_HBatalla     FEAT      1177           ****
+10  CompetenciaArmaMarcial_MangLig      FEAT      1178           ****
+11  CompetenciaArmaMarcial_MartiGue     FEAT      1179           ****
+12  CompetenciaArmaMarcial_Alab         FEAT      1180           ****
+13  CompetenciaArmaMarcial_Espadon      FEAT      1181           ****
+14  CompetenciaArmaMarcial_GHacha       FEAT      1182           ****
+15  CompetenciaArmaMarcial_Gua          FEAT      1183           ****
+16  CompetenciaArmaMarcial_MangPes      FEAT      1184           ****
+17  CompetenciaArmaMarcial_ArcCor       FEAT      1185           ****
+18  CompetenciaArmaMarcial_ArcLarg      FEAT      1186           ****
+19  CompetenciaArmaMarcial_Tridente     FEAT      1187           ****
+20  CompetenciaArmaMarcial_PicoLigero   FEAT      1188           ****
+21  CompetenciaArmaMarcial_PicoPesado   FEAT      1189           ****
+22  CompetenciaArmaMarcial_Alfanje      FEAT      1192           ****
+23  CompetenciaArmaMarcial_Cachiporra   FEAT      1193           ****
+24  CompetenciaArmaMarcial_Mazo         FEAT      1194           ****
+25  CompetenciaArmaMarcial_Aguijada     FEAT      1198           ****
+26  ScriptVar                           VAR       DLA_AllowCbAr  0

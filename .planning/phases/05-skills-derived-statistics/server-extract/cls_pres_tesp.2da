@@ -1,0 +1,14 @@
+2DA V2.0
+
+    LABEL        ReqType  ReqParam1     ReqParam2
+0   Base_Attack  BAB      5             ****
+1   Esconderse   SKILL    5             4
+2   MovSig       SKILL    8             4
+3   Avistar      SKILL    17            4
+4   FocLongBow   FEATOR   101           ****        
+5   FocShortBow  FEATOR   102           **** 
+6   FocHXBow     FEATOR   92            ****        
+7   FocLgXBow    FEATOR   93            **** 
+8   DispBocajro  FEAT     27            **** 
+9   DispLocali   FEAT     1219          **** 
+10  ScriptVar    VAR      DLA_AllowTesp 0

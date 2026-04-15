@@ -1,0 +1,13 @@
+2DA V2.0
+
+FeatLabel FeatIndex
+0 darkvision 228
+1 FEAT_SMALL_STATURE 375
+2 hardinesspoisons 229
+3 hardinessspells 230
+4 orctrain 231
+5 gobtrain 232
+6 gianttrain 233
+7 FEAT_USE_POISON 960
+8 FEAT_PROF_PRIMITIVE 2227
+9 FEAT_TRACK 2023

@@ -1,0 +1,13 @@
+2DA V2.0
+
+  FeatLabel                  FeatIndex List GrantedOnLevel OnMenu 
+0 FEAT_MASTERY_ELEMENTS_BACK 1419      3    1              1      
+1 FEAT_MASTERY_SHAPES        1425      2    -1             1      
+2 FEAT_SPELL_POWER_I         1426      2    -1             0      
+3 FEAT_SPELL_POWER_II        1427      2    -1             0      
+4 FEAT_SPELL_POWER_III       1428      2    -1             0      
+5 FEAT_SPELL_POWER_IV        1429      2    -1             0      
+6 FEAT_SPELL_POWER_V         1430      2    -1             0      
+7 FEAT_ARCANE_FIRE           1431      2    -1             1      
+8 FEAT_SPELL_LIKE            1432      2    -1             0      
+9 FEAT_MASTERY_ELEMENTS      1433      2    -1             1      

@@ -1,0 +1,9 @@
+2DA V2.0
+
+  LABEL         ReqType ReqParam1       ReqParam2 
+0 Base_Attack   BAB     5               ****      
+1 Intimidate    SKILL   24              8         
+2 Supervivencia SKILL   36              5         
+3 Rage          FEAT    293             ****      
+4 Montar        SKILL   24              5         
+5 ScriptVar     VAR     PRC_AllowOrcWar 0         

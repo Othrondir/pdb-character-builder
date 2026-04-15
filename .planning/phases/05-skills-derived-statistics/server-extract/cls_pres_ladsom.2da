@@ -1,0 +1,10 @@
+2DA V2.0
+
+    LABEL           ReqType   ReqParam1      ReqParam2
+0   Enganyar        SKILL     23             3  
+1   Esconderse      SKILL     5              8
+2   Intimidar       SKILL     24             3
+3   Moverse         SKILL     8              3
+4   ReunirInfo      SKILL     35             3
+5   Maton           FEAT      402            **** 
+6   ScriptVar       VAR       DLA_AllowSAmn  0

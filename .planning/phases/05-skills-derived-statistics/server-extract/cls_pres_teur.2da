@@ -1,0 +1,6 @@
+2DA V2.0
+
+  LABEL         ReqType ReqParam1       ReqParam2 
+0 SabRel        SKILL   7               6         
+1 SabArc        SKILL   10              6         
+2 Arcane        ARCSPELL  3             ****      

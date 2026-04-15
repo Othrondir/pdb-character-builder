@@ -1,0 +1,18 @@
+2DA V2.0
+
+LABEL ReqType ReqParam1 ReqParam2
+0 Bluff SKILL 23 6
+1 Search SKILL 14 4
+2 Intimidate SKILL 24 6
+3 Discipline SKILL 3 4
+4 Thug FEAT 402 ****
+5 GreatFort FEAT 14 ****
+6 ScriptVar VAR X1_AllowZhent 1
+7 Mage CLASSNOT 75 ****
+8 Priest CLASSNOT 76 ****
+9 Paragon CLASSNOT 77 ****
+10 Master CLASSNOT 78 ****
+11 Zmage CLASSNOT 86 ****
+12 Zpriest CLASSNOT 87 ****
+13 Zparagon CLASSNOT 88 ****
+14 Scout CLASSNOT 28 ****

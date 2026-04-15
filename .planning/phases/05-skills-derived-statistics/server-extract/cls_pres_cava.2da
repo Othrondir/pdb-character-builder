@@ -1,0 +1,8 @@
+2DA V2.0
+
+LABEL ReqType ReqParam1 ReqParam2
+0 Commoner CLASSNOT 79 ****
+1 Ride SKILL 27 8
+2 Base_Attack BAB 5 ****
+3 MountedCombat FEAT 1087 ****
+4 ScriptVar VAR C2_AllowCava 0

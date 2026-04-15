@@ -1,0 +1,14 @@
+2DA V2.0
+
+LABEL ReqType ReqParam1 ReqParam2
+0 Bluff SKILL 23 6
+1 Search SKILL 14 4
+2 Lore SKILL 7 6
+3 Discipline SKILL 3 4
+4 Alertness FEAT 0 ****
+5 IronWill FEAT 22 ****
+6 ScriptVar VAR X1_AllowHarper 1
+7 Mage CLASSNOT 75 ****
+8 Priest CLASSNOT 76 ****
+9 Paragon CLASSNOT 77 ****
+10 Master CLASSNOT 78 ****

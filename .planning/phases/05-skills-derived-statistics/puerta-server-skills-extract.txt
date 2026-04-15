@@ -1,0 +1,2192 @@
+=== skills.2da (Puerta de Baldur server) ===
+2DA V2.0
+
+Label Name Description Icon Untrained KeyAbility ArmorCheckPenalty AllClassesCanUse Category MaxCR Constant HostileSkill HideFromLevelUp GS_IP_DISABLED
+0 AnimalEmpathy 269 344 isk_aniemp 0 CHA 0 1 **** 1 SKILL_ANIMAL_EMPATHY 1 0 ****
+1 Concentration 270 16780701 isk_concen 1 CON 0 1 **** **** SKILL_CONCENTRATION 0 0 ****
+2 DisableTrap 271 16780702 isk_distrap 0 INT 0 1 **** **** SKILL_DISABLE_TRAP 0 0 ****
+3 Discipline 343 347 isk_discipline 1 STR 0 1 **** **** SKILL_DISCIPLINE 0 0 ****
+4 Heal 273 349 isk_heal 1 WIS 0 1 **** 1 SKILL_HEAL 0 0 TRUE
+5 Hide 274 350 isk_hide 1 DEX 1 1 **** **** SKILL_HIDE 0 0 ****
+6 Listen 275 351 isk_listen 1 WIS 0 1 **** **** SKILL_LISTEN 0 0 ****
+7 Lore 276 16780703 isk_lore 1 INT 0 1 **** **** SKILL_LORE 0 0 ****
+8 MoveSilently 277 353 isk_movsilent 1 DEX 1 1 **** **** SKILL_MOVE_SILENTLY 0 0 ****
+9 OpenLock 278 354 isk_olock 0 DEX 0 1 **** **** SKILL_OPEN_LOCK 0 0 ****
+10 Parry 279 16780704 isk_parry 1 DEX 1 1 **** 1 SKILL_PARRY 0 0 ****
+11 Perform 280 16780705 isk_perform 1 CHA 0 1 **** **** SKILL_PERFORM 0 0 ****
+12 Leadership 16780706 16780707 isk_persuade 1 CHA 0 1 **** **** SKILL_PERSUADE 0 0 ****
+13 PickPocket 16780708 16780709 isk_pocket 0 DEX 1 1 **** **** SKILL_PICK_POCKET 1 0 ****
+14 Search 284 16780710 isk_search 1 INT 0 1 **** **** SKILL_SEARCH 0 0 ****
+15 SetTrap 16780711 361 isk_settrap 0 DEX 1 1 **** **** SKILL_SET_TRAP 0 0 ****
+16 Spellcraft 286 362 isk_spellcraft 0 INT 0 1 **** **** SKILL_SPELLCRAFT 0 0 ****
+17 Spot 287 364 isk_spot 1 WIS 0 1 **** **** SKILL_SPOT 0 0 ****
+18 Taunt 342 366 isk_taunt 1 CHA 0 1 **** 1 SKILL_TAUNT 1 0 ****
+19 UseMagicDevice 288 16780712 isk_magicdev 0 CHA 0 0 **** **** SKILL_USE_MAGIC_DEVICE 0 0 ****
+20 Appraise 2693 16780713 ife_X1App 1 INT 0 1 **** **** SKILL_APPRAISE 0 0 TRUE
+21 Tumble 2695 16780714 ife_X1Tum 0 DEX 1 1 **** **** SKILL_TUMBLE 0 0 ****
+22 Sail 16780715 16780716 isk_sail 1 WIS 0 1 **** **** SKILL_CRAFT_TRAP 0 0 ****
+23 Bluff 8746 16780717 isk_X2bluff 1 CHA 0 1 **** **** SKILL_BLUFF 0 0 ****
+24 Intimidate 16779201 16780718 isk_X2Inti 1 CHA 0 1 **** **** SKILL_INTIMIDATE 0 0 ****
+25 CraftMastery 16780719 16780720 isk_X2CWeap 1 INT 0 1 **** **** SKILL_CRAFT_ARMOR 0 0 ****
+26 Climb 16780721 16780722 isk_climb 1 STR 0 1 **** **** SKILL_CRAFT_WEAPON 0 0 TRUE
+27 Ride 111889 16780723 isk_x3_ride 1 DEX 0 1 **** **** SKILL_RIDE 0 0 ****
+
+
+=== classes.2da (first 30 lines) ===
+2DA V2.0
+
+Label Name Plural Lower Description Icon HitDie AttackBonusTable FeatsTable SavingThrowTable SkillsTable BonusFeatsTable SkillPointBase SpellGainTable SpellKnownTable PlayerClass SpellCaster Str Dex Con Wis Int Cha PrimaryAbil AlignRestrict AlignRstrctType InvertRestrict Constant EffCRLvl01 EffCRLvl02 EffCRLvl03 EffCRLvl04 EffCRLvl05 EffCRLvl06 EffCRLvl07 EffCRLvl08 EffCRLvl09 EffCRLvl10 EffCRLvl11 EffCRLvl12 EffCRLvl13 EffCRLvl14 EffCRLvl15 EffCRLvl16 EffCRLvl17 EffCRLvl18 EffCRLvl19 EffCRLvl20 PreReqTable MaxLevel XPPenalty ArcSpellLvlMod DivSpellLvlMod EpicLevel Package StatGainTable MemorizesSpells SpellbookRestricted PickDomains PickSchool LearnScroll Arcane ASF SpellcastingAbil SpellTableColumn SkipSpellSelection CLMultiplier MinCastingLevel MinAssociateLevel CanCastSpontaneously
+0 Barbarian 5213 1 4890 240 IR_BARBARIN 12 CLS_ATK_1 CLS_FEAT_BARB CLS_SAVTHR_BARB CLS_SKILL_BARB CLS_BFEAT_BARB 6 **** **** 1 0 17 9 16 8 14 8 STR 0x02 0x1 0 CLASS_TYPE_BARBARIAN 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 cls_pres_blcom 0 1 0 0 -1 0 **** **** **** **** **** **** **** **** **** **** **** **** **** **** ****
+1 Bard 2 3 4891 241 IR_BARD 6 CLS_ATK_2 CLS_FEAT_BARD CLS_SAVTHR_BARD CLS_SKILL_BARD CLS_BFEAT_BARD 6 CLS_SPGN_BARD CLS_SPKN_BARD 1 1 15 8 14 8 14 16 CHA 0x00 0x0 0 CLASS_TYPE_BARD 1 1 2 2 4 5 6 7 8 9 10 11 12 14 15 16 17 18 19 20 cls_pres_blcom 0 1 0 0 -1 1 **** 0 1 0 0 0 1 1 CHA Bard 0 1.0 1 1 0
+2 Cleric 4 5 4892 242 IR_CLERIC 8 CLS_ATK_2 CLS_FEAT_CLER CLS_SAVTHR_CLER CLS_SKILL_CLER CLS_BFEAT_CLER 4 CLS_SPGN_CLER **** 1 1 15 8 14 16 14 8 WIS 0x00 0x0 0 CLASS_TYPE_CLERIC 1 1 1 2 2 4 7 8 9 10 11 12 13 14 15 16 17 18 19 20 cls_pres_blcom 0 1 0 0 -1 2 **** 1 0 1 0 0 0 0 WIS Cleric 0 1.0 1 255 1
+3 Druid 6 7 4893 243 IR_DRUID 8 CLS_ATK_2 CLS_FEAT_DRUID CLS_SAVTHR_DRU CLS_SKILL_DRU CLS_BFEAT_DRU 4 CLS_SPGN_DRU **** 1 1 12 8 16 16 14 8 WIS 0x01 0x3 1 CLASS_TYPE_DRUID 1 1 2 2 3 4 7 8 9 10 11 12 13 14 15 16 17 18 19 20 CLS_PRES_DRUID 0 1 0 0 -1 3 **** 1 0 0 0 0 0 0 WIS Druid 0 1.0 1 1 0
+4 Fighter 8 9 4894 244 IR_FIGHTER 10 CLS_ATK_1 CLS_FEAT_FIGHT CLS_SAVTHR_FIGHT CLS_SKILL_FIGHT CLS_BFEAT_FIGHT 4 **** **** 1 0 17 13 14 8 14 8 STR 0x00 0x1 0 CLASS_TYPE_FIGHTER 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 cls_pres_blcom 0 1 0 0 -1 4 **** **** **** **** **** **** **** **** **** **** **** **** **** **** ****
+5 Monk 10 11 4895 245 IR_MONK 8 CLS_ATK_2 CLS_FEAT_MONK CLS_SAVTHR_MONK CLS_SKILL_MONK CLS_BFEAT_MONK 6 **** **** 1 0 10 16 14 14 14 8 DEX 0x05 0x1 0 CLASS_TYPE_MONK 1 2 3 3 3 5 7 8 9 10 11 12 13 14 15 16 17 18 19 20 cls_pres_blcom 0 1 0 0 -1 5 **** **** **** **** **** **** **** **** **** **** **** **** **** **** ****
+6 Paladin 12 13 4896 16777435 IR_PALADIN 10 CLS_ATK_1 CLS_FEAT_PAL CLS_SAVTHR_PAL CLS_SKILL_PAL CLS_BFEAT_PAL 4 CLS_SPGN_PAL CLS_SPKN_PAL 1 1 15 8 14 8 14 16 CHA 0x15 0x3 0 CLASS_TYPE_PALADIN 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 cls_pres_blcom 0 1 0 0 -1 6 **** 0 1 0 0 0 0 0 CHA Paladin 0 1.0 4 255 1
+7 Ranger 14 15 4897 16777437 IR_RANGER 10 CLS_ATK_1 CLS_FEAT_RANG CLS_SAVTHR_RANG CLS_SKILL_RANG CLS_BFEAT_RANG 8 CLS_SPGN_RANG **** 1 1 10 16 14 14 14 8 WIS 0x00 0x0 0 CLASS_TYPE_RANGER 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 cls_pres_blcom 0 1 0 0 -1 7 **** 1 0 0 0 0 0 0 WIS Ranger 0 1.0 4 4 0
+8 Rogue 16 17 4898 16777436 IR_ROGUE 8 CLS_ATK_2 CLS_FEAT_ROG CLS_SAVTHR_ROG CLS_SKILL_ROG CLS_BFEAT_ROG 10 **** **** 1 0 9 17 14 8 16 8 DEX 0x00 0x0 0 CLASS_TYPE_ROGUE 1 1 2 2 4 5 6 8 9 10 11 12 13 14 15 16 17 18 19 20 cls_pres_blcom 0 1 0 0 -1 8 **** **** **** **** **** **** **** **** **** **** **** **** **** **** ****
+9 Sorcerer 18 19 4899 249 IR_SORCERER 4 CLS_ATK_3 CLS_FEAT_SORC CLS_SAVTHR_SORC CLS_SKILL_SORC CLS_BFEAT_SORC 4 CLS_SPGN_SORC CLS_SPKN_SORC 1 1 13 8 14 8 14 17 CHA 0x00 0x0 0 CLASS_TYPE_SORCERER 1 1 1 2 2 4 6 8 9 10 11 12 13 14 15 16 17 18 19 20 cls_pres_blcom 0 1 0 0 -1 9 **** 0 1 0 0 0 1 1 CHA Wiz_Sorc 0 1.0 1 1 0
+10 Wizard 20 21 4900 250 IR_WIZARD 4 CLS_ATK_3 CLS_FEAT_WIZ CLS_SAVTHR_WIZ CLS_SKILL_WIZ CLS_BFEAT_WIZ 2 CLS_SPGN_WIZ **** 1 1 12 8 16 8 18 8 INT 0x00 0x0 0 CLASS_TYPE_WIZARD 1 1 1 2 2 4 6 8 9 10 11 12 13 14 15 16 17 18 19 20 cls_pres_blcom 0 1 0 0 -1 10 **** 1 1 0 1 1 1 1 INT Wiz_Sorc 0 1.0 1 1 0
+11 Aberration 525 525 4901 8154 IR_WIZARD 8 CLS_ATK_2 CLS_FEAT_ABER CLS_SAVTHR_WIZ CLS_SKILL_FIGHT CLS_BFEAT_BARB 2 **** **** 0 0 14 14 11 14 3 5 STR 0x00 0x0 0 CLASS_TYPE_ABERRATION 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 **** 0 0 0 0 -1 73 **** **** **** **** **** **** **** **** **** **** **** **** **** **** ****
+12 Animal 526 526 4902 8154 IR_WIZARD 8 CLS_ATK_2 CLS_FEAT_CREA CLS_SAVTHR_WILD CLS_SKILL_CLER CLS_BFEAT_BARB 1 **** **** 0 0 13 17 15 12 2 6 STR 0x00 0x0 0 CLASS_TYPE_ANIMAL 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 **** 0 0 0 0 -1 74 **** **** **** **** **** **** **** **** **** **** **** **** **** **** ****
+13 Construct 528 528 4903 8154 IR_WIZARD 10 CLS_ATK_2 CLS_FEAT_CREA CLS_SAVTHR_CONS CLS_SKILL_CLER CLS_BFEAT_BARB 0 **** **** 0 0 21 9 10 11 10 3 STR 0x00 0x0 0 CLASS_TYPE_CONSTRUCT 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 **** 0 0 0 0 -1 75 **** **** **** **** **** **** **** **** **** **** **** **** **** **** ****
+14 Humanoid 1763 1764 4904 8154 IR_WIZARD 8 CLS_ATK_2 CLS_FEAT_CREA CLS_SAVTHR_FIGHT CLS_SKILL_CLER CLS_BFEAT_BARB 1 **** **** 0 0 15 10 13 11 8 8 STR 0x00 0x0 0 CLASS_TYPE_HUMANOID 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 **** 0 0 0 0 -1 76 **** **** **** **** **** **** **** **** **** **** **** **** **** **** ****
+15 Monstrous 536 536 4905 8154 IR_WIZARD 8 CLS_ATK_1 CLS_FEAT_CREA CLS_SAVTHR_BARD CLS_SKILL_FIGHT CLS_BFEAT_BARB 2 **** **** 0 0 19 10 15 10 7 8 STR 0x00 0x0 0 CLASS_TYPE_MONSTEROUS 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 **** 0 0 0 0 -1 77 **** **** **** **** **** **** **** **** **** **** **** **** **** **** ****
+16 Elemental 539 539 4906 8154 IR_WIZARD 8 CLS_ATK_2 CLS_FEAT_CREA CLS_SAVTHR_WIZ CLS_SKILL_FIGHT CLS_BFEAT_BARB 2 **** **** 0 0 17 8 13 11 4 11 STR 0x00 0x0 0 CLASS_TYPE_ELEMENTAL 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 **** 0 0 0 0 -1 78 **** **** **** **** **** **** **** **** **** **** **** **** **** **** ****
+17 Fey 540 540 4907 8154 IR_WIZARD 6 CLS_ATK_3 CLS_FEAT_FEY CLS_SAVTHR_BARD CLS_SKILL_FIGHT CLS_BFEAT_BARB 2 **** **** 0 0 10 15 11 15 14 18 DEX 0x00 0x0 0 CLASS_TYPE_FEY 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 **** 0 0 0 0 -1 79 **** **** **** **** **** **** **** **** **** **** **** **** **** **** ****
+18 Dragon 529 529 4908 8154 IR_WIZARD 12 CLS_ATK_1 CLS_FEAT_DRAG CLS_SAVTHR_MONK CLS_SKILL_CLER CLS_BFEAT_BARB 6 **** **** 0 0 13 10 13 10 11 10 STR 0x00 0x0 0 CLASS_TYPE_DRAGON 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 **** 0 0 0 0 -1 80 **** **** **** **** **** **** **** **** **** **** **** **** **** **** ****
+19 Undead 547 547 4909 8154 IR_WIZARD 12 CLS_ATK_3 CLS_FEAT_CREA CLS_SAVTHR_WIZ CLS_SKILL_FIGHT CLS_BFEAT_BARB 2 **** **** 0 0 10 12 10 10 10 11 STR 0x00 0x0 0 CLASS_TYPE_UNDEAD 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 **** 0 0 0 0 -1 81 **** **** **** **** **** **** **** **** **** **** **** **** **** **** ****
+20 Commoner 2291 2292 4910 8155 IR_WIZARD 4 CLS_ATK_3 CLS_FEAT_COMM CLS_SAVTHR_CONS CLS_SKILL_CLER CLS_BFEAT_BARB 1 **** **** 0 0 10 10 12 10 10 10 STR 0x00 0x0 0 CLASS_TYPE_COMMONER 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 **** 0 0 0 0 -1 82 **** **** **** **** **** **** **** **** **** **** **** **** **** **** ****
+21 Beast 527 527 4911 8154 IR_WIZARD 10 CLS_ATK_2 CLS_FEAT_CREA CLS_SAVTHR_WILD CLS_SKILL_FIGHT CLS_BFEAT_BARB 1 **** **** 0 0 16 13 16 3 12 8 STR 0x00 0x0 0 CLASS_TYPE_BEAST 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 **** 0 0 0 0 -1 83 **** **** **** **** **** **** **** **** **** **** **** **** **** **** ****
+22 Giant 541 541 4912 8154 IR_WIZARD 8 CLS_ATK_2 CLS_FEAT_GIAN CLS_SAVTHR_FIGHT CLS_SKILL_FIGHT CLS_BFEAT_BARB 1 **** **** 0 0 25 8 19 10 6 17 STR 0x00 0x0 0 CLASS_TYPE_GIANT 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 **** 0 0 0 0 -1 84 **** **** **** **** **** **** **** **** **** **** **** **** **** **** ****
+23 MagicBeast 542 542 4913 8154 IR_WIZARD 10 CLS_ATK_1 CLS_FEAT_CREA CLS_SAVTHR_WILD CLS_SKILL_FIGHT CLS_BFEAT_BARB 1 **** **** 0 0 15 8 15 12 2 10 STR 0x00 0x0 0 CLASS_TYPE_MAGICAL_BEAST 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 **** 0 0 0 0 -1 85 **** **** **** **** **** **** **** **** **** **** **** **** **** **** ****
+24 Outsider 4812 4812 4914 8154 IR_WIZARD 8 CLS_ATK_1 CLS_FEAT_OUTS CLS_SAVTHR_MONK CLS_SKILL_ROG CLS_BFEAT_BARB 8 **** **** 0 0 15 10 13 13 10 12 STR 0x00 0x0 0 CLASS_TYPE_OUTSIDER 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 **** 0 0 0 0 -1 86 **** **** **** **** **** **** **** **** **** **** **** **** **** **** ****
+25 Shapechanger 546 546 4915 8154 IR_WIZARD 8 CLS_ATK_2 CLS_FEAT_CREA CLS_SAVTHR_MONK CLS_SKILL_FIGHT CLS_BFEAT_BARB 1 **** **** 0 0 15 11 17 10 10 10 STR 0x00 0x0 0 CLASS_TYPE_SHAPECHANGER 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 **** 0 0 0 0 -1 87 **** **** **** **** **** **** **** **** **** **** **** **** **** **** ****
+26 Vermin 548 548 4916 8154 IR_WIZARD 8 CLS_ATK_2 CLS_FEAT_CREA CLS_SAVTHR_FIGHT CLS_SKILL_FIGHT CLS_BFEAT_BARB 1 **** **** 0 0 11 17 12 10 10 3 STR 0x00 0x0 0 CLASS_TYPE_VERMIN 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 **** 0 0 0 0 -1 88 **** **** **** **** **** **** **** **** **** **** **** **** **** **** ****
+
+=== cls_skill_alma ===
+2DA V2.0
+
+   SkillLabel     SkillIndex ClassSkill 
+0  Concentration  1          1          
+1  IntMecanism    2          0          
+2  SaberLocal     3          0          
+3  Heal           4          1          
+4  Hide           5          0          
+5  Listen         6          0          
+6  SaberArcano    7          1          
+7  MoveSilently   8          0          
+8  OpenLock       9          0          
+9  SaberReligion  10         0          
+10 Persuade       12         1          
+11 PickPocket     13         0          
+12 Search         14         0          
+13 SetTrap        15         0          
+14 Spellcraft     16         1          
+15 Spot           17         0          
+16 SaberOtros     18         0          
+17 Appraise       20         0          
+18 Tumble         21         0          
+19 Artesania      22         1          
+20 Bluff          23         0          
+21 Intimidate     24         0          
+22 Nadar          25         0          
+23 Saltar         26         1          
+24 Ride           27         0          
+25 AverIntencions 28         1          
+26 DescEscritura  29         0          
+27 Disfrazarse    30         0          
+28 Equilibrio     31         0          
+29 Escapismo      32         0          
+30 Falsificar     33         0          
+31 HablarUnIdioma 34         0          
+32 ReunirInfo     35         0          
+33 Supervivncia   36         0          
+34 Trepar         37         0          
+35 UsoDeCuerdas   38         0          
+36 Perform        11         0          
+37 UseMagicDevice 19         0          
+38 AnimalEmpathy  0          0          
+
+
+=== cls_skill_arch ===
+2DA V2.0
+
+   SkillLabel     SkillIndex ClassSkill 
+0  Concentration  1          1          
+1  IntMecanism    2          0          
+2  SaberLocal     3          1          
+3  Heal           4          0          
+4  Hide           5          0          
+5  Listen         6          0          
+6  SaberArcano    7          1          
+7  MoveSilently   8          0          
+8  OpenLock       9          0          
+9  SaberReligion  10         1          
+10 Persuade       12         1          
+11 PickPocket     13         0          
+12 Search         14         0          
+13 SetTrap        15         0          
+14 Spellcraft     16         1          
+15 Spot           17         0          
+16 SaberOtros     18         1          
+17 Appraise       20         0          
+18 Tumble         21         0          
+19 Artesania      22         0          
+20 Bluff          23         0          
+21 Intimidate     24         0          
+22 Nadar          25         0          
+23 Saltar         26         0          
+24 Ride           27         0          
+25 AverIntencions 28         0          
+26 DescEscritura  29         1          
+27 Disfrazarse    30         0          
+28 Equilibrio     31         0          
+29 Escapismo      32         0          
+30 Falsificar     33         0          
+31 HablarUnIdioma 34         0          
+32 ReunirInfo     35         0          
+33 Supervivncia   36         0          
+34 Trepar         37         0          
+35 UsoDeCuerdas   38         0          
+36 Perform        11         0          
+37 UseMagicDevice 19         0          
+38 AnimalEmpathy  0          0          
+
+
+=== cls_skill_archer ===
+2DA V2.0
+
+SkillLabel SkillIndex ClassSkill
+0 Concentration 1 1
+1 DisableTrap 2 0
+2 Discipline 3 0
+3 Heal 4 1
+4 Hide 5 1
+5 Listen 6 1
+6 Lore 7 1
+7 MoveSilently 8 1
+8 OpenLock 9 0
+9 Parry 10 0
+10 Leadership 12 0
+11 SleightofHand 13 0
+12 Search 14 0
+13 Spellcraft 16 0
+14 Spot 17 1
+15 Taunt 18 0
+16 Appraise 20 0
+17 Tumble 21 0
+18 Bluff 23 0
+19 Intimidate 24 0
+20 CraftMastery 25 1
+21 Climb 26 1
+22 Ride 27 1
+23 SetTrap 15 0
+24 Sail 22 1
+
+
+=== cls_skill_asasin ===
+2DA V2.0
+
+SkillLabel SkillIndex ClassSkill
+0 Concentration 1 0
+1 DisableTrap 2 1
+2 Discipline 3 0
+3 Heal 4 1
+4 Hide 5 1
+5 Listen 6 1
+6 Lore 7 1
+7 MoveSilently 8 1
+8 OpenLock 9 1
+9 Parry 10 1
+10 Perform 11 1
+11 PickPocket 13 1
+12 Search 14 1
+13 SetTrap 15 1
+14 Spellcraft 16 0
+15 Spot 17 1
+16 Taunt 18 0
+17 UseMagicDevice 19 1
+18 Appraise 20 1
+19 Tumble 21 1
+20 Bluff 23 1
+21 Intimidate 24 1
+22 CraftMastery 25 1
+23 Climb 26 1
+24 Ride 27 1
+25 Leadership 12 0
+26 Sail 22 1
+
+
+=== cls_skill_barb ===
+2DA V2.0
+
+SkillLabel SkillIndex ClassSkill
+0 Concentration 1 0
+1 DisableTrap 2 0
+2 Discipline 3 1
+3 Heal 4 1
+4 Hide 5 0
+5 Listen 6 1
+6 Lore 7 1
+7 MoveSilently 8 0
+8 OpenLock 9 0
+9 Parry 10 1
+10 Persuade 12 0
+11 PickPocket 13 0
+12 Search 14 0
+13 SetTrap 15 0
+14 Spellcraft 16 0
+15 Spot 17 1
+16 Taunt 18 1
+17 Appraise 20 0
+18 Tumble 21 0
+19 AnimalEmpathy 0 1
+20 Bluff 23 0
+21 Intimidate 24 1
+22 CraftMastery 25 1
+23 Climb 26 1
+24 Ride 27 1
+25 Sail 22 1
+
+
+=== cls_skill_bard ===
+2DA V2.0
+
+SkillLabel SkillIndex ClassSkill
+0 Concentration 1 1
+1 DisableTrap 2 0
+2 Discipline 3 1
+3 Heal 4 1
+4 Hide 5 1
+5 Listen 6 1
+6 Lore 7 1
+7 MoveSilently 8 1
+8 OpenLock 9 0
+9 Parry 10 1
+10 Perform 11 1
+11 Leadership 12 1
+12 PickPocket 13 1
+13 Search 14 1
+14 SetTrap 15 0
+15 Spellcraft 16 1
+16 Spot 17 1
+17 Taunt 18 1
+18 UseMagicDevice 19 1
+19 Appraise 20 1
+20 Tumble 21 1
+21 Ride 27 1
+22 Bluff 23 1
+23 Intimidate 24 1
+24 CraftMastery 25 1
+25 Climb 26 1
+26 Sail 22 1
+27 AnimalEmpathy 0 1
+
+
+=== cls_skill_blkgrd ===
+2DA V2.0
+
+SkillLabel SkillIndex ClassSkill
+0 Concentration 1 1
+1 DisableTrap 2 0
+2 Discipline 3 1
+3 Heal 4 1
+4 Hide 5 0
+5 Listen 6 1
+6 Lore 7 1
+7 MoveSilently 8 0
+8 OpenLock 9 0
+9 Parry 10 1
+10 Leadership 12 1
+11 PickPocket 13 0
+12 Search 14 0
+13 Spellcraft 16 0
+14 Spot 17 1
+15 Taunt 18 1
+16 Appraise 20 0
+17 Tumble 21 0
+18 Ride 27 1
+19 Bluff 23 1
+20 Intimidate 24 1
+21 CraftArmor 25 1
+22 CraftWeapon 26 0
+23 Sail 22 1
+
+
+=== cls_skill_bribon ===
+2DA V2.0
+
+      SkillLabel       SkillIndex   ClassSkill   
+0     Concentration    1            1            
+1     IntMecanism      2            1            
+2     SaberLocal       3            1            
+3     Heal             4            0            
+4     Hide             5            1            
+5     Listen           6            1            
+6     SaberArcano      7            1            
+7     MoveSilently     8            1            
+8     OpenLock         9            1            
+9     SaberReligion    10           1            
+10    Persuade         12           1            
+11    PickPocket       13           1            
+12    Search           14           1            
+13    SetTrap          15           1            
+14    Spellcraft       16           1            
+15    Spot             17           1            
+16    SaberOtros       18           1            
+17    UseMagicDevice   19           0            
+18    Appraise         20           1            
+19    Tumble           21           1            
+20    Artesania        22           1            
+21    Bluff            23           1            
+22    Intimidate       24           0            
+23    Nadar            25           1
+24    Saltar           26           1           
+25    Ride             27           0
+26    AverIntencions   28           1
+27    DescEscritura    29           1
+28    Disfrazarse      30           1
+29    Equilibrio       31           1 
+30    Escapismo        32           1 
+31    Falsificar       33           0 
+32    HablarUnIdioma   34           1
+33    ReunirInfo       35           1
+34    Supervivncia     36           0
+35    Trepar           37           1
+36    UsoDeCuerdas     38           1
+37    Perform          11           0
+38    AnimalEmpathy    0            0  
+
+=== cls_skill_cabarc ===
+2DA V2.0
+
+      SkillLabel       SkillIndex   ClassSkill
+0     Concentration    1            1
+1     IntMecanism      2            0
+2     SaberLocal       3            0
+3     Heal             4            0
+4     Hide             5            0
+5     Listen           6            0
+6     SaberArcano      7            1
+7     MoveSilently     8            0
+8     OpenLock         9            0
+9     SaberReligion    10           0
+10    Persuade         12           0
+11    PickPocket       13           0
+12    Search           14           0
+13    SetTrap          15           0
+14    Spellcraft       16           1
+15    Spot             17           0
+16    SaberOtros       18           1
+17    UseMagicDevice   19           0
+18    Appraise         20           0
+19    Tumble           21           0
+20    Artesania        22           1
+21    Bluff            23           0
+22    Intimidate       24           0
+23    Nadar            25           1
+24    Saltar           26           1
+25    Ride             27           1
+26    AverIntencions   28           1
+27    DescEscritura    29           1
+28    Disfrazarse      30           0
+29    Equilibrio       31           0
+30    Escapismo        32           0
+31    Falsificar       33           0
+32    HablarUnIdioma   34           0
+33    ReunirInfo       35           0
+34    Supervivncia     36           0
+35    Trepar           37           0
+36    UsoDeCuerdas     38           0
+37    Perform          11           0
+38    AnimalEmpathy    0            0
+
+
+=== cls_skill_cav ===
+2DA V2.0
+
+   SkillLabel     SkillIndex ClassSkill 
+0  Concentration  1          0          
+1  IntMecanism    2          0          
+2  SaberLocal     3          0          
+3  Heal           4          0          
+4  Hide           5          0          
+5  Listen         6          0          
+6  SaberArcano    7          0          
+7  MoveSilently   8          0          
+8  OpenLock       9          0          
+9  SaberReligion  10         0          
+10 Persuade       12         1          
+11 PickPocket     13         0          
+12 Search         14         0          
+13 SetTrap        15         0          
+14 Spellcraft     16         0          
+15 Spot           17         1          
+16 SaberOtros     18         1          
+17 Appraise       20         0          
+18 Tumble         21         0          
+19 Artesania      22         0          
+20 Bluff          23         0          
+21 Intimidate     24         1          
+22 Nadar          25         0          
+23 Saltar         26         0          
+24 Ride           27         1          
+25 AverIntencions 28         0          
+26 DescEscritura  29         0          
+27 Disfrazarse    30         0          
+28 Equilibrio     31         0          
+29 Escapismo      32         0          
+30 Falsificar     33         0          
+31 HablarUnIdioma 34         0          
+32 ReunirInfo     35         0          
+33 Supervivncia   36         0          
+34 Trepar         37         0          
+35 UsoDeCuerdas   38         0          
+36 Perform        11         0          
+37 UseMagicDevice 19         0          
+38 AnimalEmpathy  0          1          
+
+
+=== cls_skill_cava ===
+2DA V2.0
+
+SkillLabel SkillIndex ClassSkill
+0 Concentration 1 1
+1 DisableTrap 2 0
+2 Discipline 3 1
+3 Heal 4 1
+4 Hide 5 0
+5 Listen 6 1
+6 Lore 7 1
+7 MoveSilently 8 0
+8 OpenLock 9 0
+9 Parry 10 0
+10 Persuade 12 1
+11 PickPocket 13 0
+12 Search 14 0
+13 Spellcraft 16 0
+14 Spot 17 1
+15 Taunt 18 1
+16 Appraise 20 0
+17 Tumble 21 0
+18 Bluff 23 0
+19 Intimidate 24 1
+20 CraftArmor 25 1
+21 Climb 26 0
+22 Ride 27 1
+23 Perform 11 0
+24 Sail 22 1
+
+
+=== cls_skill_cler ===
+2DA V2.0
+
+SkillLabel SkillIndex ClassSkill
+0 Concentration 1 1
+1 DisableTrap 2 0
+2 Discipline 3 0
+3 Heal 4 1
+4 Hide 5 0
+5 Listen 6 0
+6 Lore 7 1
+7 MoveSilently 8 0
+8 OpenLock 9 0
+9 Parry 10 0
+10 Leadership 12 1
+11 PickPocket 13 0
+12 Search 14 0
+13 SetTrap 15 0
+14 Spellcraft 16 1
+15 Spot 17 0
+16 Taunt 18 0
+17 Appraise 20 0
+18 Tumble 21 0
+19 Bluff 23 0
+20 Intimidate 24 1
+21 CraftArmor 25 1
+22 Climb 26 0
+23 Ride 27 1
+24 Sail 22 1
+
+
+=== cls_skill_com ===
+2DA V2.0
+
+SkillLabel SkillIndex ClassSkill
+0 Concentration 1 0
+1 DisableTrap 2 0
+2 Discipline 3 0
+3 Heal 4 1
+4 Hide 5 0
+5 Listen 6 1
+6 Lore 7 1
+7 MoveSilently 8 0
+8 OpenLock 9 0
+9 Parry 10 0
+10 Persuade 12 1
+11 PickPocket 13 0
+12 Search 14 1
+13 SetTrap 15 0
+14 Spellcraft 16 0
+15 Spot 17 1
+16 Taunt 18 1
+17 Appraise 20 1
+18 Tumble 21 0
+19 Perform 11 1
+20 Bluff 23 1
+21 Intimidate 24 1
+22 CraftMastery 25 1
+23 Climb 26 0
+24 Ride 27 1
+25 Sail 22 1
+
+
+=== cls_skill_dirge ===
+2DA V2.0
+
+SkillLabel SkillIndex ClassSkill
+0 Concentration 1 1
+1 DisableTrap 2 0
+2 Discipline 3 1
+3 Heal 4 1
+4 Hide 5 1
+5 Listen 6 1
+6 Lore 7 1
+7 MoveSilently 8 1
+8 OpenLock 9 0
+9 Parry 10 0
+10 Perform 11 1
+11 Leadership 12 1
+12 PickPocket 13 1
+13 Search 14 0
+14 SetTrap 15 0
+15 Spellcraft 16 1
+16 Spot 17 0
+17 Taunt 18 1
+18 UseMagicDevice 19 1
+19 Appraise 20 1
+20 Tumble 21 1
+21 Ride 27 1
+22 Bluff 23 1
+23 Intimidate 24 1
+24 CraftMastery 25 1
+25 Climb 26 0
+26 Sail 22 1
+
+
+=== cls_skill_divcha ===
+2DA V2.0
+
+SkillLabel SkillIndex ClassSkill
+0 Concentration 1 1
+1 DisableTrap 2 0
+2 Discipline 3 1
+3 Heal 4 1
+4 Hide 5 0
+5 Listen 6 1
+6 Lore 7 1
+7 MoveSilently 8 0
+8 OpenLock 9 0
+9 Parry 10 1
+10 Leadership 12 1
+11 PickPocket 13 0
+12 Search 14 0
+13 SetTrap 15 0
+14 Spellcraft 16 0
+15 Spot 17 1
+16 Taunt 18 1
+17 Appraise 20 0
+18 Tumble 21 0
+19 Ride 27 1
+20 Bluff 23 0
+21 Intimidate 24 1
+22 CraftArmor 25 1
+23 CraftWeapon 26 0
+24 Sail 22 1
+
+
+=== cls_skill_dradis ===
+2DA V2.0
+
+SkillLabel SkillIndex ClassSkill
+0 Concentration 1 1
+1 DisableTrap 2 0
+2 Discipline 3 1
+3 Heal 4 1
+4 Hide 5 0
+5 Listen 6 1
+6 Lore 7 1
+7 MoveSilently 8 0
+8 OpenLock 9 0
+9 Parry 10 0
+10 Persuade 12 0
+11 PickPocket 13 0
+12 Search 14 0
+13 SetTrap 15 0
+14 Spellcraft 16 1
+15 Spot 17 1
+16 Taunt 18 0
+17 Appraise 20 0
+18 Tumble 21 0
+19 Ride 27 0
+20 Bluff 23 0
+21 Intimidate 24 1
+22 CraftArmor 25 1
+23 CraftWeapon 26 1
+24 Sail 22 1
+
+
+=== cls_skill_dru ===
+2DA V2.0
+
+SkillLabel SkillIndex ClassSkill
+0 AnimalEmpathy 0 1
+1 Concentration 1 1
+2 DisableTrap 2 0
+3 Discipline 3 0
+4 Heal 4 1
+5 Hide 5 0
+6 Listen 6 0
+7 Lore 7 1
+8 MoveSilently 8 0
+9 OpenLock 9 0
+10 Parry 10 0
+11 Persuade 12 1
+12 PickPocket 13 0
+13 Search 14 0
+14 SetTrap 15 0
+15 Spellcraft 16 1
+16 Spot 17 0
+17 Taunt 18 0
+18 Appraise 20 0
+19 Tumble 21 0
+20 Ride 27 0
+21 Bluff 23 0
+22 Intimidate 24 0
+23 CraftArmor 25 1
+24 CraftWeapon 26 0
+25 Sail 22 1
+
+
+=== cls_skill_dwdef ===
+2DA V2.0
+
+SkillLabel SkillIndex ClassSkill
+0 Concentration 1 1
+1 DisableTrap 2 0
+2 Discipline 3 1
+3 Heal 4 1
+4 Hide 5 0
+5 Listen 6 1
+6 Lore 7 1
+7 MoveSilently 8 0
+8 OpenLock 9 0
+9 Parry 10 1
+10 Persuade 12 0
+11 PickPocket 13 0
+12 Search 14 0
+13 SetTrap 15 0
+14 Spellcraft 16 0
+15 Spot 17 1
+16 Taunt 18 1
+17 Appraise 20 0
+18 Tumble 21 0
+19 Ride 27 1
+20 Bluff 23 0
+21 Intimidate 24 0
+22 CraftArmor 25 1
+23 CraftWeapon 26 0
+24 Sail 22 1
+
+
+=== cls_skill_fight ===
+2DA V2.0
+
+SkillLabel SkillIndex ClassSkill
+0 Concentration 1 1
+1 DisableTrap 2 0
+2 Discipline 3 1
+3 Heal 4 1
+4 Hide 5 0
+5 Listen 6 1
+6 Lore 7 1
+7 MoveSilently 8 0
+8 OpenLock 9 0
+9 Parry 10 1
+10 Persuade 12 1
+11 PickPocket 13 0
+12 Search 14 0
+13 SetTrap 15 0
+14 Spellcraft 16 0
+15 Spot 17 1
+16 Taunt 18 1
+17 Appraise 20 0
+18 Tumble 21 0
+19 Ride 27 1
+20 Bluff 23 0
+21 Intimidate 24 1
+22 CraftArmor 25 1
+23 CraftWeapon 26 1
+24 Sail 22 1
+
+
+=== cls_skill_frebzk ===
+2DA V2.0
+
+   SkillLabel     SkillIndex ClassSkill 
+0  Concentration  1          0          
+1  IntMecanism    2          0          
+2  SaberLocal     3          0          
+3  Heal           4          0          
+4  Hide           5          0          
+5  Listen         6          0          
+6  SaberArcano    7          0          
+7  MoveSilently   8          0          
+8  OpenLock       9          0          
+9  SaberReligion  10         0          
+10 Persuade       12         0          
+11 PickPocket     13         0          
+12 Search         14         0          
+13 SetTrap        15         0          
+14 Spellcraft     16         0          
+15 Spot           17         0          
+16 SaberOtros     18         0          
+17 Appraise       20         0          
+18 Tumble         21         0          
+19 Artesania      22         0          
+20 Bluff          23         0          
+21 Intimidate     24         1          
+22 Nadar          25         1          
+23 Saltar         26         1          
+24 Ride           27         1          
+25 AverIntencions 28         0          
+26 DescEscritura  29         0          
+27 Disfrazarse    30         0          
+28 Equilibrio     31         0          
+29 Escapismo      32         0          
+30 Falsificar     33         0          
+31 HablarUnIdioma 34         0          
+32 ReunirInfo     35         0          
+33 Supervivncia   36         0          
+34 Trepar         37         1          
+35 UsoDeCuerdas   38         0          
+36 Perform        11         0          
+37 UseMagicDevice 19         0          
+38 AnimalEmpathy  0          0          
+
+
+=== cls_skill_harb ===
+2DA V2.0
+
+SkillLabel SkillIndex ClassSkill
+0 Concentration 1 1
+1 DisableTrap 2 1
+2 Discipline 3 1
+3 Heal 4 1
+4 Hide 5 0
+5 Listen 6 1
+6 Lore 7 1
+7 MoveSilently 8 0
+8 OpenLock 9 0
+9 Parry 10 1
+10 Leadership 12 1
+11 PickPocket 13 0
+12 Search 14 1
+13 SetTrap 15 1
+14 Spellcraft 16 0
+15 Spot 17 1
+16 Taunt 18 1
+17 Appraise 20 0
+18 Tumble 21 0
+19 Ride 27 1
+20 Bluff 23 1
+21 Intimidate 24 1
+22 CraftMastery 25 1
+23 Climb 26 0
+24 Sail 22 1
+
+
+=== cls_skill_harper ===
+2DA V2.0
+
+SkillLabel SkillIndex ClassSkill
+0 Concentration 1 0
+1 DisableTrap 2 0
+2 Discipline 3 0
+3 Heal 4 1
+4 Hide 5 1
+5 Listen 6 1
+6 Lore 7 1
+7 MoveSilently 8 1
+8 OpenLock 9 1
+9 Parry 10 1
+10 Persuade 12 1
+11 PickPocket 13 1
+12 Search 14 1
+13 SetTrap 15 1
+14 Spellcraft 16 0
+15 Spot 17 1
+16 Taunt 18 0
+17 Appraise 20 1
+18 Tumble 21 1
+19 Perform 11 1
+20 Bluff 23 1
+21 Intimidate 24 1
+22 CraftArmor 25 1
+23 CraftWeapon 26 1
+24 Ride 27 1
+25 UseMagicDevice 19 1
+26 Sail 22 1
+
+
+=== cls_skill_hex ===
+2DA V2.0
+
+SkillLabel SkillIndex ClassSkill
+0 Concentration 1 1
+1 DisableTrap 2 0
+2 Discipline 3 1
+3 Heal 4 1
+4 Hide 5 0
+5 Listen 6 1
+6 Lore 7 1
+7 MoveSilently 8 0
+8 OpenLock 9 0
+9 Parry 10 1
+10 Persuade 12 1
+11 PickPocket 13 0
+12 Search 14 0
+13 SetTrap 15 1
+14 Spellcraft 16 0
+15 Spot 17 1
+16 Taunt 18 1
+17 Appraise 20 0
+18 Tumble 21 0
+19 Ride 27 1
+20 Bluff 23 1
+21 Intimidate 24 1
+22 CraftArmor 25 1
+23 CraftWeapon 26 0
+24 Sail 22 1
+
+
+=== cls_skill_hmage ===
+2DA V2.0
+
+SkillLabel SkillIndex ClassSkill
+0 Concentration 1 1
+1 DisableTrap 2 0
+2 Discipline 3 0
+3 Heal 4 1
+4 Hide 5 1
+5 Listen 6 0
+6 Lore 7 1
+7 MoveSilently 8 1
+8 OpenLock 9 0
+9 Parry 10 0
+10 Persuade 12 1
+11 PickPocket 13 0
+12 Search 14 0
+13 SetTrap 15 0
+14 Spellcraft 16 1
+15 Spot 17 0
+16 Taunt 18 0
+17 Appraise 20 0
+18 Tumble 21 0
+19 Ride 27 1
+20 Bluff 23 1
+21 Intimidate 24 0
+22 CraftArmor 25 1
+23 CraftWeapon 26 0
+24 Sail 22 1
+
+
+=== cls_skill_hmstr ===
+2DA V2.0
+
+SkillLabel SkillIndex ClassSkill
+0 Concentration 1 1
+1 DisableTrap 2 0
+2 Discipline 3 1
+3 Heal 4 1
+4 Hide 5 1
+5 Listen 6 1
+6 Lore 7 1
+7 MoveSilently 8 1
+8 OpenLock 9 0
+9 Parry 10 0
+10 Persuade 12 1
+11 PickPocket 13 1
+12 Search 14 0
+13 SetTrap 15 0
+14 Spellcraft 16 1
+15 Spot 17 0
+16 Taunt 18 0
+17 Appraise 20 1
+18 Tumble 21 1
+20 Bluff 23 1
+21 Intimidate 24 1
+22 CraftArmor 25 1
+23 Ride 27 1
+24 UseMagicDevice 19 1
+25 Perform 11 1
+26 CraftWeapon 26 0
+27 Sail 22 1
+
+
+=== cls_skill_hollib ===
+2DA V2.0
+
+SkillLabel SkillIndex ClassSkill
+0 AnimalEmpathy 0 0
+1 Concentration 1 1
+2 DisableTrap 2 0
+3 Discipline 3 1
+4 Heal 4 1
+5 Hide 5 0
+6 Listen 6 1
+7 Lore 7 1
+8 MoveSilently 8 0
+9 OpenLock 9 0
+10 Parry 10 1
+11 Perform 11 0
+12 Leadership 12 0
+13 PickPocket 13 0
+14 Search 14 0
+15 SetTrap 15 1
+16 Spellcraft 16 0
+17 Spot 17 1
+18 Taunt 18 1
+19 Appraise 20 0
+20 Tumble 21 0
+21 Sail 22 1
+22 Bluff 23 1
+23 Intimidate 24 1
+24 CraftMastery 25 1
+25 Climb 26 1
+26 Ride 27 1
+
+
+=== cls_skill_hprgn ===
+2DA V2.0
+
+SkillLabel SkillIndex ClassSkill
+0 Concentration 1 0
+1 DisableTrap 2 0
+2 Discipline 3 1
+3 Heal 4 1
+4 Hide 5 1
+5 Listen 6 1
+6 Lore 7 1
+7 MoveSilently 8 1
+8 OpenLock 9 0
+9 Parry 10 1
+10 Persuade 12 1
+11 PickPocket 13 0
+12 Search 14 0
+13 SetTrap 15 0
+14 Spellcraft 16 0
+15 Spot 17 1
+16 Taunt 18 1
+17 Appraise 20 0
+18 Tumble 21 0
+20 Bluff 23 1
+21 Intimidate 24 1
+22 CraftArmor 25 1
+23 CraftWeapon 26 0
+24 Ride 27 1
+25 Sail 22 1
+
+
+=== cls_skill_hprie ===
+2DA V2.0
+
+SkillLabel SkillIndex ClassSkill
+0 Concentration 1 1
+1 DisableTrap 2 0
+2 Discipline 3 0
+3 Heal 4 1
+4 Hide 5 1
+5 Listen 6 0
+6 Lore 7 1
+7 MoveSilently 8 1
+8 OpenLock 9 0
+9 Parry 10 0
+10 Persuade 12 1
+11 PickPocket 13 0
+12 Search 14 0
+13 SetTrap 15 0
+14 Spellcraft 16 1
+15 Spot 17 0
+16 Taunt 18 0
+17 Appraise 20 0
+18 Tumble 21 1
+20 Bluff 23 1
+21 Intimidate 24 1
+22 CraftArmor 25 1
+23 CraftWeapon 26 0
+24 Ride 27 1
+25 Sail 22 1
+
+
+=== cls_skill_inbl ===
+2DA V2.0
+
+SkillLabel SkillIndex ClassSkill
+0 Concentration 1 1
+1 DisableTrap 2 0
+2 Discipline 3 1
+3 Heal 4 1
+4 Hide 5 1
+5 Listen 6 1
+6 Lore 7 1
+7 MoveSilently 8 1
+8 OpenLock 9 0
+9 Parry 10 1
+10 Perform 11 1
+11 Persuade 12 0
+12 PickPocket 13 1
+13 Search 14 0
+14 SetTrap 15 0
+15 Spellcraft 16 0
+16 Spot 17 1
+17 Taunt 18 0
+18 Appraise 20 0
+19 Tumble 21 1
+20 Sail 22 1
+21 Bluff 23 1
+22 Intimidate 24 0
+23 CraftArmor 25 1
+24 Climb 26 1
+25 Ride 27 1
+
+
+=== cls_skill_ing ===
+2DA V2.0
+
+     SkillLabel           SkillIndex ClassSkill 
+0    TratoConAnimales     0          0          
+1    Concentracion        1          1          
+2    InutilizarMecanismo  2          1          
+3    SaberLocal           3          0          
+4    Sanar                4          1          
+5    Esconderse           5          0          
+6    Escuchar             6          0          
+7    SaberArcano          7          1          
+8    MoverseSigilosamente 8          0          
+9    AbrirCerraduras      9          0          
+10   SaberReligion        10         0          
+11   Interpretar          11         0          
+12   Diplomacia           12         1          
+13   JuegoDeManos         13         0          
+14   Buscar               14         1          
+15   PonerTrampas         15         0          
+16   ConocimientoConjuros 16         1          
+17   Avistar              17         1          
+18   SaberOtros           18         1          
+19   UsarObjetoMagico     19         1          
+20   Tasacion             20         1          
+21   Piruetas             21         0          
+22   Artesania            22         1          
+23   Enga�ar              23         0          
+24   Intimidar            24         0          
+25   Nadar                25         0          
+26   Saltar               26         0          
+27   Montar               27         0          
+28   AveriguarIntenciones 28         0          
+29   DescifrarEscritura   29         0          
+30   Disfrazarse          30         0          
+31   Equilibrio           31         0          
+32   Escapismo            32         0          
+33   Falsificar           33         0          
+34   HablarUnIdioma       34         0          
+35   ReunirInformacion    35         0          
+36   Supervivencia        36         0          
+37   Trepar               37         0          
+38   UsoDeCuerdas         38         0          
+
+
+=== cls_skill_ladsom ===
+2DA V2.0
+
+   SkillLabel     SkillIndex ClassSkill 
+0  Concentration  1          0          
+1  IntMecanism    2          1          
+2  SaberLocal     3          1          
+3  Heal           4          0          
+4  Hide           5          1          
+5  Listen         6          1          
+6  SaberArcano    7          0          
+7  MoveSilently   8          1          
+8  OpenLock       9          1          
+9  SaberReligion  10         0          
+10 Persuade       12         1          
+11 PickPocket     13         1          
+12 Search         14         1          
+13 SetTrap        15         1          
+14 Spellcraft     16         0          
+15 Spot           17         1          
+16 SaberOtros     18         0          
+17 UseMagicDevice 19         0          
+18 Appraise       20         1          
+19 Tumble         21         0          
+20 Artesania      22         1          
+21 Bluff          23         1          
+22 Intimidate     24         1          
+23 Nadar          25         0          
+24 Saltar         26         1          
+25 Ride           27         0          
+26 AverIntencions 28         1          
+27 DescEscritura  29         0          
+28 Disfrazarse    30         1          
+29 Equilibrio     31         0          
+30 Escapismo      32         0          
+31 Falsificar     33         1          
+32 HablarUnIdioma 34         0          
+33 ReunirInfo     35         0          
+34 Supervivncia   36         0          
+35 Trepar         37         1          
+36 UsoDeCuerdas   38         1          
+37 Perform        11         0          
+38 AnimalEmpathy  0          0          
+
+
+=== cls_skill_lorems ===
+2DA V2.0
+
+SkillLabel SkillIndex ClassSkill
+0 Concentration 1 1
+1 DisableTrap 2 1
+2 Discipline 3 0
+3 Heal 4 1
+4 Hide 5 0
+5 Listen 6 1
+6 Lore 7 1
+7 MoveSilently 8 0
+8 OpenLock 9 1
+9 Parry 10 0
+10 Perform 11 0
+11 Persuade 12 0
+12 PickPocket 13 0
+13 Search 14 1
+14 SetTrap 15 0
+15 Spellcraft 16 1
+16 Spot 17 1
+17 Taunt 18 0
+18 UseMagicDevice 19 1
+19 Appraise 20 1
+20 Tumble 21 0
+22 Bluff 23 0
+23 Intimidate 24 0
+24 CraftArmor 25 1
+25 CraftWeapon 26 0
+26 Ride 27 1
+27 Sail 22 1
+
+
+=== cls_skill_mmf ===
+2DA V2.0
+
+      SkillLabel      SkillIndex   ClassSkill   
+0     AnimalEmpathy   0            1            
+1     Concentration   1            1            
+2     IntMecanism     2            0            
+3     SaberLocal      3            0            
+4     Heal            4            0            
+5     Hide            5            1            
+6     Listen          6            1            
+7     SaberArcano     7            0            
+8     MoveSilently    8            0            
+9     OpenLock        9            0            
+10    SaberReligion   10           0            
+11    Persuade        12           1            
+12    PickPocket      13           0            
+13    Search          14           0            
+14    SetTrap         15           0            
+15    Spellcraft      16           0            
+16    Spot            17           1            
+17    SaberOtros      18           1            
+18    Appraise        20           0            
+19    Tumble          21           0            
+20    Artesania       22           1            
+21    Bluff           23           0            
+22    Intimidate      24           0            
+23    Nadar           25           1
+24    Saltar          26           0           
+25    Ride            27           0
+26    AverIntencions  28           0
+27    DescEscritura   29           0
+28    Disfrazarse     30           1
+29    Equilibrio      31           0 
+30    Escapismo       32           0 
+31    Falsificar      33           0 
+32    HablarUnIdioma  34           0
+33    ReunirInfo      35           0
+34    Supervivncia    36           1
+35    Trepar          37           1
+36    UsoDeCuerdas    38           0
+37    Perform         11           0
+38    UseMagicDevice  19           0
+
+=== cls_skill_monk ===
+2DA V2.0
+
+SkillLabel SkillIndex ClassSkill
+0 Concentration 1 1
+1 DisableTrap 2 0
+2 Discipline 3 1
+3 Heal 4 1
+4 Hide 5 1
+5 Listen 6 1
+6 Lore 7 1
+7 MoveSilently 8 1
+8 OpenLock 9 0
+9 Parry 10 1
+10 Persuade 12 1
+11 PickPocket 13 0
+12 Search 14 0
+13 SetTrap 15 0
+14 Spellcraft 16 0
+15 Spot 17 1
+16 Taunt 18 0
+17 Appraise 20 0
+18 Tumble 21 1
+20 Bluff 23 0
+21 Intimidate 24 1
+22 CraftMastery 25 1
+23 Ride 27 1
+24 Perform 11 1
+25 Climb 26 1
+26 Sail 22 1
+
+
+=== cls_skill_orcus ===
+2DA V2.0
+
+   SkillLabel     SkillIndex ClassSkill 
+0  Concentration  1          1          
+1  IntMecanism    2          0          
+2  SaberLocal     3          1          
+3  Heal           4          0          
+4  Hide           5          1          
+5  Listen         6          0          
+6  SaberArcano    7          1          
+7  MoveSilently   8          1          
+8  OpenLock       9          0          
+9  SaberReligion  10         1          
+10 Persuade       12         0          
+11 PickPocket     13         0          
+12 Search         14         0          
+13 SetTrap        15         0          
+14 Spellcraft     16         1          
+15 Spot           17         0          
+16 SaberOtros     18         1          
+17 Appraise       20         0          
+18 Tumble         21         0          
+19 Artesania      22         1          
+20 Bluff          23         1          
+21 Intimidate     24         1          
+22 Nadar          25         0          
+23 Saltar         26         0          
+24 Ride           27         0          
+25 AverIntencions 28         0          
+26 DescEscritura  29         0          
+27 Disfrazarse    30         0          
+28 Equilibrio     31         0          
+29 Escapismo      32         0          
+30 Falsificar     33         0          
+31 HablarUnIdioma 34         0          
+32 ReunirInfo     35         0          
+33 Supervivncia   36         0          
+34 Trepar         37         0          
+35 UsoDeCuerdas   38         0          
+36 Perform        11         0          
+37 UseMagicDevice 19         0          
+38 AnimalEmpathy  0          0          
+
+
+=== cls_skill_orcwar ===
+2DA V2.0
+
+   SkillLabel     SkillIndex ClassSkill 
+0  Concentration  1          0          
+1  IntMecanism    2          0          
+2  SaberLocal     3          0          
+3  Heal           4          0          
+4  Hide           5          0          
+5  Listen         6          1          
+6  SaberArcano    7          0          
+7  MoveSilently   8          0          
+8  OpenLock       9          0          
+9  SaberReligion  10         0          
+10 Persuade       12         0          
+11 PickPocket     13         0          
+12 Search         14         1          
+13 SetTrap        15         0          
+14 Spellcraft     16         0          
+15 Spot           17         0          
+16 SaberOtros     18         0          
+17 Appraise       20         0          
+18 Tumble         21         0          
+19 Artesania      22         1          
+20 Bluff          23         1          
+21 Intimidate     24         1          
+22 Nadar          25         0          
+23 Saltar         26         1          
+24 Ride           27         1          
+25 AverIntencions 28         1          
+26 DescEscritura  29         0          
+27 Disfrazarse    30         0          
+28 Equilibrio     31         0          
+29 Escapismo      32         0          
+30 Falsificar     33         0          
+31 HablarUnIdioma 34         0          
+32 ReunirInfo     35         0          
+33 Supervivncia   36         1          
+34 Trepar         37         0          
+35 UsoDeCuerdas   38         0          
+36 Perform        11         0          
+37 UseMagicDevice 19         0          
+38 AnimalEmpathy  0          0          
+
+
+=== cls_skill_pal ===
+2DA V2.0
+
+SkillLabel SkillIndex ClassSkill
+0 Concentration 1 1
+1 DisableTrap 2 0
+2 Discipline 3 1
+3 Heal 4 1
+4 Hide 5 0
+5 Listen 6 1
+6 Lore 7 1
+7 MoveSilently 8 0
+8 OpenLock 9 0
+9 Parry 10 1
+10 Persuade 12 1
+11 PickPocket 13 0
+12 Search 14 0
+13 SetTrap 15 0
+14 Spellcraft 16 0
+15 Spot 17 1
+16 Taunt 18 1
+17 Appraise 20 0
+18 Tumble 21 0
+20 Bluff 23 0
+21 Intimidate 24 1
+22 CraftArmor 25 1
+23 CraftWeapon 26 0
+24 Ride 27 1
+25 Sail 22 1
+
+
+=== cls_skill_pala ===
+2DA V2.0
+
+   SkillLabel     SkillIndex ClassSkill
+0  Concentration  1          1
+1  IntMecanism    2          0
+2  SaberLocal     3          0
+3  Heal           4          0
+4  Hide           5          0
+5  Listen         6          1
+6  SaberArcano    7          0
+7  MoveSilently   8          0
+8  OpenLock       9          0
+9  SaberReligion  10         0
+10 Persuade       12         1
+11 PickPocket     13         0
+12 Search         14         0
+13 SetTrap        15         0
+14 Spellcraft     16         0
+15 Spot           17         0
+16 SaberOtros     18         0
+17 Appraise       20         0
+18 Tumble         21         0
+19 Artesania      22         1
+20 Bluff          23         0
+21 Intimidate     24         0
+22 Nadar          25         0
+23 Saltar         26         0
+24 Ride           27         1
+25 AverIntencions 28         1
+26 DescEscritura  29         0
+27 Disfrazarse    30         0
+28 Equilibrio     31         0
+29 Escapismo      32         0
+30 Falsificar     33         0
+31 HablarUnIdioma 34         0
+32 ReunirInfo     35         0
+33 Supervivncia   36         1
+34 Trepar         37         0
+35 UsoDeCuerdas   38         0
+36 Perform        11         1
+37 UseMagicDevice 19         0
+38 AnimalEmpathy  0          1
+
+
+=== cls_skill_palema ===
+2DA V2.0
+
+SkillLabel SkillIndex ClassSkill
+0 Concentration 1 1
+1 DisableTrap 2 0
+2 Discipline 3 0
+3 Heal 4 1
+4 Hide 5 1
+5 Listen 6 0
+6 Lore 7 1
+7 MoveSilently 8 1
+8 OpenLock 9 0
+9 Parry 10 0
+10 Persuade 12 0
+11 PickPocket 13 0
+12 Search 14 0
+13 SetTrap 15 0
+14 Spellcraft 16 1
+15 Spot 17 0
+16 Taunt 18 0
+17 Appraise 20 0
+18 Tumble 21 0
+20 Bluff 23 0
+21 Intimidate 24 1
+22 CraftArmor 25 1
+23 CraftWeapon 26 0
+24 Ride 27 0
+25 Sail 22 1
+
+
+=== cls_skill_palo ===
+2DA V2.0
+
+   SkillLabel     SkillIndex ClassSkill
+0  Concentration  1          1
+1  IntMecanism    2          0
+2  SaberLocal     3          0
+3  Heal           4          0
+4  Hide           5          1
+5  Listen         6          0
+6  SaberArcano    7          0
+7  MoveSilently   8          1
+8  OpenLock       9          0
+9  SaberReligion  10         0
+10 Persuade       12         0
+11 PickPocket     13         0
+12 Search         14         0
+13 SetTrap        15         0
+14 Spellcraft     16         0
+15 Spot           17         0
+16 SaberOtros     18         1
+17 Appraise       20         0
+18 Tumble         21         0
+19 Artesania      22         1
+20 Bluff          23         1
+21 Intimidate     24         1
+22 Nadar          25         0
+23 Saltar         26         0
+24 Ride           27         1
+25 AverIntencions 28         1
+26 DescEscritura  29         0
+27 Disfrazarse    30         0
+28 Equilibrio     31         0
+29 Escapismo      32         0
+30 Falsificar     33         0
+31 HablarUnIdioma 34         0
+32 ReunirInfo     35         0
+33 Supervivncia   36         0
+34 Trepar         37         0
+35 UsoDeCuerdas   38         0
+36 Perform        11         0
+37 UseMagicDevice 19         0
+38 AnimalEmpathy  0          0
+
+
+=== cls_skill_palv ===
+2DA V2.0
+
+   SkillLabel     SkillIndex ClassSkill
+0  Concentration  1          1
+1  IntMecanism    2          0
+2  SaberLocal     3          0
+3  Heal           4          0
+4  Hide           5          1
+5  Listen         6          0
+6  SaberArcano    7          0
+7  MoveSilently   8          0
+8  OpenLock       9          0
+9  SaberReligion  10         1
+10 Persuade       12         0
+11 PickPocket     13         0
+12 Search         14         1
+13 SetTrap        15         0
+14 Spellcraft     16         0
+15 Spot           17         0
+16 SaberOtros     18         0
+17 Appraise       20         0
+18 Tumble         21         0
+19 Artesania      22         1
+20 Bluff          23         0
+21 Intimidate     24         1
+22 Nadar          25         0
+23 Saltar         26         0
+24 Ride           27         1
+25 AverIntencions 28         1
+26 DescEscritura  29         0
+27 Disfrazarse    30         0
+28 Equilibrio     31         0
+29 Escapismo      32         0
+30 Falsificar     33         0
+31 HablarUnIdioma 34         0
+32 ReunirInfo     35         1
+33 Supervivncia   36         0
+34 Trepar         37         0
+35 UsoDeCuerdas   38         0
+36 Perform        11         0
+37 UseMagicDevice 19         0
+38 AnimalEmpathy  0          0
+
+
+=== cls_skill_pdk ===
+2DA V2.0
+
+SkillLabel SkillIndex ClassSkill
+0 Concentration 1 1
+1 DisableTrap 2 0
+2 Discipline 3 1
+3 Heal 4 1
+4 Hide 5 0
+5 Listen 6 1
+6 Lore 7 1
+7 MoveSilently 8 0
+8 OpenLock 9 0
+9 Parry 10 1
+10 Persuade 12 1
+11 PickPocket 13 0
+12 Search 14 0
+13 SetTrap 15 0
+14 Spellcraft 16 0
+15 Spot 17 1
+16 Taunt 18 1
+17 Appraise 20 0
+18 Tumble 21 0
+20 Bluff 23 0
+21 Intimidate 24 1
+22 CraftArmor 25 1
+23 CraftWeapon 26 0
+24 Ride 27 1
+25 Sail 22 1
+
+
+=== cls_skill_rang ===
+2DA V2.0
+
+SkillLabel SkillIndex ClassSkill
+0 AnimalEmpathy 0 1
+1 Concentration 1 1
+2 DisableTrap 2 1
+3 Discipline 3 1
+4 Heal 4 1
+5 Hide 5 1
+6 Listen 6 1
+7 Lore 7 1
+8 MoveSilently 8 1
+9 OpenLock 9 0
+10 Parry 10 1
+11 Persuade 12 0
+12 PickPocket 13 0
+13 Search 14 1
+14 SetTrap 15 1
+15 Spellcraft 16 0
+16 Spot 17 1
+17 Taunt 18 0
+18 Appraise 20 0
+19 Tumble 21 0
+21 Bluff 23 0
+22 Intimidate 24 1
+23 CraftArmor 25 1
+24 CraftWeapon 26 1
+25 Ride 27 1
+26 Sail 22 1
+
+
+=== cls_skill_rog ===
+2DA V2.0
+
+SkillLabel SkillIndex ClassSkill
+0 Concentration 1 0
+1 DisableTrap 2 1
+2 Discipline 3 0
+3 Heal 4 1
+4 Hide 5 1
+5 Listen 6 1
+6 Lore 7 1
+7 MoveSilently 8 1
+8 OpenLock 9 1
+9 Parry 10 1
+10 Persuade 12 1
+11 PickPocket 13 1
+12 Search 14 1
+13 SetTrap 15 1
+14 Spellcraft 16 0
+15 Spot 17 1
+16 Taunt 18 1
+17 UseMagicDevice 19 1
+18 Appraise 20 1
+19 Tumble 21 1
+20 Perform 11 1
+21 Bluff 23 1
+22 Intimidate 24 1
+23 CraftArrmor 25 1
+24 CraftWeapon 26 1
+25 Ride 27 1
+26 Perform 11 1
+27 Sail 22 1
+
+
+=== cls_skill_shadep ===
+2DA V2.0
+
+   SkillLabel     SkillIndex ClassSkill 
+0  Concentration  1          1          
+1  IntMecanism    2          0          
+2  SaberLocal     3          1          
+3  Heal           4          0          
+4  Hide           5          1          
+5  Listen         6          0          
+6  SaberArcano    7          1          
+7  MoveSilently   8          0          
+8  OpenLock       9          0          
+9  SaberReligion  10         1          
+10 Persuade       12         0          
+11 PickPocket     13         0          
+12 Search         14         0          
+13 SetTrap        15         0          
+14 Spellcraft     16         1          
+15 Spot           17         0          
+16 SaberOtros     18         1          
+17 UseMagicDevice 19         0          
+18 Appraise       20         0          
+19 Tumble         21         0          
+20 Artesania      22         1          
+21 Bluff          23         1          
+22 Intimidate     24         0          
+23 Nadar          25         0          
+24 Saltar         26         0          
+25 Ride           27         0          
+26 AverIntencions 28         0          
+27 DescEscritura  29         0          
+28 Disfrazarse    30         1          
+29 Equilibrio     31         0          
+30 Escapismo      32         0          
+31 Falsificar     33         0          
+32 HablarUnIdioma 34         0          
+33 ReunirInfo     35         0          
+34 Supervivncia   36         0          
+35 Trepar         37         0          
+36 UsoDeCuerdas   38         0          
+37 Perform        11         0          
+38 AnimalEmpathy  0          0          
+
+
+=== cls_skill_shadow ===
+2DA V2.0
+
+SkillLabel SkillIndex ClassSkill
+0 Concentration 1 0
+1 DisableTrap 2 0
+2 Discipline 3 0
+3 Heal 4 1
+4 Hide 5 1
+5 Listen 6 1
+6 Lore 7 1
+7 MoveSilently 8 1
+8 OpenLock 9 0
+9 Parry 10 1
+10 Persuade 12 0
+11 PickPocket 13 1
+12 Search 14 1
+13 SetTrap 15 0
+14 Spellcraft 16 0
+15 Spot 17 1
+16 Taunt 18 0
+17 Appraise 20 0
+18 Tumble 21 1
+19 Perform 11 1
+20 Bluff 23 1
+21 Intimidate 24 0
+22 CraftArmor 25 1
+23 CraftWeapon 26 1
+24 Ride 27 1
+25 Sail 22 1
+
+
+=== cls_skill_shiftr ===
+2DA V2.0
+
+SkillLabel SkillIndex ClassSkill
+0 AnimalEmpathy 0 1
+1 Concentration 1 1
+2 DisableTrap 2 0
+3 Discipline 3 0
+4 Heal 4 1
+5 Hide 5 1
+6 Listen 6 1
+7 Lore 7 1
+8 MoveSilently 8 1
+9 OpenLock 9 0
+10 Parry 10 0
+11 Persuade 12 0
+12 PickPocket 13 0
+13 Search 14 0
+14 SetTrap 15 0
+15 Spellcraft 16 0
+16 Spot 17 1
+17 Taunt 18 0
+18 Appraise 20 0
+19 Tumble 21 0
+21 Bluff 23 1
+22 Intimidate 24 0
+23 CraftArmor 25 1
+24 CraftWeapon 26 0
+25 Ride 27 1
+26 Sail 22 1
+
+
+=== cls_skill_sol ===
+2DA V2.0
+
+      SkillLabel      SkillIndex   ClassSkill   
+0     Concentration   1            1            
+1     IntMecanism     2            0            
+2     SaberLocal      3            0            
+3     Heal            4            1            
+4     Hide            5            0            
+5     Listen          6            0            
+6     SaberArcano     7            0            
+7     MoveSilently    8            0            
+8     OpenLock        9            0            
+9     SaberReligion   10           1            
+10    Persuade        12           1            
+11    PickPocket      13           0            
+12    Search          14           0            
+13    SetTrap         15           0            
+14    Spellcraft      16           1            
+15    Spot            17           0            
+16    SaberOtros      18           0            
+17    Appraise        20           0            
+18    Tumble          21           0            
+19    Artesania       22           1            
+20    Bluff           23           0            
+21    Intimidate      24           0           
+22    Nadar           25           0
+23    Saltar          26           0          
+24    Ride            27           0
+25    AverIntencions  28           1
+26    DescEscritura   29           0
+27    Disfrazarse     30           0
+28    Equilibrio      31           0 
+29    Escapismo       32           0 
+30    Falsificar      33           0 
+31    HablarUnIdioma  34           0
+32    ReunirInfo      35           0
+33    Supervivncia    36           0
+34    Trepar          37           0
+35    UsoDeCuerdas    38           0
+36    Perform         11           0
+37    UseMagicDevice  19           0
+38    AnimalEmpathy   0            0
+
+=== cls_skill_sorc ===
+2DA V2.0
+
+SkillLabel SkillIndex ClassSkill
+0 Concentration 1 1
+1 DisableTrap 2 0
+2 Discipline 3 0
+3 Heal 4 1
+4 Hide 5 0
+5 Listen 6 0
+6 Lore 7 1
+7 MoveSilently 8 0
+8 OpenLock 9 0
+9 Parry 10 0
+10 Persuade 12 1
+11 PickPocket 13 0
+12 Search 14 0
+13 SetTrap 15 0
+14 Spellcraft 16 1
+15 Spot 17 0
+16 Taunt 18 0
+17 Appraise 20 0
+18 Tumble 21 0
+20 Bluff 23 1
+21 Intimidate 24 0
+22 CraftArmor 25 1
+23 CraftWeapon 26 0
+24 Ride 27 0
+25 Sail 22 1
+
+
+=== cls_skill_spe ===
+2DA V2.0
+
+SkillLabel SkillIndex ClassSkill
+0 Concentration 1 1
+1 DisableTrap 2 1
+2 Discipline 3 1
+3 Heal 4 1
+4 Hide 5 1
+5 Listen 6 1
+6 Lore 7 1
+7 MoveSilently 8 1
+8 OpenLock 9 1
+9 Parry 10 1
+10 Persuade 12 1
+11 PickPocket 13 1
+12 Search 14 1
+13 SetTrap 15 1
+14 Spellcraft 16 1
+15 Spot 17 1
+16 Taunt 18 1
+17 Appraise 20 1
+18 Tumble 21 1
+20 Bluff 23 1
+21 Intimidate 24 1
+22 CraftArmor 25 1
+23 Ride 27 1
+24 Perform 11 1
+25 AnimalEmpathy 0 1
+26 Usemagicdevice 19 1
+27 CraftWeapon 26 1
+28 Sail 22 1
+
+
+=== cls_skill_sps ===
+2DA V2.0
+
+SkillLabel SkillIndex ClassSkill
+0 AnimalEmpathy 0 0
+1 Concentration 1 1
+2 DisableTrap 2 0
+3 Discipline 3 1
+4 Heal 4 1
+5 Hide 5 0
+6 Listen 6 1
+7 Lore 7 1
+8 MoveSilently 8 0
+9 OpenLock 9 0
+10 Parry 10 1
+11 Perform 11 0
+12 Leadership 12 1
+13 PickPocket 13 0
+14 Search 14 0
+15 SetTrap 15 0
+16 Spellcraft 16 1
+17 Spot 17 1
+18 Taunt 18 0
+19 Appraise 20 0
+20 Tumble 21 0
+21 Sail 22 1
+22 Bluff 23 0
+23 Intimidate 24 0
+24 CraftMastery 25 1
+25 Climb 26 0
+26 Ride 27 1
+
+
+=== cls_skill_swash ===
+2DA V2.0
+
+SkillLabel SkillIndex ClassSkill
+0 Concentration 1 0
+1 DisableTrap 2 0
+2 Discipline 3 1
+3 Heal 4 1
+4 Hide 5 0
+5 Listen 6 0
+6 Lore 7 1
+7 MoveSilently 8 0
+8 OpenLock 9 0
+9 Parry 10 1
+10 Persuade 12 1
+11 PickPocket 13 0
+12 Search 14 0
+13 SetTrap 15 0
+14 Spellcraft 16 0
+15 Spot 17 1
+16 Taunt 18 1
+17 Appraise 20 0
+18 Tumble 21 1
+20 Bluff 23 1
+21 Intimidate 24 1
+22 CraftArmor 25 1
+23 Ride 27 1
+24 Perform 11 1
+25 CraftWeapon 26 1
+26 Sail 22 1
+
+
+=== cls_skill_tesp ===
+2DA V2.0
+
+      SkillLabel      SkillIndex   ClassSkill   
+0     AnimalEmpathy   0            0            
+1     Concentration   1            0            
+2     IntMecanism     2            0            
+3     SaberLocal      3            0            
+4     Heal            4            0            
+5     Hide            5            1            
+6     Listen          6            1            
+7     SaberArcano     7            0            
+8     MoveSilently    8            1            
+9     OpenLock        9            0            
+10    SaberReligion   10           0            
+11    Persuade        12           0            
+12    PickPocket      13           0            
+13    Search          14           1            
+14    SetTrap         15           1            
+15    Spellcraft      16           0            
+16    Spot            17           1            
+17    SaberOtros      18           1            
+18    Appraise        20           0            
+19    Tumble          21           0            
+20    Artesania       22           1            
+21    Bluff           23           0            
+22    Intimidate      24           0            
+23    Nadar           25           1
+24    Saltar          26           1          
+25    Ride            27           0
+26    AverIntencions  28           1
+27    DescEscritura   29           0
+28    Disfrazarse     30           0
+29    Equilibrio      31           1 
+30    Escapismo       32           1 
+31    Falsificar      33           0 
+32    HablarUnIdioma  34           0
+33    ReunirInfo      35           0
+34    Supervivncia    36           1
+35    Trepar          37           1
+36    UsoDeCuerdas    38           0
+37    Perform         11           0
+38    UseMagicDevice  19           0
+
+=== cls_skill_teur ===
+2DA V2.0
+
+      SkillLabel      SkillIndex   ClassSkill   
+0     Concentration   1            1            
+1     IntMecanism     2            0            
+2     SaberLocal      3            0            
+3     Heal            4            0            
+4     Hide            5            0            
+5     Listen          6            0            
+6     SaberArcano     7            1            
+7     MoveSilently    8            0            
+8     OpenLock        9            0            
+9     SaberReligion   10           1            
+10    Persuade        12           0            
+11    PickPocket      13           0            
+12    Search          14           0            
+13    SetTrap         15           0            
+14    Spellcraft      16           1            
+15    Spot            17           0            
+16    SaberOtros      18           0            
+17    Appraise        20           0            
+18    Tumble          21           0            
+19    Artesania       22           1            
+20    Bluff           23           0            
+21    Intimidate      24           0            
+22    Nadar           25           0
+23    Saltar          26           0          
+24    Ride            27           0
+25    AverIntencions  28           1
+26    DescEscritura   29           1
+27    Disfrazarse     30           0
+28    Equilibrio      31           0 
+29    Escapismo       32           0 
+30    Falsificar      33           0 
+31    HablarUnIdioma  34           0
+32    ReunirInfo      35           0
+33    Supervivncia    36           0
+34    Trepar          37           0
+35    UsoDeCuerdas    38           0
+36    Perform         11           0
+37    UseMagicDevice  19           0
+38    AnimalEmpathy   0            0
+
+=== cls_skill_vig ===
+2DA V2.0
+
+SkillLabel SkillIndex ClassSkill
+0 AnimalEmpathy 0 0
+1 Concentration 1 1
+2 DisableTrap 2 1
+3 Discipline 3 1
+4 Heal 4 1
+5 Hide 5 1
+6 Listen 6 1
+7 Lore 7 1
+8 MoveSilently 8 1
+9 OpenLock 9 1
+10 Parry 10 1
+11 Perform 11 0
+12 Leadership 12 0
+13 PickPocket 13 1
+14 Search 14 1
+15 SetTrap 15 1
+16 Spellcraft 16 0
+17 Spot 17 1
+18 Taunt 18 1
+19 Appraise 20 0
+20 Tumble 21 1
+21 Sail 22 1
+22 Bluff 23 1
+23 Intimidate 24 1
+24 CraftMastery 25 1
+25 Climb 26 1
+26 Ride 27 1
+
+
+=== cls_skill_war ===
+2DA V2.0
+
+SkillLabel SkillIndex ClassSkill
+0 AnimalEmpathy 0 0
+1 Concentration 1 1
+2 DisableTrap 2 0
+3 Discipline 3 1
+4 Heal 4 1
+5 Hide 5 1
+6 Listen 6 0
+7 Lore 7 1
+8 MoveSilently 8 1
+9 OpenLock 9 0
+10 Parry 10 0
+11 Perform 11 1
+12 Leadership 12 1
+13 PickPocket 13 0
+14 Search 14 0
+15 SetTrap 15 0
+16 Spellcraft 16 1
+17 Spot 17 1
+18 Taunt 18 0
+19 UseMagicDevice 19 1
+20 Appraise 20 0
+21 Tumble 21 1
+22 Sail 22 1
+23 Bluff 23 1
+24 Intimidate 24 1
+25 CraftMastery 25 1
+26 Climb 26 0
+27 Ride 27 0
+
+
+=== cls_skill_warlok ===
+2DA V2.0
+
+   SkillLabel     SkillIndex ClassSkill 
+0  Concentration  1          1          
+1  IntMecanism    2          0          
+2  SaberLocal     3          0          
+3  Heal           4          0          
+4  Hide           5          0          
+5  Listen         6          0          
+6  SaberArcano    7          1          
+7  MoveSilently   8          0          
+8  OpenLock       9          0          
+9  SaberReligion  10         1          
+10 Persuade       12         0          
+11 PickPocket     13         0          
+12 Search         14         0          
+13 SetTrap        15         0          
+14 Spellcraft     16         1          
+15 Spot           17         0          
+16 SaberOtros     18         1          
+17 Appraise       20         0          
+18 Tumble         21         0          
+19 Artesania      22         1          
+20 Bluff          23         1          
+21 Intimidate     24         1          
+22 Nadar          25         0          
+23 Saltar         26         1          
+24 Ride           27         0          
+25 AverIntencions 28         1          
+26 DescEscritura  29         0          
+27 Disfrazarse    30         1          
+28 Equilibrio     31         0          
+29 Escapismo      32         0          
+30 Falsificar     33         0          
+31 HablarUnIdioma 34         0          
+32 ReunirInfo     35         0          
+33 Supervivncia   36         0          
+34 Trepar         37         0          
+35 UsoDeCuerdas   38         0          
+36 Perform        11         0          
+37 UseMagicDevice 19         1          
+38 AnimalEmpathy  0          0          
+
+
+=== cls_skill_wiz ===
+2DA V2.0
+
+SkillLabel SkillIndex ClassSkill
+0 Concentration 1 1
+1 DisableTrap 2 0
+2 Discipline 3 0
+3 Heal 4 1
+4 Hide 5 0
+5 Listen 6 0
+6 Lore 7 1
+7 MoveSilently 8 0
+8 OpenLock 9 0
+9 Parry 10 0
+10 Persuade 12 0
+11 PickPocket 13 0
+12 Search 14 0
+13 SetTrap 15 0
+14 Spellcraft 16 1
+15 Spot 17 0
+16 Taunt 18 0
+17 Appraise 20 0
+18 Tumble 21 0
+20 Bluff 23 0
+21 Intimidate 24 0
+22 CraftArmor 25 1
+23 CraftWeapon 26 0
+24 Ride 27 0
+25 Sail 22 1
+
+
+=== cls_skill_wm ===
+2DA V2.0
+
+SkillLabel SkillIndex ClassSkill
+0 Concentration 1 1
+1 DisableTrap 2 0
+2 Discipline 3 1
+3 Heal 4 1
+4 Hide 5 0
+5 Listen 6 1
+6 Lore 7 1
+7 MoveSilently 8 0
+8 OpenLock 9 0
+9 Parry 10 1
+10 Persuade 12 0
+11 PickPocket 13 0
+12 Search 14 0
+13 SetTrap 15 0
+14 Spellcraft 16 0
+15 Spot 17 1
+16 Taunt 18 1
+17 Appraise 20 0
+18 Tumble 21 0
+19 Perform 11 1
+20 Bluff 23 0
+21 Intimidate 24 1
+22 CraftArmor 25 1
+23 CraftWeapon 26 0
+24 Ride 27 1
+25 Sail 22 1
+

@@ -1,0 +1,14 @@
+2DA V2.0
+
+LABEL ReqType ReqParam1 ReqParam2
+0 Persuade SKILL 12 4
+1 Lore SKILL 7 10
+2 Alertness FEAT 0 ****
+3 IronWill FEAT 22 ****
+4 ScriptVar VAR X1_AllowHarper 1
+5 Scout CLASSNOT 28 ****
+6 Priest CLASSNOT 76 ****
+7 Paragon CLASSNOT 77 ****
+8 Master CLASSNOT 78 ****
+9 Arcane ARCSPELL 3 ****
+10 Commoner CLASSNOT 79 ****

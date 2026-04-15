@@ -1,0 +1,6 @@
+2DA V2.0
+
+LABEL ReqType ReqParam1 ReqParam2
+0 ScriptVar VAR X1_AllowShadow 1
+1 Commoner CLASSNOT 79 ****
+2 BAB BAB 2 ****

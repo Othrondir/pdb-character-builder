@@ -1,0 +1,8 @@
+2DA V2.0
+
+  LABEL              ReqType ReqParam1      ReqParam2 
+0 Base_Attack        BAB     4              ****      
+1 ScriptVar          VAR     PRC_AllowOrcus 0         
+2 SaberReligion      SKILL   10             2         
+3 SaberArcano        SKILL   7              2         
+4 SolturaNigromancia FEAT    171            ****      

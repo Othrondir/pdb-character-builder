@@ -1,0 +1,8 @@
+2DA V2.0
+
+  LABEL            ReqType ReqParam1     ReqParam2 
+0 Clerigo          CLASSOR 2             5         
+1 FEAT_SHADOWWEAVE FEAT    1354          ****      
+2 SaberArcano      SKILL   7             8         
+3 ConocConjuros    SKILL   16            8         
+4 ScriptVar        VAR     DLA_AllowCbAr 0         

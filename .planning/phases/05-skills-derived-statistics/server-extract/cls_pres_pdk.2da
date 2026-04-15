@@ -1,0 +1,12 @@
+2DA V2.0
+
+LABEL ReqType ReqParam1 ReqParam2
+0 Commoner CLASSNOT 79 ****
+1 "SF: Concentration" FEATOR 173 ****
+2 "SF: Discipline" FEATOR 175 ****
+3 "SF: Intimidate" FEATOR 916 ****
+4 "SF: Leadership" FEATOR 185 ****
+5 "SF: Perform" FEATOR 184 ****
+6 "SF: Ride" FEATOR 2027 ****
+7 "SF: Taunt" FEATOR 192 ****
+8 Base_Attack BAB 2 ****

@@ -1,0 +1,9 @@
+2DA V2.0
+
+LABEL ReqType ReqParam1 ReqParam2
+0 Commoner CLASSNOT 79 ****
+1 Bluff SKILL 23 4
+2 DirtyFighting2 FEAT 2380 ****
+3 Base_Attack BAB 3 ****
+4 ScriptVar VAR X2_Allow_Vigilante 0
+5 Liberator CLASSNOT 98 ****

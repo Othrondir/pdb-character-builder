@@ -1,0 +1,11 @@
+2DA V2.0
+
+  LABEL             ReqType ReqParam1    ReqParam2 
+0 Base_Attack       BAB     8            ****      
+1 Montar            SKILL   27           6         
+2 SaberOtros        SKILL   18           4         
+3 CombatirMon       FEAT    1087         ****      
+4 WeapFocSpear      FEAT    97           ****      
+5 TratoConAnimales  SKILL   0            4         
+6 EmbestidaMejorada FEAT    1157         ****      
+7 ScriptVar         VAR     DLA_AllowPDK 0         

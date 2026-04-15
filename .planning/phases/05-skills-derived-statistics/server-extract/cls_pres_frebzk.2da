@@ -1,0 +1,9 @@
+2DA V2.0
+
+  LABEL          ReqType ReqParam1       ReqParam2 
+0 Base_Attack    BAB     6               ****      
+1 Cleave         FEAT    6               ****      
+2 Power_Attack   FEAT    1220            ****      
+3 FuriaIntimidar FEAT    1457            ****      
+4 RomerArma      FEAT    1214            ****      
+4 ScriptVar      VAR     PRC_AllowFrebzk 0         

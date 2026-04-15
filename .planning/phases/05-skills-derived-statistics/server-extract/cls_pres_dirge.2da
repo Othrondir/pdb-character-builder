@@ -1,0 +1,10 @@
+2DA V2.0
+
+LABEL ReqType ReqParam1 ReqParam2
+0 ScriptVar VAR X2_Allow_Dirgesinger 0
+1 Commoner CLASSNOT 79 ****
+2 FeatOrCurseSong FEATOR 2483 ****
+3 FeatOrSFPerform FEATOR 184 ****
+4 FeatIronWill FEAT 22 ****
+5 SkillLore6 SKILL 7 5
+6 SkillIntim6 SKILL 24 5

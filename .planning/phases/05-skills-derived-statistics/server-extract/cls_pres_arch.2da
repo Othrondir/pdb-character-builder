@@ -1,0 +1,17 @@
+2DA V2.0
+
+   LABEL         ReqType  ReqParam1     ReqParam2 
+0  Arcane        ARCSPELL 7             ****      
+1  SaberArcano   SKILL    7             17        
+2  ConocConjuros SKILL    16            17        
+3  SoltConConj   FEAT     189           ****      
+4  ScriptVar     VAR      DLA_AllowCbAr 0         
+5  GrSpllFcsAbj  FEATOR   393           ****      
+6  GrSpllFcsCnj  FEATOR   394           ****      
+7  GrSpllFcsDiv  FEATOR   395           ****      
+8  GrSpllFcsEnch FEATOR   396           ****      
+9  GrSpllFcsEvc  FEATOR   397           ****      
+10 GrSpllFcsIll  FEATOR   398           ****      
+11 GrSpllFcsNec  FEATOR   399           ****      
+12 GrSpllFcsTran FEATOR   400           ****      
+13 ScriptVar     VAR      DLA_AllowCbAr ****      

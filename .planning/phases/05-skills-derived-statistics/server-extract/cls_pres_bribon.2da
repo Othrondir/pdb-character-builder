@@ -1,0 +1,12 @@
+2DA V2.0
+
+  LABEL          ReqType  ReqParam1     ReqParam2 
+0 Arcane         ARCSPELL 5             ****      
+1 DescEscritura  SKILL    29            6         
+2 Escapismo      SKILL    32            6         
+3 IntMecanismo   SKILL    2             6         
+4 SaberArcano    SKILL    7             4         
+5 AtaqFurt2d6Pic FEATOR   345           ****      
+6 AtaqFurt2d6LSA FEATOR   835           ****      
+7 AtaqFurt2d6Ase FEATOR   456           ****      
+8 ScriptVar      VAR      DLA_AllowBrib 0         
