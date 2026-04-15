@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 
 // ── Helpers: build synthetic binary fixtures ──────────────────────────
 
@@ -287,132 +287,110 @@ describe('parseKey', () => {
 
 // ── BaseGameReader tests ──────────────────────────────────────────────
 
+/**
+ * Create a mock file reader that dispatches on path substrings.
+ * Each entry maps a path substring to the Buffer it should return.
+ */
+function mockFileReader(
+  fileMap: Record<string, Buffer>,
+  tracker?: { calls: string[] },
+): (path: string) => Buffer {
+  return (filePath: string): Buffer => {
+    tracker?.calls.push(filePath);
+    for (const [substr, buf] of Object.entries(fileMap)) {
+      if (filePath.includes(substr)) {
+        return buf;
+      }
+    }
+    throw new Error(`Unexpected file read: ${filePath}`);
+  };
+}
+
 describe('BaseGameReader', () => {
   it('resolves a resource by resref and restype through KEY+BIF chain', async () => {
     const { BaseGameReader } = await import(
       '@data-extractor/readers/base-game-reader'
     );
-    const fs = await import('node:fs');
 
     const keyBuf = buildKeyBuffer();
     const bifBuf = buildBifBuffer();
 
-    // Mock fs.readFileSync to return our synthetic buffers
-    const readFileSyncSpy = vi.spyOn(fs, 'readFileSync');
-    readFileSyncSpy.mockImplementation((filePath: any) => {
-      const p = String(filePath);
-      if (p.endsWith('.key')) return keyBuf;
-      if (p.includes('base_2da.bif')) return bifBuf;
-      throw new Error(`Unexpected file read: ${p}`);
+    const readFile = mockFileReader({
+      '.key': keyBuf,
+      'base_2da.bif': bifBuf,
     });
 
-    try {
-      const reader = new BaseGameReader('/game/nwn_base.key', '/game');
-      const result = reader.getResource('subraces', 2017);
+    const reader = new BaseGameReader('/game/nwn_base.key', '/game', { readFile });
+    const result = reader.getResource('subraces', 2017);
 
-      expect(result).not.toBeNull();
-      expect(result!.toString('ascii')).toBe('HELLO');
-    } finally {
-      readFileSyncSpy.mockRestore();
-    }
+    expect(result).not.toBeNull();
+    expect(result!.toString('ascii')).toBe('HELLO');
   });
 
   it('returns null for unknown resref', async () => {
     const { BaseGameReader } = await import(
       '@data-extractor/readers/base-game-reader'
     );
-    const fs = await import('node:fs');
 
     const keyBuf = buildKeyBuffer();
+    const readFile = mockFileReader({ '.key': keyBuf });
 
-    const readFileSyncSpy = vi.spyOn(fs, 'readFileSync');
-    readFileSyncSpy.mockImplementation((filePath: any) => {
-      const p = String(filePath);
-      if (p.endsWith('.key')) return keyBuf;
-      throw new Error(`Unexpected file read: ${p}`);
-    });
+    const reader = new BaseGameReader('/game/nwn_base.key', '/game', { readFile });
+    const result = reader.getResource('nonexistent', 2017);
 
-    try {
-      const reader = new BaseGameReader('/game/nwn_base.key', '/game');
-      const result = reader.getResource('nonexistent', 2017);
-
-      expect(result).toBeNull();
-    } finally {
-      readFileSyncSpy.mockRestore();
-    }
+    expect(result).toBeNull();
   });
 
   it('caches BIF files lazily (only parses on first access)', async () => {
     const { BaseGameReader } = await import(
       '@data-extractor/readers/base-game-reader'
     );
-    const fs = await import('node:fs');
 
     const keyBuf = buildKeyBuffer();
     const bifBuf = buildBifBuffer();
 
-    let bifReadCount = 0;
-    const readFileSyncSpy = vi.spyOn(fs, 'readFileSync');
-    readFileSyncSpy.mockImplementation((filePath: any) => {
-      const p = String(filePath);
-      if (p.endsWith('.key')) return keyBuf;
-      if (p.includes('base_2da.bif')) {
-        bifReadCount++;
-        return bifBuf;
-      }
-      throw new Error(`Unexpected file read: ${p}`);
-    });
+    const tracker = { calls: [] as string[] };
+    const readFile = mockFileReader(
+      { '.key': keyBuf, 'base_2da.bif': bifBuf },
+      tracker,
+    );
 
-    try {
-      const reader = new BaseGameReader('/game/nwn_base.key', '/game');
+    const reader = new BaseGameReader('/game/nwn_base.key', '/game', { readFile });
 
-      // First access should read the BIF
-      reader.getResource('subraces', 2017);
-      expect(bifReadCount).toBe(1);
+    // First access should read the BIF (call count: 1 for KEY + 1 for BIF = 2)
+    reader.getResource('subraces', 2017);
+    const afterFirst = tracker.calls.filter((c) => c.includes('base_2da.bif')).length;
+    expect(afterFirst).toBe(1);
 
-      // Second access should NOT re-read the BIF
-      reader.getResource('subraces', 2017);
-      expect(bifReadCount).toBe(1);
-    } finally {
-      readFileSyncSpy.mockRestore();
-    }
+    // Second access should NOT re-read the BIF
+    reader.getResource('subraces', 2017);
+    const afterSecond = tracker.calls.filter((c) => c.includes('base_2da.bif')).length;
+    expect(afterSecond).toBe(1);
   });
 
   it('provides getTlk to read a standalone TLK file directly', async () => {
     const { BaseGameReader } = await import(
       '@data-extractor/readers/base-game-reader'
     );
-    const fs = await import('node:fs');
 
     const keyBuf = buildKeyBuffer();
     const fakeTlkContent = Buffer.from('TLK_CONTENT_HERE', 'ascii');
 
-    const readFileSyncSpy = vi.spyOn(fs, 'readFileSync');
-    readFileSyncSpy.mockImplementation((filePath: any) => {
-      const p = String(filePath);
-      if (p.endsWith('.key')) return keyBuf;
-      if (p.includes('dialog.tlk')) return fakeTlkContent;
-      throw new Error(`Unexpected file read: ${p}`);
+    const readFile = mockFileReader({
+      '.key': keyBuf,
+      'dialog.tlk': fakeTlkContent,
     });
 
-    try {
-      const reader = new BaseGameReader('/game/nwn_base.key', '/game');
-      const tlk = reader.getTlk('lang/es/data/dialog.tlk');
+    const reader = new BaseGameReader('/game/nwn_base.key', '/game', { readFile });
+    const tlk = reader.getTlk('lang/es/data/dialog.tlk');
 
-      expect(tlk.toString('ascii')).toBe('TLK_CONTENT_HERE');
-    } finally {
-      readFileSyncSpy.mockRestore();
-    }
+    expect(tlk.toString('ascii')).toBe('TLK_CONTENT_HERE');
   });
 
   it('rejects path traversal in BIF filenames from KEY', async () => {
-    const { parseKey } = await import(
-      '@data-extractor/parsers/key-parser'
-    );
     const { BaseGameReader } = await import(
       '@data-extractor/readers/base-game-reader'
     );
-    const fs = await import('node:fs');
 
     // Build KEY with a path-traversal BIF filename
     const filenameStr = '..\\..\\etc\\passwd';
@@ -440,20 +418,11 @@ describe('BaseGameReader', () => {
     buf.writeUInt16LE(2017, keyTableOffset + 16);
     buf.writeUInt32LE(0, keyTableOffset + 18);
 
-    const readFileSyncSpy = vi.spyOn(fs, 'readFileSync');
-    readFileSyncSpy.mockImplementation((filePath: any) => {
-      const p = String(filePath);
-      if (p.endsWith('.key')) return buf;
-      throw new Error(`Should not read: ${p}`);
-    });
+    const readFile = mockFileReader({ '.key': buf });
 
-    try {
-      const reader = new BaseGameReader('/game/nwn_base.key', '/game');
-      // Should reject/return null for a resource from a path-traversal BIF
-      const result = reader.getResource('evilres', 2017);
-      expect(result).toBeNull();
-    } finally {
-      readFileSyncSpy.mockRestore();
-    }
+    const reader = new BaseGameReader('/game/nwn_base.key', '/game', { readFile });
+    // Should reject/return null for a resource from a path-traversal BIF
+    const result = reader.getResource('evilres', 2017);
+    expect(result).toBeNull();
   });
 });
