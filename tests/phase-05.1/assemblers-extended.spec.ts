@@ -2,6 +2,8 @@ import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { existsSync } from 'node:fs';
 
 import { assembleFeatCatalog, buildFeatIdsByRow, type ClassRowInfo } from '@data-extractor/assemblers/feat-assembler';
+import { assembleSpellCatalog, buildSpellIdsByRow, type SpellClassRowInfo } from '@data-extractor/assemblers/spell-assembler';
+import { assembleDomainCatalog } from '@data-extractor/assemblers/domain-assembler';
 import { TlkResolver } from '@data-extractor/readers/tlk-resolver';
 import { NwsyncReader } from '@data-extractor/readers/nwsync-reader';
 import type { TlkTable } from '@data-extractor/parsers/tlk-parser';
@@ -15,6 +17,8 @@ import {
   BASE_GAME_TLK,
 } from '@data-extractor/config';
 import { featCatalogSchema } from '@data-extractor/contracts/feat-catalog';
+import { spellCatalogSchema } from '@data-extractor/contracts/spell-catalog';
+import { domainCatalogSchema } from '@data-extractor/contracts/domain-catalog';
 
 // ---------------------------------------------------------------------------
 // Test dataset ID
@@ -268,6 +272,245 @@ describe('assembleFeatCatalog (unit)', () => {
 });
 
 // ---------------------------------------------------------------------------
+// Spell test data
+// ---------------------------------------------------------------------------
+
+const MINIMAL_SPELLS_2DA = `2DA V2.0
+
+Label	Name	Description	School	Bard	Cleric	Druid	Paladin	Ranger	Wiz_Sorc	Innate	MetaMagic
+0	MagicMissile	600	601	V	****	****	****	****	****	1	1	0x003F
+1	CureLightWounds	610	611	C	****	1	1	****	****	****	1	0x0000
+2	Fireball	620	621	V	****	****	****	****	****	3	****	0x003F
+3	BardSong	630	631	T	1	****	****	****	****	****	****	0x0000
+4	MonsterAbility	640	641	I	****	****	****	****	****	****	****	0x0000
+`;
+
+const MINIMAL_CLS_SPGN_WIZ = `2DA V2.0
+
+Level	NumSpellLevels	SpellLevel0	SpellLevel1	SpellLevel2	SpellLevel3
+0	1	10	3	1	****	****
+1	2	10	4	2	****	****
+2	3	10	4	2	1	****
+3	4	10	4	3	2	1
+`;
+
+const MINIMAL_CLS_SPKN_WIZ = `2DA V2.0
+
+Level	SpellLevel0	SpellLevel1	SpellLevel2	SpellLevel3
+0	1	5	3	****	****
+1	2	5	4	****	****
+2	3	5	4	2	****
+3	4	5	4	3	2
+`;
+
+// ---------------------------------------------------------------------------
+// Domain test data
+// ---------------------------------------------------------------------------
+
+const MINIMAL_DOMAINS_2DA = `2DA V2.0
+
+Label	Name	Description	Icon	GrantedFeat	Level_0	Level_1	Level_2	Level_3	Level_4	Level_5	Level_6	Level_7	Level_8	Level_9	IsActive
+0	Air	700	701	****	0	0	****	2	****	****	****	****	****	****	****	1
+1	War	710	711	****	2	****	1	****	****	****	****	****	****	****	****	1
+`;
+
+// ---------------------------------------------------------------------------
+// Spell assembler unit tests
+// ---------------------------------------------------------------------------
+
+describe('assembleSpellCatalog (unit)', () => {
+  const baseTlk = mockTlkTable({
+    600: 'Misil Magico',
+    601: 'Desc misil magico',
+    610: 'Curar Heridas Leves',
+    611: 'Desc curar heridas',
+    620: 'Bola de Fuego',
+    621: 'Desc bola de fuego',
+    630: 'Cancion de Bardo',
+    631: 'Desc cancion bardo',
+    640: 'Habilidad de Monstruo',
+    641: 'Desc habilidad monstruo',
+  });
+  const customTlk = mockTlkTable({});
+  const resolver = new TlkResolver(baseTlk, customTlk);
+
+  const classRows = new Map<string, SpellClassRowInfo>([
+    ['class:bard', { sourceRow: 0, spellGainTableRef: null, spellKnownTableRef: null, spellColumnName: 'Bard' }],
+    ['class:cleric', { sourceRow: 1, spellGainTableRef: null, spellKnownTableRef: null, spellColumnName: 'Cleric' }],
+    ['class:druid', { sourceRow: 2, spellGainTableRef: null, spellKnownTableRef: null, spellColumnName: 'Druid' }],
+    ['class:wizard', { sourceRow: 3, spellGainTableRef: 'CLS_SPGN_WIZ', spellKnownTableRef: 'CLS_SPKN_WIZ', spellColumnName: 'Wiz_Sorc' }],
+  ]);
+
+  it('extracts class-level mappings from spell columns', () => {
+    const resources: Record<string, string> = {
+      spells: MINIMAL_SPELLS_2DA,
+      cls_spgn_wiz: MINIMAL_CLS_SPGN_WIZ,
+      cls_spkn_wiz: MINIMAL_CLS_SPKN_WIZ,
+    };
+    const reader = mockNwsyncReader(resources);
+    const baseReader = mockBaseGameReader();
+
+    const result = assembleSpellCatalog(reader, baseReader, resolver, classRows, TEST_DATASET_ID);
+
+    // MagicMissile: Wiz_Sorc=1, Innate=1
+    const mm = result.catalog.spells.find((s) => s.id === 'spell:magicmissile')!;
+    expect(mm.classLevels['class:wizard']).toBe(1);
+    expect(mm.innateLevel).toBe(1);
+
+    // CureLightWounds: Cleric=1, Druid=1, Innate=1
+    const clw = result.catalog.spells.find((s) => s.id === 'spell:curelightwounds')!;
+    expect(clw.classLevels['class:cleric']).toBe(1);
+    expect(clw.classLevels['class:druid']).toBe(1);
+    expect(clw.innateLevel).toBe(1);
+
+    // Fireball: Wiz_Sorc=3
+    const fb = result.catalog.spells.find((s) => s.id === 'spell:fireball')!;
+    expect(fb.classLevels['class:wizard']).toBe(3);
+
+    // BardSong: Bard=1
+    const bs = result.catalog.spells.find((s) => s.id === 'spell:bardsong')!;
+    expect(bs.classLevels['class:bard']).toBe(1);
+  });
+
+  it('filters out monster-only spells', () => {
+    const resources: Record<string, string> = {
+      spells: MINIMAL_SPELLS_2DA,
+      cls_spgn_wiz: MINIMAL_CLS_SPGN_WIZ,
+      cls_spkn_wiz: MINIMAL_CLS_SPKN_WIZ,
+    };
+    const reader = mockNwsyncReader(resources);
+    const baseReader = mockBaseGameReader();
+
+    const result = assembleSpellCatalog(reader, baseReader, resolver, classRows, TEST_DATASET_ID);
+    const ids = result.catalog.spells.map((s) => s.id);
+
+    // MonsterAbility has no player class columns -> should be excluded
+    expect(ids).not.toContain('spell:monsterability');
+    // Player-castable spells should be included
+    expect(ids).toContain('spell:magicmissile');
+    expect(ids).toContain('spell:curelightwounds');
+    expect(ids).toContain('spell:fireball');
+    expect(ids).toContain('spell:bardsong');
+  });
+
+  it('builds spell gain tables from cls_spgn_* 2DAs', () => {
+    const resources: Record<string, string> = {
+      spells: MINIMAL_SPELLS_2DA,
+      cls_spgn_wiz: MINIMAL_CLS_SPGN_WIZ,
+      cls_spkn_wiz: MINIMAL_CLS_SPKN_WIZ,
+    };
+    const reader = mockNwsyncReader(resources);
+    const baseReader = mockBaseGameReader();
+
+    const result = assembleSpellCatalog(reader, baseReader, resolver, classRows, TEST_DATASET_ID);
+
+    const wizGain = result.catalog.spellGainTables['class:wizard'];
+    expect(wizGain).toBeDefined();
+    expect(wizGain.length).toBe(4);
+
+    // First row: casterLevel=1, slots with SpellLevel0=3, SpellLevel1=1
+    expect(wizGain[0].casterLevel).toBe(1);
+    expect(wizGain[0].slots['0']).toBe(3);
+    expect(wizGain[0].slots['1']).toBe(1);
+  });
+
+  it('builds spell known tables from cls_spkn_* 2DAs', () => {
+    const resources: Record<string, string> = {
+      spells: MINIMAL_SPELLS_2DA,
+      cls_spgn_wiz: MINIMAL_CLS_SPGN_WIZ,
+      cls_spkn_wiz: MINIMAL_CLS_SPKN_WIZ,
+    };
+    const reader = mockNwsyncReader(resources);
+    const baseReader = mockBaseGameReader();
+
+    const result = assembleSpellCatalog(reader, baseReader, resolver, classRows, TEST_DATASET_ID);
+
+    const wizKnown = result.catalog.spellKnownTables['class:wizard'];
+    expect(wizKnown).toBeDefined();
+    expect(wizKnown.length).toBe(4);
+
+    // First row: casterLevel=1, SpellLevel0=5, SpellLevel1=3
+    expect(wizKnown[0].casterLevel).toBe(1);
+    expect(wizKnown[0].known['0']).toBe(5);
+    expect(wizKnown[0].known['1']).toBe(3);
+  });
+
+  it('passes Zod schema validation', () => {
+    const resources: Record<string, string> = {
+      spells: MINIMAL_SPELLS_2DA,
+      cls_spgn_wiz: MINIMAL_CLS_SPGN_WIZ,
+      cls_spkn_wiz: MINIMAL_CLS_SPKN_WIZ,
+    };
+    const reader = mockNwsyncReader(resources);
+    const baseReader = mockBaseGameReader();
+
+    const result = assembleSpellCatalog(reader, baseReader, resolver, classRows, TEST_DATASET_ID);
+    expect(() => spellCatalogSchema.parse(result.catalog)).not.toThrow();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Domain assembler unit tests
+// ---------------------------------------------------------------------------
+
+describe('assembleDomainCatalog (unit)', () => {
+  const baseTlk = mockTlkTable({
+    700: 'Aire',
+    701: 'Desc dominio aire',
+    710: 'Guerra',
+    711: 'Desc dominio guerra',
+  });
+  const customTlk = mockTlkTable({});
+  const resolver = new TlkResolver(baseTlk, customTlk);
+
+  const featIdsByRow = new Map<number, string>([
+    [0, 'feat:powerattack'],
+    [2, 'feat:weaponfocus'],
+  ]);
+  const spellIdsByRow = new Map<number, string>([
+    [0, 'spell:magicmissile'],
+    [1, 'spell:curelightwounds'],
+    [2, 'spell:fireball'],
+  ]);
+
+  it('resolves granted feats and spell cross-references', () => {
+    const reader = mockNwsyncReader({ domains: MINIMAL_DOMAINS_2DA });
+    const baseReader = mockBaseGameReader();
+
+    const result = assembleDomainCatalog(
+      reader, baseReader, resolver, featIdsByRow, spellIdsByRow, TEST_DATASET_ID,
+    );
+
+    expect(result.catalog.domains).toHaveLength(2);
+
+    // Air domain: GrantedFeat=0 -> feat:powerattack
+    const air = result.catalog.domains.find((d) => d.id === 'domain:air')!;
+    expect(air.label).toBe('Aire');
+    expect(air.grantedFeatIds).toEqual(['feat:powerattack']);
+    // Level_0=0 (spell:magicmissile), Level_2=2 (spell:fireball)
+    expect(air.spellIds['0']).toEqual(['spell:magicmissile']);
+    expect(air.spellIds['2']).toEqual(['spell:fireball']);
+
+    // War domain: GrantedFeat=2 -> feat:weaponfocus
+    const war = result.catalog.domains.find((d) => d.id === 'domain:war')!;
+    expect(war.label).toBe('Guerra');
+    expect(war.grantedFeatIds).toEqual(['feat:weaponfocus']);
+    // Level_1=1 (spell:curelightwounds)
+    expect(war.spellIds['1']).toEqual(['spell:curelightwounds']);
+  });
+
+  it('passes Zod schema validation', () => {
+    const reader = mockNwsyncReader({ domains: MINIMAL_DOMAINS_2DA });
+    const baseReader = mockBaseGameReader();
+
+    const result = assembleDomainCatalog(
+      reader, baseReader, resolver, featIdsByRow, spellIdsByRow, TEST_DATASET_ID,
+    );
+    expect(() => domainCatalogSchema.parse(result.catalog)).not.toThrow();
+  });
+});
+
+// ---------------------------------------------------------------------------
 // Integration tests (require local nwsync + base game)
 // ---------------------------------------------------------------------------
 
@@ -275,11 +518,31 @@ const hasNwsync = existsSync(NWSYNC_META_DB) && existsSync(NWSYNC_DATA_DB);
 const hasBaseGame = existsSync(BASE_GAME_KEY);
 const hasIntegrationDeps = hasNwsync && hasBaseGame;
 
-describe.skipIf(!hasIntegrationDeps)('Feat assembler (integration)', () => {
+describe.skipIf(!hasIntegrationDeps)('Extended assemblers (integration)', () => {
   let nwsyncReader: NwsyncReader;
   let baseGameReader: BaseGameReader;
   let tlkResolver: TlkResolver;
   let classRowsForFeats: Map<string, ClassRowInfo>;
+  let classRowsForSpells: Map<string, SpellClassRowInfo>;
+
+  // Known spell column name -> class ID mapping for Puerta
+  const SPELL_COLUMN_MAP: Record<string, string> = {
+    'class:bard': 'Bard',
+    'class:cleric': 'Cleric',
+    'class:druid': 'Druid',
+    'class:paladin': 'Paladin',
+    'class:ranger': 'Ranger',
+    'class:wizard': 'Wiz_Sorc',
+    'class:sorcerer': 'Wiz_Sorc',
+    'class:shaman': 'Shaman',
+    'class:favoredsoul': 'FavSoul',
+    'class:favored-soul': 'FavSoul',
+    'class:hex': 'Hex',
+    'class:warlock': 'Warlock',
+    'class:spellsword': 'Spellsword',
+    'class:invokerele': 'InvokerEle',
+    'class:invokerhematurgo': 'InvokerHem',
+  };
 
   beforeAll(async () => {
     const { BaseGameReader: BGReader } = await import(
@@ -303,11 +566,23 @@ describe.skipIf(!hasIntegrationDeps)('Feat assembler (integration)', () => {
     );
 
     classRowsForFeats = new Map();
+    classRowsForSpells = new Map();
     for (const cls of classResult.catalog.classes) {
       classRowsForFeats.set(cls.id, {
         sourceRow: cls.sourceRow,
         featTableRef: cls.featTableRef,
       });
+      if (cls.spellCaster) {
+        const colName = SPELL_COLUMN_MAP[cls.id];
+        if (colName) {
+          classRowsForSpells.set(cls.id, {
+            sourceRow: cls.sourceRow,
+            spellGainTableRef: cls.spellGainTableRef,
+            spellKnownTableRef: cls.spellKnownTableRef,
+            spellColumnName: colName,
+          });
+        }
+      }
     }
   });
 
@@ -330,5 +605,45 @@ describe.skipIf(!hasIntegrationDeps)('Feat assembler (integration)', () => {
 
     // Validate schema
     expect(() => featCatalogSchema.parse(result.catalog)).not.toThrow();
+  });
+
+  it('assembles spell catalog with expected count range', () => {
+    const result = assembleSpellCatalog(
+      nwsyncReader, baseGameReader, tlkResolver, classRowsForSpells, TEST_DATASET_ID,
+    );
+
+    // Per RESEARCH: ~1558 lines, many player-castable
+    expect(result.catalog.spells.length).toBeGreaterThanOrEqual(50);
+    expect(result.catalog.spells.length).toBeLessThanOrEqual(2000);
+
+    // Should have some spell gain tables
+    const gainKeys = Object.keys(result.catalog.spellGainTables);
+    expect(gainKeys.length).toBeGreaterThanOrEqual(1);
+
+    // Validate schema
+    expect(() => spellCatalogSchema.parse(result.catalog)).not.toThrow();
+  });
+
+  it('assembles domain catalog with ~34 domains', () => {
+    const featResult = assembleFeatCatalog(
+      nwsyncReader, baseGameReader, tlkResolver, classRowsForFeats, TEST_DATASET_ID,
+    );
+    const spellResult = assembleSpellCatalog(
+      nwsyncReader, baseGameReader, tlkResolver, classRowsForSpells, TEST_DATASET_ID,
+    );
+
+    const featIds = buildFeatIdsByRow(featResult.catalog.feats);
+    const spellIds = buildSpellIdsByRow(spellResult.catalog.spells);
+
+    const result = assembleDomainCatalog(
+      nwsyncReader, baseGameReader, tlkResolver, featIds, spellIds, TEST_DATASET_ID,
+    );
+
+    // Per RESEARCH: 34 domains
+    expect(result.catalog.domains.length).toBeGreaterThanOrEqual(20);
+    expect(result.catalog.domains.length).toBeLessThanOrEqual(50);
+
+    // Validate schema
+    expect(() => domainCatalogSchema.parse(result.catalog)).not.toThrow();
   });
 });
