@@ -1,34 +1,43 @@
 import { create } from 'zustand';
-import type { PlannerSectionId } from '@planner/lib/sections';
+import type { LevelSubStep, OriginStep, ProgressionLevel, SheetTab } from '@planner/lib/sections';
 
 export type PlannerValidationStatus = 'blocked' | 'illegal' | 'legal' | 'pending';
 
 interface PlannerShellState {
-  activeSection: PlannerSectionId;
+  activeOriginStep: OriginStep | null;
+  activeLevelSubStep: LevelSubStep | null;
+  characterSheetTab: SheetTab;
   datasetId: string;
+  expandedLevel: ProgressionLevel | null;
   mobileNavOpen: boolean;
-  setActiveSection: (sectionId: PlannerSectionId) => void;
-  setSummaryPanelOpen: (isOpen: boolean) => void;
-  summaryPanelOpen: boolean;
-  toggleMobileNav: () => void;
-  toggleSummaryPanel: () => void;
   validationStatus: PlannerValidationStatus;
+
+  setActiveOriginStep: (step: OriginStep | null) => void;
+  setActiveLevelSubStep: (subStep: LevelSubStep | null) => void;
+  setCharacterSheetTab: (tab: SheetTab) => void;
+  setExpandedLevel: (level: ProgressionLevel | null) => void;
+  toggleMobileNav: () => void;
 }
 
 export const usePlannerShellStore = create<PlannerShellState>((set) => ({
-  activeSection: 'build',
+  activeOriginStep: 'race',
+  activeLevelSubStep: null,
+  characterSheetTab: 'stats',
   datasetId: 'dataset:pendiente',
+  expandedLevel: null,
   mobileNavOpen: false,
-  setActiveSection: (activeSection) => set({ activeSection }),
-  setSummaryPanelOpen: (summaryPanelOpen) => set({ summaryPanelOpen }),
-  summaryPanelOpen: true,
-  toggleMobileNav: () =>
-    set((state) => ({
-      mobileNavOpen: !state.mobileNavOpen,
-    })),
-  toggleSummaryPanel: () =>
-    set((state) => ({
-      summaryPanelOpen: !state.summaryPanelOpen,
-    })),
   validationStatus: 'pending',
+
+  setActiveOriginStep: (activeOriginStep) =>
+    set({ activeOriginStep, activeLevelSubStep: null, expandedLevel: null }),
+  setActiveLevelSubStep: (activeLevelSubStep) =>
+    set({ activeLevelSubStep, activeOriginStep: null }),
+  setCharacterSheetTab: (characterSheetTab) => set({ characterSheetTab }),
+  setExpandedLevel: (expandedLevel) =>
+    set((state) => ({
+      activeOriginStep: null,
+      activeLevelSubStep: expandedLevel ? (state.activeLevelSubStep ?? 'class') : null,
+      expandedLevel,
+    })),
+  toggleMobileNav: () => set((state) => ({ mobileNavOpen: !state.mobileNavOpen })),
 }));

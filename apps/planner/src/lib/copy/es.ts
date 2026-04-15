@@ -125,6 +125,46 @@ export const shellCopyEs = {
       repair: 'Habilidades en reparacion',
     },
   },
+  stepper: {
+    heading: 'Creacion de personajes',
+    originHeading: 'Origen',
+    progressionHeading: 'Progresion',
+    originSteps: {
+      race: 'Raza',
+      alignment: 'Alineamiento',
+      deity: 'Deidad',
+      attributes: 'Atributos',
+    },
+    levelSubSteps: {
+      class: 'Clase',
+      skills: 'Habilidades',
+      feats: 'Dotes',
+      spells: 'Conjuros',
+    },
+    sheetTabs: {
+      stats: 'Estadisticas',
+      skills: 'Habilidades',
+      feats: 'Dotes',
+      spells: 'Conjuros',
+    },
+    characterSheetHeading: 'Hoja de personaje',
+    emptySheetHeading: 'La hoja aun esta vacia',
+    emptySheetBody: 'Empieza seleccionando una raza para definir la base de tu personaje.',
+    blockedStepHint: 'Completa el paso anterior para desbloquear esta opcion.',
+    levelEmptyHint: 'Selecciona una clase para empezar este nivel.',
+    errorState: 'Seleccion no permitida: revisa los requisitos marcados y corrige el paso anterior.',
+    resetOriginLabel: 'Reiniciar origen',
+    resetOriginConfirm: 'Se perderan el origen y los atributos iniciales. Continuar?',
+    resetLevelLabel: 'Reiniciar nivel',
+    resetLevelConfirm: 'Se perderan las decisiones de este nivel. Continuar?',
+    resetAllLabel: 'Reiniciar todo',
+    resetAllConfirm: 'Se perdera toda la construccion del personaje. Continuar?',
+    resumenLabel: 'Resumen',
+    utilidadesLabel: 'Utilidades',
+    jugarLabel: 'Jugar',
+    reiniciarLabel: 'Reiniciar',
+    cancelarLabel: 'Cancelar',
+  },
   emptyStateHeading: 'La hoja aún está vacía',
   emptyStateBody:
     'Empieza en Construcción para fijar la base del personaje y desbloquear el resto del planificador.',
@@ -183,3 +223,5 @@ export const shellCopyEs = {
 
 export type PlannerSectionCopy =
   (typeof shellCopyEs.sections)[keyof typeof shellCopyEs.sections];
+
+export type PlannerStepperCopy = typeof shellCopyEs.stepper;

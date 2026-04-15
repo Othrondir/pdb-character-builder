@@ -1,73 +1,43 @@
 import { shellCopyEs } from '@planner/lib/copy/es';
 
-export type PlannerSectionId =
-  | 'build'
-  | 'skills'
-  | 'spells'
-  | 'abilities'
-  | 'stats'
-  | 'summary'
-  | 'utilities';
+export type OriginStep = 'race' | 'alignment' | 'deity' | 'attributes';
+export type LevelSubStep = 'class' | 'skills' | 'feats' | 'spells';
+export type SheetTab = 'stats' | 'skills' | 'feats' | 'spells';
 
-export interface PlannerSectionDefinition {
-  readonly description: string;
-  readonly heading: string;
-  readonly highlights: readonly string[];
-  readonly id: PlannerSectionId;
+export interface OriginStepDefinition {
+  readonly id: OriginStep;
   readonly label: string;
-  readonly path: string;
 }
 
-export const plannerSections: readonly PlannerSectionDefinition[] = [
-  {
-    ...shellCopyEs.sections.build,
-    id: 'build',
-    path: '/',
-  },
-  {
-    ...shellCopyEs.sections.skills,
-    id: 'skills',
-    path: '/skills',
-  },
-  {
-    ...shellCopyEs.sections.spells,
-    id: 'spells',
-    path: '/spells',
-  },
-  {
-    ...shellCopyEs.sections.abilities,
-    id: 'abilities',
-    path: '/abilities',
-  },
-  {
-    ...shellCopyEs.sections.stats,
-    id: 'stats',
-    path: '/stats',
-  },
-  {
-    ...shellCopyEs.sections.summary,
-    id: 'summary',
-    path: '/summary',
-  },
-  {
-    ...shellCopyEs.sections.utilities,
-    id: 'utilities',
-    path: '/utilities',
-  },
+export interface LevelSubStepDefinition {
+  readonly id: LevelSubStep;
+  readonly label: string;
+}
+
+export interface SheetTabDefinition {
+  readonly id: SheetTab;
+  readonly label: string;
+}
+
+export const originSteps: readonly OriginStepDefinition[] = [
+  { id: 'race', label: shellCopyEs.stepper.originSteps.race },
+  { id: 'alignment', label: shellCopyEs.stepper.originSteps.alignment },
+  { id: 'deity', label: shellCopyEs.stepper.originSteps.deity },
+  { id: 'attributes', label: shellCopyEs.stepper.originSteps.attributes },
 ] as const;
 
-export function getSectionById(id: PlannerSectionId): PlannerSectionDefinition {
-  return plannerSections.find((section) => section.id === id) ?? plannerSections[0];
-}
+export const levelSubSteps: readonly LevelSubStepDefinition[] = [
+  { id: 'class', label: shellCopyEs.stepper.levelSubSteps.class },
+  { id: 'skills', label: shellCopyEs.stepper.levelSubSteps.skills },
+  { id: 'feats', label: shellCopyEs.stepper.levelSubSteps.feats },
+  { id: 'spells', label: shellCopyEs.stepper.levelSubSteps.spells },
+] as const;
 
-export function getSectionByPathname(pathname: string): PlannerSectionDefinition {
-  const normalizedPath =
-    pathname !== '/' && pathname.endsWith('/')
-      ? pathname.slice(0, -1)
-      : pathname;
+export const sheetTabs: readonly SheetTabDefinition[] = [
+  { id: 'stats', label: shellCopyEs.stepper.sheetTabs.stats },
+  { id: 'skills', label: shellCopyEs.stepper.sheetTabs.skills },
+  { id: 'feats', label: shellCopyEs.stepper.sheetTabs.feats },
+  { id: 'spells', label: shellCopyEs.stepper.sheetTabs.spells },
+] as const;
 
-  return (
-    plannerSections.find((section) => section.path === normalizedPath) ??
-    plannerSections[0]
-  );
-}
+export type ProgressionLevel = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16;
