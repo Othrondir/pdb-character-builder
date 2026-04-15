@@ -124,14 +124,14 @@ Plans:
 **Goal:** Rebuild the planner's navigation flow and layout density so the app is actually usable — guided wizard flow for character creation, compact information display, and clear visual hierarchy instead of an endless vertical scroll of identical cards.
 **Requirements**: FLOW-01, FLOW-02
 **Depends on:** Phase 5.1
-**Plans:** 4/6 plans executed
+**Plans:** 5/6 plans executed
 
 Plans:
 - [x] 05.2-01-PLAN.md — Design system foundation: dark NWN1 tokens, CSS overhaul, UI primitives (NwnFrame, NwnButton, ActionBar)
 - [x] 05.2-02-PLAN.md — Shell state model, step definitions, creation stepper + level rail components
 - [x] 05.2-03-PLAN.md — Center content primitives (SelectionScreen, OptionList, DetailPanel) + character sheet
 - [x] 05.2-04-PLAN.md — Shell frame rewrite, router simplification, Phase 2 test updates
-- [ ] 05.2-05-PLAN.md — Feature board adaptation (origin, attributes, progression, skills) + dead code cleanup
+- [x] 05.2-05-PLAN.md — Feature board adaptation (origin, attributes, progression, skills) + dead code cleanup
 - [ ] 05.2-06-PLAN.md — Visual verification checkpoint (human approval)
 **UI hint**: yes
 
