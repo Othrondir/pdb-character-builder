@@ -15,7 +15,7 @@ const appCss = readFileSync(
 );
 
 describe('planner theme contract', () => {
-  it('defines the approved fonts and NWN1 token names', () => {
+  it('defines the NWN1 dark palette and font tokens', () => {
     expect(fontsCss).toContain('@fontsource/cormorant-garamond');
     expect(fontsCss).toContain('@fontsource/spectral');
     expect(tokensCss).toContain('--color-surface: #0a0a0a');
@@ -24,10 +24,10 @@ describe('planner theme contract', () => {
     expect(tokensCss).toContain('--font-display: "Cormorant Garamond"');
   });
 
-  it('applies shared shell classes for the routed planner frame', () => {
+  it('applies NWN1 frame and button classes', () => {
     expect(appCss).toContain('.planner-shell');
-    expect(appCss).toContain('.planner-panel');
-    expect(appCss).toContain('.shell-reveal');
-    expect(appCss).toContain('.section-fade');
+    expect(appCss).toContain('.nwn-frame');
+    expect(appCss).toContain('.nwn-button');
+    expect(appCss).toContain('.planner-layout');
   });
 });

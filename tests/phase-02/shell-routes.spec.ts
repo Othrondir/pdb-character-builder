@@ -2,55 +2,44 @@
 
 import { beforeEach, describe, expect, it } from 'vitest';
 import { createElement } from 'react';
-import { RouterProvider } from '@tanstack/react-router';
 import { render, screen } from '@testing-library/react';
-import { createPlannerRouter } from '@planner/router';
-import { plannerSections } from '@planner/lib/sections';
+import { PlannerShellFrame } from '@planner/components/shell/planner-shell-frame';
+import { usePlannerShellStore } from '@planner/state/planner-shell';
+import { originSteps, levelSubSteps, sheetTabs } from '@planner/lib/sections';
 
-describe('planner shell routes', () => {
+describe('planner shell structure', () => {
   beforeEach(() => {
     document.body.innerHTML = '';
+    usePlannerShellStore.setState({
+      activeOriginStep: 'race',
+      activeLevelSubStep: null,
+      characterSheetTab: 'stats',
+      expandedLevel: null,
+      mobileNavOpen: false,
+    });
   });
 
-  it('exposes all primary planner sections in the section registry', () => {
-    expect(plannerSections.map((section) => section.id)).toEqual([
-      'build',
-      'skills',
-      'spells',
-      'abilities',
-      'stats',
-      'summary',
-      'utilities',
+  it('exposes origin steps, level sub-steps, and sheet tabs in the step registry', () => {
+    expect(originSteps.map((s) => s.id)).toEqual([
+      'race', 'alignment', 'deity', 'attributes',
     ]);
-
-    expect(plannerSections.map((section) => section.path)).toEqual([
-      '/',
-      '/skills',
-      '/spells',
-      '/abilities',
-      '/stats',
-      '/summary',
-      '/utilities',
+    expect(levelSubSteps.map((s) => s.id)).toEqual([
+      'class', 'skills', 'feats', 'spells',
+    ]);
+    expect(sheetTabs.map((s) => s.id)).toEqual([
+      'stats', 'skills', 'feats', 'spells',
     ]);
   });
 
-  it('renders the shared shell frame and current route content', async () => {
-    const router = createPlannerRouter(['/summary']);
-    await router.load();
-
-    render(createElement(RouterProvider, { router }));
+  it('renders the shell frame with stepper and character sheet', () => {
+    render(createElement(PlannerShellFrame));
 
     expect(
-      screen.getByRole('navigation', {
-        name: 'Navegación principal del planificador',
-      }),
+      screen.getByRole('navigation', { name: 'Creacion de personajes' }),
     ).toBeInTheDocument();
     expect(screen.getByRole('main')).toBeInTheDocument();
     expect(
-      screen.getByLabelText('Resumen del personaje'),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('heading', { name: 'Resumen' }),
+      screen.getByRole('complementary', { name: 'Hoja de personaje' }),
     ).toBeInTheDocument();
   });
 });
