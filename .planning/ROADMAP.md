@@ -110,14 +110,30 @@ Plans:
 **Goal:** Build the nwsync-to-compiled-JSON extraction pipeline that reads Puerta de Baldur server data directly from the local nwsync SQLite databases and produces typed, static TypeScript catalogs for all character-building data.
 **Requirements**: LANG-02, FEAT-01, MAGI-01, MAGI-04
 **Depends on:** Phase 5
-**Plans:** 4/5 plans executed
+**Plans:** 5/5 plans executed
 
 Plans:
 - [x] 05.1-01-PLAN.md — Bootstrap data-extractor package and implement core parsers (NSYC, TLK, 2DA)
 - [x] 05.1-02-PLAN.md — Implement BIF/KEY parsers, base-game reader, and catalog Zod contracts
 - [x] 05.1-03-PLAN.md — Build nwsync reader, TLK resolver, and core assemblers (classes, races, skills, deities)
 - [x] 05.1-04-PLAN.md — Implement complex assemblers (feats, spells, domains) with cross-references
-- [ ] 05.1-05-PLAN.md — Build CLI orchestrator, run extraction, and wire planner imports
+- [x] 05.1-05-PLAN.md — Build CLI orchestrator, run extraction, and wire planner imports
+
+### Phase 05.2: UX Overhaul (INSERTED)
+
+**Goal:** Rebuild the planner's navigation flow and layout density so the app is actually usable — guided wizard flow for character creation, compact information display, and clear visual hierarchy instead of an endless vertical scroll of identical cards.
+**Requirements**: FLOW-01, FLOW-02
+**Depends on:** Phase 5.1
+**Plans:** 6 plans
+
+Plans:
+- [ ] 05.2-01-PLAN.md — Design system foundation: dark NWN1 tokens, CSS overhaul, UI primitives (NwnFrame, NwnButton, ActionBar)
+- [ ] 05.2-02-PLAN.md — Shell state model, step definitions, creation stepper + level rail components
+- [ ] 05.2-03-PLAN.md — Center content primitives (SelectionScreen, OptionList, DetailPanel) + character sheet
+- [ ] 05.2-04-PLAN.md — Shell frame rewrite, router simplification, Phase 2 test updates
+- [ ] 05.2-05-PLAN.md — Feature board adaptation (origin, attributes, progression, skills) + dead code cleanup
+- [ ] 05.2-06-PLAN.md — Visual verification checkpoint (human approval)
+**UI hint**: yes
 
 ### Phase 6: Feats & Proficiencies
 **Goal**: Users can choose Puerta feats and proficiencies with exact prerequisite feedback.
@@ -171,7 +187,7 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 6 -> 7 -> 8
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -> 8
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -180,7 +196,8 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 6 -> 7 -> 8
 | 3. Character Origin & Base Attributes | 2/2 | Complete | 2026-03-30 |
 | 4. Level Progression & Class Path | 3/3 | Complete | 2026-03-30 |
 | 5. Skills & Derived Statistics | 3/3 | Complete | 2026-03-31 |
-| 5.1 Data Extractor Pipeline | 0/5 | Planning complete | - |
+| 5.1 Data Extractor Pipeline | 5/5 | Complete | 2026-04-15 |
+| 5.2 UX Overhaul | 0/6 | Not started | - |
 | 6. Feats & Proficiencies | 0/2 | Not started | - |
 | 7. Magic & Full Legality Engine | 0/3 | Not started | - |
 | 8. Summary, Persistence & Shared Builds | 0/2 | Not started | - |
