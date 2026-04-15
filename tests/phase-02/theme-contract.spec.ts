@@ -18,9 +18,9 @@ describe('planner theme contract', () => {
   it('defines the approved fonts and NWN1 token names', () => {
     expect(fontsCss).toContain('@fontsource/cormorant-garamond');
     expect(fontsCss).toContain('@fontsource/spectral');
-    expect(tokensCss).toContain('--color-parchment: #e3d8c1');
-    expect(tokensCss).toContain('--color-ink: #2f241d');
-    expect(tokensCss).toContain('--color-bronze: #9f7a31');
+    expect(tokensCss).toContain('--color-surface: #0a0a0a');
+    expect(tokensCss).toContain('--color-gold: #c8a84e');
+    expect(tokensCss).toContain('--color-text: #e8d5a0');
     expect(tokensCss).toContain('--font-display: "Cormorant Garamond"');
   });
 

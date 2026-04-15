@@ -1,17 +1,27 @@
 :root {
-  --color-parchment: #e3d8c1;
-  --color-parchment-shadow: #c8b89a;
-  --color-ink: #2f241d;
-  --color-ink-soft: #5d4d42;
-  --color-bronze: #9f7a31;
+  /* Palette: dark NWN1 replica */
+  --color-surface: #0a0a0a;
+  --color-panel: #141010;
+  --color-gold: #c8a84e;
+  --color-text: #e8d5a0;
+  --color-text-muted: #8b7355;
   --color-destructive: #7a1f1f;
-  --color-foundation-canvas: #050403;
-  --color-foundation-panel: #17120f;
-  --color-panel-edge: rgba(63, 45, 32, 0.65);
-  --color-panel-glow: rgba(159, 122, 49, 0.18);
-  --color-selection-fill: rgba(159, 122, 49, 0.28);
+  --color-panel-edge: rgba(200, 168, 78, 0.35);
+  --color-selection: rgba(200, 168, 78, 0.18);
+  --color-selection-border: rgba(200, 168, 78, 0.75);
+  --color-blocked: rgba(200, 168, 78, 0.55);
+
+  /* Borders */
+  --border-frame: 2px solid var(--color-gold);
+  --border-frame-inner: 1px solid var(--color-panel-edge);
+  --border-button: 1px solid var(--color-gold);
+  --border-button-muted: 1px solid var(--color-text-muted);
+
+  /* Fonts (families unchanged) */
   --font-display: "Cormorant Garamond", "Times New Roman", serif;
   --font-body: "Spectral", Georgia, serif;
+
+  /* Spacing (unchanged) */
   --space-xs: 4px;
   --space-sm: 8px;
   --space-md: 16px;
@@ -19,6 +29,4 @@
   --space-xl: 32px;
   --space-2xl: 48px;
   --space-3xl: 64px;
-  --shadow-panel: 0 18px 48px rgba(31, 22, 18, 0.16);
-  --border-frame: 1px solid rgba(79, 58, 41, 0.45);
 }
