@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: verifying
-stopped_at: Completed quick task 260414-gxx
-last_updated: "2026-04-14T10:11:54.891Z"
-last_activity: 2026-04-14
+status: executing
+stopped_at: Completed 05.1-01-PLAN.md
+last_updated: "2026-04-15T12:21:28.652Z"
+last_activity: 2026-04-15
 progress:
-  total_phases: 8
+  total_phases: 9
   completed_phases: 5
-  total_plans: 14
-  completed_plans: 14
-  percent: 55
+  total_plans: 19
+  completed_plans: 15
+  percent: 79
 ---
 
 # Project State
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-30)
 
 **Core value:** A player can build a Puerta de Baldur character from level 1 to 16 with strict server-valid validation and share that exact build reliably.
-**Current focus:** Phase 05 — skills-derived-statistics
+**Current focus:** Phase 05.1 — data-extractor-pipeline
 
 ## Current Position
 
-Phase: 05 (skills-derived-statistics) — EXECUTING
-Plan: 3 of 3
-Status: Phase complete — ready for verification
-Last activity: 2026-04-14 - Completed quick task 260414-gxx: ignorar artefactos locales del workspace
+Phase: 05.1 (data-extractor-pipeline) — EXECUTING
+Plan: 2 of 5
+Status: Ready to execute
+Last activity: 2026-04-15
 
 Progress: [█████░░░░░] 55%
 
@@ -61,6 +61,7 @@ Progress: [█████░░░░░] 55%
 | Phase 05 P01 | 6 min | 2 tasks | 8 files |
 | Phase 05 P02 | 12min | 2 tasks | 11 files |
 | Phase 05 P03 | 12 min | 2 tasks | 9 files |
+| Phase 05.1 P01 | 6min | 2 tasks | 11 files |
 
 ## Accumulated Context
 
@@ -86,6 +87,8 @@ Recent decisions affecting current work:
 - [Phase 05]: Shell summary severity now reflects skill repair state once the user has entered skill allocations.
 - [Phase 05]: Estadisticas now projects the active skill snapshot through shared selectors instead of route-local math.
 - [Phase 05]: Shell summary skill severity now comes from a dedicated Phase 5 summary selector and only yields to progression when progression is blocked or illegal.
+- [Phase 05.1]: Used fzstd (pure JS) for zstd decompression instead of native bindings for zero-native-dep safety on Windows
+- [Phase 05.1]: Hand-wrote TLK V3.0 and 2DA V2.0 parsers instead of using neverwinter.nim CLI -- nwsync provides direct resource access
 
 ### Pending Todos
 
@@ -110,6 +113,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-14T10:11:54.891Z
-Stopped at: Completed quick task 260414-gxx
+Last session: 2026-04-15T12:21:28.648Z
+Stopped at: Completed 05.1-01-PLAN.md
 Resume file: None

@@ -8,7 +8,7 @@
 ### Idioma e identidad del producto
 
 - [x] **LANG-01**: El usuario puede usar toda la interfaz principal del planner en espanol.
-- [ ] **LANG-02**: El usuario ve en espanol los nombres y descripciones de clases, dotes, conjuros, dominios y reglas custom de Puerta de Baldur.
+- [x] **LANG-02**: El usuario ve en espanol los nombres y descripciones de clases, dotes, conjuros, dominios y reglas custom de Puerta de Baldur.
 - [ ] **LANG-03**: El usuario puede identificar que una build esta ligada a un conjunto concreto de datos/reglas del servidor.
 
 ### Flujo del planner
@@ -106,7 +106,7 @@
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | LANG-01 | Phase 2 | Complete |
-| LANG-02 | Phase 7 | Pending |
+| LANG-02 | Phase 7 | Complete |
 | LANG-03 | Phase 8 | Pending |
 | FLOW-01 | Phase 2 | Complete |
 | FLOW-02 | Phase 2 | Complete |
