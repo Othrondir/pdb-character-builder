@@ -105,6 +105,16 @@ Plans:
 - [x] 05-03-PLAN.md — Synchronize `Estadísticas` and the shell summary with skill evaluation
 **UI hint**: yes
 
+### Phase 05.1: Data Extractor Pipeline (INSERTED)
+
+**Goal:** [Urgent work - to be planned]
+**Requirements**: TBD
+**Depends on:** Phase 5
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd-plan-phase 05.1 to break down)
+
 ### Phase 6: Feats & Proficiencies
 **Goal**: Users can choose Puerta feats and proficiencies with exact prerequisite feedback.
 **Depends on**: Phase 5

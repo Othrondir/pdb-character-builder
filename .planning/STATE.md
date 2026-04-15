@@ -91,10 +91,15 @@ Recent decisions affecting current work:
 
 None yet.
 
+### Roadmap Evolution
+
+- Phase 05.1 inserted after Phase 5: Data Extractor Pipeline (URGENT) — UAT revealed all planner catalogs are ~10% placeholders vs server reality (47 classes, 39 skills, 2692 feats, 2037 spells, 34 domains). Extractor must produce real compiled JSON from nwsync 2DAs before any feature phase is meaningful.
+
 ### Blockers/Concerns
 
 - [Phase 1] Final Puerta exception inventory still needs a source-of-truth pass for script-only or forum-only rules.
 - [Phase 1] Exact coverage for local `nwsync` plus TLK/custom text extraction still needs confirmation before extractor implementation.
+- [Phase 05] UAT blocked: hardcoded skill catalog covers 8 of 39 server skills. Extractor (Phase 05.1) must run first.
 - [Phase 8] Dataset mismatch UX still needs a final product decision before implementation.
 
 ### Quick Tasks Completed
