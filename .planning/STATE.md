@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 05.1-01-PLAN.md
-last_updated: "2026-04-15T12:21:28.652Z"
+stopped_at: Completed 05.1-02-PLAN.md
+last_updated: "2026-04-15T12:30:22.575Z"
 last_activity: 2026-04-15
 progress:
   total_phases: 9
   completed_phases: 5
   total_plans: 19
-  completed_plans: 15
-  percent: 79
+  completed_plans: 16
+  percent: 84
 ---
 
 # Project State
@@ -26,7 +26,7 @@ See: .planning/PROJECT.md (updated 2026-03-30)
 ## Current Position
 
 Phase: 05.1 (data-extractor-pipeline) — EXECUTING
-Plan: 2 of 5
+Plan: 3 of 5
 Status: Ready to execute
 Last activity: 2026-04-15
 
@@ -62,6 +62,7 @@ Progress: [█████░░░░░] 55%
 | Phase 05 P02 | 12min | 2 tasks | 11 files |
 | Phase 05 P03 | 12 min | 2 tasks | 9 files |
 | Phase 05.1 P01 | 6min | 2 tasks | 11 files |
+| Phase 05.1 P02 | 6min | 2 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -89,6 +90,8 @@ Recent decisions affecting current work:
 - [Phase 05]: Shell summary skill severity now comes from a dedicated Phase 5 summary selector and only yields to progression when progression is blocked or illegal.
 - [Phase 05.1]: Used fzstd (pure JS) for zstd decompression instead of native bindings for zero-native-dep safety on Windows
 - [Phase 05.1]: Hand-wrote TLK V3.0 and 2DA V2.0 parsers instead of using neverwinter.nim CLI -- nwsync provides direct resource access
+- [Phase 05.1]: Used dependency injection (readFile option) instead of ESM spy mocking for BaseGameReader testability
+- [Phase 05.1]: Binary parsers validate magic+version headers and bounds-check all offset reads before slicing
 
 ### Pending Todos
 
@@ -113,6 +116,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-15T12:21:28.648Z
-Stopped at: Completed 05.1-01-PLAN.md
+Last session: 2026-04-15T12:30:22.571Z
+Stopped at: Completed 05.1-02-PLAN.md
 Resume file: None
