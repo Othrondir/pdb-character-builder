@@ -577,6 +577,7 @@ a {
 }
 
 .skill-sheet__summary-grid {
+  display: grid;
   gap: var(--space-sm);
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
 }
@@ -608,6 +609,8 @@ a {
   border-radius: 18px;
   display: grid;
   gap: var(--space-sm);
+  min-width: 0;
+  overflow: hidden;
   padding: 14px 16px;
 }
 
@@ -625,7 +628,8 @@ a {
 .skill-sheet__controls {
   align-items: center;
   display: flex;
-  gap: var(--space-md);
+  flex-wrap: wrap;
+  gap: var(--space-sm);
   justify-content: space-between;
 }
 
@@ -873,27 +877,12 @@ a {
     grid-template-columns: 1fr;
   }
 
-  .progression-board {
-    grid-template-columns: 1fr;
-  }
-
   .skill-stats-board__layout {
     grid-template-columns: 1fr;
   }
 
   .skill-stats-board__panel:last-child {
     grid-column: auto;
-  }
-
-  .skill-sheet__row-main,
-  .skill-sheet__controls {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .skill-sheet__next-cost,
-  .skill-sheet__value {
-    justify-items: start;
   }
 }
 
@@ -921,5 +910,20 @@ a {
 
   .planner-layout__nav.is-open {
     display: block;
+  }
+
+  .progression-board {
+    grid-template-columns: 1fr;
+  }
+
+  .skill-sheet__row-main,
+  .skill-sheet__controls {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .skill-sheet__next-cost,
+  .skill-sheet__value {
+    justify-items: start;
   }
 }
