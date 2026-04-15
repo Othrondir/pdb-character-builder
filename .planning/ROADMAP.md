@@ -107,13 +107,17 @@ Plans:
 
 ### Phase 05.1: Data Extractor Pipeline (INSERTED)
 
-**Goal:** [Urgent work - to be planned]
-**Requirements**: TBD
+**Goal:** Build the nwsync-to-compiled-JSON extraction pipeline that reads Puerta de Baldur server data directly from the local nwsync SQLite databases and produces typed, static TypeScript catalogs for all character-building data.
+**Requirements**: LANG-02, FEAT-01, MAGI-01, MAGI-04
 **Depends on:** Phase 5
-**Plans:** 0 plans
+**Plans:** 5 plans
 
 Plans:
-- [ ] TBD (run /gsd-plan-phase 05.1 to break down)
+- [ ] 05.1-01-PLAN.md — Bootstrap data-extractor package and implement core parsers (NSYC, TLK, 2DA)
+- [ ] 05.1-02-PLAN.md — Implement BIF/KEY parsers, base-game reader, and catalog Zod contracts
+- [ ] 05.1-03-PLAN.md — Build nwsync reader, TLK resolver, and core assemblers (classes, races, skills, deities)
+- [ ] 05.1-04-PLAN.md — Implement complex assemblers (feats, spells, domains) with cross-references
+- [ ] 05.1-05-PLAN.md — Build CLI orchestrator, run extraction, and wire planner imports
 
 ### Phase 6: Feats & Proficiencies
 **Goal**: Users can choose Puerta feats and proficiencies with exact prerequisite feedback.
@@ -167,7 +171,7 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 6 -> 7 -> 8
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -175,7 +179,8 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | 2. Spanish-First Planner Shell | 3/3 | Complete | 2026-03-30 |
 | 3. Character Origin & Base Attributes | 2/2 | Complete | 2026-03-30 |
 | 4. Level Progression & Class Path | 3/3 | Complete | 2026-03-30 |
-| 5. Skills & Derived Statistics | 0/3 | Not started | - |
+| 5. Skills & Derived Statistics | 3/3 | Complete | 2026-03-31 |
+| 5.1 Data Extractor Pipeline | 0/5 | Planning complete | - |
 | 6. Feats & Proficiencies | 0/2 | Not started | - |
 | 7. Magic & Full Legality Engine | 0/3 | Not started | - |
 | 8. Summary, Persistence & Shared Builds | 0/2 | Not started | - |
