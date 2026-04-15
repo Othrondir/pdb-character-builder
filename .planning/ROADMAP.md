@@ -110,12 +110,12 @@ Plans:
 **Goal:** Build the nwsync-to-compiled-JSON extraction pipeline that reads Puerta de Baldur server data directly from the local nwsync SQLite databases and produces typed, static TypeScript catalogs for all character-building data.
 **Requirements**: LANG-02, FEAT-01, MAGI-01, MAGI-04
 **Depends on:** Phase 5
-**Plans:** 2/5 plans executed
+**Plans:** 3/5 plans executed
 
 Plans:
 - [x] 05.1-01-PLAN.md — Bootstrap data-extractor package and implement core parsers (NSYC, TLK, 2DA)
 - [x] 05.1-02-PLAN.md — Implement BIF/KEY parsers, base-game reader, and catalog Zod contracts
-- [ ] 05.1-03-PLAN.md — Build nwsync reader, TLK resolver, and core assemblers (classes, races, skills, deities)
+- [x] 05.1-03-PLAN.md — Build nwsync reader, TLK resolver, and core assemblers (classes, races, skills, deities)
 - [ ] 05.1-04-PLAN.md — Implement complex assemblers (feats, spells, domains) with cross-references
 - [ ] 05.1-05-PLAN.md — Build CLI orchestrator, run extraction, and wire planner imports
 

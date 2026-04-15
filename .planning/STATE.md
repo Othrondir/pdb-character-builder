@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 05.1-02-PLAN.md
-last_updated: "2026-04-15T12:30:22.575Z"
+stopped_at: Completed 05.1-03-PLAN.md
+last_updated: "2026-04-15T12:46:14.534Z"
 last_activity: 2026-04-15
 progress:
   total_phases: 9
   completed_phases: 5
   total_plans: 19
-  completed_plans: 16
-  percent: 84
+  completed_plans: 17
+  percent: 89
 ---
 
 # Project State
@@ -26,7 +26,7 @@ See: .planning/PROJECT.md (updated 2026-03-30)
 ## Current Position
 
 Phase: 05.1 (data-extractor-pipeline) — EXECUTING
-Plan: 3 of 5
+Plan: 4 of 5
 Status: Ready to execute
 Last activity: 2026-04-15
 
@@ -63,6 +63,7 @@ Progress: [█████░░░░░] 55%
 | Phase 05 P03 | 12 min | 2 tasks | 9 files |
 | Phase 05.1 P01 | 6min | 2 tasks | 11 files |
 | Phase 05.1 P02 | 6min | 2 tasks | 9 files |
+| Phase 05.1 P03 | 13min | 2 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -92,6 +93,10 @@ Recent decisions affecting current work:
 - [Phase 05.1]: Hand-wrote TLK V3.0 and 2DA V2.0 parsers instead of using neverwinter.nim CLI -- nwsync provides direct resource access
 - [Phase 05.1]: Used dependency injection (readFile option) instead of ESM spy mocking for BaseGameReader testability
 - [Phase 05.1]: Binary parsers validate magic+version headers and bounds-check all offset reads before slicing
+- [Phase 05.1]: NwsyncReader uses prepared SQL statements scoped to PUERTA_MANIFEST_SHA1 for all queries
+- [Phase 05.1]: Saving throw progressions derived from SavingThrowTable naming convention (tables not in nwsync)
+- [Phase 05.1]: Race size resolved from appearance.2da SIZECATEGORY via Appearance index lookup
+- [Phase 05.1]: Spanish character transliteration via shared slug-utils for canonical ID generation from 2DA Labels
 
 ### Pending Todos
 
@@ -116,6 +121,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-15T12:30:22.571Z
-Stopped at: Completed 05.1-02-PLAN.md
+Last session: 2026-04-15T12:46:14.530Z
+Stopped at: Completed 05.1-03-PLAN.md
 Resume file: None
