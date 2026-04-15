@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeAll } from 'vitest';
 
 import { TlkResolver } from '@data-extractor/readers/tlk-resolver';
 import type { TlkTable } from '@data-extractor/parsers/tlk-parser';
