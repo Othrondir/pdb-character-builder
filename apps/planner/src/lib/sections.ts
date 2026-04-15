@@ -56,6 +56,22 @@ export const plannerSections: readonly PlannerSectionDefinition[] = [
   },
 ] as const;
 
+/* ── Character Sheet Tab definitions (Plan 03) ───────────── */
+
+export type SheetTab = 'stats' | 'skills' | 'feats' | 'spells';
+
+export interface SheetTabDefinition {
+  readonly id: SheetTab;
+  readonly label: string;
+}
+
+export const sheetTabs: readonly SheetTabDefinition[] = [
+  { id: 'stats', label: shellCopyEs.stepper.sheetTabs.stats },
+  { id: 'skills', label: shellCopyEs.stepper.sheetTabs.skills },
+  { id: 'feats', label: shellCopyEs.stepper.sheetTabs.feats },
+  { id: 'spells', label: shellCopyEs.stepper.sheetTabs.spells },
+] as const;
+
 export function getSectionById(id: PlannerSectionId): PlannerSectionDefinition {
   return plannerSections.find((section) => section.id === id) ?? plannerSections[0];
 }

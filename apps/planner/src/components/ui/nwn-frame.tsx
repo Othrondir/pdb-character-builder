@@ -1,14 +1,16 @@
-import type { ReactNode } from 'react';
+import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 
-interface NwnFrameProps {
-  as?: 'aside' | 'div' | 'nav' | 'section';
+type NwnFrameTag = 'aside' | 'div' | 'nav' | 'section';
+
+type NwnFrameProps = {
+  as?: NwnFrameTag;
   children: ReactNode;
   className?: string;
-}
+} & Omit<ComponentPropsWithoutRef<'div'>, 'children' | 'className'>;
 
-export function NwnFrame({ as: Tag = 'div', children, className }: NwnFrameProps) {
+export function NwnFrame({ as: Tag = 'div', children, className, ...rest }: NwnFrameProps) {
   return (
-    <Tag className={`nwn-frame${className ? ` ${className}` : ''}`}>
+    <Tag className={`nwn-frame${className ? ` ${className}` : ''}`} {...rest}>
       {children}
     </Tag>
   );
