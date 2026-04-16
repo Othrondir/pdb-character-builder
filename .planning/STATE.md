@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Phase 6 context gathered
-last_updated: "2026-04-16T10:54:49.242Z"
-last_activity: 2026-04-16
+stopped_at: Phase 6 UI-SPEC approved
+last_updated: "2026-04-16T13:47:26.126Z"
+last_activity: 2026-04-16 -- Phase 06 execution started
 progress:
   total_phases: 10
   completed_phases: 7
-  total_plans: 27
+  total_plans: 29
   completed_plans: 27
-  percent: 100
+  percent: 93
 ---
 
 # Project State
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-30)
 
 **Core value:** A player can build a Puerta de Baldur character from level 1 to 16 with strict server-valid validation and share that exact build reliably.
-**Current focus:** Phase 05.2 — ux-overhaul-inserted
+**Current focus:** Phase 06 — feats-proficiencies
 
 ## Current Position
 
-Phase: 6
-Plan: Not started
-Status: Executing Phase 05.2
-Last activity: 2026-04-16
+Phase: 06 (feats-proficiencies) — EXECUTING
+Plan: 1 of 2
+Status: Executing Phase 06
+Last activity: 2026-04-16 -- Phase 06 execution started
 
 Progress: [██████░░░░] 60%
 
@@ -128,6 +128,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-16T10:54:49.238Z
-Stopped at: Phase 6 context gathered
-Resume file: .planning/phases/06-feats-proficiencies/06-CONTEXT.md
+Last session: 2026-04-16T11:25:49.896Z
+Stopped at: Phase 6 UI-SPEC approved
+Resume file: .planning/phases/06-feats-proficiencies/06-UI-SPEC.md

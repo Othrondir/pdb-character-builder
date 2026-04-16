@@ -149,7 +149,7 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 06-01-PLAN.md — Rules engine (prerequisite evaluator, BAB calculator, eligibility filter, revalidation), zustand store, selectors, Spanish copy, and test suite
+- [x] 06-01-PLAN.md — Rules engine (prerequisite evaluator, BAB calculator, eligibility filter, revalidation), zustand store, selectors, Spanish copy, and test suite
 - [ ] 06-02-PLAN.md — React UI components (FeatBoard, FeatSheet, FeatSearch, FeatDetailPanel, FeatSheetTab), CSS, shell wiring, and visual verification
 **UI hint**: yes
 
