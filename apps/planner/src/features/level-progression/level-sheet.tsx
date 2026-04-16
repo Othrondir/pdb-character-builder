@@ -26,19 +26,19 @@ export function LevelSheet() {
     <aside className="planner-panel planner-panel--inner level-sheet">
       <div>
         <h2>{activeSheet.title}</h2>
-        <p className="planner-section-view__description">
+        <p className="detail-panel__body">
           {shellCopyEs.progression.levelLabel} {activeSheet.level}
         </p>
       </div>
 
       <section className="level-sheet__requirements">
         <h3>{shellCopyEs.progression.classSectionHeading}</h3>
-        <div className="planner-section-view__highlights">
+        <div className="level-sheet__class-options">
           {activeSheet.classOptions.map((option) => (
             <button
               aria-label={`${option.label} ${STATUS_LABELS[option.status]}`}
               aria-pressed={option.selected}
-              className={`planner-chip class-option is-${option.status}${
+              className={`class-option is-${option.status}${
                 option.selected ? ' is-selected' : ''
               }`}
               key={option.id}
@@ -69,7 +69,7 @@ export function LevelSheet() {
                   </p>
                 ))
               ) : (
-                <p className="planner-section-view__description">
+                <p className="detail-panel__body">
                   {shellCopyEs.progression.statuses.legal}
                 </p>
               )}
@@ -81,12 +81,12 @@ export function LevelSheet() {
             <div className="level-sheet__rows">
               {[...activeSheet.gains, ...activeSheet.choicePrompts].length > 0 ? (
                 [...activeSheet.gains, ...activeSheet.choicePrompts].map((item) => (
-                  <p className="planner-section-view__description" key={item}>
+                  <p className="detail-panel__body" key={item}>
                     {item}
                   </p>
                 ))
               ) : (
-                <p className="planner-section-view__description">
+                <p className="detail-panel__body">
                   {activeSheet.placeholderBody}
                 </p>
               )}
@@ -102,7 +102,7 @@ export function LevelSheet() {
       {activeSheet.abilityIncreaseAvailable ? (
         <section className="level-sheet__ability">
           <h3>{shellCopyEs.progression.abilityHeading}</h3>
-          <p className="planner-section-view__description">
+          <p className="detail-panel__body">
             {shellCopyEs.progression.abilityHelper}
           </p>
           <AbilityIncreaseControl
