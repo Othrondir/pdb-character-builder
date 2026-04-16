@@ -97,12 +97,13 @@ Plans:
   1. User can assign skill ranks at each level using the selected class and current build state.
   2. The planner enforces class or cross-class costs, caps, and Puerta skill restrictions, including known heavy-armor or equivalent exceptions.
   3. Stats and derived totals remain synchronized with skill and progression changes.
-**Plans**: 3 plans
+**Plans**: 4 plans
 
 Plans:
 - [x] 05-01-PLAN.md — Define the compiled skill catalog, rules helpers, and raw skill store
 - [x] 05-02-PLAN.md — Build the routed `Habilidades` editor over the shared skill selectors
 - [x] 05-03-PLAN.md — Synchronize `Estadísticas` and the shell summary with skill evaluation
+- [ ] 05-04-PLAN.md — Gap closure: unified scrollable skill board with compact NWN1-style rows
 **UI hint**: yes
 
 ### Phase 05.1: Data Extractor Pipeline (INSERTED)
@@ -197,9 +198,9 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -
 | 2. Spanish-First Planner Shell | 3/3 | Complete | 2026-03-30 |
 | 3. Character Origin & Base Attributes | 2/2 | Complete | 2026-03-30 |
 | 4. Level Progression & Class Path | 3/3 | Complete | 2026-03-30 |
-| 5. Skills & Derived Statistics | 3/3 | Complete | 2026-03-31 |
+| 5. Skills & Derived Statistics | 3/4 | Gap closure | 2026-03-31 |
 | 5.1 Data Extractor Pipeline | 5/5 | Complete | 2026-04-15 |
-| 5.2 UX Overhaul | 6/8 | Gap closure | - |
-| 6. Feats & Proficiencies | 0/2 | Planned | - |
+| 5.2 UX Overhaul | 8/8 | Complete | - |
+| 6. Feats & Proficiencies | 2/2 | Complete | - |
 | 7. Magic & Full Legality Engine | 0/3 | Not started | - |
 | 8. Summary, Persistence & Shared Builds | 0/2 | Not started | - |
