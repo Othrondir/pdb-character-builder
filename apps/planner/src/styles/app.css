@@ -406,6 +406,7 @@ a {
 .skill-board .selection-screen__content {
   grid-template-columns: 1fr;
   overflow-y: auto;
+  padding-bottom: var(--space-lg);
 }
 
 .skill-board .skill-sheet {
