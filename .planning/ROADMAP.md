@@ -149,8 +149,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 06-01: Deliver feat catalogs, filters, and prerequisite evaluation
-- [ ] 06-02: Model Puerta proficiency overrides and custom feat behavior
+- [ ] 06-01-PLAN.md — Rules engine (prerequisite evaluator, BAB calculator, eligibility filter, revalidation), zustand store, selectors, Spanish copy, and test suite
+- [ ] 06-02-PLAN.md — React UI components (FeatBoard, FeatSheet, FeatSearch, FeatDetailPanel, FeatSheetTab), CSS, shell wiring, and visual verification
 **UI hint**: yes
 
 ### Phase 7: Magic & Full Legality Engine
@@ -200,6 +200,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -
 | 5. Skills & Derived Statistics | 3/3 | Complete | 2026-03-31 |
 | 5.1 Data Extractor Pipeline | 5/5 | Complete | 2026-04-15 |
 | 5.2 UX Overhaul | 6/8 | Gap closure | - |
-| 6. Feats & Proficiencies | 0/2 | Not started | - |
+| 6. Feats & Proficiencies | 0/2 | Planned | - |
 | 7. Magic & Full Legality Engine | 0/3 | Not started | - |
 | 8. Summary, Persistence & Shared Builds | 0/2 | Not started | - |
