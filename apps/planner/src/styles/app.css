@@ -43,29 +43,6 @@ a {
   padding: var(--space-md);
 }
 
-.planner-nav h2,
-.planner-summary h2,
-.planner-section-view h1,
-.planner-section-view h2 {
-  font-family: var(--font-display);
-  font-size: 18px;
-  font-weight: 600;
-  letter-spacing: 0.15em;
-  line-height: 1.2;
-  margin: 0;
-  text-transform: uppercase;
-}
-
-.planner-nav__eyebrow,
-.planner-section-view__eyebrow {
-  color: var(--color-text-muted);
-  font-size: 14px;
-  font-weight: 400;
-  letter-spacing: 0.16em;
-  margin: 0 0 var(--space-xs);
-  text-transform: uppercase;
-}
-
 /* ── Layout ───────────────────────────────────────────────── */
 
 .planner-layout {
@@ -152,72 +129,11 @@ a {
   position: absolute;
 }
 
-.planner-panel--inner,
-.planner-nav,
-.planner-summary,
-.planner-section-view {
+.planner-panel--inner {
   padding: var(--space-lg);
 }
 
-.planner-panel--nav {
-  background: var(--color-panel);
-  color: var(--color-text);
-}
-
-.planner-panel--nav::before {
-  border-color: var(--color-panel-edge);
-}
-
-/* ── Nav ──────────────────────────────────────────────────── */
-
-.planner-nav__list {
-  display: grid;
-  gap: var(--space-sm);
-  list-style: none;
-  margin: var(--space-lg) 0 0;
-  padding: 0;
-}
-
-.planner-nav__link {
-  align-items: center;
-  border: 1px solid transparent;
-  border-radius: 0;
-  color: inherit;
-  display: flex;
-  gap: var(--space-sm);
-  padding: 12px 14px;
-  transition:
-    border-color 180ms ease,
-    background-color 180ms ease,
-    transform 180ms ease;
-}
-
-.planner-nav__link:hover,
-.planner-nav__link:focus-visible {
-  border-color: var(--color-panel-edge);
-  background: var(--color-selection);
-}
-
-.planner-nav__link.is-active {
-  background: var(--color-selection);
-  border-color: var(--color-selection-border);
-  transform: translateX(2px);
-}
-
-.planner-nav__icon {
-  color: var(--color-gold);
-  flex-shrink: 0;
-  height: 18px;
-  width: 18px;
-}
-
-/* ── Summary ──────────────────────────────────────────────── */
-
-.planner-summary {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-lg);
-}
+/* ── Summary Grid ────────────────────────────────────────────── */
 
 .planner-summary__grid {
   display: grid;
@@ -235,54 +151,6 @@ a {
   font-size: 14px;
   font-weight: 600;
   margin: 0;
-}
-
-/* ── Section View ─────────────────────────────────────────── */
-
-.planner-section-view {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-lg);
-  min-height: 60vh;
-}
-
-.planner-section-view h1 {
-  font-size: 18px;
-  text-align: center;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-}
-
-.planner-section-view h3 {
-  font-family: var(--font-display);
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: 0.10em;
-  line-height: 1.2;
-  margin: 0;
-  text-transform: uppercase;
-}
-
-.planner-section-view__description {
-  color: var(--color-text-muted);
-  margin: var(--space-sm) 0 0;
-  max-width: 60ch;
-}
-
-.planner-section-view__highlights {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-sm);
-}
-
-/* ── Chip ─────────────────────────────────────────────────── */
-
-.planner-chip {
-  background: var(--color-selection);
-  border: 1px solid var(--color-selection-border);
-  border-radius: 0;
-  display: inline-flex;
-  padding: 8px 12px;
 }
 
 /* ── Foundation Board ─────────────────────────────────────── */
@@ -325,11 +193,6 @@ a {
 .foundation-sheet h2,
 .attribute-control strong {
   color: var(--color-text);
-}
-
-.foundation-step .planner-section-view__description,
-.foundation-sheet .planner-section-view__description {
-  color: var(--color-text-muted);
 }
 
 .foundation-sheet {
@@ -473,9 +336,7 @@ a {
   border-color: var(--color-selection-border);
 }
 
-.progression-summary-strip .planner-section-view__eyebrow,
-.progression-summary-strip .planner-summary__grid dt,
-.level-sheet .planner-section-view__description {
+.progression-summary-strip .planner-summary__grid dt {
   color: var(--color-text-muted);
 }
 
@@ -519,11 +380,6 @@ a {
 
 .progression-summary-strip__attributes {
   margin-top: var(--space-md);
-}
-
-.progression-summary-strip .planner-chip {
-  background: var(--color-selection);
-  color: var(--color-text);
 }
 
 /* ── Progression Origin Editor ────────────────────────────── */
@@ -919,12 +775,6 @@ a {
 
 .class-option.is-illegal {
   border-color: var(--color-destructive);
-}
-
-/* ── Callout ──────────────────────────────────────────────── */
-
-.planner-section-view__callout {
-  background: var(--color-selection);
 }
 
 /* ── Mobile overlays ──────────────────────────────────────── */
@@ -1411,25 +1261,10 @@ a {
   animation: shell-reveal 420ms ease both;
 }
 
-.section-fade {
-  animation: section-fade 320ms ease both;
-}
-
 @keyframes shell-reveal {
   from {
     opacity: 0;
     transform: translateY(14px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes section-fade {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
   }
   to {
     opacity: 1;
