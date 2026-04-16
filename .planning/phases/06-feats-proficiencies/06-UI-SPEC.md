@@ -57,6 +57,8 @@ Exceptions: none. All spacing reuses existing CSS custom properties.
 
 All headings use `font-family: var(--font-display)` (Cormorant Garamond), `text-transform: uppercase`, `letter-spacing: 0.15em` for display, `0.10em` for headings. Body and label text use `font-family: var(--font-body)` (Spectral).
 
+**Hierarchy mitigation note:** The 14/16/18px size scale has narrow 2px gaps between steps, but visual hierarchy is reinforced by three independent channels: (1) weight shift from 400 to 600 between body and label/heading roles, (2) font-family change from Spectral (body/label) to Cormorant Garamond (heading/display), and (3) uppercase + letter-spacing on heading/display roles. These combined differentiators produce sufficient contrast between each typographic level despite the tight numeric scale. This is inherited from Phase 05.2 and consistent across the application.
+
 **Source:** Matches existing `selection-screen__title-bar h2`, `detail-panel__title`, `option-list__item` patterns from Phase 05.2.
 
 ---
@@ -83,6 +85,12 @@ Additional semantic colors (all existing tokens):
 Accent reserved for: frame borders on SelectionScreen and NwnFrame, selected feat row left border, search field focus outline, section divider lines. Never used as text color or fill.
 
 **Source:** All colors from `tokens.css` established in Phase 05.2. No new color tokens needed.
+
+---
+
+## Visual Focal Point
+
+**Primary focal point:** The `FeatSheet` OptionList with its search field (`feat-board__search`) is the primary interaction area on the feat selection screen. It occupies the left panel of the `SelectionScreen` layout and is where the user spends the majority of their time scanning, searching, and selecting feats. The implementer should ensure this panel draws the eye first by placing it at the natural reading origin (top-left of the content area) and giving the search input a visible gold focus ring on entry. The `FeatDetailPanel` on the right is secondary -- it responds to the user's selection in the OptionList and should not compete for initial attention.
 
 ---
 
@@ -203,7 +211,7 @@ All copy in Spanish-first, added to `shellCopyEs.feats` namespace.
 | Auto-granted label | "Automatica" -- shown in level gains summary |
 | Remove feat dialog title | "Quitar dote" |
 | Remove feat dialog body | "Quitar {featName} invalidara {dependentFeatName} en el nivel {level}. Continuar?" |
-| Remove feat confirm | "Quitar" |
+| Remove feat confirm | "Quitar dote" |
 | Remove feat cancel | "Cancelar" |
 | Plan states: empty | "Sin dotes seleccionadas" |
 | Plan states: in progress | "Dotes en curso" |
@@ -329,7 +337,7 @@ Follow the established BEM namespace `feat-*`:
   background: rgba(122, 31, 31, 0.22);
   border-left: 2px solid var(--color-destructive);
   color: var(--color-text);
-  padding: 2px var(--space-sm);
+  padding: var(--space-xs) var(--space-sm);
 }
 ```
 
