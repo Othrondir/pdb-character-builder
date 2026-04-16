@@ -21,7 +21,7 @@ describe('planner shell copy', () => {
   it('shows Spanish-first stepper labels and character sheet heading', () => {
     render(createElement(PlannerShellFrame));
 
-    for (const label of ['Raza', 'Alineamiento', 'Deidad', 'Atributos']) {
+    for (const label of ['Raza', 'Alineamiento', 'Atributos']) {
       expect(screen.getAllByText(label).length).toBeGreaterThan(0);
     }
 

@@ -60,14 +60,4 @@ describe('phase 05.2 stepper states', () => {
     expect(alignmentButton).not.toHaveAttribute('aria-current');
   });
 
-  it('shows deity step as pending when alignment is not set', () => {
-    useCharacterFoundationStore.getState().setRace('race:human');
-    usePlannerShellStore.setState({ activeOriginStep: 'alignment' });
-
-    render(createElement(CreationStepper));
-
-    const deityButton = screen.getByRole('button', { name: /Deidad/ });
-    expect(deityButton).toHaveClass('is-pending');
-    expect(deityButton).toBeDisabled();
-  });
 });

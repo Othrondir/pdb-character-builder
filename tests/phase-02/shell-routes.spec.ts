@@ -21,7 +21,7 @@ describe('planner shell structure', () => {
 
   it('exposes origin steps, level sub-steps, and sheet tabs in the step registry', () => {
     expect(originSteps.map((s) => s.id)).toEqual([
-      'race', 'alignment', 'deity', 'attributes',
+      'race', 'alignment', 'attributes',
     ]);
     expect(levelSubSteps.map((s) => s.id)).toEqual([
       'class', 'skills', 'feats', 'spells',

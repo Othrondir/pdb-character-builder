@@ -43,12 +43,11 @@ describe('phase 05.2 stepper navigation', () => {
     expect(screen.getByText('Progresion')).toBeInTheDocument();
   });
 
-  it('renders 4 origin step buttons with correct labels', () => {
+  it('renders 3 origin step buttons with correct labels', () => {
     render(createElement(CreationStepper));
 
     expect(screen.getByRole('button', { name: /Raza/ })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Alineamiento/ })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Deidad/ })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Atributos/ })).toBeInTheDocument();
   });
 
