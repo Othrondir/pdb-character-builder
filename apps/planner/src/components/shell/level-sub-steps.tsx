@@ -19,9 +19,10 @@ export function LevelSubSteps({ level: _level }: LevelSubStepsProps) {
         return (
           <StepperStep
             key={subStep.id}
+            disabled={false}
             label={subStep.label}
             onClick={() => setActiveLevelSubStep(subStep.id)}
-            status={isActive ? 'active' : 'pending'}
+            status={isActive ? 'active' : 'complete'}
           />
         );
       })}
