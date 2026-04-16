@@ -39,14 +39,27 @@ describe('phase 07 detectMissingSpellData', () => {
     }
   });
 
-  it('returns null for a spell with non-empty description', () => {
-    const okSpell = compiledSpellCatalog.spells.find(
-      (s) => s.description.length > 0,
-    );
-    expect(okSpell).toBeDefined();
-    if (!okSpell) return;
+  it('returns null for a spell with non-empty description (synthetic fixture)', () => {
+    // As of Plan 07-01 Task 1, all 376 real spell descriptions are empty (TLK gap
+    // surfaced via symmetric warning). The fail-closed contract is proven with a
+    // synthetic spell that has a populated description so the legal branch is exercised.
+    const okSpellId = 'spell:synthetic-test';
+    const syntheticCatalog = {
+      ...compiledSpellCatalog,
+      spells: [
+        {
+          classLevels: { 'class:wizard': 1 } as Record<string, number>,
+          description: 'Conjuro sintético para test de ruta legal.',
+          id: okSpellId,
+          innateLevel: 1,
+          label: 'Sintético',
+          school: 'evocation',
+          sourceRow: 9999,
+        },
+      ],
+    } as typeof compiledSpellCatalog;
 
-    const outcome = detectMissingSpellData(okSpell.id, compiledSpellCatalog);
+    const outcome = detectMissingSpellData(okSpellId, syntheticCatalog);
     expect(outcome).toBeNull();
   });
 });

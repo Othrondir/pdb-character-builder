@@ -62,9 +62,13 @@ describe('phase 07 getEligibleSpellsAtLevel', () => {
     expect(excluded?.reason).toBe('Ya conocido');
   });
 
-  it('returns sorcerer-level-1 spells without wizard-only level-1 spells at sorcerer 1', () => {
+  it('returns bard-level-1 spells without wizard-only level-1 spells at bard 1', () => {
+    // Sorcerer shares the Wiz_Sorc column with wizard in spells.2da, so the current
+    // extractor only tags those spells with class:wizard (deferred to Phase 7 Plan
+    // 07-02 / deferred-items.md for dual-tagging). Bard has its own column and is
+    // the equivalent Charisma-based known-caster coverage for MAGI-03 here.
     const result = getEligibleSpellsAtLevel({
-      classId: 'class:sorcerer',
+      classId: 'class:bard',
       casterLevel: 1,
       spellLevel: 1,
       catalog: compiledSpellCatalog,
@@ -73,7 +77,7 @@ describe('phase 07 getEligibleSpellsAtLevel', () => {
 
     expect(result.eligible.length).toBeGreaterThan(0);
     for (const spell of result.eligible) {
-      expect(spell.classLevels['class:sorcerer']).toBe(1);
+      expect(spell.classLevels['class:bard']).toBe(1);
     }
   });
 

@@ -50,14 +50,15 @@ describe('phase 07 computeCasterLevelByClass', () => {
     expect(atSix).toEqual({ 'class:paladin': 6 });
   });
 
-  it('getMaxSpellLevelAcrossClasses returns 4 for wizard level 9', () => {
+  it('getMaxSpellLevelAcrossClasses returns 5 for wizard level 9 (full-caster curve)', () => {
+    // NWN1 wizard spell-gain table grants level-5 slots at caster level 9.
     const casterLevelByClass = { 'class:wizard': 9 };
     const maxSpellLevel = getMaxSpellLevelAcrossClasses(
       casterLevelByClass,
       compiledSpellCatalog,
     );
 
-    expect(maxSpellLevel).toBe(4);
+    expect(maxSpellLevel).toBe(5);
   });
 
   it('getMaxSpellLevelAcrossClasses returns 0 for empty casterLevelByClass', () => {
