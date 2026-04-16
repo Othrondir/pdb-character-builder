@@ -124,7 +124,7 @@ Plans:
 **Goal:** Rebuild the planner's navigation flow and layout density so the app is actually usable — guided wizard flow for character creation, compact information display, and clear visual hierarchy instead of an endless vertical scroll of identical cards.
 **Requirements**: FLOW-01, FLOW-02
 **Depends on:** Phase 5.1
-**Plans:** 8 plans (6 complete + 2 gap closure)
+**Plans:** 8/8 plans complete
 
 Plans:
 - [x] 05.2-01-PLAN.md — Design system foundation: dark NWN1 tokens, CSS overhaul, UI primitives (NwnFrame, NwnButton, ActionBar)
@@ -133,8 +133,8 @@ Plans:
 - [x] 05.2-04-PLAN.md — Shell frame rewrite, router simplification, Phase 2 test updates
 - [x] 05.2-05-PLAN.md — Feature board adaptation (origin, attributes, progression, skills) + dead code cleanup
 - [x] 05.2-06-PLAN.md — Visual verification checkpoint (human approval)
-- [ ] 05.2-07-PLAN.md — Gap closure: remove deity references from 14 test files (24 failures)
-- [ ] 05.2-08-PLAN.md — Gap closure: dead CSS cleanup + feature file class name migration
+- [x] 05.2-07-PLAN.md — Gap closure: remove deity references from 14 test files (24 failures)
+- [x] 05.2-08-PLAN.md — Gap closure: dead CSS cleanup + feature file class name migration
 **UI hint**: yes
 
 ### Phase 6: Feats & Proficiencies
