@@ -18,7 +18,7 @@ function createBuildState(
     fortitudeSave: 0,
     selectedFeatIds: new Set(),
     skillRanks: {},
-    spellcastingLevel: 0,
+    casterLevelByClass: {},
     ...overrides,
   };
 }

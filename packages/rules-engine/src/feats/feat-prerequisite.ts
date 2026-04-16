@@ -22,8 +22,12 @@ export interface BuildStateAtLevel {
   selectedFeatIds: Set<string>;
   /** skillId -> cumulative ranks at this level */
   skillRanks: Record<string, number>;
-  /** Max spell level castable (0 until Phase 7) */
-  spellcastingLevel: number;
+  /**
+   * Per-class caster level map. Multiclass casters are tracked independently — a
+   * cleric 5 / wizard 5 build is `{ 'class:cleric': 5, 'class:wizard': 5 }`, never
+   * summed (07-RESEARCH Pitfall 3). Empty object when the build has no caster classes.
+   */
+  casterLevelByClass: Record<string, number>;
 }
 
 export interface PrerequisiteCheck {
@@ -50,7 +54,7 @@ export interface PrerequisiteCheckResult {
   checks: PrerequisiteCheck[];
 }
 
-const ABILITY_LABELS: Record<string, string> = {
+export const ABILITY_LABELS: Record<string, string> = {
   str: 'Fuerza',
   dex: 'Destreza',
   con: 'Constitucion',
@@ -59,7 +63,7 @@ const ABILITY_LABELS: Record<string, string> = {
   cha: 'Carisma',
 };
 
-const ABILITY_PREREQ_MAP: Record<string, string> = {
+export const ABILITY_PREREQ_MAP: Record<string, string> = {
   minStr: 'str',
   minDex: 'dex',
   minCon: 'con',
@@ -67,6 +71,25 @@ const ABILITY_PREREQ_MAP: Record<string, string> = {
   minWis: 'wis',
   minCha: 'cha',
 };
+
+/**
+ * Maximum spell level accessible across a build's caster classes, using the full-caster
+ * formula (class level L grants up to floor((L+1)/2) spell level, capped at 9). Used by
+ * feat prerequisites (`minSpellLevel`) that derive the max from casterLevelByClass.
+ *
+ * Kept inline in feat-prerequisite.ts rather than imported from `../magic/caster-level.ts`
+ * to avoid a module cycle (magic already imports BuildStateAtLevel from this file).
+ */
+export function getMaxSpellLevelFromBuildState(
+  buildState: BuildStateAtLevel,
+): number {
+  let max = 0;
+  for (const level of Object.values(buildState.casterLevelByClass)) {
+    const accessLevel = Math.min(9, Math.floor((level + 1) / 2));
+    if (accessLevel > max) max = accessLevel;
+  }
+  return max;
+}
 
 /**
  * Evaluate all prerequisites for a single feat against the current build state.
@@ -213,12 +236,13 @@ export function evaluateFeatPrerequisites(
 
   // Spell level check
   if (prereqs.minSpellLevel != null && prereqs.minSpellLevel > 0) {
+    const maxSpellLevel = getMaxSpellLevelFromBuildState(buildState);
     checks.push({
       type: 'spell-level',
       label: 'Nivel de conjuro',
-      met: buildState.spellcastingLevel >= prereqs.minSpellLevel,
+      met: maxSpellLevel >= prereqs.minSpellLevel,
       required: String(prereqs.minSpellLevel),
-      current: String(buildState.spellcastingLevel),
+      current: String(maxSpellLevel),
     });
   }
 

@@ -16,6 +16,7 @@ import {
   type FeatEvaluationStatus,
   type FeatLevelInput,
 } from '@rules-engine/feats/feat-revalidation';
+import { computeCasterLevelByClass } from '@rules-engine/magic/caster-level';
 
 import { shellCopyEs } from '@planner/lib/copy/es';
 import type { CharacterFoundationStoreState } from '@planner/features/character-foundation/store';
@@ -198,15 +199,22 @@ export function computeBuildStateAtLevel(
   // 6. Fortitude save
   const fortitudeSave = computeFortSave(classLevels, compiledClassCatalog);
 
+  // Phase 7 Pitfall 4 fixed compute order: caster level derives from class levels
+  // (pass 1) BEFORE feat eligibility (pass 2) reads from casterLevelByClass.
+  const casterLevelByClass = computeCasterLevelByClass(
+    classLevels,
+    compiledClassCatalog,
+  );
+
   return {
     abilityScores,
     bab,
+    casterLevelByClass,
     characterLevel: level,
     classLevels,
     fortitudeSave,
     selectedFeatIds,
     skillRanks,
-    spellcastingLevel: 0, // Phase 7 will compute this
   };
 }
 
