@@ -1361,6 +1361,7 @@ a {
   border-bottom: 1px solid var(--color-panel-edge);
   display: flex;
   gap: 0;
+  padding-inline: var(--space-sm);
 }
 .sheet-tabs__tab {
   background: transparent;
