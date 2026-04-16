@@ -31,7 +31,7 @@ a {
 
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: var(--color-surface); }
-::-webkit-scrollbar-thumb { background: var(--color-text-muted); border-radius: 0; }
+::-webkit-scrollbar-thumb { background: var(--color-gold-dark); border-radius: 0; }
 ::-webkit-scrollbar-thumb:hover { background: var(--color-gold); }
 
 /* ── Shell ────────────────────────────────────────────────── */
@@ -407,6 +407,8 @@ a {
   grid-template-columns: 1fr;
   overflow-y: auto;
   padding-bottom: var(--space-lg);
+  -webkit-mask-image: linear-gradient(to bottom, black calc(100% - 24px), transparent);
+  mask-image: linear-gradient(to bottom, black calc(100% - 24px), transparent);
 }
 
 .skill-board .skill-sheet {
