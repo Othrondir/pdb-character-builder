@@ -115,7 +115,7 @@ export function SkillSheet() {
     <aside className="planner-panel planner-panel--inner level-sheet skill-sheet">
       <div>
         <h2>{activeSheet.title}</h2>
-        <p className="planner-section-view__description">
+        <p className="detail-panel__body">
           {shellCopyEs.progression.levelLabel} {activeSheet.level}
           {activeSheet.classLabel ? ` · ${activeSheet.classLabel}` : ''}
         </p>

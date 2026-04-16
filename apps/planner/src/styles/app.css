@@ -880,6 +880,26 @@ a {
   padding: 12px 14px;
 }
 
+/* ── Level Sheet Class Options ───────────────────────────── */
+.level-sheet__class-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+/* ── Locked Abilities Panel ──────────────────────────────── */
+.locked-abilities-panel { padding: var(--space-lg); }
+.locked-abilities-panel__header { margin-bottom: var(--space-md); }
+.locked-abilities-panel__eyebrow {
+  color: var(--color-text-muted);
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  margin: 0 0 var(--space-xs);
+  text-transform: uppercase;
+}
+.locked-abilities-panel__callout { padding: var(--space-lg); }
+
 /* ── Class Option ─────────────────────────────────────────── */
 
 .class-option {
