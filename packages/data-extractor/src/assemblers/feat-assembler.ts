@@ -25,7 +25,6 @@ import { RESTYPE_2DA } from '../config';
 import type { NwsyncReader } from '../readers/nwsync-reader';
 import type { BaseGameReader } from '../readers/base-game-reader';
 import type { TlkResolver } from '../readers/tlk-resolver';
-import type { AssembleResult } from './class-assembler';
 import { canonicalId, slugify } from './slug-utils';
 
 // ---------------------------------------------------------------------------
@@ -80,13 +79,28 @@ function load2da(
  * @param datasetId - Dataset provenance identifier.
  * @returns The assembled and validated feat catalog with warnings.
  */
+/**
+ * Result of feat catalog assembly. Extends AssembleResult with a pre-filter
+ * featIdsByRow map covering EVERY feat row (including non-player feats that
+ * are filtered out of the catalog). Needed by downstream assemblers that
+ * reference feat rows which may point at filtered-out entries
+ * (e.g., domain.2da GrantedFeat indices point at domain-specific feats
+ * that don't appear in any cls_feat_* list, so they're excluded from
+ * FeatCatalog but still must resolve for domain-feat lookup).
+ */
+export interface FeatAssembleResult {
+  catalog: FeatCatalog;
+  warnings: string[];
+  featIdsByRowFull: Map<number, string>;
+}
+
 export function assembleFeatCatalog(
   nwsyncReader: NwsyncReader,
   baseGameReader: BaseGameReader,
   tlkResolver: TlkResolver,
   classRows: Map<string, ClassRowInfo>,
   datasetId: string,
-): AssembleResult<FeatCatalog> {
+): FeatAssembleResult {
   const warnings: string[] = [];
 
   // -------------------------------------------------------------------------
@@ -414,7 +428,7 @@ export function assembleFeatCatalog(
 
   const parsed = featCatalogSchema.parse(catalog);
 
-  return { catalog: parsed, warnings };
+  return { catalog: parsed, warnings, featIdsByRowFull: featIdsByRow };
 }
 
 /**

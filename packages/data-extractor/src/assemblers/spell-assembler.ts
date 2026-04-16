@@ -181,6 +181,13 @@ export function assembleSpellCatalog(
     if (nameStrref != null && !resolvedName) {
       warnings.push(`Spell row ${rowIndex} (${label}): Name strref ${nameStrref} resolved to empty`);
     }
+    // Phase 7 Plan 07-01 Task 1: Symmetric description warnings for diagnostic surfacing.
+    if (descStrref != null && !resolvedDesc) {
+      warnings.push(`Spell row ${rowIndex} (${label}): Description strref ${descStrref} resolved to empty`);
+    }
+    if (descStrref == null) {
+      warnings.push(`Spell row ${rowIndex} (${label}): Description column is null/null-stringref in spells.2da`);
+    }
 
     const displayLabel = resolvedName || label;
 

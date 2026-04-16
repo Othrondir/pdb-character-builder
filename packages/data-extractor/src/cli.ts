@@ -333,7 +333,9 @@ export async function main(): Promise<void> {
 
     const result = assembleFeatCatalog(nwsyncReader, baseGameReader, tlkResolver, featClassRows, datasetId);
     catalogs.feats = result.catalog;
-    featIdsByRow = buildFeatIdsByRow(result.catalog.feats);
+    // Phase 7 Plan 07-01 Task 1: Prefer the full pre-filter map so domain assembler
+    // can resolve GrantedFeat indices that point at feats excluded by the D-08 player filter.
+    featIdsByRow = result.featIdsByRowFull ?? buildFeatIdsByRow(result.catalog.feats);
     log.addCatalog('feats', result.catalog.feats.length);
     for (const w of result.warnings) log.addWarning('feats', w);
     console.log(`         ${result.catalog.feats.length} feats assembled`);
