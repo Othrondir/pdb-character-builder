@@ -10,7 +10,7 @@ function createOriginSelection(
     alignmentId: null,
     alignments: phase03FoundationFixture.alignments,
     deityId: null,
-    deities: phase03FoundationFixture.deities,
+    deities: [{ id: 'deity:none' as const, allowedAlignmentIds: [] as string[] }],
     raceId: null,
     races: phase03FoundationFixture.races,
     subraceId: null,
@@ -38,7 +38,16 @@ describe('phase 03 foundation validation helpers', () => {
       createOriginSelection({
         alignmentId: 'alignment:neutral-good',
         deityId: 'deity:none',
-        raceId: 'race:dwarf',
+        raceId: 'race:test-required-deity',
+        races: [
+          ...phase03FoundationFixture.races,
+          {
+            allowedAlignmentIds: phase03FoundationFixture.alignments.map((a) => a.id),
+            deityPolicy: 'required',
+            id: 'race:test-required-deity',
+            label: 'Test race with required deity',
+          },
+        ],
       }),
     );
 

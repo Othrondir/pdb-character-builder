@@ -2,9 +2,8 @@
 
 import { beforeEach, describe, expect, it } from 'vitest';
 import { createElement } from 'react';
-import { RouterProvider } from '@tanstack/react-router';
 import { render, screen } from '@testing-library/react';
-import { createPlannerRouter } from '@planner/router';
+import { PlannerShellFrame } from '@planner/components/shell/planner-shell-frame';
 import { usePlannerShellStore } from '@planner/state/planner-shell';
 import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
 
@@ -13,50 +12,32 @@ describe('phase 03 origin flow', () => {
     document.body.innerHTML = '';
     useCharacterFoundationStore.getState().resetFoundation();
     usePlannerShellStore.setState({
-      activeSection: 'build',
-      datasetId: 'dataset:pendiente',
+      activeOriginStep: 'race',
+      activeLevelSubStep: null,
+      characterSheetTab: 'stats',
+      expandedLevel: null,
       mobileNavOpen: false,
-      summaryPanelOpen: true,
-      validationStatus: 'pending',
     });
   });
 
-  it('renders the ordered origin steps and explicit deity option', async () => {
-    const router = createPlannerRouter(['/']);
-    await router.load();
-
-    render(createElement(RouterProvider, { router }));
+  it('renders the ordered origin steps without deity', () => {
+    render(createElement(PlannerShellFrame));
 
     const content = document.body.textContent ?? '';
 
-    expect(content.indexOf('Raza')).toBeLessThan(content.indexOf('Subraza'));
-    expect(content.indexOf('Subraza')).toBeLessThan(
-      content.indexOf('Alineamiento'),
-    );
+    expect(content.indexOf('Raza')).toBeLessThan(content.indexOf('Alineamiento'));
     expect(content.indexOf('Alineamiento')).toBeLessThan(
-      content.indexOf('Deidad'),
+      content.indexOf('Atributos'),
     );
-    expect(screen.getByText('Sin deidad')).toBeInTheDocument();
-    expect(
-      screen.getByRole('button', { name: 'Confirmar origen' }),
-    ).toBeInTheDocument();
+    expect(content).not.toContain('Deidad');
+    expect(content).not.toContain('Sin deidad');
   });
 
-  it('keeps Atributos blocked until the origin is ready', async () => {
-    const router = createPlannerRouter(['/abilities']);
-    await router.load();
+  it('keeps Atributos step pending and disabled until the origin is ready', () => {
+    render(createElement(PlannerShellFrame));
 
-    render(createElement(RouterProvider, { router }));
-
-    expect(
-      screen.getByRole('heading', {
-        name: 'El origen del personaje sigue incompleto',
-      }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(
-        'Selecciona raza, subraza, alineamiento y deidad en Construcción para desbloquear Atributos.',
-      ),
-    ).toBeInTheDocument();
+    const atributosButton = screen.getByRole('button', { name: /Atributos/ });
+    expect(atributosButton).toHaveClass('is-pending');
+    expect(atributosButton).toBeDisabled();
   });
 });
