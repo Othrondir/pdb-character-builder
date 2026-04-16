@@ -30,27 +30,18 @@ function SkillRankRow({
 
   return (
     <article className={`skill-sheet__row is-${row.status}`}>
-      <div className="skill-sheet__row-main">
-        <div>
-          <h4>{row.label}</h4>
-          <div className="skill-sheet__meta">
-            <span>{row.costTypeLabel}</span>
-            <span>
-              {shellCopyEs.skills.capLabel}: {row.cap}
-            </span>
-            {row.trainedOnly ? <span>{shellCopyEs.skills.trainedOnlyLabel}</span> : null}
-          </div>
-        </div>
-
-        <div className="skill-sheet__value">
-          <span>{row.currentTotal}</span>
-          <small>
-            {shellCopyEs.skills.rankLabel}: {row.currentRank}
-          </small>
-        </div>
+      <div className="skill-sheet__row-label">
+        <h4>{row.label}</h4>
+        <span className="skill-sheet__meta-inline">
+          <span>{row.costTypeLabel}</span>
+          {row.trainedOnly ? <span>{shellCopyEs.skills.trainedOnlyLabel}</span> : null}
+        </span>
       </div>
 
-      <div className="skill-sheet__controls">
+      <div
+        className="skill-sheet__controls"
+        title={`${shellCopyEs.skills.nextCostLabel}: ${row.nextCostLabel}`}
+      >
         <button
           aria-label={`${shellCopyEs.skills.decreaseRankLabel} ${row.label}`}
           className="skill-sheet__stepper"
@@ -82,10 +73,13 @@ function SkillRankRow({
         >
           +
         </button>
-        <div className="skill-sheet__next-cost">
-          <span>{shellCopyEs.skills.nextCostLabel}</span>
-          <strong>{row.nextCostLabel}</strong>
-        </div>
+      </div>
+
+      <div className="skill-sheet__totals-inline">
+        <span className="skill-sheet__total-value">{row.currentTotal}</span>
+        <span className="skill-sheet__cap-value">
+          {shellCopyEs.skills.capLabel}: {row.cap}
+        </span>
       </div>
 
       {row.issues.length > 0 ? (
@@ -121,7 +115,7 @@ export function SkillSheet() {
         </p>
       </div>
 
-      <dl className="planner-summary__grid skill-sheet__summary-grid">
+      <dl className="planner-summary__grid skill-sheet__summary-grid skill-sheet__summary-inline">
         <div>
           <dt>{shellCopyEs.skills.availablePointsLabel}</dt>
           <dd>{activeSheet.availablePoints}</dd>
