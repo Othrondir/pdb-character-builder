@@ -26,12 +26,8 @@ export function SkillBoard() {
   }
 
   return (
-    <SelectionScreen title={shellCopyEs.stepper.stepTitles.skills}>
+    <SelectionScreen className="skill-board" title={shellCopyEs.stepper.stepTitles.skills}>
       <SkillSheet />
-      <DetailPanel
-        title="Habilidades"
-        body="Distribuye los puntos de habilidad disponibles para este nivel."
-      />
     </SelectionScreen>
   );
 }
