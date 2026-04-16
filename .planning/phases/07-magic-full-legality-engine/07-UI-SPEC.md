@@ -1,10 +1,11 @@
 ---
 phase: 07
 slug: magic-full-legality-engine
-status: draft
+status: approved
 shadcn_initialized: false
 preset: none
 created: 2026-04-16
+reviewed_at: 2026-04-16
 ---
 
 # Phase 07 — UI Design Contract
