@@ -166,9 +166,9 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 07-01: Compile and expose domain and spell selection workflows
-- [ ] 07-02: Complete full-build recomputation across all decision types
-- [ ] 07-03: Finalize legality messaging and Spanish rule explanations
+- [ ] 07-01-PLAN.md — Rules engine magic module + extractor catalog remediation + BuildStateAtLevel migration + Wave 0 test scaffolding
+- [ ] 07-02-PLAN.md — Magic zustand store + multi-store selectors + MagicBoard/MagicSheet/MagicDetailPanel/SpellLevelTabs/DomainTileGrid/SpellRow/SwapSpellDialog
+- [ ] 07-03-PLAN.md — Magic-legality aggregator + shell severity projection + shellCopyEs.magic namespace + MagicSheetTab + shell wiring + jsdom smoke tests
 **UI hint**: yes
 
 ### Phase 8: Summary, Persistence & Shared Builds

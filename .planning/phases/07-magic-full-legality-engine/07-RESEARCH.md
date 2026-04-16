@@ -662,37 +662,43 @@ function projectSeverity(s: AllStores): PlannerValidationStatus {
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **OQ-1 — Spell descriptions empty: TLK resolver bug or 2DA source data gap?**
    - What we know: 376/376 empty. Extractor warns on empty *names* (line 109-116 of extraction-report) but never on empty *descriptions* (asymmetric warning logic in `spell-assembler.ts:181-183`).
    - What's unclear: Is `descStrref` itself null/zero in `spells.2da` (no description offset), or does the strref point somewhere the TLK resolver fails to resolve?
    - Recommendation: Plan 07-01 task: log `descStrref` and `tlkResolver.resolve(descStrref)` for the first 10 spells to diagnose. Likely a TLK index issue (Puerta uses a custom TLK; description strrefs may exceed base TLK range and require a custom-TLK lookup chain).
+   - RESOLVED: 07-01 Task 1 emits symmetric warning (Option A); residual empties fail-closed via Task 3.
 
 2. **OQ-2 — Wizard initial spellbook formula: "3 + INT mod cantrips" or "all cantrips"?**
    - What we know: CONTEXT specifies "3 + INT mod cantrips known + (3 + INT mod) 1st-level spells". WebSearch (nwn.wiki) says "all cantrips + 3 + INT mod 1st level".
    - What's unclear: Which is correct for NWN1 EE? Puerta may have customized.
    - Recommendation: Plan 07-01 task: read the wizard CLS_SPKN table from compiled catalog to see the level-1 known counts. Or, since wizards in NWN are prepared casters with no separate "known" cap on cantrips, consider: do they have a known-cap at all, or does the spellbook just pool? Defer to user clarification if unresolvable. Conservative fallback: assume "all cantrips + 3 + INT mod 1st level" (matches both NWN1 wiki and the standard 3.5 SRD).
+   - RESOLVED: out of scope; wizard L1 known-cap not enforced this phase.
 
 3. **OQ-3 — Sorcerer/bard swap cadence in NWN1 EE / Puerta**
    - What we know: D-15 picks the D&D 3.5 cadence. WebSearch indicates original NWN allowed free swap.
    - What's unclear: NWN1 EE behavior; Puerta server policy.
    - Recommendation: Implement D-15 conservatively (matches CONTEXT decision). Add a TODO comment in `magic-rules.ts` referencing the override-registry path so a server-rule override can switch the cadence later. Defer to user before plan execution.
+   - RESOLVED: D-15 sets sorc 4/8/12/16, bard 5/8/11/14.
 
 4. **OQ-4 — How should `repair_needed` differ visibly from `blocked`?**
    - What we know: D-08 + D-09 introduce a soft-block tier. UI-SPEC line 110 says `is-repair-needed` uses amber border + selection fill (different from `is-illegal` red). Planner-shell currently has only `'blocked' | 'illegal' | 'legal' | 'pending'`.
    - What's unclear: Does the `PlannerValidationStatus` enum need a new `'repair_needed'` member, or does the magic selector just translate its "blocked" output to existing `'blocked'` and let the visual layer disambiguate?
    - Recommendation: Add `'repair_needed'` to the enum (no risk; is additive). Selectors set this status when `magic.aggregator.issues` are all `blockKind: 'missing-source'` or runtime-capacity violations.
+   - RESOLVED: 07-03 Task 1 adds repair_needed additively.
 
 5. **OQ-5 — Domain-allowed list per cleric subclass / deity**
    - What we know: 27 domains exist; CONTEXT says "Selecciona 2 dominios" (D-11). Standard cleric picks any 2.
    - What's unclear: Does Puerta restrict domains by deity? We have no deity data (`compiled-deities.ts` is null per Phase 05.1 decision: server uses scripts not 2DA).
    - Recommendation: For v1, allow any cleric to pick any 2 domains (no deity-gated restriction). Document as Phase 8 deferred (deity overrides). This matches CONTEXT's deferred-ideas list.
+   - RESOLVED: any cleric picks any 2 domains v1; deity gating deferred.
 
 6. **OQ-6 — Specialist wizards (school specialization) and prohibited schools**
    - What we know: NWN1 EE supports specialist wizards (Abjurer, Conjurer, etc.) via `class:wizard` variants. Phase 7 description doesn't mention specialists.
    - What's unclear: Is school specialization in scope for v1? Phase 6 (feats) didn't include school-of-magic feats either.
    - Recommendation: Out of scope for Phase 7. Document as Phase 8+ deferred or v2 enhancement.
+   - RESOLVED: school specialization out of scope.
 
 ---
 
