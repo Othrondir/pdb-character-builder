@@ -18,6 +18,7 @@ A player can build a Puerta de Baldur character from level 1 to 16 with strict s
 - [x] Users can navigate a static Spanish-first planner shell across the main builder areas with an NWN1-inspired presentation baseline — Phase 2
 - [x] Users can define a legal character foundation with origin restrictions, deity requirements, and budget-led starting attributes before later planning phases — Phase 3
 - [x] Users can build and repair a stable level 1-16 class path with prerequisite feedback, multiclass legality, and per-level gains — Phase 4
+- [x] Users can navigate a guided wizard flow with compact information display and clear visual hierarchy instead of an endless vertical scroll — Phase 05.2
 
 ### Active
 
@@ -99,4 +100,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-03-30 after Phase 4*
+*Last updated: 2026-04-16 after Phase 05.2*
