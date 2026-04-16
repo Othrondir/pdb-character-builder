@@ -23,7 +23,8 @@ A player can build a Puerta de Baldur character from level 1 to 16 with strict s
 ### Active
 
 - [ ] User can plan a character from level 1 to level 16 using Puerta de Baldur rules.
-- [ ] User can choose race, subrace, alignment, deity, classes, prestige classes, feats, skills, domains, spells, and level progression.
+- [x] User can choose feats and proficiencies with exact prerequisite feedback per level — Phase 6
+- [ ] User can choose race, subrace, alignment, deity, classes, prestige classes, domains, spells, and level progression.
 - [ ] User can use a UI flow equivalent to the NWN2DB builder's main planner screens.
 - [ ] User can only create legal builds according to the server's enforced rules and exceptions.
 - [ ] User can save, load, import, export, and share builds through both files and URLs.
@@ -100,4 +101,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-16 after Phase 05.2*
+*Last updated: 2026-04-16 after Phase 6*
