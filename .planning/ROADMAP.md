@@ -166,7 +166,7 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 07-01-PLAN.md — Rules engine magic module + extractor catalog remediation + BuildStateAtLevel migration + Wave 0 test scaffolding
+- [x] 07-01-PLAN.md — Rules engine magic module + extractor catalog remediation + BuildStateAtLevel migration + Wave 0 test scaffolding
 - [ ] 07-02-PLAN.md — Magic zustand store + multi-store selectors + MagicBoard/MagicSheet/MagicDetailPanel/SpellLevelTabs/DomainTileGrid/SpellRow/SwapSpellDialog
 - [ ] 07-03-PLAN.md — Magic-legality aggregator + shell severity projection + shellCopyEs.magic namespace + MagicSheetTab + shell wiring + jsdom smoke tests
 **UI hint**: yes
