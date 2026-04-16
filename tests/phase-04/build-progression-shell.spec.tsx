@@ -3,8 +3,7 @@
 import { createElement } from 'react';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { RouterProvider } from '@tanstack/react-router';
-import { createPlannerRouter } from '@planner/router';
+import { PlannerShellFrame } from '@planner/components/shell/planner-shell-frame';
 import { usePlannerShellStore } from '@planner/state/planner-shell';
 import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
 import { useLevelProgressionStore } from '@planner/features/level-progression/store';
@@ -14,7 +13,6 @@ function primeOrigin() {
 
   foundationStore.setRace('race:human');
   foundationStore.setAlignment('alignment:neutral-good');
-  foundationStore.setDeity('deity:none');
 }
 
 describe('phase 04 build progression shell', () => {
@@ -23,33 +21,24 @@ describe('phase 04 build progression shell', () => {
     useCharacterFoundationStore.getState().resetFoundation();
     useLevelProgressionStore.getState().resetProgression();
     usePlannerShellStore.setState({
-      activeSection: 'build',
-      datasetId: 'dataset:pendiente',
+      activeOriginStep: null,
+      activeLevelSubStep: 'class',
+      characterSheetTab: 'stats',
+      expandedLevel: 1,
       mobileNavOpen: false,
-      summaryPanelOpen: true,
-      validationStatus: 'pending',
     });
   });
 
-  it('renders the foundation strip, rail, and active level sheet together once the origin is ready', async () => {
+  it('renders the class selection screen and level rail once the origin is ready', () => {
     primeOrigin();
 
-    const router = createPlannerRouter(['/']);
-    await router.load();
-
-    render(createElement(RouterProvider, { router }));
+    render(createElement(PlannerShellFrame));
 
     expect(
-      screen.getByRole('heading', { name: 'Base del personaje' }),
+      screen.getByRole('heading', { name: /Selecciona la clase del nivel/ }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('heading', { name: 'Progresión 1-16' }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('heading', { name: 'Hoja del nivel' }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('button', { name: 'Editar origen' }),
+      screen.getByRole('radiogroup', { name: 'Nivel de progresion' }),
     ).toBeInTheDocument();
   });
 });

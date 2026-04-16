@@ -1,20 +1,22 @@
 // @vitest-environment jsdom
 
 import { createElement } from 'react';
-import { act, fireEvent, render, screen, within } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { RouterProvider } from '@tanstack/react-router';
-import { createPlannerRouter } from '@planner/router';
+import { PlannerShellFrame } from '@planner/components/shell/planner-shell-frame';
 import { usePlannerShellStore } from '@planner/state/planner-shell';
 import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
 import { useLevelProgressionStore } from '@planner/features/level-progression/store';
+import {
+  selectLevelRail,
+  selectProgressionSummary,
+} from '@planner/features/level-progression/selectors';
 
 function primeFoundation() {
   const foundationStore = useCharacterFoundationStore.getState();
 
   foundationStore.setRace('race:human');
   foundationStore.setAlignment('alignment:neutral-good');
-  foundationStore.setDeity('deity:none');
   foundationStore.setBaseAttribute('int', 12);
 }
 
@@ -24,15 +26,15 @@ describe('phase 04 progression revalidation', () => {
     useCharacterFoundationStore.getState().resetFoundation();
     useLevelProgressionStore.getState().resetProgression();
     usePlannerShellStore.setState({
-      activeSection: 'build',
-      datasetId: 'dataset:pendiente',
+      activeOriginStep: null,
+      activeLevelSubStep: 'class',
+      characterSheetTab: 'stats',
+      expandedLevel: 1,
       mobileNavOpen: false,
-      summaryPanelOpen: true,
-      validationStatus: 'pending',
     });
   });
 
-  it('preserves later levels and marks downstream repair after an earlier class change', async () => {
+  it('preserves later levels and marks downstream repair after an earlier class change', () => {
     primeFoundation();
 
     act(() => {
@@ -42,29 +44,35 @@ describe('phase 04 progression revalidation', () => {
       progressionStore.setLevelClassId(2, 'class:rogue');
       progressionStore.setLevelClassId(3, 'class:fighter');
       progressionStore.setLevelClassId(4, 'class:fighter');
-      progressionStore.setActiveLevel(3);
     });
 
-    const router = createPlannerRouter(['/']);
-    await router.load();
+    render(createElement(PlannerShellFrame));
 
-    render(createElement(RouterProvider, { router }));
+    // Change level 2 from rogue to fighter via the rail and class selection
+    const level2Radio = screen.getByRole('radio', { name: /^2/ });
+    fireEvent.click(level2Radio);
+    fireEvent.click(screen.getByRole('option', { name: /Guerrero/ }));
 
-    fireEvent.click(screen.getByRole('button', { name: /Nivel 2 Legal/ }));
-    fireEvent.click(screen.getByRole('button', { name: /Guerrero/ }));
-    fireEvent.click(screen.getByRole('button', { name: /Nivel 3 Bloqueada/ }));
+    // Verify downstream levels are marked as blocked in the rail
+    const rail = selectLevelRail(
+      useLevelProgressionStore.getState(),
+      useCharacterFoundationStore.getState(),
+    );
+    const level3Entry = rail.find((entry) => entry.level === 3);
+    const level4Entry = rail.find((entry) => entry.level === 4);
+    expect(level3Entry?.status).not.toBe('legal');
+    expect(level4Entry?.status).not.toBe('legal');
 
-    expect(screen.getByRole('button', { name: /Nivel 3 Bloqueada/ })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Nivel 4 Bloqueada/ })).toBeInTheDocument();
-    expect(
-      screen.getByText(
-        'Este nivel se conserva, pero depende de corregir decisiones anteriores.',
-      ),
-    ).toBeInTheDocument();
+    // Verify levels 3 and 4 still have their class assignments preserved (not cleared)
+    const progressionLevels = useLevelProgressionStore.getState().levels;
+    expect(progressionLevels.find((l) => l.level === 3)?.classId).toBe('class:fighter');
+    expect(progressionLevels.find((l) => l.level === 4)?.classId).toBe('class:fighter');
 
-    const summaryPanel = screen.getByLabelText('Resumen del personaje');
-
-    expect(within(summaryPanel).getByText('Inválida')).toBeInTheDocument();
-    expect(within(summaryPanel).getByText('Ruta inválida')).toBeInTheDocument();
+    // Verify summary shows invalid/repair state
+    const progressionSummary = selectProgressionSummary(
+      useLevelProgressionStore.getState(),
+      useCharacterFoundationStore.getState(),
+    );
+    expect(progressionSummary.planState).toBe('Ruta inválida');
   });
 });

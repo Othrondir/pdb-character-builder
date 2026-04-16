@@ -3,18 +3,17 @@
 import { createElement } from 'react';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { RouterProvider } from '@tanstack/react-router';
-import { createPlannerRouter } from '@planner/router';
+import { PlannerShellFrame } from '@planner/components/shell/planner-shell-frame';
 import { usePlannerShellStore } from '@planner/state/planner-shell';
 import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
 import { useLevelProgressionStore } from '@planner/features/level-progression/store';
+import { selectActiveLevelSheet } from '@planner/features/level-progression/selectors';
 
 function primeFoundation() {
   const foundationStore = useCharacterFoundationStore.getState();
 
   foundationStore.setRace('race:human');
   foundationStore.setAlignment('alignment:neutral-good');
-  foundationStore.setDeity('deity:none');
   foundationStore.setBaseAttribute('int', 12);
 }
 
@@ -24,15 +23,15 @@ describe('phase 04 level sheet gains', () => {
     useCharacterFoundationStore.getState().resetFoundation();
     useLevelProgressionStore.getState().resetProgression();
     usePlannerShellStore.setState({
-      activeSection: 'build',
-      datasetId: 'dataset:pendiente',
+      activeOriginStep: null,
+      activeLevelSubStep: 'class',
+      characterSheetTab: 'stats',
+      expandedLevel: 1,
       mobileNavOpen: false,
-      summaryPanelOpen: true,
-      validationStatus: 'pending',
     });
   });
 
-  it('renders gains for a selectable base class and shows the ability helper at level 4', async () => {
+  it('renders gains for a selectable base class and shows the ability increase at level 4', () => {
     primeFoundation();
 
     act(() => {
@@ -42,41 +41,40 @@ describe('phase 04 level sheet gains', () => {
       progressionStore.setLevelClassId(2, 'class:fighter');
       progressionStore.setLevelClassId(3, 'class:fighter');
       progressionStore.setActiveLevel(4);
+      usePlannerShellStore.setState({ expandedLevel: 4 });
     });
 
-    const router = createPlannerRouter(['/']);
-    await router.load();
+    render(createElement(PlannerShellFrame));
 
-    render(createElement(RouterProvider, { router }));
+    // Select fighter for level 4 using the option listbox
+    fireEvent.click(screen.getByRole('option', { name: /Guerrero/ }));
 
-    fireEvent.click(screen.getByRole('button', { name: /Guerrero/ }));
-
-    expect(
-      screen.getByRole('heading', { name: 'Ganancias del nivel' }),
-    ).toBeInTheDocument();
+    // Verify gains include hit die
     expect(screen.getByText('Dado de golpe d10')).toBeInTheDocument();
-    expect(
-      screen.getByText(
-        'Este nivel concede un aumento de característica que se reflejará en Atributos.',
-      ),
-    ).toBeInTheDocument();
+
+    // Verify the ability increase is available at level 4
+    const sheet = selectActiveLevelSheet(
+      useLevelProgressionStore.getState(),
+      useCharacterFoundationStore.getState(),
+    );
+    expect(sheet.abilityIncreaseAvailable).toBe(true);
   });
 
-  it('shows blocked prestige copy inline when shadowdancer is selected', async () => {
+  it('marks shadowdancer as blocked in the class options', () => {
     primeFoundation();
 
-    const router = createPlannerRouter(['/']);
-    await router.load();
+    render(createElement(PlannerShellFrame));
 
-    render(createElement(RouterProvider, { router }));
+    const shadowdancerOption = screen.getByRole('option', { name: /Sombra danzante/ });
+    expect(shadowdancerOption).toHaveClass('is-blocked');
 
-    fireEvent.click(screen.getByRole('button', { name: /Sombra danzante/ }));
-
-    expect(
-      screen.getByText('Pendiente de dotes o habilidades de fases posteriores.'),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('button', { name: /Sombra danzante Bloqueada/ }),
-    ).toBeInTheDocument();
+    // Verify the selector reports blocked status for the prestige class
+    const sheet = selectActiveLevelSheet(
+      useLevelProgressionStore.getState(),
+      useCharacterFoundationStore.getState(),
+    );
+    const shadowdancer = sheet.classOptions.find((c) => c.label === 'Sombra danzante');
+    expect(shadowdancer).toBeDefined();
+    expect(shadowdancer?.status).toBe('blocked');
   });
 });

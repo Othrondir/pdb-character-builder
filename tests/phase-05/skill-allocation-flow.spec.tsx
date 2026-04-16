@@ -3,8 +3,7 @@
 import { createElement } from 'react';
 import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { RouterProvider } from '@tanstack/react-router';
-import { createPlannerRouter } from '@planner/router';
+import { PlannerShellFrame } from '@planner/components/shell/planner-shell-frame';
 import { usePlannerShellStore } from '@planner/state/planner-shell';
 import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
 import { useLevelProgressionStore } from '@planner/features/level-progression/store';
@@ -15,7 +14,6 @@ function primeFoundation() {
 
   foundationStore.setRace('race:human');
   foundationStore.setAlignment('alignment:neutral-good');
-  foundationStore.setDeity('deity:none');
   foundationStore.setBaseAttribute('int', 12);
 }
 
@@ -26,15 +24,15 @@ describe('phase 05 skill allocation flow', () => {
     useLevelProgressionStore.getState().resetProgression();
     useSkillStore.getState().resetSkillAllocations();
     usePlannerShellStore.setState({
-      activeSection: 'skills',
-      datasetId: 'dataset:pendiente',
+      activeOriginStep: null,
+      activeLevelSubStep: 'skills',
+      characterSheetTab: 'stats',
+      expandedLevel: 1,
       mobileNavOpen: false,
-      summaryPanelOpen: true,
-      validationStatus: 'pending',
     });
   });
 
-  it('renders the level rail and active sheet for the routed habilidades editor', async () => {
+  it('renders the skill sheet for the stepper-based habilidades editor', () => {
     primeFoundation();
 
     act(() => {
@@ -44,19 +42,17 @@ describe('phase 05 skill allocation flow', () => {
       progressionStore.setLevelClassId(2, 'class:fighter');
     });
 
-    const router = createPlannerRouter(['/skills']);
-    await router.load();
+    render(createElement(PlannerShellFrame));
 
-    render(createElement(RouterProvider, { router }));
-
-    expect(screen.getAllByRole('heading', { name: 'Habilidades 1-16' })).toHaveLength(2);
+    expect(
+      screen.getByRole('heading', { name: /Distribuir puntos de habilidad/ }),
+    ).toBeInTheDocument();
     expect(
       screen.getByRole('heading', { name: 'Hoja de habilidades' }),
     ).toBeInTheDocument();
-    expect(screen.getAllByText('Puntos disponibles')).toHaveLength(2);
   });
 
-  it('switches the active level from the rail and reflects class versus transclase costs', async () => {
+  it('switches the active level from the rail and reflects class versus transclase costs', () => {
     primeFoundation();
 
     act(() => {
@@ -67,10 +63,7 @@ describe('phase 05 skill allocation flow', () => {
       useSkillStore.getState().setActiveLevel(1);
     });
 
-    const router = createPlannerRouter(['/skills']);
-    await router.load();
-
-    render(createElement(RouterProvider, { router }));
+    render(createElement(PlannerShellFrame));
 
     // After Phase 05.1 extraction, skill labels come from the Puerta 2DA:
     //   "Acrobacias" is now "Piruetas" (Tumble)
@@ -79,14 +72,18 @@ describe('phase 05 skill allocation flow', () => {
     expect(piruetasRow).not.toBeNull();
     expect(within(piruetasRow as HTMLElement).getByText('Clase')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('button', { name: /Nivel 2 Legal/ }));
+    // Switch to level 2 via the skill store and re-render
+    act(() => {
+      useSkillStore.getState().setActiveLevel(2);
+      usePlannerShellStore.setState({ expandedLevel: 2 });
+    });
 
     const diplomaciaRow = screen.getByRole('heading', { name: 'Diplomacia' }).closest('article');
     expect(diplomaciaRow).not.toBeNull();
     expect(within(diplomaciaRow as HTMLElement).getByText('Transclase')).toBeInTheDocument();
   });
 
-  it('preserves downstream allocations when an upstream class change breaks legality', async () => {
+  it('preserves downstream allocations when an upstream class change breaks legality', () => {
     primeFoundation();
 
     act(() => {
@@ -98,18 +95,14 @@ describe('phase 05 skill allocation flow', () => {
       skillStore.setSkillRank(1, 'skill:esconderse', 4);
       skillStore.setSkillRank(2, 'skill:escuchar', 1);
       skillStore.setActiveLevel(2);
+      usePlannerShellStore.setState({ expandedLevel: 2 });
     });
 
-    const router = createPlannerRouter(['/skills']);
-    await router.load();
-
-    render(createElement(RouterProvider, { router }));
+    render(createElement(PlannerShellFrame));
 
     act(() => {
       useLevelProgressionStore.getState().setLevelClassId(1, 'class:fighter');
     });
-
-    fireEvent.click(screen.getByRole('button', { name: /Nivel 2 Bloqueada/ }));
 
     expect(
       screen.getByText(
@@ -117,8 +110,5 @@ describe('phase 05 skill allocation flow', () => {
       ),
     ).toBeInTheDocument();
     expect(screen.getByDisplayValue('1')).toBeInTheDocument();
-
-    const summaryPanel = screen.getByLabelText('Resumen del personaje');
-    expect(within(summaryPanel).getByText('Habilidades en reparacion')).toBeInTheDocument();
   });
 });

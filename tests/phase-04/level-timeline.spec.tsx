@@ -3,8 +3,7 @@
 import { createElement } from 'react';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { RouterProvider } from '@tanstack/react-router';
-import { createPlannerRouter } from '@planner/router';
+import { PlannerShellFrame } from '@planner/components/shell/planner-shell-frame';
 import { usePlannerShellStore } from '@planner/state/planner-shell';
 import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
 import { useLevelProgressionStore } from '@planner/features/level-progression/store';
@@ -14,7 +13,6 @@ function primeOrigin() {
 
   foundationStore.setRace('race:human');
   foundationStore.setAlignment('alignment:neutral-good');
-  foundationStore.setDeity('deity:none');
 }
 
 describe('phase 04 level timeline', () => {
@@ -23,35 +21,29 @@ describe('phase 04 level timeline', () => {
     useCharacterFoundationStore.getState().resetFoundation();
     useLevelProgressionStore.getState().resetProgression();
     usePlannerShellStore.setState({
-      activeSection: 'build',
-      datasetId: 'dataset:pendiente',
+      activeOriginStep: null,
+      activeLevelSubStep: 'class',
+      characterSheetTab: 'stats',
+      expandedLevel: 1,
       mobileNavOpen: false,
-      summaryPanelOpen: true,
-      validationStatus: 'pending',
     });
   });
 
-  it('shows the full 1-16 rail and switches the active level when another entry is selected', async () => {
+  it('shows the full 1-16 rail and switches the expanded level when another entry is selected', () => {
     primeOrigin();
 
-    const router = createPlannerRouter(['/']);
-    await router.load();
+    render(createElement(PlannerShellFrame));
 
-    render(createElement(RouterProvider, { router }));
+    const radioGroup = screen.getByRole('radiogroup', { name: 'Nivel de progresion' });
+    const radios = radioGroup.querySelectorAll('[role="radio"]');
+    expect(radios).toHaveLength(16);
 
-    expect(
-      screen.getByRole('button', { name: /^Nivel 1\b/i }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('button', { name: /^Nivel 16\b/i }),
-    ).toBeInTheDocument();
-    expect(screen.getAllByText('Nivel 1').length).toBeGreaterThan(0);
+    const level1Radio = screen.getByRole('radio', { name: /^1$/ });
+    expect(level1Radio).toHaveAttribute('aria-checked', 'true');
 
-    fireEvent.click(screen.getByRole('button', { name: /^Nivel 6\b/i }));
+    const level6Radio = screen.getByRole('radio', { name: /^6$/ });
+    fireEvent.click(level6Radio);
 
-    expect(screen.getAllByText('Nivel 6').length).toBeGreaterThan(0);
-    expect(
-      screen.getByRole('button', { name: /^Nivel 6\b/i }),
-    ).toHaveAttribute('aria-pressed', 'true');
+    expect(usePlannerShellStore.getState().expandedLevel).toBe(6);
   });
 });
