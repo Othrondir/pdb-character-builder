@@ -103,7 +103,7 @@ Plans:
 - [x] 05-01-PLAN.md — Define the compiled skill catalog, rules helpers, and raw skill store
 - [x] 05-02-PLAN.md — Build the routed `Habilidades` editor over the shared skill selectors
 - [x] 05-03-PLAN.md — Synchronize `Estadísticas` and the shell summary with skill evaluation
-- [ ] 05-04-PLAN.md — Gap closure: unified scrollable skill board with compact NWN1-style rows
+- [x] 05-04-PLAN.md — Gap closure: unified scrollable skill board with compact NWN1-style rows
 **UI hint**: yes
 
 ### Phase 05.1: Data Extractor Pipeline (INSERTED)
@@ -111,7 +111,7 @@ Plans:
 **Goal:** Build the nwsync-to-compiled-JSON extraction pipeline that reads Puerta de Baldur server data directly from the local nwsync SQLite databases and produces typed, static TypeScript catalogs for all character-building data.
 **Requirements**: LANG-02, FEAT-01, MAGI-01, MAGI-04
 **Depends on:** Phase 5
-**Plans:** 5/5 plans executed
+**Plans:** 4/4 plans complete
 
 Plans:
 - [x] 05.1-01-PLAN.md — Bootstrap data-extractor package and implement core parsers (NSYC, TLK, 2DA)

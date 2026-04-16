@@ -4,14 +4,14 @@ milestone: v1.0
 milestone_name: milestone
 status: executing
 stopped_at: Phase 6 UI-SPEC approved
-last_updated: "2026-04-16T14:48:02.060Z"
-last_activity: 2026-04-16
+last_updated: "2026-04-16T15:03:55.192Z"
+last_activity: 2026-04-16 -- Phase 05 execution started
 progress:
   total_phases: 10
-  completed_phases: 8
-  total_plans: 29
+  completed_phases: 7
+  total_plans: 30
   completed_plans: 29
-  percent: 100
+  percent: 97
 ---
 
 # Project State
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-30)
 
 **Core value:** A player can build a Puerta de Baldur character from level 1 to 16 with strict server-valid validation and share that exact build reliably.
-**Current focus:** Phase 06 — feats-proficiencies
+**Current focus:** Phase 05 — skills-derived-statistics
 
 ## Current Position
 
-Phase: 7
-Plan: Not started
-Status: Executing Phase 06
-Last activity: 2026-04-16
+Phase: 05 (skills-derived-statistics) — EXECUTING
+Plan: 1 of 4
+Status: Executing Phase 05
+Last activity: 2026-04-16 -- Phase 05 execution started
 
 Progress: [██████░░░░] 60%
 
