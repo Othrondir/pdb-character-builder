@@ -403,12 +403,19 @@ a {
 
 /* ── Skill Board ──────────────────────────────────────────── */
 
+.skill-board.selection-screen {
+  padding-bottom: var(--space-md);
+}
+
 .skill-board .selection-screen__content {
   grid-template-columns: 1fr;
   overflow-y: auto;
-  padding-bottom: var(--space-lg);
-  -webkit-mask-image: linear-gradient(to bottom, black calc(100% - 24px), transparent);
-  mask-image: linear-gradient(to bottom, black calc(100% - 24px), transparent);
+  padding-bottom: var(--space-sm);
+  scroll-snap-type: y proximity;
+}
+
+.skill-board .skill-sheet__row {
+  scroll-snap-align: start;
 }
 
 .skill-board .skill-sheet {
