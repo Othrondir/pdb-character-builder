@@ -13,6 +13,7 @@ import {
   ATTRIBUTE_KEYS,
   type AttributeKey,
 } from '@planner/features/character-foundation/foundation-fixture';
+import { FeatSheetTab } from '@planner/features/feats/feat-sheet-tab';
 
 const ATTRIBUTE_LABELS: Record<AttributeKey, string> = {
   str: 'Fuerza',
@@ -102,14 +103,6 @@ function SkillsPanel() {
   );
 }
 
-function FeatsPanel() {
-  return (
-    <div role="tabpanel" id="sheet-panel-feats" aria-labelledby="sheet-tab-feats">
-      <p>Dotes del personaje</p>
-    </div>
-  );
-}
-
 function SpellsPanel() {
   return (
     <div role="tabpanel" id="sheet-panel-spells" aria-labelledby="sheet-tab-spells">
@@ -143,7 +136,7 @@ export function CharacterSheet() {
           <>
             {activeTab === 'stats' && <StatsPanel />}
             {activeTab === 'skills' && <SkillsPanel />}
-            {activeTab === 'feats' && <FeatsPanel />}
+            {activeTab === 'feats' && <FeatSheetTab />}
             {activeTab === 'spells' && <SpellsPanel />}
           </>
         ) : (

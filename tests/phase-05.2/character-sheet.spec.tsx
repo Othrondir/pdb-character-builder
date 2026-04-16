@@ -106,7 +106,7 @@ describe('phase 05.2 character sheet', () => {
 
     // Click feats tab
     fireEvent.click(screen.getByRole('tab', { name: 'Dotes' }));
-    expect(screen.getByText('Dotes del personaje')).toBeInTheDocument();
+    expect(screen.getByText('0 dotes')).toBeInTheDocument();
 
     // Click spells tab
     fireEvent.click(screen.getByRole('tab', { name: 'Conjuros' }));

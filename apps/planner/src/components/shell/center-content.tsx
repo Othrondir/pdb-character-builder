@@ -3,6 +3,7 @@ import { OriginBoard } from '@planner/features/character-foundation/origin-board
 import { AttributesBoard } from '@planner/features/character-foundation/attributes-board';
 import { BuildProgressionBoard } from '@planner/features/level-progression/build-progression-board';
 import { SkillBoard } from '@planner/features/skills/skill-board';
+import { FeatBoard } from '@planner/features/feats/feat-board';
 import { shellCopyEs } from '@planner/lib/copy/es';
 
 export function CenterContent() {
@@ -26,7 +27,7 @@ export function CenterContent() {
       case 'skills':
         return <SkillBoard />;
       case 'feats':
-        return <PlaceholderScreen title="Dotes" body="Las dotes se habilitaran en la siguiente fase." />;
+        return <FeatBoard />;
       case 'spells':
         return <PlaceholderScreen title="Conjuros" body="Los conjuros se habilitaran en una fase posterior." />;
     }
