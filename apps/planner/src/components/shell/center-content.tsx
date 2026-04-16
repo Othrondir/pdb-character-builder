@@ -12,7 +12,7 @@ export function CenterContent() {
 
   // Origin steps
   if (activeOriginStep === 'race' || activeOriginStep === 'alignment' || activeOriginStep === 'deity') {
-    return <OriginBoard />;
+    return <OriginBoard activeStep={activeOriginStep} />;
   }
   if (activeOriginStep === 'attributes') {
     return <AttributesBoard />;
