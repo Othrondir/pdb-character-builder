@@ -32,9 +32,8 @@ export const shellCopyEs = {
       'Define el origen para desbloquear la base del personaje.',
     currentStateHeading: 'Estado actual',
     lockedAbilitiesBody:
-      'Selecciona raza, subraza, alineamiento y deidad en Construcción para desbloquear Atributos.',
+      'Selecciona raza, subraza y alineamiento en Construcción para desbloquear Atributos.',
     lockedAbilitiesHeading: 'El origen del personaje sigue incompleto',
-    noDeity: 'Sin deidad',
     planStates: {
       blocked: 'Origen incompleto',
       invalid: 'Base en conflicto',
@@ -46,12 +45,10 @@ export const shellCopyEs = {
     spentPoints: 'Puntos gastados',
     stepHints: {
       alignmentLocked: 'La alineación se activa después de elegir la raza.',
-      deityLocked: 'La deidad se activa después del alineamiento.',
       subraceLocked: 'La subraza se activa después de elegir la raza.',
     },
     steps: {
       alignment: 'Alineamiento',
-      deity: 'Deidad',
       race: 'Raza',
       subrace: 'Subraza',
     },
@@ -132,7 +129,6 @@ export const shellCopyEs = {
     originSteps: {
       race: 'Raza',
       alignment: 'Alineamiento',
-      deity: 'Deidad',
       attributes: 'Atributos',
     },
     levelSubSteps: {
@@ -167,7 +163,6 @@ export const shellCopyEs = {
     stepTitles: {
       race: 'Selecciona la raza de tu personaje',
       alignment: 'Selecciona el alineamiento del personaje',
-      deity: 'Selecciona la deidad del personaje',
       attributes: 'Ajusta las caracteristicas iniciales',
       class: 'Selecciona la clase del nivel',
       skills: 'Distribuir puntos de habilidad',

@@ -42,17 +42,8 @@ function useOriginStepStatus(
       }
       return { status: 'pending', summary: undefined };
     }
-    case 'deity': {
-      if (foundationState.alignmentId === null) {
-        return { status: 'pending', summary: undefined };
-      }
-      if (foundationState.deityId !== null) {
-        return { status: 'complete', summary: foundationSummary.selectedDeityLabel ?? undefined };
-      }
-      return { status: 'pending', summary: undefined };
-    }
     case 'attributes': {
-      if (foundationState.deityId === null) {
+      if (foundationState.alignmentId === null) {
         return { status: 'pending', summary: undefined };
       }
       const originReady = selectOriginReadyForAbilities(foundationState);

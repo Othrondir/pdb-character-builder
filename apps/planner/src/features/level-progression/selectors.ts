@@ -46,7 +46,6 @@ export interface FoundationSummaryStripView {
   characterLabel: string;
   datasetId: string;
   selectedAlignmentLabel: string | null;
-  selectedDeityLabel: string | null;
   selectedRaceLabel: string | null;
   selectedSubraceLabel: string | null;
 }
@@ -112,7 +111,7 @@ function createFoundationSnapshot(foundationState: CharacterFoundationStoreState
   return {
     alignmentId: foundationState.alignmentId,
     baseAttributes: foundationState.baseAttributes,
-    deityId: foundationState.deityId,
+    deityId: null,
   };
 }
 
@@ -141,7 +140,6 @@ export function selectFoundationSummaryStrip(
     characterLabel: summary.characterLabel,
     datasetId: summary.datasetId,
     selectedAlignmentLabel: summary.selectedAlignmentLabel,
-    selectedDeityLabel: summary.selectedDeityLabel,
     selectedRaceLabel: summary.selectedRaceLabel,
     selectedSubraceLabel: summary.selectedSubraceLabel,
   };

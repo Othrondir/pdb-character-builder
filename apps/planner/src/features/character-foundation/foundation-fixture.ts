@@ -13,11 +13,10 @@ export const ATTRIBUTE_KEYS = [
 
 export type AttributeKey = (typeof ATTRIBUTE_KEYS)[number];
 export type FoundationStatus = 'blocked' | 'illegal' | 'legal';
-export type DeityPolicy = 'optional' | 'required';
 
 export interface FoundationRaceOption {
   allowedAlignmentIds: CanonicalId[];
-  deityPolicy: DeityPolicy;
+  deityPolicy: 'optional' | 'required';
   id: CanonicalId;
   label: string;
 }
@@ -36,12 +35,6 @@ export interface FoundationAlignmentOption {
   lawChaos: 'chaotic' | 'lawful' | 'neutral';
 }
 
-export interface FoundationDeityOption {
-  allowedAlignmentIds: CanonicalId[];
-  id: CanonicalId;
-  label: string;
-}
-
 export interface AttributeRules {
   baseScore: number;
   budget: number;
@@ -54,7 +47,6 @@ export interface Phase03FoundationFixture {
   alignments: FoundationAlignmentOption[];
   attributeRules: AttributeRules;
   datasetId: string;
-  deities: FoundationDeityOption[];
   races: FoundationRaceOption[];
   subraces: FoundationSubraceOption[];
 }
@@ -148,41 +140,6 @@ export const phase03FoundationFixture: Phase03FoundationFixture = {
     minimum: 8,
   },
   datasetId: FOUNDATION_DATASET_ID,
-  deities: [
-    {
-      allowedAlignmentIds: ALL_ALIGNMENT_IDS,
-      id: 'deity:none',
-      label: 'Sin deidad',
-    },
-    {
-      allowedAlignmentIds: [
-        'alignment:lawful-good',
-        'alignment:lawful-neutral',
-        'alignment:neutral-good',
-      ],
-      id: 'deity:tyr',
-      label: 'Tyr',
-    },
-    {
-      allowedAlignmentIds: [
-        'alignment:neutral-good',
-        'alignment:chaotic-good',
-        'alignment:true-neutral',
-      ],
-      id: 'deity:mielikki',
-      label: 'Mielikki',
-    },
-    {
-      allowedAlignmentIds: [
-        'alignment:true-neutral',
-        'alignment:chaotic-neutral',
-        'alignment:neutral-evil',
-        'alignment:chaotic-evil',
-      ],
-      id: 'deity:mask',
-      label: 'Mask',
-    },
-  ],
   races: [
     {
       allowedAlignmentIds: ALL_ALIGNMENT_IDS,
@@ -208,7 +165,7 @@ export const phase03FoundationFixture: Phase03FoundationFixture = {
         'alignment:lawful-neutral',
         'alignment:true-neutral',
       ],
-      deityPolicy: 'required',
+      deityPolicy: 'optional',
       id: 'race:dwarf',
       label: 'Enano',
     },

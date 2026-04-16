@@ -11,7 +11,7 @@ export function CenterContent() {
   const activeLevelSubStep = usePlannerShellStore((state) => state.activeLevelSubStep);
 
   // Origin steps
-  if (activeOriginStep === 'race' || activeOriginStep === 'alignment' || activeOriginStep === 'deity') {
+  if (activeOriginStep === 'race' || activeOriginStep === 'alignment') {
     return <OriginBoard activeStep={activeOriginStep} />;
   }
   if (activeOriginStep === 'attributes') {

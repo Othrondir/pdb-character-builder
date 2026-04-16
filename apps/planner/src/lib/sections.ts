@@ -1,6 +1,6 @@
 import { shellCopyEs } from '@planner/lib/copy/es';
 
-export type OriginStep = 'race' | 'alignment' | 'deity' | 'attributes';
+export type OriginStep = 'race' | 'alignment' | 'attributes';
 export type LevelSubStep = 'class' | 'skills' | 'feats' | 'spells';
 export type SheetTab = 'stats' | 'skills' | 'feats' | 'spells';
 
@@ -22,7 +22,6 @@ export interface SheetTabDefinition {
 export const originSteps: readonly OriginStepDefinition[] = [
   { id: 'race', label: shellCopyEs.stepper.originSteps.race },
   { id: 'alignment', label: shellCopyEs.stepper.originSteps.alignment },
-  { id: 'deity', label: shellCopyEs.stepper.originSteps.deity },
   { id: 'attributes', label: shellCopyEs.stepper.originSteps.attributes },
 ] as const;
 

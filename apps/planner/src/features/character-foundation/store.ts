@@ -14,12 +14,10 @@ export interface CharacterFoundationStoreState {
   alignmentId: CanonicalId | null;
   baseAttributes: BaseAttributes;
   datasetId: string;
-  deityId: CanonicalId | null;
   raceId: CanonicalId | null;
   resetFoundation: () => void;
   setAlignment: (alignmentId: CanonicalId | null) => void;
   setBaseAttribute: (key: AttributeKey, value: number) => void;
-  setDeity: (deityId: CanonicalId | null) => void;
   setRace: (raceId: CanonicalId | null) => void;
   setSubrace: (subraceId: CanonicalId | null) => void;
   subraceId: CanonicalId | null;
@@ -39,7 +37,6 @@ function createInitialFoundationState() {
     alignmentId: null,
     baseAttributes: createBaseAttributes(),
     datasetId: FOUNDATION_DATASET_ID,
-    deityId: null,
     raceId: null,
     subraceId: null,
   };
@@ -70,7 +67,6 @@ export const useCharacterFoundationStore = create<CharacterFoundationStoreState>
           [key]: value,
         },
       })),
-    setDeity: (deityId) => set({ deityId }),
     setRace: (raceId) =>
       set((state) => ({
         raceId,

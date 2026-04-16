@@ -16,7 +16,6 @@ import type { CharacterFoundationStoreState } from './store';
 type FoundationControlKey =
   | 'alignment'
   | 'attributes'
-  | 'deity'
   | 'race'
   | 'subrace';
 
@@ -39,7 +38,6 @@ export interface FoundationSummaryView {
   datasetId: string;
   planState: string;
   selectedAlignmentLabel: string | null;
-  selectedDeityLabel: string | null;
   selectedRaceLabel: string | null;
   selectedSubraceLabel: string | null;
   summaryStatus: FoundationStatus;
@@ -54,16 +52,6 @@ function findAlignment(alignmentId: CanonicalId | null) {
     phase03FoundationFixture.alignments.find(
       (alignment) => alignment.id === alignmentId,
     ) ?? null
-  );
-}
-
-function findDeity(deityId: CanonicalId | null) {
-  if (!deityId) {
-    return null;
-  }
-
-  return (
-    phase03FoundationFixture.deities.find((deity) => deity.id === deityId) ?? null
   );
 }
 
@@ -128,18 +116,19 @@ function getLabelById(id: string | null): string | null {
   const option =
     phase03FoundationFixture.races.find((race) => race.id === id) ??
     phase03FoundationFixture.subraces.find((subrace) => subrace.id === id) ??
-    phase03FoundationFixture.alignments.find((alignment) => alignment.id === id) ??
-    phase03FoundationFixture.deities.find((deity) => deity.id === id);
+    phase03FoundationFixture.alignments.find((alignment) => alignment.id === id);
 
   return option?.label ?? null;
 }
+
+const NO_DEITY = { allowedAlignmentIds: [] as CanonicalId[], id: 'deity:none' as CanonicalId };
 
 function createOriginEvaluation(state: CharacterFoundationStoreState) {
   return evaluateOriginSelection({
     alignmentId: state.alignmentId,
     alignments: phase03FoundationFixture.alignments,
-    deityId: state.deityId,
-    deities: phase03FoundationFixture.deities,
+    deityId: NO_DEITY.id,
+    deities: [NO_DEITY],
     raceId: state.raceId,
     races: phase03FoundationFixture.races,
     subraceId: state.subraceId,
@@ -149,18 +138,16 @@ function createOriginEvaluation(state: CharacterFoundationStoreState) {
 
 export function selectOriginOptions(state: CharacterFoundationStoreState) {
   const selectedAlignment = findAlignment(state.alignmentId);
-  const selectedDeity = findDeity(state.deityId);
   const selectedRace = findRace(state.raceId);
   const selectedSubrace = findSubrace(state.subraceId);
   const subraceLocked = state.raceId === null;
   const alignmentLocked = state.raceId === null;
-  const deityLocked = state.alignmentId === null;
   const visibleSubraceIds = new Set(
     getAllowedSubraces({
       alignmentId: state.alignmentId,
       alignments: phase03FoundationFixture.alignments,
-      deityId: state.deityId,
-      deities: phase03FoundationFixture.deities,
+      deityId: NO_DEITY.id,
+      deities: [NO_DEITY],
       raceId: state.raceId,
       races: phase03FoundationFixture.races,
       subraceId: state.subraceId,
@@ -178,39 +165,21 @@ export function selectOriginOptions(state: CharacterFoundationStoreState) {
         ((selectedRace !== null &&
           !selectedRace.allowedAlignmentIds.includes(alignment.id)) ||
           (selectedSubrace !== null &&
-            !selectedSubrace.allowedAlignmentIds.includes(alignment.id)) ||
-          (selectedDeity !== null &&
-            selectedDeity.id !== 'deity:none' &&
-            !selectedDeity.allowedAlignmentIds.includes(alignment.id))),
+            !selectedSubrace.allowedAlignmentIds.includes(alignment.id))),
       disabled: alignmentLocked,
       id: alignment.id,
       label: alignment.label,
       selected: alignment.id === state.alignmentId,
     })),
-    deities: phase03FoundationFixture.deities.map((deity) => ({
-      blocked:
-        !deityLocked &&
-        ((deity.id === 'deity:none' &&
-          selectedRace?.deityPolicy === 'required') ||
-          (selectedAlignment !== null &&
-            deity.id !== 'deity:none' &&
-            !deity.allowedAlignmentIds.includes(selectedAlignment.id))),
-      disabled: deityLocked,
-      id: deity.id,
-      label: deity.label,
-      selected: deity.id === state.deityId,
-    })),
     locks: {
       alignment: alignmentLocked,
-      deity: deityLocked,
       subrace: subraceLocked,
     },
     races: phase03FoundationFixture.races.map((race) => ({
       blocked:
         (selectedSubrace !== null && selectedSubrace.parentRaceId !== race.id) ||
         (selectedAlignment !== null &&
-          !race.allowedAlignmentIds.includes(selectedAlignment.id)) ||
-        (selectedDeity?.id === 'deity:none' && race.deityPolicy === 'required'),
+          !race.allowedAlignmentIds.includes(selectedAlignment.id)),
       disabled: false,
       id: race.id,
       label: race.label,
@@ -228,8 +197,7 @@ export function selectOriginOptions(state: CharacterFoundationStoreState) {
     })),
   } satisfies {
     alignments: FoundationOptionView[];
-    deities: FoundationOptionView[];
-    locks: Record<'alignment' | 'deity' | 'subrace', boolean>;
+    locks: Record<'alignment' | 'subrace', boolean>;
     races: FoundationOptionView[];
     subraces: FoundationOptionView[];
   };
@@ -262,7 +230,6 @@ export function selectFoundationValidation(
     state.alignmentId,
     originEvaluation.issues,
   );
-  const deityStatus = getControlStatus(state.deityId, originEvaluation.issues);
   const attributesStatus =
     attributeSnapshot.status === 'legal'
       ? null
@@ -270,7 +237,6 @@ export function selectFoundationValidation(
   const controlStatuses = {
     alignment: alignmentStatus,
     attributes: attributesStatus,
-    deity: deityStatus,
     race: raceStatus,
     subrace: subraceStatus,
   } satisfies Record<FoundationControlKey, FoundationStatus | null>;
@@ -279,7 +245,6 @@ export function selectFoundationValidation(
     controlMessages: {
       alignment: alignmentStatus ? shellCopyEs.foundation.blockedChoice : null,
       attributes: attributesStatus ? shellCopyEs.foundation.blockedChoice : null,
-      deity: deityStatus ? shellCopyEs.foundation.blockedChoice : null,
       race: raceStatus ? shellCopyEs.foundation.blockedChoice : null,
       subrace: subraceStatus ? shellCopyEs.foundation.blockedChoice : null,
     },
@@ -297,13 +262,11 @@ export function selectFoundationSummary(
   const selectedRaceLabel = getLabelById(state.raceId);
   const selectedSubraceLabel = getLabelById(state.subraceId);
   const selectedAlignmentLabel = getLabelById(state.alignmentId);
-  const selectedDeityLabel = getLabelById(state.deityId);
   const validation = selectFoundationValidation(state);
   const characterParts = [
     selectedRaceLabel,
     selectedSubraceLabel,
     selectedAlignmentLabel,
-    selectedDeityLabel,
   ].filter((part): part is string => Boolean(part));
 
   return {
@@ -317,7 +280,6 @@ export function selectFoundationSummary(
           ? shellCopyEs.foundation.planStates.invalid
           : shellCopyEs.foundation.planStates.blocked,
     selectedAlignmentLabel,
-    selectedDeityLabel,
     selectedRaceLabel,
     selectedSubraceLabel,
     summaryStatus: validation.summaryStatus,

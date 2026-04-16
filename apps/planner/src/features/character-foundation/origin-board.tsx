@@ -13,7 +13,7 @@ import { useCharacterFoundationStore } from '@planner/features/character-foundat
 import { usePlannerShellStore } from '@planner/state/planner-shell';
 
 interface OriginBoardProps {
-  activeStep?: 'race' | 'alignment' | 'deity';
+  activeStep?: 'race' | 'alignment';
 }
 
 export function OriginBoard({ activeStep = 'race' }: OriginBoardProps) {
@@ -21,7 +21,6 @@ export function OriginBoard({ activeStep = 'race' }: OriginBoardProps) {
   const foundationValidation = selectFoundationValidation(foundationState);
   const originOptions = selectOriginOptions(foundationState);
   const setAlignment = useCharacterFoundationStore((state) => state.setAlignment);
-  const setDeity = useCharacterFoundationStore((state) => state.setDeity);
   const setRace = useCharacterFoundationStore((state) => state.setRace);
   const setSubrace = useCharacterFoundationStore((state) => state.setSubrace);
   const setActiveOriginStep = usePlannerShellStore((state) => state.setActiveOriginStep);
@@ -39,17 +38,9 @@ export function OriginBoard({ activeStep = 'race' }: OriginBoardProps) {
       title: shellCopyEs.stepper.stepTitles.alignment,
       options: originOptions.alignments,
       onSelect: (id: CanonicalId) => setAlignment(id),
-      nextStep: 'deity' as const,
+      nextStep: 'attributes' as const,
       issue: foundationValidation.controlMessages.alignment,
       issueStatus: foundationValidation.controlStatuses.alignment,
-    },
-    deity: {
-      title: shellCopyEs.stepper.stepTitles.deity,
-      options: originOptions.deities,
-      onSelect: (id: CanonicalId) => setDeity(id),
-      nextStep: 'attributes' as const,
-      issue: foundationValidation.controlMessages.deity,
-      issueStatus: foundationValidation.controlStatuses.deity,
     },
   };
 
