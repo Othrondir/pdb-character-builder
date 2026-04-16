@@ -1460,9 +1460,21 @@ a {
 .feat-sheet-tab__row {
   border-left: 2px solid transparent;
   color: var(--color-text);
+  display: flex;
   font-size: 14px;
+  gap: var(--space-sm);
   line-height: 1.5;
   padding: var(--space-xs) var(--space-sm);
+}
+
+.feat-sheet-tab__label {
+  flex: 1;
+}
+
+.feat-sheet-tab__slot {
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+  font-size: 12px;
 }
 
 .feat-sheet-tab__row.is-auto {

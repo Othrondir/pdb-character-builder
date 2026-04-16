@@ -57,7 +57,7 @@ export function FeatSheetTab() {
               key={feat.featId}
               className={`feat-sheet-tab__row is-${feat.status}${feat.auto ? ' is-auto' : ''}`}
             >
-              <span>{feat.label}</span>
+              <span className="feat-sheet-tab__label">{feat.label}</span>
               <span className="feat-sheet-tab__slot">
                 {SLOT_LABELS[feat.slot] ?? feat.slot}
               </span>

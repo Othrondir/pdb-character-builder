@@ -32,18 +32,27 @@ export interface EligibleFeatSet {
 const GENERAL_FEAT_LEVELS = [1, 3, 6, 9, 12, 15];
 
 /**
+ * Standard NWN1 EE bonus feat schedules — class levels at which a class
+ * grants a selectable bonus feat pick. Sourced from cls_feat_*.2da gain
+ * tables. Only classes whose classFeatLists entries use grantedOnLevel=null
+ * (pool-style) need an explicit schedule here; classes with per-level
+ * grantedOnLevel entries are handled by the normal loop below.
+ */
+const CLASS_BONUS_FEAT_SCHEDULES: Record<string, number[]> = {
+  'class:fighter': [1, 2, 4, 6, 8, 10, 12, 14, 16],
+  'class:swashbuckler': [1, 2, 5, 9, 13],
+  'class:caballero-arcano': [1, 3, 5, 7, 9, 11, 13, 15],
+};
+
+/**
  * Determine feat slots available at a given character level.
  *
  * Auto-granted feats (list=3 with grantedOnLevel) are collected.
  * General feat slot is available at character levels 1, 3, 6, 9, 12, 15.
  * Class bonus feat slot is detected from classFeatLists entries where
- * list=1/2 with grantedOnLevel matching classLevelInClass and onMenu=true.
- *
- * NOTE: Some classes (e.g., Fighter) encode their bonus feat pool with
- * grantedOnLevel=null, meaning the bonus feat schedule is not derivable
- * from classFeatLists alone. A class gain table or hardcoded schedule
- * would be needed for full coverage. TODO: Wire class gain tables for
- * bonus feat schedules in a future pass.
+ * list=1/2 with grantedOnLevel matching classLevelInClass and onMenu=true,
+ * OR from CLASS_BONUS_FEAT_SCHEDULES for classes that encode their bonus
+ * feat pool with grantedOnLevel=null (e.g., Fighter).
  *
  * NOTE: Human bonus feat at level 1 is not modeled here (would need race data).
  * TODO: Add human bonus feat logic when race-aware feat selection is implemented.
@@ -58,6 +67,8 @@ export function determineFeatSlots(
   let classBonusFeatSlot = false;
 
   if (classId && classFeatLists[classId]) {
+    let hasNullLevelPool = false;
+
     for (const entry of classFeatLists[classId]) {
       // Auto-granted: list=3 with grantedOnLevel matching this class level
       if (entry.list === 3 && entry.grantedOnLevel === classLevelInClass) {
@@ -79,6 +90,23 @@ export function determineFeatSlots(
         entry.grantedOnLevel === classLevelInClass &&
         entry.onMenu === true
       ) {
+        classBonusFeatSlot = true;
+      }
+
+      // Track if this class uses pool-style bonus feats (grantedOnLevel=null)
+      if (
+        (entry.list === 1 || entry.list === 2) &&
+        entry.grantedOnLevel === null &&
+        entry.onMenu === true
+      ) {
+        hasNullLevelPool = true;
+      }
+    }
+
+    // For classes with pool-style bonus feats, check the hardcoded schedule
+    if (!classBonusFeatSlot && hasNullLevelPool) {
+      const schedule = CLASS_BONUS_FEAT_SCHEDULES[classId];
+      if (schedule && schedule.includes(classLevelInClass)) {
         classBonusFeatSlot = true;
       }
     }
