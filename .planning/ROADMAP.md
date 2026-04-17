@@ -188,8 +188,11 @@ Plans:
   9. Extractor code for spells and domains (`packages/data-extractor/src/assemblers/spell-assembler.ts`, `domain-assembler.ts`) stays buildable but is no longer invoked by the default `pnpm extract` run.
   10. Full vitest suite passes after the purge; planner dev server boots; cold-load UAT (race → alignment → attributes → level 1 class pick) works without any magic references in console or UI.
 
+**Plans:** 2 plans
+
 Plans:
-- [ ] TBD (run /gsd-plan-phase 07.2 to break down)
+- [ ] 07.2-01-PLAN.md — Runtime purge: delete magic dirs, compiled spell/domain catalogs, phase-07 tests, copy namespace; detach feats from magic; revert ConfirmDialog + PlannerValidationStatus; disconnect extractor spell/domain emit
+- [ ] 07.2-02-PLAN.md — Catalog schema cleanup (drop minSpellLevel) + archive deferred-items + final verification checkpoint (build + vitest + dev server + human cold-load UAT)
 
 ### Phase 07.1: Shell narrow viewport nav fix (INSERTED)
 
