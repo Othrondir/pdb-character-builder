@@ -56,14 +56,14 @@
 
 - [x] **MAGI-01**: El usuario puede elegir dominios de clerigo soportados por Puerta de Baldur, incluidos los custom.
 - [ ] **MAGI-02**: El usuario puede ver como los dominios, clases y progreso del personaje afectan a los conjuros disponibles.
-- [ ] **MAGI-03**: El usuario puede elegir conjuros, conjuros conocidos u otras selecciones magicas relevantes segun su clase y nivel.
+- [x] **MAGI-03**: El usuario puede elegir conjuros, conjuros conocidos u otras selecciones magicas relevantes segun su clase y nivel.
 - [x] **MAGI-04**: El planner usa la lista de conjuros custom y revisados del servidor en lugar de limitarse al NWN base.
 
 ### Validacion y explicaciones
 
-- [ ] **VALI-01**: El planner bloquea builds ilegales en lugar de permitirlas con simples avisos.
+- [x] **VALI-01**: El planner bloquea builds ilegales en lugar de permitirlas con simples avisos.
 - [ ] **VALI-02**: El usuario recibe explicaciones precisas y legibles cuando una eleccion es invalida.
-- [ ] **VALI-03**: El planner recalcula automaticamente la build completa cuando cambia cualquier decision.
+- [x] **VALI-03**: El planner recalcula automaticamente la build completa cuando cambia cualquier decision.
 - [x] **VALI-04**: El planner evita marcar una build como valida cuando falten datos o exista conflicto entre fuentes de reglas.
 
 ### Resumen y comparticion
@@ -133,11 +133,11 @@
 | FEAT-04 | Phase 6 | Pending |
 | MAGI-01 | Phase 7 | Complete |
 | MAGI-02 | Phase 7 | Pending |
-| MAGI-03 | Phase 7 | Pending |
+| MAGI-03 | Phase 7 | Complete |
 | MAGI-04 | Phase 7 | Complete |
-| VALI-01 | Phase 7 | Pending |
+| VALI-01 | Phase 7 | Complete |
 | VALI-02 | Phase 7 | Pending |
-| VALI-03 | Phase 7 | Pending |
+| VALI-03 | Phase 7 | Complete |
 | VALI-04 | Phase 1 | Complete |
 | SHAR-01 | Phase 8 | Pending |
 | SHAR-02 | Phase 8 | Pending |

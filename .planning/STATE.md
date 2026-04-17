@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Phase 7 UI-SPEC approved
-last_updated: "2026-04-17T12:14:10.108Z"
-last_activity: 2026-04-17 -- Phase 07 execution started
+stopped_at: Completed 07-04-PLAN.md (gap closure)
+last_updated: "2026-04-17T12:27:13.409Z"
+last_activity: 2026-04-17
 progress:
   total_phases: 10
   completed_phases: 8
   total_plans: 35
-  completed_plans: 33
-  percent: 94
+  completed_plans: 34
+  percent: 97
 ---
 
 # Project State
@@ -26,9 +26,9 @@ See: .planning/PROJECT.md (updated 2026-03-30)
 ## Current Position
 
 Phase: 07 (magic-full-legality-engine) — EXECUTING
-Plan: 1 of 5
-Status: Executing Phase 07
-Last activity: 2026-04-17 -- Phase 07 execution started
+Plan: 2 of 5
+Status: Ready to execute
+Last activity: 2026-04-17
 
 Progress: [██████░░░░] 60%
 
@@ -68,6 +68,7 @@ Progress: [██████░░░░] 60%
 | Phase 05.1 P03 | 13min | 2 tasks | 10 files |
 | Phase 05.1 P04 | 10min | 2 tasks | 4 files |
 | Phase 05.1 P05 | 30min | 3 tasks | 12 files |
+| Phase 07 P04 | 9min | 4 tasks | 12 files |
 
 ## Accumulated Context
 
@@ -104,6 +105,9 @@ Recent decisions affecting current work:
 - [Phase 05.1]: Feat assembler accepts composable classRows map; spell assembler accepts spellColumnName per class; Zod v4 enum-key records require all keys populated
 - [Phase 05.1]: NWN color codes stripped from TLK strings via regex before catalog emission
 - [Phase 05.1]: Deity catalog emitted as null -- server manages deities via scripts, not 2DA
+- [Phase 07]: classId threaded into MagicLevelInput at selector construction sites (not max-reduce over buildState.classLevels) so swap-cadence validation correctly handles multiclass builds
+- [Phase 07]: dispatchParadigm signature stability preserved: characterLevel arg retained (marked void) while cleric branch reads classLevels for first-cleric-level detection
+- [Phase 07]: ConfirmDialog gains confirmDisabled prop forwarded via NwnButton native disabled; SwapSpellDialog steps 1 and 2 gate Aceptar on row selection
 
 ### Pending Todos
 
@@ -129,6 +133,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-16T20:16:10.775Z
-Stopped at: Phase 7 UI-SPEC approved
-Resume file: .planning/phases/07-magic-full-legality-engine/07-UI-SPEC.md
+Last session: 2026-04-17T12:27:13.405Z
+Stopped at: Completed 07-04-PLAN.md (gap closure)
+Resume file: None
