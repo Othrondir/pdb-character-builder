@@ -28,6 +28,7 @@
     "@types/react-dom": "latest",
     "@vitejs/plugin-react": "latest",
     "fake-indexeddb": "^6.2.5",
+    "fflate": "^0.8.2",
     "fzstd": "^0.1.1",
     "jsdom": "latest",
     "lucide-react": "latest",

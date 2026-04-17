@@ -17,3 +17,17 @@ export {
 } from './slot-api';
 export { downloadBuildAsJson } from './json-export';
 export { importBuildFromFile, JsonImportError } from './json-import';
+export {
+  encodeSharePayload,
+  decodeSharePayload,
+  toBase64Url,
+  fromBase64Url,
+  ShareDecodeError,
+} from './share-url';
+export {
+  MAX_ENCODED_PAYLOAD_LENGTH,
+  SHARE_URL_HASH_PREFIX,
+  exceedsBudget,
+  buildShareUrl,
+} from './url-budget';
+export { diffRuleset, type RulesetDiff } from './version-mismatch';
