@@ -4,14 +4,14 @@ milestone: v1.0
 milestone_name: milestone
 status: executing
 stopped_at: Completed 07.2-02-PLAN.md (Phase 07.2 magic UI descope complete, human UAT approved)
-last_updated: "2026-04-17T18:42:42.383Z"
-last_activity: 2026-04-17 -- Phase 07.1 execution started
+last_updated: "2026-04-17T20:49:16.234Z"
+last_activity: 2026-04-17 -- Phase 8 execution started
 progress:
   total_phases: 12
-  completed_phases: 10
-  total_plans: 38
-  completed_plans: 37
-  percent: 97
+  completed_phases: 11
+  total_plans: 40
+  completed_plans: 38
+  percent: 95
 ---
 
 # Project State
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-30)
 
 **Core value:** A player can build a Puerta de Baldur character from level 1 to 16 with strict server-valid validation and share that exact build reliably.
-**Current focus:** Phase 07.1 — shell-narrow-viewport-nav-fix
+**Current focus:** Phase 8 — summary-persistence-shared-builds
 
 ## Current Position
 
-Phase: 07.1 (shell-narrow-viewport-nav-fix) — EXECUTING
-Plan: 1 of 1
-Status: Executing Phase 07.1
-Last activity: 2026-04-17 -- Phase 07.1 execution started
+Phase: 8 (summary-persistence-shared-builds) — EXECUTING
+Plan: 1 of 2
+Status: Executing Phase 8
+Last activity: 2026-04-17 -- Phase 8 execution started
 
 Progress: [██████████] 100%
 
