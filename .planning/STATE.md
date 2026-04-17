@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 07-05-PLAN.md (gap closure WR-04)
-last_updated: "2026-04-17T17:35:25.351Z"
-last_activity: 2026-04-17 -- Phase 07.2 execution started
+stopped_at: Completed 07.2-02-PLAN.md (Phase 07.2 magic UI descope complete)
+last_updated: "2026-04-17T18:30:00.000Z"
+last_activity: 2026-04-17 -- Phase 07.2 complete (both plans); Phase 07.1 next
 progress:
   total_phases: 12
-  completed_phases: 9
+  completed_phases: 10
   total_plans: 38
-  completed_plans: 35
-  percent: 92
+  completed_plans: 37
+  percent: 97
 ---
 
 # Project State
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-30)
 
 **Core value:** A player can build a Puerta de Baldur character from level 1 to 16 with strict server-valid validation and share that exact build reliably.
-**Current focus:** Phase 07.2 — magic-ui-descope
+**Current focus:** Phase 07.1 — shell narrow viewport nav fix (next)
 
 ## Current Position
 
-Phase: 07.2 (magic-ui-descope) — EXECUTING
-Plan: 1 of 2
-Status: Executing Phase 07.2
-Last activity: 2026-04-17 -- Phase 07.2 execution started
+Phase: 07.2 (magic-ui-descope) — COMPLETE
+Plan: 2 of 2 complete
+Status: Phase 07.2 landed; Phase 07.1 (narrow-viewport nav fix) next in execution order
+Last activity: 2026-04-17 -- Phase 07.2 complete (both plans, human UAT approved)
 
 Progress: [██████████] 100%
 
@@ -111,6 +111,11 @@ Recent decisions affecting current work:
 - [Phase 07]: ConfirmDialog gains confirmDisabled prop forwarded via NwnButton native disabled; SwapSpellDialog steps 1 and 2 gate Aceptar on row selection
 - [Phase 07]: Extractor uses Map<column, string[]> so classes sharing a 2DA column (e.g., Wiz_Sorc) fan out to every classId instead of last-wins overwrite
 - [Phase 07]: Lock sorcererCount === wizardCount at the catalog test layer so shared-column co-tagging cannot silently regress
+- [Phase 07.2]: PlannerValidationStatus reverts to pre-Phase-07 4-variant union (blocked/illegal/legal/pending); repair_needed was magic-only
+- [Phase 07.2]: ConfirmDialog reverts to 5-prop pre-07 shape; no children slot, no confirmDisabled, no disabled attribute on Aceptar
+- [Phase 07.2]: Extractor preserves assembleSpellCatalog/assembleDomainCatalog code behind EMIT_MAGIC_CATALOGS=1 env flag; default run emits 5 catalogs (classes/races/skills/feats/deities)
+- [Phase 07.2]: Feat prerequisite minSpellLevel branch + getMaxSpellLevelFromBuildState helper + 'spell-level' PrerequisiteCheck variant all deleted; caster-level map removed from BuildStateAtLevel
+- [Phase 07.2]: Magic-free bundle verification uses tight symbol + copy-key greps (aggregateMagicLegality|MagicBoard|MagicSheet|classHasCastingAtLevel|computeCasterLevelByClass|getMaxSpellLevelFromBuildState and stepper.levelSubSteps.spells|sections.spells) instead of broad Spanish-text greps — Spanish prose 'magia'/'conjuros' inside legitimate feat/class descriptions must ship as valid Puerta de Baldur content
 
 ### Pending Todos
 
@@ -138,6 +143,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-17T12:46:14.245Z
-Stopped at: Completed 07-05-PLAN.md (gap closure WR-04)
+Last session: 2026-04-17T18:30:00.000Z
+Stopped at: Completed 07.2-02-PLAN.md (Phase 07.2 magic UI descope complete, human UAT approved)
 Resume file: None

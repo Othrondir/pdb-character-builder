@@ -188,11 +188,11 @@ Plans:
   9. Extractor code for spells and domains (`packages/data-extractor/src/assemblers/spell-assembler.ts`, `domain-assembler.ts`) stays buildable but is no longer invoked by the default `pnpm extract` run.
   10. Full vitest suite passes after the purge; planner dev server boots; cold-load UAT (race → alignment → attributes → level 1 class pick) works without any magic references in console or UI.
 
-**Plans:** 1/2 plans executed
+**Plans:** 2/2 plans complete
 
 Plans:
 - [x] 07.2-01-PLAN.md — Runtime purge: delete magic dirs, compiled spell/domain catalogs, phase-07 tests, copy namespace; detach feats from magic; revert ConfirmDialog + PlannerValidationStatus; disconnect extractor spell/domain emit
-- [ ] 07.2-02-PLAN.md — Catalog schema cleanup (drop minSpellLevel) + archive deferred-items + final verification checkpoint (build + vitest + dev server + human cold-load UAT)
+- [x] 07.2-02-PLAN.md — Catalog schema cleanup (drop minSpellLevel) + archive deferred-items + final verification checkpoint (build + vitest + dev server + human cold-load UAT)
 
 ### Phase 07.1: Shell narrow viewport nav fix (INSERTED)
 
@@ -242,5 +242,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -
 | 5.1 Data Extractor Pipeline | 5/5 | Complete | 2026-04-15 |
 | 5.2 UX Overhaul | 8/8 | Complete | - |
 | 6. Feats & Proficiencies | 2/2 | Complete | - |
-| 7. Magic & Full Legality Engine | 0/3 | Not started | - |
+| 7. Magic & Full Legality Engine | Descoped | Superseded by Phase 07.2 | - |
+| 07.2 Magic UI descope (INSERTED) | 2/2 | Complete | 2026-04-17 |
+| 07.1 Shell narrow viewport nav fix (INSERTED) | 0/1 | Not started | - |
 | 8. Summary, Persistence & Shared Builds | 0/2 | Not started | - |
