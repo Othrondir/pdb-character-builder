@@ -17,6 +17,7 @@ interface PlannerShellState {
   setCharacterSheetTab: (tab: SheetTab) => void;
   setExpandedLevel: (level: ProgressionLevel | null) => void;
   toggleMobileNav: () => void;
+  closeMobileNav: () => void;
 }
 
 export const usePlannerShellStore = create<PlannerShellState>((set) => ({
@@ -40,4 +41,5 @@ export const usePlannerShellStore = create<PlannerShellState>((set) => ({
       expandedLevel,
     })),
   toggleMobileNav: () => set((state) => ({ mobileNavOpen: !state.mobileNavOpen })),
+  closeMobileNav: () => set({ mobileNavOpen: false }),
 }));

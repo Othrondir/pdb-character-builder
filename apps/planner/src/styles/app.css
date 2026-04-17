@@ -1410,6 +1410,12 @@ a {
   }
 }
 
+/* ── Mobile Nav Toggle + Backdrop (desktop defaults) ──────── */
+
+.planner-shell__mobile-toggle { display: none; }
+.planner-shell__mobile-close { display: none; }
+.planner-layout__backdrop { display: none; }
+
 /* ── Responsive: Tablet ───────────────────────────────────── */
 
 @media (max-width: 1023px) {
@@ -1424,6 +1430,44 @@ a {
     z-index: 10;
   }
   .planner-layout__stepper.is-open { display: block; }
+
+  .planner-shell__mobile-toggle {
+    align-items: center;
+    background: var(--color-surface-raised, rgba(0, 0, 0, 0.4));
+    border: 1px solid var(--color-gold);
+    color: var(--color-gold);
+    cursor: pointer;
+    display: inline-flex;
+    gap: 0.5rem;
+    height: 40px;
+    left: 0.75rem;
+    padding: 0 0.75rem;
+    position: fixed;
+    top: 0.75rem;
+    z-index: 11;
+  }
+  .planner-shell__mobile-close {
+    align-items: center;
+    background: var(--color-surface-raised, rgba(0, 0, 0, 0.6));
+    border: 1px solid var(--color-gold);
+    color: var(--color-gold);
+    cursor: pointer;
+    display: inline-flex;
+    gap: 0.5rem;
+    left: 0.75rem;
+    padding: 0 0.75rem;
+    position: fixed;
+    top: 0.75rem;
+    z-index: 12;
+  }
+  .planner-layout__backdrop {
+    background: rgba(0, 0, 0, 0.55);
+    display: none;
+    inset: 0;
+    position: fixed;
+    z-index: 9;
+  }
+  .planner-layout__backdrop.is-open { display: block; }
 
   .foundation-board__layout {
     grid-template-columns: 1fr;
