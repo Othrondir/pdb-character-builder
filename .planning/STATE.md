@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 07.2-02-PLAN.md (Phase 07.2 magic UI descope complete)
-last_updated: "2026-04-17T18:30:00.000Z"
-last_activity: 2026-04-17 -- Phase 07.2 complete (both plans); Phase 07.1 next
+stopped_at: Completed 07.2-02-PLAN.md (Phase 07.2 magic UI descope complete, human UAT approved)
+last_updated: "2026-04-17T18:42:42.383Z"
+last_activity: 2026-04-17 -- Phase 07.1 execution started
 progress:
   total_phases: 12
   completed_phases: 10
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-30)
 
 **Core value:** A player can build a Puerta de Baldur character from level 1 to 16 with strict server-valid validation and share that exact build reliably.
-**Current focus:** Phase 07.1 — shell narrow viewport nav fix (next)
+**Current focus:** Phase 07.1 — shell-narrow-viewport-nav-fix
 
 ## Current Position
 
-Phase: 07.2 (magic-ui-descope) — COMPLETE
-Plan: 2 of 2 complete
-Status: Phase 07.2 landed; Phase 07.1 (narrow-viewport nav fix) next in execution order
-Last activity: 2026-04-17 -- Phase 07.2 complete (both plans, human UAT approved)
+Phase: 07.1 (shell-narrow-viewport-nav-fix) — EXECUTING
+Plan: 1 of 1
+Status: Executing Phase 07.1
+Last activity: 2026-04-17 -- Phase 07.1 execution started
 
 Progress: [██████████] 100%
 
