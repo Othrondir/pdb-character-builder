@@ -10,7 +10,10 @@ export default defineConfig({
     },
   },
   test: {
-    environmentMatchGlobs: [['tests/phase-02/**/*.spec.{ts,tsx}', 'jsdom']],
+    environmentMatchGlobs: [
+      ['tests/phase-02/**/*.spec.{ts,tsx}', 'jsdom'],
+      ['tests/phase-08/**/*.spec.tsx', 'jsdom'],
+    ],
     environment: 'node',
     include: ['tests/**/*.spec.ts', 'tests/**/*.spec.tsx'],
     setupFiles: ['tests/setup.ts'],
