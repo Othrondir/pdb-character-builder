@@ -14,7 +14,6 @@ export function PlannerShellFrame() {
       <div className="planner-layout">
         <div
           aria-label={shellCopyEs.stepper.heading}
-          aria-modal={mobileNavOpen ? true : undefined}
           className={`planner-layout__stepper${mobileNavOpen ? ' is-open' : ''}`}
           id="planner-stepper-drawer"
           role={mobileNavOpen ? 'dialog' : undefined}
