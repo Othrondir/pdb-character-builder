@@ -3,9 +3,9 @@
 ============================================================
 
 PROVENANCE
-  Dataset ID:    puerta-ee-2026-04-16+cf6e8aad
+  Dataset ID:    puerta-ee-2026-04-17+cf6e8aad
   Manifest SHA1: cf6e8aad5751930e345266b84a3be31d9d67f3b1
-  Extracted:     2026-04-16T21:49:39.692Z
+  Extracted:     2026-04-17T12:41:31.529Z
 
 ------------------------------------------------------------
 CATALOGS
