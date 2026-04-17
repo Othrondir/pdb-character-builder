@@ -4,12 +4,19 @@ import { AttributesBoard } from '@planner/features/character-foundation/attribut
 import { BuildProgressionBoard } from '@planner/features/level-progression/build-progression-board';
 import { SkillBoard } from '@planner/features/skills/skill-board';
 import { FeatBoard } from '@planner/features/feats/feat-board';
+import { ResumenBoard } from '@planner/features/summary/resumen-board';
 import { shellCopyEs } from '@planner/lib/copy/es';
 
 export function CenterContent() {
+  const activeView = usePlannerShellStore((state) => state.activeView);
   const activeOriginStep = usePlannerShellStore((state) => state.activeOriginStep);
   const expandedLevel = usePlannerShellStore((state) => state.expandedLevel);
   const activeLevelSubStep = usePlannerShellStore((state) => state.activeLevelSubStep);
+
+  // Resumen view (dedicated screen per Phase 08 D-03)
+  if (activeView === 'resumen') {
+    return <ResumenBoard />;
+  }
 
   // Origin steps
   if (activeOriginStep === 'race' || activeOriginStep === 'alignment') {

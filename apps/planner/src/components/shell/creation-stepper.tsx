@@ -60,6 +60,8 @@ export function CreationStepper() {
   const activeOriginStep = usePlannerShellStore((state) => state.activeOriginStep);
   const setActiveOriginStep = usePlannerShellStore((state) => state.setActiveOriginStep);
   const expandedLevel = usePlannerShellStore((state) => state.expandedLevel);
+  const activeView = usePlannerShellStore((state) => state.activeView);
+  const setActiveView = usePlannerShellStore((state) => state.setActiveView);
 
   return (
     <NwnFrame as="nav" className="creation-stepper" aria-label={shellCopyEs.stepper.heading}>
@@ -93,8 +95,18 @@ export function CreationStepper() {
       </section>
 
       <div className="creation-stepper__bottom">
-        <NwnButton variant="auxiliary">{shellCopyEs.stepper.resumenLabel}</NwnButton>
-        <NwnButton variant="auxiliary">{shellCopyEs.stepper.utilidadesLabel}</NwnButton>
+        <NwnButton
+          variant={activeView === 'resumen' ? 'primary' : 'auxiliary'}
+          onClick={() => setActiveView('resumen')}
+        >
+          {shellCopyEs.stepper.resumenLabel}
+        </NwnButton>
+        <NwnButton
+          variant={activeView === 'utilities' ? 'primary' : 'auxiliary'}
+          onClick={() => setActiveView('utilities')}
+        >
+          {shellCopyEs.stepper.utilidadesLabel}
+        </NwnButton>
       </div>
     </NwnFrame>
   );

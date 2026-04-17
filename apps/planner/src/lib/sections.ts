@@ -38,3 +38,10 @@ export const sheetTabs: readonly SheetTabDefinition[] = [
 ] as const;
 
 export type ProgressionLevel = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16;
+
+/**
+ * Top-level view selection for the shell's center column.
+ * 'creation' is the default (origin + progression editing).
+ * 'resumen' and 'utilities' are dedicated stepper-bottom screens (Phase 08 D-03).
+ */
+export type PlannerView = 'creation' | 'resumen' | 'utilities';
