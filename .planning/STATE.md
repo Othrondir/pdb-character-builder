@@ -4,14 +4,14 @@ milestone: v1.0
 milestone_name: milestone
 status: executing
 stopped_at: Completed 07-05-PLAN.md (gap closure WR-04)
-last_updated: "2026-04-17T12:46:14.249Z"
-last_activity: 2026-04-17
+last_updated: "2026-04-17T16:55:30.405Z"
+last_activity: 2026-04-17 -- Phase 07.1 planning complete
 progress:
-  total_phases: 10
+  total_phases: 11
   completed_phases: 9
-  total_plans: 35
+  total_plans: 36
   completed_plans: 35
-  percent: 100
+  percent: 97
 ---
 
 # Project State
@@ -27,8 +27,8 @@ See: .planning/PROJECT.md (updated 2026-03-30)
 
 Phase: 07 (magic-full-legality-engine) — COMPLETED (gap-closure plans 07-04 and 07-05 landed)
 Plan: 5 of 5
-Status: Phase closed; awaiting re-verification
-Last activity: 2026-04-17
+Status: Ready to execute
+Last activity: 2026-04-17 -- Phase 07.1 planning complete
 
 Progress: [██████████] 100%
 
@@ -121,6 +121,7 @@ None yet.
 - Phase 05.1 inserted after Phase 5: Data Extractor Pipeline (URGENT) — UAT revealed all planner catalogs are ~10% placeholders vs server reality. **Completed 2026-04-15:** 2016 items extracted across 6 catalogs.
 - Phase 05.2 inserted after Phase 5.1: UX Overhaul — User identified that the current planner is not navigable: endless vertical scroll, no visual hierarchy, no wizard flow, low information density. Must fix before adding more feature phases.
 - Phase 07.1 inserted after Phase 7: Shell narrow viewport nav fix (URGENT) — Phase 07 UAT surfaced that at viewports ≤1023px the creation-stepper is hidden by media query and no hamburger toggle consumes `toggleMobileNav`, leaving the shell unusable at small resolutions. Blocks downstream UAT until fixed.
+- Phase 07.2 inserted after Phase 7: Magic UI descope (URGENT) — Product pivot. User clarified the planner should match `excel simulador de fichas/Plantilla Base.xlsx` (Resumen Ficha / Caracteristicas&Dotes / Puntos de habilidad / Dotes). No per-level spell selection, no sorcerer swap, no cleric domain picker, no Conjuros tab. Phase 07 magic UI, cleric domains, rules-engine magic module, spell+domain compiled catalogs, and related tests to be purged. Run 07.2 before 07.1 so the drawer lands over a slim shell.
 
 ### Blockers/Concerns
 

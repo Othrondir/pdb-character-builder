@@ -171,6 +171,26 @@ Plans:
 - [x] 07-03-PLAN.md — Magic-legality aggregator + shell severity projection + shellCopyEs.magic namespace + MagicSheetTab + shell wiring + jsdom smoke tests
 **UI hint**: yes
 
+### Phase 07.2: Magic UI descope (INSERTED)
+
+**Goal:** Strip all magic UI, spell catalogs, and cleric-domain picker from the planner so the product surface matches the "Plantilla Base.xlsx" reference (Resumen Ficha / Caracteristicas&Dotes / Puntos de habilidad / Dotes) — characters are built with attributes, class progression, skills, and feats only.
+**Depends on:** Phase 7
+**Requirements**: FLOW-01, FLOW-02, LANG-01
+**Success Criteria** (what must be TRUE):
+  1. `apps/planner/src/features/magic/` is deleted and no import references it anywhere in `apps/planner` or `packages/*`.
+  2. The character sheet's `Conjuros` tab is gone; sheet shows Estadísticas / Habilidades / Dotes only.
+  3. The level stepper does not offer a `Magia` sub-step for any class (caster or non-caster); the D-02 conditional filter is removed.
+  4. `packages/rules-engine/src/magic/` is deleted; nothing in the rules engine or planner selectors imports from it.
+  5. `apps/planner/src/data/compiled-spells.ts` and `compiled-domains.ts` are deleted; the runtime no longer bundles spell or domain data.
+  6. `tests/phase-07/` is deleted; no test file references magic, spells, domains, `aggregateMagicLegality`, `MagicSheetTab`, or `SwapSpellDialog`.
+  7. `shellCopyEs.magic`, `shellCopyEs.stepper.levelSubSteps.spells`, and `shellCopyEs.sheetTabs.spells` are removed; `scripts/verify-phase-07-copy.cjs` is deleted.
+  8. `PlannerValidationStatus.repair_needed` is removed unless a non-magic consumer remains (audit before removing).
+  9. Extractor code for spells and domains (`packages/data-extractor/src/assemblers/spell-assembler.ts`, `domain-assembler.ts`) stays buildable but is no longer invoked by the default `pnpm extract` run.
+  10. Full vitest suite passes after the purge; planner dev server boots; cold-load UAT (race → alignment → attributes → level 1 class pick) works without any magic references in console or UI.
+
+Plans:
+- [ ] TBD (run /gsd-plan-phase 07.2 to break down)
+
 ### Phase 07.1: Shell narrow viewport nav fix (INSERTED)
 
 **Goal:** At viewports ≤1023px the planner shell stays fully operable — the creation stepper (Origen / Progresión / Resumen / Utilidades) is reachable through a visible toggle and never leaves the user stranded on the Atributos step.
