@@ -53,6 +53,19 @@ export function MobileNavToggle() {
     return undefined;
   }, [mobileNavOpen]);
 
+  // Body scroll lock — prevent background content from scrolling beneath the
+  // backdrop on mobile viewports (WR-04). iOS Safari in particular will bleed
+  // momentum scroll into body unless overflow:hidden is applied at document root.
+  useEffect(() => {
+    if (!mobileNavOpen) return undefined;
+    if (typeof document === 'undefined') return undefined;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [mobileNavOpen]);
+
   return (
     <>
       <button
