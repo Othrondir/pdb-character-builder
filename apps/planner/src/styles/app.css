@@ -1812,3 +1812,60 @@ a {
 .load-slot-dialog__list button:hover {
   background: var(--color-panel);
 }
+
+/* Phase 8-02: VersionMismatchDialog + ShareEntry */
+.version-mismatch-dialog {
+  padding: 1rem;
+  min-width: 24rem;
+  max-width: 40rem;
+}
+.version-mismatch-dialog__title {
+  margin-top: 0;
+}
+.version-mismatch-dialog__diff {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.5rem 1rem;
+  align-items: center;
+  margin: 0.75rem 0;
+}
+.version-mismatch-dialog__diff dt {
+  font-family: var(--font-display);
+  color: var(--color-gold-faded);
+}
+.version-mismatch-dialog__diff dd {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.version-mismatch-dialog__incoming {
+  color: #ffb8a6;
+}
+.version-mismatch-dialog__arrow {
+  color: var(--color-gold-faded);
+}
+.version-mismatch-dialog__current {
+  color: var(--color-gold);
+}
+.version-mismatch-dialog__note {
+  color: var(--color-gold-faded);
+  font-size: 0.875rem;
+}
+.version-mismatch-dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+.share-entry {
+  padding: 2rem;
+  font-family: var(--font-display);
+  color: var(--color-gold);
+  text-align: center;
+}
+.share-entry--error {
+  max-width: 40rem;
+  margin: 2rem auto;
+}

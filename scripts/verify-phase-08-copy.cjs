@@ -52,6 +52,18 @@ const REQUIRED_SUBSTRINGS = [
   'saveSuccess:',
   'loadSuccess:',
   'privateModeUnavailable:',
+  // 08-02 copy keys (share URL + version mismatch)
+  'versionMismatch: {',
+  'rulesetLabel:',
+  'datasetLabel:',
+  'downloadJson:',
+  'shareError: {',
+  'emptyPayload:',
+  'invalidPayload:',
+  'returnHome:',
+  'shareLoading:',
+  'shareSuccess:',
+  'shareFallback:',
 ];
 
 const missing = REQUIRED_SUBSTRINGS.filter((s) => !source.includes(s));
