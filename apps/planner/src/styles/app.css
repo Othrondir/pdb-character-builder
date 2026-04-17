@@ -1419,6 +1419,7 @@ a {
 /* ── Responsive: Tablet ───────────────────────────────────── */
 
 @media (max-width: 1023px) {
+  .planner-shell { padding-top: calc(var(--space-md) + 3.5rem); }
   .planner-layout { grid-template-columns: minmax(0, 1fr) 300px; }
   .planner-layout__stepper {
     background: var(--color-panel);
