@@ -64,6 +64,30 @@ describe('aggregateMagicLegality', () => {
     expect(['legal', 'pending']).toContain(result.status);
   });
 
+  it('rolls a mixed pending+legal build up to pending (not legal)', () => {
+    // Level 1: empty fighter (no caster, no selections) -> status 'pending'
+    //   (revalidation returns pending when !hasAnySelection && !hasCaster)
+    // Level 2: empty cleric at class level 1 (caster, no selections) -> status 'legal'
+    //   (revalidation returns legal when no illegal/blocked issues and hasCaster)
+    // Aggregator must pick the MORE severe: pending (2) < legal (3), so result = 'pending'.
+    const levels: MagicLevelInput[] = [
+      emptyLevelInput(1, emptyBuildState(1)),
+      emptyLevelInput(
+        2,
+        emptyBuildState(2, { 'class:cleric': 1 }, { 'class:cleric': 1 }),
+      ),
+    ];
+    const result = aggregateMagicLegality({
+      levels,
+      spellCatalog: compiledSpellCatalog,
+      domainCatalog: compiledDomainCatalog,
+    });
+    // This assertion FAILS under the pre-fix STATUS_ORDER (legal=2, pending=3),
+    // because legal would be treated as more severe than pending — locking the
+    // CR-02 fix in place.
+    expect(result.status).toBe('pending');
+  });
+
   it('rolls an illegal selection up to overall status illegal', () => {
     const wizardSpell = compiledSpellCatalog.spells.find(
       (s) => s.classLevels['class:wizard'] != null,

@@ -17,8 +17,8 @@ import {
 const STATUS_ORDER: Record<MagicEvaluationStatus, number> = {
   illegal: 0,
   blocked: 1,
-  legal: 2,
-  pending: 3,
+  pending: 2,
+  legal: 3,
 };
 
 export interface MagicAggregateInput {
