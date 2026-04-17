@@ -14,6 +14,7 @@ import {
   type AttributeKey,
 } from '@planner/features/character-foundation/foundation-fixture';
 import { FeatSheetTab } from '@planner/features/feats/feat-sheet-tab';
+import { MagicSheetTab } from '@planner/features/magic/magic-sheet-tab';
 
 const ATTRIBUTE_LABELS: Record<AttributeKey, string> = {
   str: 'Fuerza',
@@ -103,14 +104,6 @@ function SkillsPanel() {
   );
 }
 
-function SpellsPanel() {
-  return (
-    <div role="tabpanel" id="sheet-panel-spells" aria-labelledby="sheet-tab-spells">
-      <p>Conjuros del personaje</p>
-    </div>
-  );
-}
-
 function EmptyState() {
   return (
     <div className="character-sheet__empty">
@@ -137,7 +130,7 @@ export function CharacterSheet() {
             {activeTab === 'stats' && <StatsPanel />}
             {activeTab === 'skills' && <SkillsPanel />}
             {activeTab === 'feats' && <FeatSheetTab />}
-            {activeTab === 'spells' && <SpellsPanel />}
+            {activeTab === 'spells' && <MagicSheetTab />}
           </>
         ) : (
           <EmptyState />

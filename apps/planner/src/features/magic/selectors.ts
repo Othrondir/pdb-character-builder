@@ -233,6 +233,26 @@ function getActiveClassAtLevel(
   return rec?.classId ?? null;
 }
 
+/**
+ * D-02 filter helper. Returns `true` when the class assigned at `level` has
+ * the `spellCaster` flag in the compiled class catalog (or has no class yet —
+ * callers interpret missing class as "don't hide the step until a class is
+ * selected"). Paladins and Rangers remain casters by catalog flag even though
+ * they do not gain slots until class-level 4; the magia sub-step still shows
+ * a summary for them per D-04.
+ */
+export function classHasCastingAtLevel(
+  level: number,
+  progressionState: LevelProgressionStoreState,
+): boolean {
+  const rec = progressionState.levels.find((r) => r.level === level);
+  if (!rec || !rec.classId) return false;
+  const classDef = compiledClassCatalog.classes.find(
+    (c) => c.id === rec.classId,
+  );
+  return Boolean(classDef?.spellCaster);
+}
+
 function dispatchParadigm(
   classId: CanonicalId | null,
   characterLevel: ProgressionLevel,

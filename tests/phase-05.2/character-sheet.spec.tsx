@@ -108,8 +108,11 @@ describe('phase 05.2 character sheet', () => {
     fireEvent.click(screen.getByRole('tab', { name: 'Dotes' }));
     expect(screen.getByText('0 dotes')).toBeInTheDocument();
 
-    // Click spells tab
+    // Click spells tab — Phase 07-03 replaces the SpellsPanel placeholder with
+    // the live MagicSheetTab, which renders a "{N} conjuros" header via the
+    // magic selector. Assert the new header content instead of the old
+    // placeholder copy.
     fireEvent.click(screen.getByRole('tab', { name: 'Conjuros' }));
-    expect(screen.getByText('Conjuros del personaje')).toBeInTheDocument();
+    expect(screen.getByText(/\d+ conjuros/)).toBeInTheDocument();
   });
 });
