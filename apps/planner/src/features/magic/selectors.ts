@@ -31,6 +31,7 @@ import type { ProgressionLevel } from '@planner/features/level-progression/progr
 import type { SkillStoreState } from '@planner/features/skills/store';
 import type { FeatStoreState } from '@planner/features/feats/store';
 import { compiledFeatCatalog } from '@planner/features/feats/compiled-feat-catalog';
+import { shellCopyEs } from '@planner/lib/copy/es';
 
 import {
   compiledClassCatalog,
@@ -256,12 +257,21 @@ export function classHasCastingAtLevel(
 function dispatchParadigm(
   classId: CanonicalId | null,
   characterLevel: ProgressionLevel,
+  classLevels: Record<string, number>,
 ): MagicParadigm {
   if (!classId) return 'empty';
+  // characterLevel retained for signature stability; cleric branch reads
+  // classLevels instead. See WR-01 note below.
+  void characterLevel;
 
   switch (classId) {
-    case 'class:cleric':
-      return characterLevel === 1 ? 'domains' : 'prepared-summary';
+    case 'class:cleric': {
+      // D-15/WR-01: "First cleric level" is the level the user FIRST enters the
+      // Cleric class, regardless of character-level. Fighter 1 / Cleric 2 should
+      // still see the domain picker on the level they add Cleric.
+      const clericLevelHere = classLevels['class:cleric'] ?? 0;
+      return clericLevelHere === 1 ? 'domains' : 'prepared-summary';
+    }
     case 'class:wizard':
       return 'spellbook';
     case 'class:sorcerer':
@@ -402,7 +412,6 @@ export function selectMagicBoardView(
   }
 
   const classId = getActiveClassAtLevel(activeLevel, progressionState);
-  const paradigm = dispatchParadigm(classId, activeLevel);
   const buildState = computeMagicBuildStateAtLevel(
     activeLevel,
     foundationState,
@@ -410,6 +419,7 @@ export function selectMagicBoardView(
     skillState,
     featState,
   );
+  const paradigm = dispatchParadigm(classId, activeLevel, buildState.classLevels);
 
   // Run snapshot revalidation so `status` reflects the full cascade.
   const revalidationInput: MagicLevelInput[] = magicState.levels.map((lvl) => ({
@@ -678,29 +688,71 @@ export function selectMagicSheetTabView(
 
     const spells: MagicSheetTabRow[] = [];
 
+    // WR-02 fix: per-row validation. Previously every row was hardcoded
+    // status: 'legal' and invalidCount stayed at 0. Now each row runs the
+    // catalog fail-closed check + spell prerequisite evaluator so the
+    // character-sheet summary reflects illegal / blocked selections.
+    const validateSpellRow = (
+      spellId: string,
+    ): { status: MagicEvaluationStatus; statusReason: string | null } => {
+      // 1. Catalog fail-closed: missing description / missing source.
+      const missing = detectMissingSpellData(spellId, compiledSpellCatalog);
+      if (missing) {
+        return {
+          status: 'blocked',
+          statusReason: shellCopyEs.magic.missingDescription,
+        };
+      }
+      // 2. Prereq evaluation.
+      const spell = compiledSpellCatalog.spells.find((s) => s.id === spellId);
+      if (!spell) {
+        return {
+          status: 'blocked',
+          statusReason: shellCopyEs.magic.missingDescription,
+        };
+      }
+      const result = evaluateSpellPrerequisites(
+        spell,
+        buildState,
+        compiledSpellCatalog,
+      );
+      if (!result.met) {
+        const reason = result.checks
+          .filter((c) => !c.met)
+          .map((c) => `${c.label}: ${c.current}`)
+          .join(', ');
+        return { status: 'illegal', statusReason: reason || null };
+      }
+      return { status: 'legal', statusReason: null };
+    };
+
     for (const list of Object.values(lvl.spellbookAdditions)) {
       for (const spellId of list) {
+        const { status, statusReason } = validateSpellRow(spellId);
         spells.push({
           label: getSpellLabel(spellId),
           slot: 'spellbook',
           spellId,
-          status: 'legal',
-          statusReason: null,
+          status,
+          statusReason,
         });
         totalCount++;
+        if (status !== 'legal') invalidCount++;
       }
     }
 
     for (const list of Object.values(lvl.knownSpells)) {
       for (const spellId of list) {
+        const { status, statusReason } = validateSpellRow(spellId);
         spells.push({
           label: getSpellLabel(spellId),
           slot: 'known',
           spellId,
-          status: 'legal',
-          statusReason: null,
+          status,
+          statusReason,
         });
         totalCount++;
+        if (status !== 'legal') invalidCount++;
       }
     }
 
