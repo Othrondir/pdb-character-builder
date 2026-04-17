@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
+import { CURRENT_DATASET_ID } from '@planner/data/ruleset-version';
 
 import {
-  FOUNDATION_DATASET_ID,
   type AttributeKey,
 } from '@planner/features/character-foundation/foundation-fixture';
 
@@ -29,7 +29,7 @@ export interface LevelProgressionStoreState {
 export function createInitialProgressionState() {
   return {
     activeLevel: 1 as ProgressionLevel,
-    datasetId: FOUNDATION_DATASET_ID,
+    datasetId: CURRENT_DATASET_ID,
     lastEditedLevel: null,
     levels: createEmptyProgressionLevels(),
   };

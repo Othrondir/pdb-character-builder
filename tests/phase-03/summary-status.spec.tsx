@@ -7,6 +7,7 @@ import { PlannerShellFrame } from '@planner/components/shell/planner-shell-frame
 import { usePlannerShellStore } from '@planner/state/planner-shell';
 import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
 import { selectFoundationSummary } from '@planner/features/character-foundation/selectors';
+import { CURRENT_DATASET_ID } from '@planner/data/ruleset-version';
 
 describe('phase 03 summary panel', () => {
   beforeEach(() => {
@@ -27,7 +28,7 @@ describe('phase 03 summary panel', () => {
 
     expect(summary.summaryStatus).toBe('blocked');
     expect(summary.characterLabel).toBe('Sin configuración');
-    expect(summary.datasetId).toBe('puerta-ee-2026-03-30+phase03');
+    expect(summary.datasetId).toBe(CURRENT_DATASET_ID);
   });
 
   it('shows origin identity labels once the base choices are defined', () => {

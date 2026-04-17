@@ -9,7 +9,8 @@
     "extract": "pnpm --filter @pdb/data-extractor extract",
     "test": "vitest run",
     "test:phase-01": "vitest run tests/phase-01 --reporter=dot",
-    "test:phase-02": "vitest run tests/phase-02 --reporter=dot"
+    "test:phase-02": "vitest run tests/phase-02 --reporter=dot",
+    "test:phase-08": "vitest run tests/phase-08 --reporter=dot"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
@@ -26,6 +27,7 @@
     "@types/react": "latest",
     "@types/react-dom": "latest",
     "@vitejs/plugin-react": "latest",
+    "fake-indexeddb": "^6.2.5",
     "fzstd": "^0.1.1",
     "jsdom": "latest",
     "lucide-react": "latest",

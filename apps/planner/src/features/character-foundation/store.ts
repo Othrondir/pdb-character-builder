@@ -1,9 +1,9 @@
 import { create } from 'zustand';
 import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
+import { CURRENT_DATASET_ID } from '@planner/data/ruleset-version';
 
 import {
   ATTRIBUTE_KEYS,
-  FOUNDATION_DATASET_ID,
   phase03FoundationFixture,
   type AttributeKey,
 } from './foundation-fixture';
@@ -36,7 +36,7 @@ function createInitialFoundationState() {
   return {
     alignmentId: null,
     baseAttributes: createBaseAttributes(),
-    datasetId: FOUNDATION_DATASET_ID,
+    datasetId: CURRENT_DATASET_ID,
     raceId: null,
     subraceId: null,
   };

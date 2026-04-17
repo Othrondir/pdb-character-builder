@@ -1,6 +1,5 @@
 import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
-
-export const FOUNDATION_DATASET_ID = 'puerta-ee-2026-03-30+phase03';
+import { CURRENT_DATASET_ID } from '@planner/data/ruleset-version';
 
 export const ATTRIBUTE_KEYS = [
   'str',
@@ -139,7 +138,7 @@ export const phase03FoundationFixture: Phase03FoundationFixture = {
     maximum: 18,
     minimum: 8,
   },
-  datasetId: FOUNDATION_DATASET_ID,
+  datasetId: CURRENT_DATASET_ID,
   races: [
     {
       allowedAlignmentIds: ALL_ALIGNMENT_IDS,
