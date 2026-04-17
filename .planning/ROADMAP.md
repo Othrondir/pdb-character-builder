@@ -183,8 +183,10 @@ Plans:
   4. Desktop layout (>1023px) remains unchanged: stepper column always visible, no toggle button rendered.
   5. Regression suite covers the narrow-viewport open/close flow (jsdom or Vitest component-level) so the hamburger never regresses silently again.
 
+**Plans:** 1 plan
+
 Plans:
-- [ ] TBD (run /gsd-plan-phase 07.1 to break down)
+- [ ] 07.1-01-PLAN.md — MobileNavToggle + store action + CSS scaffolding + jsdom regression specs
 
 ### Phase 8: Summary, Persistence & Shared Builds
 **Goal**: Users can preserve, reload, and share an exact build snapshot pinned to its dataset version.
