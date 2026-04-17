@@ -34,3 +34,19 @@ deferred to a future plan for resolution. These do not block the plan's goal.
   so the correctness contract is preserved. The data fix is a separate 07-03 follow-up.
 - **Deferred to**: Plan 07-03 UI or a 07-02 data-override pass using the Puerta forum
   spell descriptions as `manual-override` layer evidence.
+
+## Discovered in Plan 07-05
+
+### Pre-existing TypeScript errors in tests/phase-03/foundation-validation.spec.ts
+
+- **Discovered**: Plan 07-05 Task 1 root `pnpm typecheck` surfaced pre-existing errors.
+- **Symptom**: `tsc -p tsconfig.base.json --noEmit` fails at lines 25, 38, 60 of
+  `tests/phase-03/foundation-validation.spec.ts` with `DeityRuleRecord.allowedAlignmentIds`
+  type mismatches (`string[]` vs kind-prefixed CanonicalId union). Exit code 2.
+- **Reproduces on HEAD**: Confirmed via `git stash push` + `pnpm typecheck` — the errors
+  exist on the parent commit without any Plan 07-05 edits. Not introduced by WR-04 fix.
+- **Scope**: Out of Plan 07-05. Plan 07-05's automated verify is scoped to the
+  data-extractor package (`pnpm --filter @pdb/data-extractor exec tsc --noEmit`), which
+  passes cleanly. The phase-03 test fixture needs to be updated to construct `deity:none`
+  with a correctly-typed `allowedAlignmentIds` (alignment:*-prefixed tuple).
+- **Deferred to**: A small phase-03 test-fixture fix plan, or a future hygiene pass.

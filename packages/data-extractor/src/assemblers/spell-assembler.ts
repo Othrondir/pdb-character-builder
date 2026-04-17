@@ -120,15 +120,20 @@ export function assembleSpellCatalog(
   }
 
   // -------------------------------------------------------------------------
-  // 2. Build column name -> class canonical ID mapping
+  // 2. Build column name -> class canonical IDs mapping
   // -------------------------------------------------------------------------
-  const columnToClassId = new Map<string, string>();
+  // Promoted to plural values per WR-04 fix (07-VERIFICATION): Wizard and Sorcerer
+  // both point at the 'Wiz_Sorc' column in spells.2da, so a singular map would
+  // overwrite one of them. Emit each spell under every class sharing the column.
+  const columnToClassIds = new Map<string, string[]>();
   for (const [classId, info] of classRows) {
-    columnToClassId.set(info.spellColumnName, classId);
+    const existing = columnToClassIds.get(info.spellColumnName) ?? [];
+    existing.push(classId);
+    columnToClassIds.set(info.spellColumnName, existing);
   }
 
   // Get all class spell column names for filtering
-  const classColumnNames = Array.from(columnToClassId.keys());
+  const classColumnNames = Array.from(columnToClassIds.keys());
 
   // -------------------------------------------------------------------------
   // 3. Build spell entries with class-level mappings
@@ -148,8 +153,10 @@ export function assembleSpellCatalog(
     for (const colName of classColumnNames) {
       const val = parseIntOrNull(row[colName]);
       if (val != null && val >= 0 && val <= 9) {
-        const classId = columnToClassId.get(colName)!;
-        classLevels[classId] = val;
+        const classIds = columnToClassIds.get(colName)!;
+        for (const classId of classIds) {
+          classLevels[classId] = val;
+        }
       } else if (val != null && (val < 0 || val > 9)) {
         // T-05.1-14: Validate spell level values are 0-9
         warnings.push(

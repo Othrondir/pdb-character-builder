@@ -6,6 +6,7 @@
     "build:planner": "corepack pnpm --dir apps/planner build",
     "typecheck": "tsc -p tsconfig.base.json --noEmit",
     "dev:planner": "corepack pnpm --dir apps/planner dev",
+    "extract": "pnpm --filter @pdb/data-extractor extract",
     "test": "vitest run",
     "test:phase-01": "vitest run tests/phase-01 --reporter=dot",
     "test:phase-02": "vitest run tests/phase-02 --reporter=dot"
