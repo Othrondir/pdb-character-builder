@@ -57,3 +57,7 @@ deferred to a future plan for resolution. These do not block the plan's goal.
   passes cleanly. The phase-03 test fixture needs to be updated to construct `deity:none`
   with a correctly-typed `allowedAlignmentIds` (alignment:*-prefixed tuple).
 - **Deferred to**: A small phase-03 test-fixture fix plan, or a future hygiene pass.
+
+## DESCOPED — 2026-04-17 (Phase 07.2: magic-ui-descope)
+
+All Phase 07 magic surface (feature dir, rules-engine module, compiled spell + domain catalogs, tests/phase-07, copy namespace, Conjuros tab, Magia sub-step) was removed by Phase 07.2 as a product pivot. The reference surface is now `excel simulador de fichas/Plantilla Base.xlsx` — no spell selection, no cleric domain picker, no per-class spell progression. The open deferred item above ("Spell descriptions are all empty") is therefore NO LONGER RELEVANT to the shipping planner — it only matters if spell selection is ever re-introduced as a new feature phase (see ROADMAP Phase 07.2 entry). Extractor source for spells and domains is preserved under `packages/data-extractor/src/assemblers/` per Phase 07.2 CONTEXT, but is not invoked by the default `pnpm extract` run. See `.planning/phases/07.2-magic-ui-descope/07.2-01-SUMMARY.md` and `07.2-02-SUMMARY.md` for the descope record.
