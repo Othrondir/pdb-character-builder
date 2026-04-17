@@ -206,10 +206,10 @@ Plans:
   4. Desktop layout (>1023px) remains unchanged: stepper column always visible, no toggle button rendered.
   5. Regression suite covers the narrow-viewport open/close flow (jsdom or Vitest component-level) so the hamburger never regresses silently again.
 
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 
 Plans:
-- [ ] 07.1-01-PLAN.md — MobileNavToggle + store action + CSS scaffolding + jsdom regression specs
+- [x] 07.1-01-PLAN.md — MobileNavToggle + store action + CSS scaffolding + jsdom regression specs
 
 ### Phase 8: Summary, Persistence & Shared Builds
 **Goal**: Users can preserve, reload, and share an exact build snapshot pinned to its dataset version.
@@ -244,5 +244,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -
 | 6. Feats & Proficiencies | 2/2 | Complete | - |
 | 7. Magic & Full Legality Engine | Descoped | Superseded by Phase 07.2 | - |
 | 07.2 Magic UI descope (INSERTED) | 2/2 | Complete | 2026-04-17 |
-| 07.1 Shell narrow viewport nav fix (INSERTED) | 0/1 | Not started | - |
+| 07.1 Shell narrow viewport nav fix (INSERTED) | 1/1 | Complete   | 2026-04-17 |
 | 8. Summary, Persistence & Shared Builds | 0/2 | Not started | - |
