@@ -223,7 +223,7 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 08-01: Build summary, local save or load, and JSON import or export
+- [x] 08-01: Build summary, local save or load, and JSON import or export
 - [ ] 08-02: Implement URL sharing, dataset pinning, and mismatch handling
 **UI hint**: yes
 
