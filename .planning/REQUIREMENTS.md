@@ -9,7 +9,7 @@
 
 - [x] **LANG-01**: El usuario puede usar toda la interfaz principal del planner en espanol.
 - [x] **LANG-02**: El usuario ve en espanol los nombres y descripciones de clases, dotes, conjuros, dominios y reglas custom de Puerta de Baldur.
-- [ ] **LANG-03**: El usuario puede identificar que una build esta ligada a un conjunto concreto de datos/reglas del servidor.
+- [x] **LANG-03**: El usuario puede identificar que una build esta ligada a un conjunto concreto de datos/reglas del servidor.
 
 ### Flujo del planner
 
@@ -68,11 +68,11 @@
 
 ### Resumen y comparticion
 
-- [ ] **SHAR-01**: El usuario puede ver una ficha resumen final clara de la build completa.
-- [ ] **SHAR-02**: El usuario puede guardar y cargar builds en local.
-- [ ] **SHAR-03**: El usuario puede exportar e importar builds en formato JSON.
-- [ ] **SHAR-04**: El usuario puede compartir una build mediante URL.
-- [ ] **SHAR-05**: Una build compartida por URL o JSON conserva exactamente las decisiones del personaje y la version del dataset usada al crearla.
+- [x] **SHAR-01**: El usuario puede ver una ficha resumen final clara de la build completa.
+- [x] **SHAR-02**: El usuario puede guardar y cargar builds en local.
+- [x] **SHAR-03**: El usuario puede exportar e importar builds en formato JSON.
+- [x] **SHAR-04**: El usuario puede compartir una build mediante URL.
+- [x] **SHAR-05**: Una build compartida por URL o JSON conserva exactamente las decisiones del personaje y la version del dataset usada al crearla.
 
 ## v2 Requirements
 
@@ -107,7 +107,7 @@
 |-------------|-------|--------|
 | LANG-01 | Phase 2 | Complete |
 | LANG-02 | Phase 7 | Complete |
-| LANG-03 | Phase 8 | Pending |
+| LANG-03 | Phase 8 | Complete |
 | FLOW-01 | Phase 2 | Complete |
 | FLOW-02 | Phase 2 | Complete |
 | FLOW-03 | Phase 4 | Complete |
@@ -139,11 +139,11 @@
 | VALI-02 | Phase 7 | Pending |
 | VALI-03 | Phase 7 | Complete |
 | VALI-04 | Phase 1 | Complete |
-| SHAR-01 | Phase 8 | Pending |
-| SHAR-02 | Phase 8 | Pending |
-| SHAR-03 | Phase 8 | Pending |
-| SHAR-04 | Phase 8 | Pending |
-| SHAR-05 | Phase 8 | Pending |
+| SHAR-01 | Phase 8 | Complete |
+| SHAR-02 | Phase 8 | Complete |
+| SHAR-03 | Phase 8 | Complete |
+| SHAR-04 | Phase 8 | Complete |
+| SHAR-05 | Phase 8 | Complete |
 
 **Coverage:**
 - v1 requirements: 39 total

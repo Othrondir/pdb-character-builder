@@ -19,7 +19,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 5: Skills & Derived Statistics** - Add per-level skill allocation with server-specific enforcement and synchronized stats.
 - [ ] **Phase 6: Feats & Proficiencies** - Model Puerta feat choices, proficiencies, and exact prerequisite failures.
 - [ ] **Phase 7: Magic & Full Legality Engine** - Complete domains, spells, Spanish rules text, and full-build recomputation.
-- [ ] **Phase 8: Summary, Persistence & Shared Builds** - Preserve and share exact dataset-pinned builds through local storage, JSON, and URLs.
+- [x] **Phase 8: Summary, Persistence & Shared Builds** - Preserve and share exact dataset-pinned builds through local storage, JSON, and URLs.
 
 ## Phase Details
 
@@ -224,7 +224,7 @@ Plans:
 
 Plans:
 - [x] 08-01: Build summary, local save or load, and JSON import or export
-- [ ] 08-02: Implement URL sharing, dataset pinning, and mismatch handling
+- [x] 08-02: Implement URL sharing, dataset pinning, and mismatch handling
 **UI hint**: yes
 
 ## Progress
@@ -245,4 +245,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -
 | 7. Magic & Full Legality Engine | Descoped | Superseded by Phase 07.2 | - |
 | 07.2 Magic UI descope (INSERTED) | 2/2 | Complete | 2026-04-17 |
 | 07.1 Shell narrow viewport nav fix (INSERTED) | 1/1 | Complete   | 2026-04-17 |
-| 8. Summary, Persistence & Shared Builds | 0/2 | Not started | - |
+| 8. Summary, Persistence & Shared Builds | 2/2 | Complete | 2026-04-18 |

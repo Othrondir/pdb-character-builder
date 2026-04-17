@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: executing
-stopped_at: Completed 07.2-02-PLAN.md (Phase 07.2 magic UI descope complete, human UAT approved)
-last_updated: "2026-04-17T20:49:16.234Z"
-last_activity: 2026-04-17 -- Phase 8 execution started
+status: verifying
+stopped_at: "Completed 08-02-PLAN.md (Phase 8 complete: URL sharing + version pinning + all 8 UAT flows green)"
+last_updated: "2026-04-17T22:02:52.523Z"
+last_activity: 2026-04-17
 progress:
   total_phases: 12
-  completed_phases: 11
+  completed_phases: 12
   total_plans: 40
-  completed_plans: 38
-  percent: 95
+  completed_plans: 40
+  percent: 100
 ---
 
 # Project State
@@ -26,9 +26,9 @@ See: .planning/PROJECT.md (updated 2026-03-30)
 ## Current Position
 
 Phase: 8 (summary-persistence-shared-builds) — EXECUTING
-Plan: 1 of 2
-Status: Executing Phase 8
-Last activity: 2026-04-17 -- Phase 8 execution started
+Plan: 2 of 2
+Status: Phase complete — ready for verification
+Last activity: 2026-04-17
 
 Progress: [██████████] 100%
 
@@ -70,6 +70,7 @@ Progress: [██████████] 100%
 | Phase 05.1 P05 | 30min | 3 tasks | 12 files |
 | Phase 07 P04 | 9min | 4 tasks | 12 files |
 | Phase 07 P05 | 17m | 4 tasks | 12 files |
+| Phase 08 P02 | 32m | 4 tasks | 18 files |
 
 ## Accumulated Context
 
@@ -116,6 +117,10 @@ Recent decisions affecting current work:
 - [Phase 07.2]: Extractor preserves assembleSpellCatalog/assembleDomainCatalog code behind EMIT_MAGIC_CATALOGS=1 env flag; default run emits 5 catalogs (classes/races/skills/feats/deities)
 - [Phase 07.2]: Feat prerequisite minSpellLevel branch + getMaxSpellLevelFromBuildState helper + 'spell-level' PrerequisiteCheck variant all deleted; caster-level map removed from BuildStateAtLevel
 - [Phase 07.2]: Magic-free bundle verification uses tight symbol + copy-key greps (aggregateMagicLegality|MagicBoard|MagicSheet|classHasCastingAtLevel|computeCasterLevelByClass|getMaxSpellLevelFromBuildState and stepper.levelSubSteps.spells|sections.spells) instead of broad Spanish-text greps — Spanish prose 'magia'/'conjuros' inside legitimate feat/class descriptions must ship as valid Puerta de Baldur content
+- [Phase 08]: Zod 4 native .default().catch() replaces @tanstack/zod-adapter in TanStack Router (zod-adapter is Zod 3 compat shim)
+- [Phase 08]: Share-URL uses createHashHistory() + #/share?b={fflate-deflate+base64url} for GH Pages static hosting compatibility (no server rewrites needed)
+- [Phase 08]: D-07 fail-closed version-mismatch gate via shared diffRuleset() applied to BOTH /share decode and JSON import paths; VersionMismatchDialog is single UI surface
+- [Phase 08]: IncompleteBuildError at projection boundary + isBuildProjectable() predicate for UI gating — preserves strict buildDocumentSchema (SHAR-05) while preventing ZodError leak
 
 ### Pending Todos
 
@@ -143,6 +148,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-17T18:30:00.000Z
-Stopped at: Completed 07.2-02-PLAN.md (Phase 07.2 magic UI descope complete, human UAT approved)
+Last session: 2026-04-17T22:02:52.519Z
+Stopped at: Completed 08-02-PLAN.md (Phase 8 complete: URL sharing + version pinning + all 8 UAT flows green)
 Resume file: None
