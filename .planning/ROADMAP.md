@@ -171,6 +171,21 @@ Plans:
 - [x] 07-03-PLAN.md — Magic-legality aggregator + shell severity projection + shellCopyEs.magic namespace + MagicSheetTab + shell wiring + jsdom smoke tests
 **UI hint**: yes
 
+### Phase 07.1: Shell narrow viewport nav fix (INSERTED)
+
+**Goal:** At viewports ≤1023px the planner shell stays fully operable — the creation stepper (Origen / Progresión / Resumen / Utilidades) is reachable through a visible toggle and never leaves the user stranded on the Atributos step.
+**Depends on:** Phase 7
+**Requirements**: FLOW-01, FLOW-02
+**Success Criteria** (what must be TRUE):
+  1. At viewport widths ≤1023px, a visible Spanish-labeled toggle control opens the creation-stepper drawer and another affordance closes it.
+  2. When the drawer is open, users can reach Raza, Alineamiento, Atributos, every Progresión level, Resumen, and Utilidades — no step is hidden behind an unreachable nav.
+  3. Opening the drawer does not cover the active step content so that tapping outside or pressing Escape closes the drawer without destroying attribute or build state.
+  4. Desktop layout (>1023px) remains unchanged: stepper column always visible, no toggle button rendered.
+  5. Regression suite covers the narrow-viewport open/close flow (jsdom or Vitest component-level) so the hamburger never regresses silently again.
+
+Plans:
+- [ ] TBD (run /gsd-plan-phase 07.1 to break down)
+
 ### Phase 8: Summary, Persistence & Shared Builds
 **Goal**: Users can preserve, reload, and share an exact build snapshot pinned to its dataset version.
 **Depends on**: Phase 7

@@ -120,6 +120,7 @@ None yet.
 
 - Phase 05.1 inserted after Phase 5: Data Extractor Pipeline (URGENT) — UAT revealed all planner catalogs are ~10% placeholders vs server reality. **Completed 2026-04-15:** 2016 items extracted across 6 catalogs.
 - Phase 05.2 inserted after Phase 5.1: UX Overhaul — User identified that the current planner is not navigable: endless vertical scroll, no visual hierarchy, no wizard flow, low information density. Must fix before adding more feature phases.
+- Phase 07.1 inserted after Phase 7: Shell narrow viewport nav fix (URGENT) — Phase 07 UAT surfaced that at viewports ≤1023px the creation-stepper is hidden by media query and no hamburger toggle consumes `toggleMobileNav`, leaving the shell unusable at small resolutions. Blocks downstream UAT until fixed.
 
 ### Blockers/Concerns
 
