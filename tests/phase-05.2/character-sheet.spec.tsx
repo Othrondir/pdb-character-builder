@@ -40,15 +40,14 @@ describe('phase 05.2 character sheet', () => {
     expect(tablist).toBeInTheDocument();
   });
 
-  it('renders 4 tabs with correct labels', () => {
+  it('renders 3 tabs with correct labels', () => {
     render(createElement(CharacterSheet));
 
     const tabs = screen.getAllByRole('tab');
-    expect(tabs).toHaveLength(4);
+    expect(tabs).toHaveLength(3);
     expect(tabs[0]).toHaveTextContent('Estadisticas');
     expect(tabs[1]).toHaveTextContent('Habilidades');
     expect(tabs[2]).toHaveTextContent('Dotes');
-    expect(tabs[3]).toHaveTextContent('Conjuros');
   });
 
   it('marks the active tab with aria-selected="true"', () => {
@@ -107,12 +106,5 @@ describe('phase 05.2 character sheet', () => {
     // Click feats tab
     fireEvent.click(screen.getByRole('tab', { name: 'Dotes' }));
     expect(screen.getByText('0 dotes')).toBeInTheDocument();
-
-    // Click spells tab — Phase 07-03 replaces the SpellsPanel placeholder with
-    // the live MagicSheetTab, which renders a "{N} conjuros" header via the
-    // magic selector. Assert the new header content instead of the old
-    // placeholder copy.
-    fireEvent.click(screen.getByRole('tab', { name: 'Conjuros' }));
-    expect(screen.getByText(/\d+ conjuros/)).toBeInTheDocument();
   });
 });

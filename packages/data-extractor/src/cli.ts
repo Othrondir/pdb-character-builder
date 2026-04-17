@@ -215,20 +215,6 @@ const CATALOG_CONFIGS: Record<string, CatalogEmitConfig> = {
     schemaName: 'featCatalogSchema',
     typeName: 'FeatCatalog',
   },
-  spells: {
-    fileName: 'compiled-spells.ts',
-    catalogName: 'compiledSpellCatalog',
-    schemaImport: '@data-extractor/contracts/spell-catalog',
-    schemaName: 'spellCatalogSchema',
-    typeName: 'SpellCatalog',
-  },
-  domains: {
-    fileName: 'compiled-domains.ts',
-    catalogName: 'compiledDomainCatalog',
-    schemaImport: '@data-extractor/contracts/domain-catalog',
-    schemaName: 'domainCatalogSchema',
-    typeName: 'DomainCatalog',
-  },
 };
 
 // ---------------------------------------------------------------------------
@@ -239,6 +225,11 @@ export async function main(): Promise<void> {
   const startTime = Date.now();
   console.log('Puerta de Baldur Data Extractor');
   console.log('='.repeat(50));
+
+  // Phase 07.2 descope: magic catalogs (spells, domains) are not emitted by default.
+  // The assembler source is preserved per .planning/phases/07.2-magic-ui-descope/07.2-CONTEXT.md
+  // so any future reintroduction uses the existing pipeline. Set EMIT_MAGIC_CATALOGS=1 to re-enable.
+  const EMIT_MAGIC_CATALOGS = process.env.EMIT_MAGIC_CATALOGS === '1';
 
   // -------------------------------------------------------------------------
   // a. Open readers
@@ -345,50 +336,54 @@ export async function main(): Promise<void> {
     console.error(`  ERROR: Feat assembly failed: ${message}`);
   }
 
-  // 5. Spells (needs classRows from classes)
-  try {
-    console.log('  [5/7] Assembling spells...');
-    const classCatalog = catalogs.classes as {
-      classes: Array<{
-        id: string;
-        sourceRow: number;
-        spellGainTableRef: string | null;
-        spellKnownTableRef: string | null;
-        spellCaster: boolean;
-      }>;
-    } | undefined;
+  // 5. Spells (needs classRows from classes) — gated behind EMIT_MAGIC_CATALOGS
+  if (EMIT_MAGIC_CATALOGS) {
+    try {
+      console.log('  [5/7] Assembling spells...');
+      const classCatalog = catalogs.classes as {
+        classes: Array<{
+          id: string;
+          sourceRow: number;
+          spellGainTableRef: string | null;
+          spellKnownTableRef: string | null;
+          spellCaster: boolean;
+        }>;
+      } | undefined;
 
-    const spellClassRows = classCatalog
-      ? buildSpellClassRows(classCatalog.classes, classLabelsByRow, spellsColumnNames)
-      : new Map<string, SpellClassRowInfo>();
+      const spellClassRows = classCatalog
+        ? buildSpellClassRows(classCatalog.classes, classLabelsByRow, spellsColumnNames)
+        : new Map<string, SpellClassRowInfo>();
 
-    const result = assembleSpellCatalog(nwsyncReader, baseGameReader, tlkResolver, spellClassRows, datasetId);
-    catalogs.spells = result.catalog;
-    spellIdsByRow = buildSpellIdsByRow(result.catalog.spells);
-    log.addCatalog('spells', result.catalog.spells.length);
-    for (const w of result.warnings) log.addWarning('spells', w);
-    console.log(`         ${result.catalog.spells.length} spells assembled`);
-  } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
-    log.addWarning('spells', `FAILED: ${message}`);
-    console.error(`  ERROR: Spell assembly failed: ${message}`);
+      const result = assembleSpellCatalog(nwsyncReader, baseGameReader, tlkResolver, spellClassRows, datasetId);
+      catalogs.spells = result.catalog;
+      spellIdsByRow = buildSpellIdsByRow(result.catalog.spells);
+      log.addCatalog('spells', result.catalog.spells.length);
+      for (const w of result.warnings) log.addWarning('spells', w);
+      console.log(`         ${result.catalog.spells.length} spells assembled`);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      log.addWarning('spells', `FAILED: ${message}`);
+      console.error(`  ERROR: Spell assembly failed: ${message}`);
+    }
   }
 
-  // 6. Domains (needs featIdsByRow, spellIdsByRow)
-  try {
-    console.log('  [6/7] Assembling domains...');
-    const result = assembleDomainCatalog(
-      nwsyncReader, baseGameReader, tlkResolver,
-      featIdsByRow, spellIdsByRow, datasetId,
-    );
-    catalogs.domains = result.catalog;
-    log.addCatalog('domains', result.catalog.domains.length);
-    for (const w of result.warnings) log.addWarning('domains', w);
-    console.log(`         ${result.catalog.domains.length} domains assembled`);
-  } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
-    log.addWarning('domains', `FAILED: ${message}`);
-    console.error(`  ERROR: Domain assembly failed: ${message}`);
+  // 6. Domains (needs featIdsByRow, spellIdsByRow) — gated behind EMIT_MAGIC_CATALOGS
+  if (EMIT_MAGIC_CATALOGS) {
+    try {
+      console.log('  [6/7] Assembling domains...');
+      const result = assembleDomainCatalog(
+        nwsyncReader, baseGameReader, tlkResolver,
+        featIdsByRow, spellIdsByRow, datasetId,
+      );
+      catalogs.domains = result.catalog;
+      log.addCatalog('domains', result.catalog.domains.length);
+      for (const w of result.warnings) log.addWarning('domains', w);
+      console.log(`         ${result.catalog.domains.length} domains assembled`);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      log.addWarning('domains', `FAILED: ${message}`);
+      console.error(`  ERROR: Domain assembly failed: ${message}`);
+    }
   }
 
   // 7. Deities (gap documentation)

@@ -24,10 +24,10 @@ describe('planner shell structure', () => {
       'race', 'alignment', 'attributes',
     ]);
     expect(levelSubSteps.map((s) => s.id)).toEqual([
-      'class', 'skills', 'feats', 'spells',
+      'class', 'skills', 'feats',
     ]);
     expect(sheetTabs.map((s) => s.id)).toEqual([
-      'stats', 'skills', 'feats', 'spells',
+      'stats', 'skills', 'feats',
     ]);
   });
 

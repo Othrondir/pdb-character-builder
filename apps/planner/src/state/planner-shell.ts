@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import type { LevelSubStep, OriginStep, ProgressionLevel, SheetTab } from '@planner/lib/sections';
 
-export type PlannerValidationStatus = 'blocked' | 'illegal' | 'legal' | 'pending' | 'repair_needed';
+export type PlannerValidationStatus = 'blocked' | 'illegal' | 'legal' | 'pending';
 
 interface PlannerShellState {
   activeOriginStep: OriginStep | null;

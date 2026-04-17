@@ -16,7 +16,6 @@ function createBuildState(
     fortitudeSave: 0,
     selectedFeatIds: new Set(),
     skillRanks: {},
-    casterLevelByClass: {},
     ...overrides,
   };
 }
