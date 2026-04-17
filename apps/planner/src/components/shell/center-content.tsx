@@ -4,7 +4,6 @@ import { AttributesBoard } from '@planner/features/character-foundation/attribut
 import { BuildProgressionBoard } from '@planner/features/level-progression/build-progression-board';
 import { SkillBoard } from '@planner/features/skills/skill-board';
 import { FeatBoard } from '@planner/features/feats/feat-board';
-import { MagicBoard } from '@planner/features/magic/magic-board';
 import { shellCopyEs } from '@planner/lib/copy/es';
 
 export function CenterContent() {
@@ -29,8 +28,6 @@ export function CenterContent() {
         return <SkillBoard />;
       case 'feats':
         return <FeatBoard />;
-      case 'spells':
-        return <MagicBoard />;
     }
   }
 

@@ -14,7 +14,6 @@ import {
   type AttributeKey,
 } from '@planner/features/character-foundation/foundation-fixture';
 import { FeatSheetTab } from '@planner/features/feats/feat-sheet-tab';
-import { MagicSheetTab } from '@planner/features/magic/magic-sheet-tab';
 
 const ATTRIBUTE_LABELS: Record<AttributeKey, string> = {
   str: 'Fuerza',
@@ -130,7 +129,6 @@ export function CharacterSheet() {
             {activeTab === 'stats' && <StatsPanel />}
             {activeTab === 'skills' && <SkillsPanel />}
             {activeTab === 'feats' && <FeatSheetTab />}
-            {activeTab === 'spells' && <MagicSheetTab />}
           </>
         ) : (
           <EmptyState />
