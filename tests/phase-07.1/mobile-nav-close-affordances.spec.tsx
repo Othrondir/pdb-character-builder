@@ -79,4 +79,36 @@ describe('MobileNavToggle close affordances', () => {
     const close = screen.getByRole('button', { name: 'Cerrar menú' });
     expect(close.className).toContain('planner-shell__mobile-close');
   });
+
+  // A11y contract coverage (WR-03). These assertions lock the focus-management
+  // promises made by the component so regressions to WR-01 or the open-focus
+  // effect fail CI rather than silently shipping.
+  it('moves focus to the close button when the drawer opens', async () => {
+    render(createElement(MobileNavToggle));
+    openDrawer();
+    // Flush requestAnimationFrame before asserting focus.
+    await new Promise((resolve) => requestAnimationFrame(() => resolve(null)));
+    const close = screen.getByRole('button', { name: 'Cerrar menú' });
+    expect(document.activeElement).toBe(close);
+  });
+
+  it('returns focus to the toggle when the drawer closes via Escape', async () => {
+    render(createElement(MobileNavToggle));
+    openDrawer();
+    await new Promise((resolve) => requestAnimationFrame(() => resolve(null)));
+    fireEvent.keyDown(window, { key: 'Escape' });
+    const toggle = screen.getByRole('button', { name: 'Menú' });
+    expect(document.activeElement).toBe(toggle);
+  });
+
+  it('does NOT steal focus on initial mount (WR-01)', () => {
+    const outside = document.createElement('button');
+    outside.textContent = 'outside';
+    document.body.appendChild(outside);
+    outside.focus();
+    expect(document.activeElement).toBe(outside);
+    render(createElement(MobileNavToggle));
+    expect(document.activeElement).toBe(outside);
+    document.body.removeChild(outside);
+  });
 });
