@@ -17,12 +17,11 @@ export function DomainTileGrid({
   eligibleDomains,
   onSelect,
 }: DomainTileGridProps) {
-  const magicCopy =
-    (shellCopyEs as unknown as { magic?: Record<string, string> }).magic ?? {};
+  const magicCopy = shellCopyEs.magic;
 
   return (
     <div
-      aria-label={magicCopy.domainsStepTitle ?? 'Dominios'}
+      aria-label={magicCopy.domainsStepTitle}
       className="magic-board__domain-grid"
       role="listbox"
     >
@@ -47,13 +46,13 @@ export function DomainTileGrid({
             <span className="magic-board__domain-tile-label">{d.label}</span>
             {d.grantedFeatLabels.length > 0 && (
               <span className="magic-board__domain-tile-eyebrow">
-                {magicCopy.domainGrantHeading ?? 'APTITUDES'}:{' '}
+                {magicCopy.domainGrantHeading}:{' '}
                 {d.grantedFeatLabels.length}
               </span>
             )}
             {d.missingData && (
               <span className="magic-board__domain-tile-eyebrow">
-                {magicCopy.missingGrants ?? '(pendiente extracción)'}
+                {magicCopy.missingGrants}
               </span>
             )}
             {d.blockReason && !d.selected && (

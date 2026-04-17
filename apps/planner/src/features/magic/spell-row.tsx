@@ -26,8 +26,7 @@ export function SpellRow({
   onRemove,
   option,
 }: SpellRowProps) {
-  const magicCopy =
-    (shellCopyEs as unknown as { magic?: Record<string, string> }).magic ?? {};
+  const magicCopy = shellCopyEs.magic;
 
   const stateClass = option.selected
     ? 'is-selected'
@@ -54,7 +53,7 @@ export function SpellRow({
       <span className="magic-sheet__row-school">{option.schoolLabel}</span>
       {option.blockReason && (
         <span className="magic-sheet__row-reason" role="status">
-          {magicCopy.rejectionPrefixHard ?? 'Requiere'}: {option.blockReason}
+          {magicCopy.rejectionPrefixHard}: {option.blockReason}
         </span>
       )}
       {!option.selected && !option.blocked && (
@@ -64,7 +63,7 @@ export function SpellRow({
       )}
       {option.selected && (
         <NwnButton onClick={stopAnd(onRemove)} variant="secondary">
-          {magicCopy.removeFromSpellbook ?? 'Eliminar del grimorio'}
+          {magicCopy.removeFromSpellbook}
         </NwnButton>
       )}
     </article>

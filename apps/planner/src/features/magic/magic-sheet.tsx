@@ -42,14 +42,13 @@ export function MagicSheet({ boardView, focusedId, onFocusId }: MagicSheetProps)
     setActiveSpellLevel(sheet.activeSpellLevel);
   }, [sheet.activeSpellLevel, sheet.level, sheet.classId, sheet.paradigm]);
 
-  const magicCopy =
-    (shellCopyEs as unknown as { magic?: Record<string, string> }).magic ?? {};
+  const magicCopy = shellCopyEs.magic;
 
   if (sheet.paradigm === 'empty') {
     return (
       <aside className="planner-panel planner-panel--inner magic-sheet">
         <p className="magic-sheet__empty">
-          {magicCopy.noCastingStepTitle ?? 'Este nivel no concede magia'}
+          {magicCopy.noCastingStepTitle}
         </p>
       </aside>
     );
@@ -60,11 +59,10 @@ export function MagicSheet({ boardView, focusedId, onFocusId }: MagicSheetProps)
       <aside className="planner-panel planner-panel--inner magic-sheet">
         <section className="magic-sheet__group">
           <h3 className="magic-board__section-heading">
-            {magicCopy.preparedStepTitle ?? 'Magia preparada por descanso'}
+            {magicCopy.preparedStepTitle}
           </h3>
           <p>
-            {magicCopy.preparedCasterInfo ??
-              'El servidor prepara estos conjuros automáticamente según tu Sabiduría o Carisma.'}
+            {magicCopy.preparedCasterInfo}
           </p>
           <ul>
             {Object.entries(sheet.slotsByLevel)
@@ -109,8 +107,8 @@ export function MagicSheet({ boardView, focusedId, onFocusId }: MagicSheetProps)
   // spellbook or known paradigm
   const sectionHeading =
     sheet.paradigm === 'spellbook'
-      ? (magicCopy.spellbookStepTitle ?? 'Grimorio')
-      : (magicCopy.knownSpellsStepTitle ?? 'Conjuros conocidos');
+      ? magicCopy.spellbookStepTitle
+      : magicCopy.knownSpellsStepTitle;
 
   return (
     <aside className="planner-panel planner-panel--inner magic-sheet">
@@ -146,7 +144,7 @@ export function MagicSheet({ boardView, focusedId, onFocusId }: MagicSheetProps)
       </section>
       {sheet.swapAvailable && sheet.paradigm === 'known' && (
         <NwnButton onClick={() => setSwapOpen(true)} variant="primary">
-          {magicCopy.swapSpell ?? 'Cambiar conjuro conocido'}
+          {magicCopy.swapSpell}
         </NwnButton>
       )}
       {swapOpen && (

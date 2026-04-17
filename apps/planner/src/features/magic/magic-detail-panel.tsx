@@ -18,19 +18,13 @@ export function MagicDetailPanel({
   boardView,
   focusedId,
 }: MagicDetailPanelProps) {
-  const magicCopy =
-    (shellCopyEs as unknown as { magic?: Record<string, string> }).magic ?? {};
-  const missingDescription =
-    magicCopy.missingDescription ??
-    'Descripción no disponible — completar en próxima extracción';
+  const magicCopy = shellCopyEs.magic;
+  const missingDescription = magicCopy.missingDescription;
 
   if (!focusedId) {
     return (
       <DetailPanel
-        body={
-          magicCopy.emptyStateBody ??
-          'Selecciona un conjuro o dominio para ver los detalles.'
-        }
+        body={magicCopy.emptyStateBodyNotReady}
         title={shellCopyEs.stepper.stepTitles.spells}
       />
     );
@@ -58,7 +52,7 @@ export function MagicDetailPanel({
               role="listitem"
             >
               <span>
-                {magicCopy.rejectionPrefixHard ?? 'Requiere'}:{' '}
+                {magicCopy.rejectionPrefixHard}:{' '}
                 {spellOption.blockReason}
               </span>
             </li>
@@ -86,7 +80,7 @@ export function MagicDetailPanel({
         {domainOption.grantedFeatLabels.length > 0 ? (
           <section>
             <h4 className="magic-detail-panel__eyebrow">
-              {magicCopy.domainGrantHeading ?? 'APTITUDES'}
+              {magicCopy.domainGrantHeading}
             </h4>
             <ul>
               {domainOption.grantedFeatLabels.map((l) => (
@@ -96,13 +90,13 @@ export function MagicDetailPanel({
           </section>
         ) : (
           <p className="magic-detail-panel__placeholder">
-            {magicCopy.missingGrants ?? '(pendiente extracción)'}
+            {magicCopy.missingGrants}
           </p>
         )}
         {bonusEntries.length > 0 && (
           <section>
             <h4 className="magic-detail-panel__eyebrow">
-              {magicCopy.domainBonusSpellsHeading ?? 'CONJUROS ADICIONALES'}
+              {magicCopy.domainBonusSpellsHeading}
             </h4>
             {bonusEntries.map(([lvl, labels]) => (
               <div key={lvl}>

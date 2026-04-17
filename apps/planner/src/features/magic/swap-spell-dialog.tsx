@@ -36,8 +36,7 @@ export function SwapSpellDialog({
   const [learnId, setLearnId] = useState<CanonicalId | null>(null);
   const applySwap = useMagicStore((s) => s.applySwap);
 
-  const magicCopy =
-    (shellCopyEs as unknown as { magic?: Record<string, string> }).magic ?? {};
+  const magicCopy = shellCopyEs.magic;
 
   // Step 1 — pick a known spell to forget.
   if (!forgetId) {
@@ -50,11 +49,11 @@ export function SwapSpellDialog({
 
     return (
       <ConfirmDialog
-        body={magicCopy.swapStep1Body ?? 'Selecciona el conjuro que deseas olvidar.'}
+        body={magicCopy.swapStep1Body}
         onCancel={onClose}
         onConfirm={onClose}
         open
-        title={magicCopy.swapStep1Title ?? 'Paso 1: elige el conjuro a olvidar'}
+        title={magicCopy.swapStep1Title}
       >
         <OptionList
           items={items}
@@ -78,11 +77,11 @@ export function SwapSpellDialog({
 
     return (
       <ConfirmDialog
-        body={magicCopy.swapStep2Body ?? 'Selecciona el nuevo conjuro para aprender.'}
+        body={magicCopy.swapStep2Body}
         onCancel={onClose}
         onConfirm={onClose}
         open
-        title={magicCopy.swapStep2Title ?? 'Paso 2: elige el conjuro a aprender'}
+        title={magicCopy.swapStep2Title}
       >
         <OptionList
           items={items}
@@ -100,10 +99,7 @@ export function SwapSpellDialog({
     eligibleSpells.find((sp) => String(sp.spellId) === String(learnId))
       ?.label ?? String(learnId);
 
-  const body = (
-    magicCopy.swapConfirmBody ??
-    'Vas a olvidar {forget} y aprender {learn} en el nivel {level}. Esta acción se registra en el nivel activo.'
-  )
+  const body = magicCopy.swapConfirmBody
     .replace('{forget}', forgetLabel)
     .replace('{learn}', learnLabel)
     .replace('{level}', String(level));
@@ -117,7 +113,7 @@ export function SwapSpellDialog({
         onClose();
       }}
       open
-      title={magicCopy.swapSpell ?? 'Cambiar conjuro conocido'}
+      title={magicCopy.swapSpell}
     />
   );
 }

@@ -16,8 +16,7 @@ import { useMagicStore } from './store';
  * Top-level magic board. Mirrors apps/planner/src/features/feats/feat-board.tsx.
  *
  * Copy namespace `shellCopyEs.magic.*` is finalized in Plan 07-03; components
- * use `(shellCopyEs as unknown as { magic?: ... }).magic ?? fallback` so the
- * feature compiles today and picks up the typed copy automatically.
+ * now consume the typed namespace directly (no runtime fallbacks).
  */
 export function MagicBoard() {
   const magicState = useMagicStore();
@@ -36,8 +35,7 @@ export function MagicBoard() {
 
   const [focusedId, setFocusedId] = useState<string | null>(null);
 
-  const magicCopy =
-    (shellCopyEs as unknown as { magic?: Record<string, string> }).magic ?? {};
+  const magicCopy = shellCopyEs.magic;
 
   if (boardView.emptyStateBody) {
     return (
@@ -45,7 +43,7 @@ export function MagicBoard() {
         title={shellCopyEs.stepper.stepTitles.spells}
       >
         <DetailPanel
-          title={magicCopy.emptyStateHeading ?? 'La magia sigue bloqueada'}
+          title={magicCopy.emptyStateHeadingNotReady}
           body={boardView.emptyStateBody}
         />
         <div />
@@ -54,12 +52,11 @@ export function MagicBoard() {
   }
 
   const paradigmTitle: Record<string, string> = {
-    domains: magicCopy.domainsStepTitle ?? 'Selecciona los dominios del nivel',
-    spellbook: magicCopy.spellbookStepTitle ?? 'Amplía el grimorio',
-    known: magicCopy.knownSpellsStepTitle ?? 'Selecciona los conjuros conocidos',
-    'prepared-summary':
-      magicCopy.preparedStepTitle ?? 'Magia preparada por descanso',
-    empty: magicCopy.noCastingStepTitle ?? 'Este nivel no concede magia',
+    domains: magicCopy.domainsStepTitle,
+    spellbook: magicCopy.spellbookStepTitle,
+    known: magicCopy.knownSpellsStepTitle,
+    'prepared-summary': magicCopy.preparedStepTitle,
+    empty: magicCopy.noCastingStepTitle,
   };
   const title = paradigmTitle[boardView.activeSheet.paradigm] ?? paradigmTitle.empty;
 
