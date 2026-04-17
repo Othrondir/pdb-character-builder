@@ -16,7 +16,6 @@ export const featPrerequisitesSchema = z.object({
   minInt: z.number().int().nonnegative().nullable().optional(),
   minLevel: z.number().int().nonnegative().nullable().optional(),
   minLevelClass: z.string().regex(canonicalIdRegex).nullable().optional(),
-  minSpellLevel: z.number().int().nonnegative().nullable().optional(),
   minStr: z.number().int().nonnegative().nullable().optional(),
   minWis: z.number().int().nonnegative().nullable().optional(),
   maxLevel: z.number().int().nonnegative().nullable().optional(),

@@ -42600,7 +42600,6 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "id": "feat:empower",
       "label": "Potenciar conjuro",
       "prerequisites": {
-        "minSpellLevel": 2,
         "preReqEpic": false
       },
       "sourceRow": 11
@@ -42612,7 +42611,6 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "id": "feat:extspell",
       "label": "Prolongar conjuro",
       "prerequisites": {
-        "minSpellLevel": 1,
         "preReqEpic": false
       },
       "sourceRow": 12
@@ -42701,7 +42699,6 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "id": "feat:maxspell",
       "label": "Maximizar conjuro",
       "prerequisites": {
-        "minSpellLevel": 3,
         "preReqEpic": false
       },
       "sourceRow": 25
@@ -42737,7 +42734,6 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "id": "feat:quicken",
       "label": "Apresurar conjuro",
       "prerequisites": {
-        "minSpellLevel": 4,
         "preReqEpic": false
       },
       "sourceRow": 29
@@ -42773,7 +42769,6 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "id": "feat:silent",
       "label": "Conjurar en silencio",
       "prerequisites": {
-        "minSpellLevel": 1,
         "preReqEpic": false
       },
       "sourceRow": 33
@@ -42796,7 +42791,6 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "id": "feat:spellfocusabj",
       "label": "Soltura con una escuela de magia (Abjuración)",
       "prerequisites": {
-        "minSpellLevel": 1,
         "preReqEpic": false
       },
       "sourceRow": 35
@@ -42819,7 +42813,6 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "id": "feat:stillspell",
       "label": "Conjurar sin moverse",
       "prerequisites": {
-        "minSpellLevel": 1,
         "preReqEpic": false
       },
       "sourceRow": 37
@@ -44601,7 +44594,6 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "id": "feat:spellfocuscon",
       "label": "Soltura con una escuela de magia (Conjuración)",
       "prerequisites": {
-        "minSpellLevel": 1,
         "preReqEpic": false
       },
       "sourceRow": 166
@@ -44613,7 +44605,6 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "id": "feat:spellfocusdiv",
       "label": "Soltura con una escuela de magia (Adivinación)",
       "prerequisites": {
-        "minSpellLevel": 1,
         "preReqEpic": false
       },
       "sourceRow": 167
@@ -44625,7 +44616,6 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "id": "feat:spellfocusenc",
       "label": "Soltura con una escuela de magia (Encantamiento)",
       "prerequisites": {
-        "minSpellLevel": 1,
         "preReqEpic": false
       },
       "sourceRow": 168
@@ -44637,7 +44627,6 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "id": "feat:spellfocusevo",
       "label": "Soltura con una escuela de magia (Evocación)",
       "prerequisites": {
-        "minSpellLevel": 1,
         "preReqEpic": false
       },
       "sourceRow": 169
@@ -44649,7 +44638,6 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "id": "feat:spellfocusill",
       "label": "Soltura con una escuela de magia (Ilusión)",
       "prerequisites": {
-        "minSpellLevel": 1,
         "preReqEpic": false
       },
       "sourceRow": 170
@@ -44661,7 +44649,6 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "id": "feat:spellfocusnec",
       "label": "Soltura con una escuela de magia (Nigromancia)",
       "prerequisites": {
-        "minSpellLevel": 1,
         "preReqEpic": false
       },
       "sourceRow": 171
@@ -44673,7 +44660,6 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "id": "feat:spellfocustra",
       "label": "Soltura con una escuela de magia (Transmutación)",
       "prerequisites": {
-        "minSpellLevel": 1,
         "preReqEpic": false
       },
       "sourceRow": 172
@@ -48748,7 +48734,6 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "id": "feat:feat-epic-spell-focus-abjuration",
       "label": "Soltura épica con una escuela de magia (Abjuración)",
       "prerequisites": {
-        "minSpellLevel": 9,
         "preReqEpic": true,
         "requiredFeat1": "feat:grspllfcsabj"
       },
@@ -48761,7 +48746,6 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "id": "feat:feat-epic-spell-focus-conjuration",
       "label": "Soltura épica con una escuela de magia (Conjuración)",
       "prerequisites": {
-        "minSpellLevel": 9,
         "preReqEpic": true,
         "requiredFeat1": "feat:grspllfcscnj"
       },
@@ -48774,7 +48758,6 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "id": "feat:feat-epic-spell-focus-divination",
       "label": "Soltura épica con una escuela de magia (Adivinación)",
       "prerequisites": {
-        "minSpellLevel": 9,
         "preReqEpic": true,
         "requiredFeat1": "feat:grspllfcsdiv"
       },
@@ -48787,7 +48770,6 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "id": "feat:feat-epic-spell-focus-enchantment",
       "label": "Soltura épica con una escuela de magia (Encantamiento)",
       "prerequisites": {
-        "minSpellLevel": 9,
         "preReqEpic": true,
         "requiredFeat1": "feat:grspllfcsench"
       },
@@ -48800,7 +48782,6 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "id": "feat:feat-epic-spell-focus-evocation",
       "label": "Soltura épica con una escuela de magia (Evocación)",
       "prerequisites": {
-        "minSpellLevel": 9,
         "preReqEpic": true,
         "requiredFeat1": "feat:grspllfcsevc"
       },
@@ -48813,7 +48794,6 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "id": "feat:feat-epic-spell-focus-illusion",
       "label": "Soltura épica con una escuela de magia (Ilusión)",
       "prerequisites": {
-        "minSpellLevel": 9,
         "preReqEpic": true,
         "requiredFeat1": "feat:grspllfcsill"
       },
@@ -48826,7 +48806,6 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "id": "feat:feat-epic-spell-focus-necromancy",
       "label": "Soltura épica con una escuela de magia (Nigromancia)",
       "prerequisites": {
-        "minSpellLevel": 9,
         "preReqEpic": true,
         "requiredFeat1": "feat:grspllfcsnec"
       },
@@ -48839,7 +48818,6 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "id": "feat:feat-epic-spell-focus-transmutation",
       "label": "Soltura épica con una escuela de magia (Transmutación)",
       "prerequisites": {
-        "minSpellLevel": 9,
         "preReqEpic": true,
         "requiredFeat1": "feat:grspllfcstran"
       },
@@ -52015,7 +51993,6 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "id": "feat:feat-epic-automatic-quicken-1",
       "label": "Apresurar conjuro automático I",
       "prerequisites": {
-        "minSpellLevel": 9,
         "preReqEpic": true,
         "requiredFeat1": "feat:quicken",
         "requiredSkill": {
@@ -52032,7 +52009,6 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "id": "feat:feat-epic-automatic-quicken-2",
       "label": "Apresurar conjuro automático II",
       "prerequisites": {
-        "minSpellLevel": 9,
         "preReqEpic": true,
         "requiredFeat1": "feat:feat-epic-automatic-quicken-1",
         "requiredSkill": {
@@ -52049,7 +52025,6 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "id": "feat:feat-epic-automatic-quicken-3",
       "label": "Apresurar conjuro automático III",
       "prerequisites": {
-        "minSpellLevel": 9,
         "preReqEpic": true,
         "requiredFeat1": "feat:feat-epic-automatic-quicken-2",
         "requiredSkill": {
@@ -52066,7 +52041,6 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "id": "feat:feat-epic-automatic-silent-spell-1",
       "label": "Conjurar en silencio automático I",
       "prerequisites": {
-        "minSpellLevel": 9,
         "preReqEpic": true,
         "requiredFeat1": "feat:silent",
         "requiredSkill": {
@@ -52083,7 +52057,6 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "id": "feat:feat-epic-automatic-silent-spell-2",
       "label": "Conjurar en silencio automático II",
       "prerequisites": {
-        "minSpellLevel": 9,
         "preReqEpic": true,
         "requiredFeat1": "feat:feat-epic-automatic-silent-spell-1",
         "requiredSkill": {
@@ -52100,7 +52073,6 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "id": "feat:feat-epic-automatic-silent-spell-3",
       "label": "Conjurar en silencio automático III",
       "prerequisites": {
-        "minSpellLevel": 9,
         "preReqEpic": true,
         "requiredFeat1": "feat:feat-epic-automatic-silent-spell-2",
         "requiredSkill": {
@@ -52117,7 +52089,6 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "id": "feat:feat-epic-automatic-still-spell-1",
       "label": "Conjurar sin moverse automático I",
       "prerequisites": {
-        "minSpellLevel": 9,
         "preReqEpic": true,
         "requiredFeat1": "feat:stillspell",
         "requiredSkill": {
@@ -52134,7 +52105,6 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "id": "feat:feat-epic-automatic-still-spell-2",
       "label": "Conjurar sin moverse automático II",
       "prerequisites": {
-        "minSpellLevel": 9,
         "preReqEpic": true,
         "requiredFeat1": "feat:feat-epic-automatic-still-spell-1",
         "requiredSkill": {
@@ -52151,7 +52121,6 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "id": "feat:feat-epic-automatic-still-spell-3",
       "label": "Conjurar sin moverse automático III",
       "prerequisites": {
-        "minSpellLevel": 9,
         "preReqEpic": true,
         "requiredFeat1": "feat:feat-epic-automatic-still-spell-2",
         "requiredSkill": {
@@ -55456,7 +55425,6 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "id": "feat:abstenciondemateriales",
       "label": "Abstención de materiales",
       "prerequisites": {
-        "minSpellLevel": 1,
         "preReqEpic": false
       },
       "sourceRow": 1200
@@ -57171,7 +57139,6 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "id": "feat:conjurosveterano",
       "label": "Lanzador de Conjuros Veterano",
       "prerequisites": {
-        "minSpellLevel": 1,
         "preReqEpic": false,
         "requiredSkill": {
           "id": "skill:conocimientoconjuros",

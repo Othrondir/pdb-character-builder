@@ -269,9 +269,6 @@ export function assembleFeatCatalog(
     const minCha = parseIntOrNull(row.MINCHA);
     if (minCha != null && minCha > 0) prerequisites.minCha = minCha;
 
-    const minSpellLevel = parseIntOrNull(row.MINSPELLLVL);
-    if (minSpellLevel != null && minSpellLevel > 0) prerequisites.minSpellLevel = minSpellLevel;
-
     const minLevel = parseIntOrNull(row.MinLevel);
     if (minLevel != null && minLevel > 0) prerequisites.minLevel = minLevel;
 
