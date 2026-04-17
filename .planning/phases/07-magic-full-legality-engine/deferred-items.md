@@ -21,6 +21,13 @@ deferred to a future plan for resolution. These do not block the plan's goal.
 - **Workaround in Plan 07-01**: Phase 7 Wave 0 spell-eligibility test targets
   `class:bard` instead of `class:sorcerer` (bard has its own column and full coverage).
 
+### Resolution — 2026-04-17 (Plan 07-05)
+
+- Fixed in Plan 07-05 Task 1: `packages/data-extractor/src/assemblers/spell-assembler.ts` promoted `columnToClassId` to `Map<string, string[]>`, fanning out every spell under each class sharing the column.
+- Catalog regenerated via `pnpm extract` in Task 2: `grep -c '"class:sorcerer"' apps/planner/src/data/compiled-spells.ts` returned 232 post-regen (was 0). Wizard count 231 and bard count 94 preserved.
+- Test workaround reverted in Task 3: `tests/phase-07/spell-eligibility.spec.ts` now tests `class:sorcerer` directly (bard spot-check kept as regression guard). New catalog-coverage test in `tests/phase-07/sorcerer-catalog-coverage.spec.ts` locks the fix with `sorcererCount === wizardCount`.
+- VERIFICATION.md gap 5 (WR-04) closed. MAGI-03 sorcerer coverage restored.
+
 ### Spell descriptions are all empty (376 of 376)
 
 - **Discovered**: Plan 07-01 Task 1 symmetric Description strref warnings surfaced this
