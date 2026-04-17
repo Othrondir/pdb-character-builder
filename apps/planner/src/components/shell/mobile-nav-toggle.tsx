@@ -25,8 +25,12 @@ export function MobileNavToggle() {
   }, [mobileNavOpen, closeMobileNav]);
 
   // Focus management — open moves focus to close button, close returns to toggle.
+  // wasOpenRef distinguishes "drawer just closed" from "drawer default-closed on mount"
+  // so initial mount does not steal focus from whatever the user had focused (WR-01).
+  const wasOpenRef = useRef(false);
   useEffect(() => {
     if (mobileNavOpen) {
+      wasOpenRef.current = true;
       // requestAnimationFrame guards against focusing an element that has not yet
       // committed to the DOM after the render pass.
       const raf =
@@ -41,8 +45,11 @@ export function MobileNavToggle() {
         }
       };
     }
-    // On close, return focus to the toggle if it exists in the DOM.
-    toggleButtonRef.current?.focus();
+    // Only restore focus if we are transitioning open -> closed.
+    if (wasOpenRef.current) {
+      wasOpenRef.current = false;
+      toggleButtonRef.current?.focus();
+    }
     return undefined;
   }, [mobileNavOpen]);
 
