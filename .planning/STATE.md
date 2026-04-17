@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 07-04-PLAN.md (gap closure)
-last_updated: "2026-04-17T12:27:13.409Z"
+stopped_at: Completed 07-05-PLAN.md (gap closure WR-04)
+last_updated: "2026-04-17T12:46:14.249Z"
 last_activity: 2026-04-17
 progress:
   total_phases: 10
-  completed_phases: 8
+  completed_phases: 9
   total_plans: 35
-  completed_plans: 34
-  percent: 97
+  completed_plans: 35
+  percent: 100
 ---
 
 # Project State
@@ -25,12 +25,12 @@ See: .planning/PROJECT.md (updated 2026-03-30)
 
 ## Current Position
 
-Phase: 07 (magic-full-legality-engine) — EXECUTING
-Plan: 2 of 5
-Status: Ready to execute
+Phase: 07 (magic-full-legality-engine) — COMPLETED (gap-closure plans 07-04 and 07-05 landed)
+Plan: 5 of 5
+Status: Phase closed; awaiting re-verification
 Last activity: 2026-04-17
 
-Progress: [██████░░░░] 60%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
@@ -69,6 +69,7 @@ Progress: [██████░░░░] 60%
 | Phase 05.1 P04 | 10min | 2 tasks | 4 files |
 | Phase 05.1 P05 | 30min | 3 tasks | 12 files |
 | Phase 07 P04 | 9min | 4 tasks | 12 files |
+| Phase 07 P05 | 17m | 4 tasks | 12 files |
 
 ## Accumulated Context
 
@@ -108,6 +109,8 @@ Recent decisions affecting current work:
 - [Phase 07]: classId threaded into MagicLevelInput at selector construction sites (not max-reduce over buildState.classLevels) so swap-cadence validation correctly handles multiclass builds
 - [Phase 07]: dispatchParadigm signature stability preserved: characterLevel arg retained (marked void) while cleric branch reads classLevels for first-cleric-level detection
 - [Phase 07]: ConfirmDialog gains confirmDisabled prop forwarded via NwnButton native disabled; SwapSpellDialog steps 1 and 2 gate Aceptar on row selection
+- [Phase 07]: Extractor uses Map<column, string[]> so classes sharing a 2DA column (e.g., Wiz_Sorc) fan out to every classId instead of last-wins overwrite
+- [Phase 07]: Lock sorcererCount === wizardCount at the catalog test layer so shared-column co-tagging cannot silently regress
 
 ### Pending Todos
 
@@ -133,6 +136,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-17T12:27:13.405Z
-Stopped at: Completed 07-04-PLAN.md (gap closure)
+Last session: 2026-04-17T12:46:14.245Z
+Stopped at: Completed 07-05-PLAN.md (gap closure WR-04)
 Resume file: None
