@@ -9,8 +9,11 @@ import { useResumenViewModel } from './resumen-selectors';
 import { ResumenTable } from './resumen-table';
 import { SaveSlotDialog, LoadSlotDialog } from './save-slot-dialog';
 import {
+  buildShareUrl,
   diffRuleset,
   downloadBuildAsJson,
+  encodeSharePayload,
+  exceedsBudget,
   hydrateBuildDocument,
   importBuildFromFile,
   JsonImportError,
@@ -44,6 +47,34 @@ export function ResumenBoard() {
         : model.identity.name;
     const doc = projectBuildDocument(suggestedName);
     downloadBuildAsJson(doc, suggestedName);
+  }
+
+  async function onShare() {
+    const suggestedName =
+      model.identity.name === copy.emptyNamePlaceholder
+        ? 'build'
+        : model.identity.name;
+    const doc = projectBuildDocument(suggestedName);
+    const encoded = encodeSharePayload(doc);
+
+    if (exceedsBudget(encoded)) {
+      // D-06: fallback to JSON download with explanatory toast.
+      downloadBuildAsJson(doc, suggestedName);
+      pushToast(shellCopyEs.persistence.shareFallback, 'warn');
+      return;
+    }
+
+    const url = buildShareUrl(encoded);
+    if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+      try {
+        await navigator.clipboard.writeText(url);
+        pushToast(`URL copiada: ${url.length} chars`, 'info');
+        return;
+      } catch {
+        // Fall through to visible-URL toast when clipboard is blocked.
+      }
+    }
+    pushToast(`Copia esta URL: ${url}`, 'info');
   }
 
   async function onImportFile(ev: ChangeEvent<HTMLInputElement>) {
@@ -101,8 +132,7 @@ export function ResumenBoard() {
         >
           {copy.actions.import}
         </NwnButton>
-        {/* Compartir is wired in Plan 08-02 Task 3. Render disabled here so layout is final. */}
-        <NwnButton variant="auxiliary" disabled aria-disabled="true">
+        <NwnButton onClick={onShare} variant="secondary">
           {copy.actions.share}
         </NwnButton>
         <input

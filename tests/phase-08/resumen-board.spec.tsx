@@ -23,6 +23,11 @@ vi.mock('@planner/features/persistence', () => ({
   saveSlot: vi.fn(async () => undefined),
   loadSlot: vi.fn(async () => null),
   slotExists: vi.fn(async () => false),
+  // 08-02 share surface
+  encodeSharePayload: vi.fn(() => ''),
+  exceedsBudget: vi.fn(() => false),
+  buildShareUrl: vi.fn(() => ''),
+  diffRuleset: vi.fn(() => null),
 }));
 
 import { ResumenBoard } from '@planner/features/summary/resumen-board';
@@ -82,7 +87,7 @@ describe('ResumenBoard', () => {
     ).toBeInTheDocument();
   });
 
-  it('renders the 5 action buttons (Compartir disabled)', () => {
+  it('renders the 5 action buttons (Compartir enabled after 08-02 Task 3)', () => {
     render(createElement(ResumenBoard));
     const copy = shellCopyEs.resumen.actions;
     expect(screen.getByRole('button', { name: copy.save })).toBeEnabled();
@@ -91,8 +96,9 @@ describe('ResumenBoard', () => {
     // Two buttons match the importar name (the button and the hidden file input's aria-label).
     const importerButtons = screen.getAllByRole('button', { name: copy.import });
     expect(importerButtons.length).toBeGreaterThanOrEqual(1);
+    // Compartir is live in Plan 08-02 Task 3 — encodes + copies / falls back to JSON.
     const share = screen.getByRole('button', { name: copy.share });
-    expect(share).toBeDisabled();
+    expect(share).toBeEnabled();
   });
 
   it('renders em-dash (NOT "0") for every derived-stat cell when helpers are missing', () => {
