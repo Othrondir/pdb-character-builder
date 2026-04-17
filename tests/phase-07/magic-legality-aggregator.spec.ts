@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { aggregateMagicLegality } from '@rules-engine/magic/magic-legality-aggregator';
 import type { MagicLevelInput } from '@rules-engine/magic/magic-revalidation';
+import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
 import { compiledSpellCatalog } from '@planner/data/compiled-spells';
 import { compiledDomainCatalog } from '@planner/data/compiled-domains';
 import type { BuildStateAtLevel } from '@rules-engine/feats/feat-prerequisite';
@@ -22,10 +23,15 @@ function emptyBuildState(
   };
 }
 
-function emptyLevelInput(level: number, bs: BuildStateAtLevel): MagicLevelInput {
+function emptyLevelInput(
+  level: number,
+  bs: BuildStateAtLevel,
+  classId: CanonicalId | null = null,
+): MagicLevelInput {
   return {
     level,
     buildState: bs,
+    classId,
     domainsSelected: [],
     spellbookAdditions: {},
     knownSpells: {},
@@ -101,6 +107,7 @@ describe('aggregateMagicLegality', () => {
           { 'class:cleric': 1 },
           { 'class:cleric': 1 },
         ),
+        classId: null,
         domainsSelected: [],
         spellbookAdditions: { 1: [wizardSpell!.id] },
         knownSpells: {},
@@ -131,6 +138,7 @@ describe('aggregateMagicLegality', () => {
       levels.push({
         level: lvl,
         buildState: bs,
+        classId: null,
         domainsSelected: [],
         spellbookAdditions:
           lvl === 3
@@ -171,6 +179,7 @@ describe('aggregateMagicLegality', () => {
           { 'class:cleric': 1 },
           { 'class:cleric': 1 },
         ),
+        classId: null,
         domainsSelected: [emptyDomain.id],
         spellbookAdditions: {},
         knownSpells: {},
@@ -199,6 +208,7 @@ describe('aggregateMagicLegality', () => {
           { 'class:cleric': 1 },
           { 'class:cleric': 1 },
         ),
+        classId: null,
         domainsSelected: [],
         spellbookAdditions: { 1: [wizardSpell!.id] },
         knownSpells: {},
@@ -211,6 +221,7 @@ describe('aggregateMagicLegality', () => {
           { 'class:cleric': 2 },
           { 'class:cleric': 2 },
         ),
+        classId: null,
         domainsSelected: [],
         spellbookAdditions: { 0: [wizardSpell!.id] },
         knownSpells: {},

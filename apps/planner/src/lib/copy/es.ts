@@ -189,6 +189,7 @@ export const shellCopyEs = {
     slotOverflow: 'Ranura nivel {N} agotada: reduce o elimina una selección.',
     knownOverflow: 'Conocidos agotados: olvida un conjuro antes de aprender otro.',
     domainMismatch: 'Dominio incompatible con la clase actual: repara o reinicia la selección.',
+    swapOutOfCadence: 'Solo puedes cambiar un conjuro conocido en los niveles de cambio del hechicero (4, 8, 12, 16) o el bardo (5, 8, 11, 14).',
     preparedCasterInfo: 'El servidor prepara estos conjuros automáticamente según tu Sabiduría / Carisma.',
     repairCalloutBanner: 'Este nivel conserva la magia seleccionada, pero depende de corregir decisiones anteriores.',
     missingDescription: 'Descripción no disponible — completar en próxima extracción',

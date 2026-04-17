@@ -144,13 +144,31 @@ export const useMagicStore = create<MagicStoreState>((set) => ({
   applySwap: (level, forgotten, learned) =>
     set((state) => ({
       lastEditedLevel: level,
-      levels: updateLevel(state.levels, level, (record) => ({
-        ...record,
-        swapsApplied: [
-          ...record.swapsApplied,
-          { appliedAtLevel: level, forgotten, learned },
-        ],
-      })),
+      levels: updateLevel(state.levels, level, (record) => {
+        // Drop forgotten id from whichever spell-level bucket holds it, then
+        // append learned at the same bucket.
+        const nextKnown: Record<number, CanonicalId[]> = {};
+        let spellLevelOfForgotten: number | null = null;
+        for (const [slKey, list] of Object.entries(record.knownSpells)) {
+          const sl = Number(slKey);
+          if (list.includes(forgotten)) spellLevelOfForgotten = sl;
+          nextKnown[sl] = list.filter((id) => id !== forgotten);
+        }
+        if (spellLevelOfForgotten != null) {
+          nextKnown[spellLevelOfForgotten] = [
+            ...(nextKnown[spellLevelOfForgotten] ?? []),
+            learned,
+          ];
+        }
+        return {
+          ...record,
+          knownSpells: nextKnown,
+          swapsApplied: [
+            ...record.swapsApplied,
+            { appliedAtLevel: level, forgotten, learned },
+          ],
+        };
+      }),
     })),
 
   removeKnownSpell: (level, spellLevel, spellId) =>

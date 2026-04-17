@@ -1,6 +1,7 @@
 import type { SpellCatalog } from '@data-extractor/contracts/spell-catalog';
 import type { DomainCatalog } from '@data-extractor/contracts/domain-catalog';
 import type { BuildStateAtLevel } from '../feats/feat-prerequisite';
+import type { CanonicalId } from '../contracts/canonical-id';
 import {
   resolveValidationOutcome,
   type ValidationOutcome,
@@ -14,8 +15,18 @@ import {
 
 export type MagicEvaluationStatus = 'legal' | 'illegal' | 'blocked' | 'pending';
 
+/**
+ * Sorcerer spell-swap cadence per D-15. Canonical source: NWN EE rules.
+ * Kept in sync with apps/planner/src/features/magic/selectors.ts SORCERER_SWAP_LEVELS.
+ */
+const SORCERER_SWAP_LEVELS = new Set<number>([4, 8, 12, 16]);
+
+/** Bard spell-swap cadence per D-15. Kept in sync with selectors.ts BARD_SWAP_LEVELS. */
+const BARD_SWAP_LEVELS = new Set<number>([5, 8, 11, 14]);
+
 export interface MagicLevelInput {
   buildState: BuildStateAtLevel;
+  classId: CanonicalId | null;
   level: number;
   domainsSelected: string[];
   spellbookAdditions: Record<number, string[]>;
@@ -153,6 +164,27 @@ export function revalidateMagicSnapshotAfterChange(input: {
       for (const spellId of list) {
         const missing = detectMissingSpellData(spellId, input.spellCatalog);
         if (missing) issues.push(missing);
+      }
+    }
+
+    // Swap-cadence validation (D-15, CR-01 fix).
+    // A swap is only legal at sorcerer {4,8,12,16} or bard {5,8,11,14}. When a
+    // swap appears at any other level we emit an illegal issue referencing both
+    // the forgotten and learned spells. The class assigned at the swap level
+    // (lvl.classId) determines which cadence applies — using the level-record
+    // classId, NOT a max-level heuristic over buildState.classLevels (which would
+    // misfire for Fighter-3/Sorcerer-1 builds where Fighter wins on level count).
+    for (const swap of lvl.swapsApplied) {
+      const allowed =
+        lvl.classId === 'class:sorcerer'
+          ? SORCERER_SWAP_LEVELS.has(swap.appliedAtLevel)
+          : lvl.classId === 'class:bard'
+            ? BARD_SWAP_LEVELS.has(swap.appliedAtLevel)
+            : false;
+      if (!allowed) {
+        issues.push(
+          createIllegalIssue([swap.forgotten, swap.learned]),
+        );
       }
     }
 

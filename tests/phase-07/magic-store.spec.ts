@@ -95,6 +95,43 @@ describe('phase 07 magic store', () => {
     expect(useMagicStore.getState().lastEditedLevel).toBe(4);
   });
 
+  it('applySwap mutates knownSpells: forgotten removed, learned inserted at same bucket', () => {
+    // Resolve two distinct wizard/sorcerer level-1 spells dynamically so the
+    // test does not break if the 07-05 catalog regen shifts spell slugs. Fail
+    // LOUDLY if the catalog drift leaves us with <2 candidates.
+    const wizardLevel1Spells = compiledSpellCatalog.spells.filter(
+      (s) => s.classLevels['class:wizard'] === 1,
+    );
+    expect(wizardLevel1Spells.length).toBeGreaterThanOrEqual(2);
+    const [forgottenSpell, learnedSpell] = wizardLevel1Spells;
+    expect(forgottenSpell).toBeDefined();
+    expect(learnedSpell).toBeDefined();
+
+    // Seed level 4 (a legal sorcerer swap level) with the forgotten spell.
+    useMagicStore
+      .getState()
+      .addKnownSpell(4, 1, forgottenSpell.id as CanonicalId);
+    expect(useMagicStore.getState().levels[3].knownSpells[1]).toContain(
+      forgottenSpell.id,
+    );
+
+    useMagicStore
+      .getState()
+      .applySwap(
+        4,
+        forgottenSpell.id as CanonicalId,
+        learnedSpell.id as CanonicalId,
+      );
+
+    const level4 = useMagicStore.getState().levels[3];
+    // forgotten gone from the level-1 bucket
+    expect(level4.knownSpells[1]).not.toContain(forgottenSpell.id);
+    // learned inserted at the same level-1 bucket
+    expect(level4.knownSpells[1]).toContain(learnedSpell.id);
+    // swap record still preserved
+    expect(level4.swapsApplied).toHaveLength(1);
+  });
+
   it('resetLevel clears all state for the target level', () => {
     useMagicStore.getState().setDomains(1, ['domain:air' as CanonicalId]);
     useMagicStore.getState().addSpellbookEntry(1, 1, 'spell:x' as CanonicalId);

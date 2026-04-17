@@ -50,8 +50,12 @@ export function SwapSpellDialog({
     return (
       <ConfirmDialog
         body={magicCopy.swapStep1Body}
+        confirmDisabled={!forgetId}
         onCancel={onClose}
-        onConfirm={onClose}
+        onConfirm={() => {
+          /* No-op. Row click via OptionList.onSelect sets forgetId, which advances
+             to step 2 on the next render. Aceptar stays disabled until forgetId set. */
+        }}
         open
         title={magicCopy.swapStep1Title}
       >
@@ -78,8 +82,11 @@ export function SwapSpellDialog({
     return (
       <ConfirmDialog
         body={magicCopy.swapStep2Body}
+        confirmDisabled={!learnId}
         onCancel={onClose}
-        onConfirm={onClose}
+        onConfirm={() => {
+          /* No-op. Row click sets learnId. */
+        }}
         open
         title={magicCopy.swapStep2Title}
       >

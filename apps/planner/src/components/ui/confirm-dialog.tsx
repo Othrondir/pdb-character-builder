@@ -10,6 +10,12 @@ interface ConfirmDialogProps {
    * a new dialog primitive (UI-SPEC Registry Safety).
    */
   children?: ReactNode;
+  /**
+   * When true, the Aceptar button is disabled (native <button disabled>).
+   * Used by multi-step selection dialogs that should not allow the user to
+   * advance before a row is selected (WR-06 fix).
+   */
+  confirmDisabled?: boolean;
   onCancel: () => void;
   onConfirm: () => void;
   open: boolean;
@@ -19,6 +25,7 @@ interface ConfirmDialogProps {
 export function ConfirmDialog({
   body,
   children,
+  confirmDisabled = false,
   onCancel,
   onConfirm,
   open,
@@ -43,7 +50,7 @@ export function ConfirmDialog({
       {children}
       <div className="confirm-dialog__actions">
         <NwnButton onClick={onCancel} variant="secondary">Cancelar</NwnButton>
-        <NwnButton onClick={onConfirm} variant="primary">Aceptar</NwnButton>
+        <NwnButton onClick={onConfirm} variant="primary" disabled={confirmDisabled}>Aceptar</NwnButton>
       </div>
     </dialog>
   );

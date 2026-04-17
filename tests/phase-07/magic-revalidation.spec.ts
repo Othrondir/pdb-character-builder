@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { BuildStateAtLevel } from '@rules-engine/feats/feat-prerequisite';
+import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
 import {
   revalidateMagicSnapshotAfterChange,
   type MagicLevelInput,
@@ -26,6 +27,7 @@ function createMagicBuildState(
 function emptyMagicLevelInput(level: number): MagicLevelInput {
   return {
     buildState: createMagicBuildState({ characterLevel: level }),
+    classId: null,
     level,
     domainsSelected: [],
     spellbookAdditions: {},
@@ -64,6 +66,7 @@ describe('phase 07 revalidateMagicSnapshotAfterChange', () => {
           classLevels: { 'class:fighter': 3 },
           casterLevelByClass: {},
         }),
+        classId: null,
         level: 3,
         domainsSelected: [],
         // Pick any wizard spell id from the catalog
@@ -85,6 +88,7 @@ describe('phase 07 revalidateMagicSnapshotAfterChange', () => {
           classLevels: { 'class:fighter': 5 },
           casterLevelByClass: {},
         }),
+        classId: null,
         level: 5,
         domainsSelected: [],
         spellbookAdditions: (() => {
@@ -126,6 +130,7 @@ describe('phase 07 revalidateMagicSnapshotAfterChange', () => {
           classLevels: { 'class:fighter': 1 },
           casterLevelByClass: {},
         }),
+        classId: null,
         level: 1,
         domainsSelected: [],
         spellbookAdditions: { 1: [wizardSpell.id] },
@@ -160,6 +165,7 @@ describe('phase 07 revalidateMagicSnapshotAfterChange', () => {
           classLevels: { 'class:fighter': 1 },
           casterLevelByClass: {},
         }),
+        classId: null,
         level: 1,
         domainsSelected: [],
         spellbookAdditions: { 1: [wizardSpell.id, wizardSpell.id] },
@@ -184,5 +190,119 @@ describe('phase 07 revalidateMagicSnapshotAfterChange', () => {
     );
     const uniqueKeys = new Set(keys);
     expect(keys).toHaveLength(uniqueKeys.size);
+  });
+
+  it('emits illegal outcome when a swap is applied outside SORCERER_SWAP_LEVELS', () => {
+    const sorcererL1 = compiledSpellCatalog.spells.find(
+      (s) => s.classLevels['class:sorcerer'] === 1,
+    );
+    const sorcererL1b = compiledSpellCatalog.spells.find(
+      (s) =>
+        s.classLevels['class:sorcerer'] === 1 && s.id !== sorcererL1?.id,
+    );
+    // If the sorcerer catalog is still empty (pre-07-05), fall back to wizard-level-1
+    // spells — the revalidator reads classId directly and does not require the
+    // swapped spells to be sorcerer-tagged.
+    const forgotten =
+      sorcererL1 ??
+      compiledSpellCatalog.spells.find(
+        (s) => s.classLevels['class:wizard'] === 1,
+      );
+    const learned =
+      sorcererL1b ??
+      compiledSpellCatalog.spells.find(
+        (s) =>
+          s.classLevels['class:wizard'] === 1 && s.id !== forgotten?.id,
+      );
+    expect(forgotten).toBeDefined();
+    expect(learned).toBeDefined();
+
+    const result = revalidateMagicSnapshotAfterChange({
+      levels: [
+        {
+          buildState: createMagicBuildState({
+            characterLevel: 3,
+            classLevels: { 'class:sorcerer': 3 },
+            casterLevelByClass: { 'class:sorcerer': 3 },
+          }),
+          classId: 'class:sorcerer' as CanonicalId,
+          level: 3, // NOT in {4,8,12,16}
+          domainsSelected: [],
+          spellbookAdditions: {},
+          knownSpells: {},
+          swapsApplied: [
+            {
+              appliedAtLevel: 3,
+              forgotten: forgotten!.id,
+              learned: learned!.id,
+            },
+          ],
+        },
+      ],
+      spellCatalog: compiledSpellCatalog,
+      domainCatalog: compiledDomainCatalog,
+    });
+
+    expect(result[0].status).toBe('illegal');
+    expect(result[0].issues.some((i) => i.status === 'illegal')).toBe(true);
+  });
+
+  it('accepts a swap at a legal SORCERER_SWAP_LEVEL (4) without emitting illegal swap issue', () => {
+    const sorcererL1 = compiledSpellCatalog.spells.find(
+      (s) => s.classLevels['class:sorcerer'] === 1,
+    );
+    const sorcererL1b = compiledSpellCatalog.spells.find(
+      (s) =>
+        s.classLevels['class:sorcerer'] === 1 && s.id !== sorcererL1?.id,
+    );
+    const forgotten =
+      sorcererL1 ??
+      compiledSpellCatalog.spells.find(
+        (s) => s.classLevels['class:wizard'] === 1,
+      );
+    const learned =
+      sorcererL1b ??
+      compiledSpellCatalog.spells.find(
+        (s) =>
+          s.classLevels['class:wizard'] === 1 && s.id !== forgotten?.id,
+      );
+    expect(forgotten).toBeDefined();
+    expect(learned).toBeDefined();
+
+    const result = revalidateMagicSnapshotAfterChange({
+      levels: [
+        {
+          buildState: createMagicBuildState({
+            characterLevel: 4,
+            classLevels: { 'class:sorcerer': 4 },
+            casterLevelByClass: { 'class:sorcerer': 4 },
+          }),
+          classId: 'class:sorcerer' as CanonicalId,
+          level: 4,
+          domainsSelected: [],
+          spellbookAdditions: {},
+          knownSpells: {},
+          swapsApplied: [
+            {
+              appliedAtLevel: 4,
+              forgotten: forgotten!.id,
+              learned: learned!.id,
+            },
+          ],
+        },
+      ],
+      spellCatalog: compiledSpellCatalog,
+      domainCatalog: compiledDomainCatalog,
+    });
+
+    // No illegal swap issue expected — level 4 is a legal sorcerer swap level.
+    // The revalidator may still emit other issues (e.g., missing spell from catalog
+    // fail-closed) but none of them should carry the swap ids as affectedIds.
+    const swapRelated = result[0].issues.filter(
+      (i) =>
+        i.affectedIds.includes(forgotten!.id) &&
+        i.affectedIds.includes(learned!.id),
+    );
+    expect(swapRelated.filter((i) => i.status === 'illegal')).toHaveLength(0);
   });
 });
