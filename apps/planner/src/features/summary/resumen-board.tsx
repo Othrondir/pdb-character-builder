@@ -5,6 +5,7 @@ import { NwnFrame } from '@planner/components/ui/nwn-frame';
 import { VersionMismatchDialog } from '@planner/components/ui/version-mismatch-dialog';
 import { shellCopyEs } from '@planner/lib/copy/es';
 import { formatDatasetLabel } from '@planner/data/ruleset-version';
+import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
 import { useResumenViewModel } from './resumen-selectors';
 import { ResumenTable } from './resumen-table';
 import { SaveSlotDialog, LoadSlotDialog } from './save-slot-dialog';
@@ -16,6 +17,7 @@ import {
   exceedsBudget,
   hydrateBuildDocument,
   importBuildFromFile,
+  IncompleteBuildError,
   JsonImportError,
   projectBuildDocument,
   type BuildDocument,
@@ -32,6 +34,11 @@ import { pushToast } from '@planner/components/ui/toast';
  */
 export function ResumenBoard() {
   const model = useResumenViewModel();
+  // Subscribe (not getState) so the action bar re-evaluates projectability when the
+  // user picks a race / alignment without navigating away from Resumen.
+  const raceId = useCharacterFoundationStore((s) => s.raceId);
+  const alignmentId = useCharacterFoundationStore((s) => s.alignmentId);
+  const isProjectable = raceId !== null && alignmentId !== null;
   const [saveOpen, setSaveOpen] = useState(false);
   const [loadOpen, setLoadOpen] = useState(false);
   const [pendingImport, setPendingImport] = useState<
@@ -45,8 +52,16 @@ export function ResumenBoard() {
       model.identity.name === copy.emptyNamePlaceholder
         ? 'build'
         : model.identity.name;
-    const doc = projectBuildDocument(suggestedName);
-    downloadBuildAsJson(doc, suggestedName);
+    try {
+      const doc = projectBuildDocument(suggestedName);
+      downloadBuildAsJson(doc, suggestedName);
+    } catch (err) {
+      if (err instanceof IncompleteBuildError) {
+        pushToast(shellCopyEs.persistence.incompleteBuild, 'warn');
+        return;
+      }
+      throw err;
+    }
   }
 
   async function onShare() {
@@ -54,7 +69,16 @@ export function ResumenBoard() {
       model.identity.name === copy.emptyNamePlaceholder
         ? 'build'
         : model.identity.name;
-    const doc = projectBuildDocument(suggestedName);
+    let doc: BuildDocument;
+    try {
+      doc = projectBuildDocument(suggestedName);
+    } catch (err) {
+      if (err instanceof IncompleteBuildError) {
+        pushToast(shellCopyEs.persistence.incompleteBuild, 'warn');
+        return;
+      }
+      throw err;
+    }
     const encoded = encodeSharePayload(doc);
 
     if (exceedsBudget(encoded)) {
@@ -117,13 +141,23 @@ export function ResumenBoard() {
       </header>
 
       <NwnFrame className="resumen-board__actions">
-        <NwnButton onClick={() => setSaveOpen(true)} variant="primary">
+        <NwnButton
+          disabled={!isProjectable}
+          onClick={() => setSaveOpen(true)}
+          title={isProjectable ? undefined : shellCopyEs.persistence.incompleteBuild}
+          variant="primary"
+        >
           {copy.actions.save}
         </NwnButton>
         <NwnButton onClick={() => setLoadOpen(true)} variant="secondary">
           {copy.actions.load}
         </NwnButton>
-        <NwnButton onClick={onExport} variant="secondary">
+        <NwnButton
+          disabled={!isProjectable}
+          onClick={onExport}
+          title={isProjectable ? undefined : shellCopyEs.persistence.incompleteBuild}
+          variant="secondary"
+        >
           {copy.actions.export}
         </NwnButton>
         <NwnButton
@@ -132,7 +166,12 @@ export function ResumenBoard() {
         >
           {copy.actions.import}
         </NwnButton>
-        <NwnButton onClick={onShare} variant="secondary">
+        <NwnButton
+          disabled={!isProjectable}
+          onClick={onShare}
+          title={isProjectable ? undefined : shellCopyEs.persistence.incompleteBuild}
+          variant="secondary"
+        >
           {copy.actions.share}
         </NwnButton>
         <input

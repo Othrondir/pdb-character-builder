@@ -1,6 +1,11 @@
 // Barrel for the Phase 8 persistence surface.
 export { buildDocumentSchema, type BuildDocument } from './build-document-schema';
-export { projectBuildDocument } from './project-build-document';
+export {
+  projectBuildDocument,
+  isBuildProjectable,
+  IncompleteBuildError,
+  type IncompleteBuildField,
+} from './project-build-document';
 export { hydrateBuildDocument } from './hydrate-build-document';
 export {
   getPlannerDb,

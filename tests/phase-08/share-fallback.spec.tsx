@@ -8,6 +8,7 @@ import { ResumenBoard } from '@planner/features/summary/resumen-board';
 import * as persistence from '@planner/features/persistence';
 import * as toast from '@planner/components/ui/toast';
 import { shellCopyEs } from '@planner/lib/copy/es';
+import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
 
 // jsdom's HTMLDialogElement doesn't implement showModal/close — stub them just in case
 // VersionMismatchDialog ever mounts (shouldn't in these cases).
@@ -31,8 +32,16 @@ describe('Compartir — clipboard success + D-06 JSON fallback', () => {
   let clipboardWrite: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
-    // Mock projectBuildDocument so we don't need full zustand store wiring (raceId,
-    // alignmentId, etc. are null by default and would fail Zod validation).
+    // Seed the foundation store with race+alignment so the Resumen action bar
+    // considers the build projectable — the Compartir button is disabled otherwise
+    // (incomplete-build guard added in response to Phase 08 Task 4 UAT regression).
+    const foundation = useCharacterFoundationStore.getState();
+    foundation.resetFoundation();
+    foundation.setRace('race:human');
+    foundation.setAlignment('alignment:lawful-good');
+
+    // Mock projectBuildDocument so we don't need full zustand store wiring for the
+    // remaining stores (progression / skills / feats).
     projectSpy = vi
       .spyOn(persistence, 'projectBuildDocument')
       .mockImplementation(() => sampleBuildDocument());

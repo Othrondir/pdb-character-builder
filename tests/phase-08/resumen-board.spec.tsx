@@ -31,6 +31,7 @@ vi.mock('@planner/features/persistence', () => ({
 }));
 
 import { ResumenBoard } from '@planner/features/summary/resumen-board';
+import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
 
 let currentModel: ResumenViewModel;
 
@@ -66,11 +67,19 @@ const DEFAULT_MODEL: ResumenViewModel = {
 describe('ResumenBoard', () => {
   beforeEach(() => {
     currentModel = structuredClone(DEFAULT_MODEL);
+    // Seed foundation store with a projectable (race + alignment) state so the
+    // incomplete-build guard keeps the action-bar buttons enabled. Individual
+    // tests that want to verify the disabled-state variant reset explicitly.
+    const foundation = useCharacterFoundationStore.getState();
+    foundation.resetFoundation();
+    foundation.setRace('race:human');
+    foundation.setAlignment('alignment:lawful-good');
   });
 
   afterEach(() => {
     cleanup();
     vi.clearAllMocks();
+    useCharacterFoundationStore.getState().resetFoundation();
   });
 
   it('renders 3 blocks labelled via aria-labelledby', () => {
@@ -99,6 +108,22 @@ describe('ResumenBoard', () => {
     // Compartir is live in Plan 08-02 Task 3 — encodes + copies / falls back to JSON.
     const share = screen.getByRole('button', { name: copy.share });
     expect(share).toBeEnabled();
+  });
+
+  it('disables Guardar/Exportar/Compartir when the build is not projectable (Phase 08 Task 4 UAT regression)', () => {
+    // Remove the projectable seed from beforeEach — simulates the UAT flow of
+    // opening Resumen before picking a race or alignment. The raw ZodError the
+    // old code threw from projectBuildDocument must NEVER reach the user; we
+    // guard at the UI layer by disabling the action buttons.
+    useCharacterFoundationStore.getState().resetFoundation();
+    render(createElement(ResumenBoard));
+    const copy = shellCopyEs.resumen.actions;
+    expect(screen.getByRole('button', { name: copy.save })).toBeDisabled();
+    expect(screen.getByRole('button', { name: copy.export })).toBeDisabled();
+    expect(screen.getByRole('button', { name: copy.share })).toBeDisabled();
+    // Cargar/Importar stay enabled — they HYDRATE stores, so build-incompleteness
+    // is precisely the state they exist to recover from.
+    expect(screen.getByRole('button', { name: copy.load })).toBeEnabled();
   });
 
   it('renders em-dash (NOT "0") for every derived-stat cell when helpers are missing', () => {

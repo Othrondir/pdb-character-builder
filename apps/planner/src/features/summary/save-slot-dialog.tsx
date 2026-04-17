@@ -9,6 +9,7 @@ import {
   slotExists,
   projectBuildDocument,
   hydrateBuildDocument,
+  IncompleteBuildError,
   type BuildSlotRow,
 } from '@planner/features/persistence';
 import { pushToast } from '@planner/components/ui/toast';
@@ -46,7 +47,21 @@ export function SaveSlotDialog({ open, onClose }: SaveDialogProps) {
   }
 
   async function doSave(finalName: string) {
-    const doc = projectBuildDocument(finalName);
+    // Defensive guard: the action-bar button is disabled when the build is not
+    // projectable, but this dialog can also be triggered while the user navigates
+    // back to origin steps. If the store ever hands us nulls we catch the typed
+    // error here, show a toast, and leave the dialog open with the typed name.
+    let doc;
+    try {
+      doc = projectBuildDocument(finalName);
+    } catch (err) {
+      if (err instanceof IncompleteBuildError) {
+        pushToast(shellCopyEs.persistence.incompleteBuild, 'warn');
+        setOverwriteOpen(false);
+        return;
+      }
+      throw err;
+    }
     await saveSlot(finalName, doc);
     pushToast(
       shellCopyEs.persistence.saveSuccess.replace('{name}', finalName),

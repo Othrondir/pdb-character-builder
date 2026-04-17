@@ -68,6 +68,8 @@ export const shellCopyEs = {
     saveSuccess: 'Build "{name}" guardada.',
     loadSuccess: 'Build "{name}" cargada.',
     privateModeUnavailable: 'Guardado local no disponible en este modo del navegador.',
+    incompleteBuild:
+      'Completa raza y alineamiento antes de guardar, exportar o compartir la build.',
     versionMismatch: {
       title: 'Versión incompatible',
       body: 'Esta build usa una versión de reglas o dataset distinta a la que usa este planner. No se puede cargar con exactitud — las reglas pueden haber cambiado y la build dejaría de ser legal.',

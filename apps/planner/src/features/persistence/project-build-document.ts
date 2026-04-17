@@ -11,11 +11,53 @@ import {
 import { buildDocumentSchema, type BuildDocument } from './build-document-schema';
 
 /**
+ * Fields of the projected BuildDocument that the foundation store can legally hold as
+ * `null` (default state), but that `buildDocumentSchema` requires as non-null
+ * canonicalId strings. Projecting while any of these is null produces a raw ZodError
+ * leaking schema internals to the user. `IncompleteBuildError` is the typed,
+ * actionable alternative every call site can catch.
+ */
+export type IncompleteBuildField = 'raceId' | 'alignmentId';
+
+/**
+ * Thrown by `projectBuildDocument` when the foundation store is not yet in a
+ * projectable state (race and/or alignment unset). Guards D-07 / SHAR-05 by refusing
+ * to emit a partial BuildDocument AND giving dialogs a typed surface to react to —
+ * instead of letting a raw `ZodError` escape.
+ */
+export class IncompleteBuildError extends Error {
+  readonly missingFields: IncompleteBuildField[];
+
+  constructor(missingFields: IncompleteBuildField[]) {
+    super(
+      `Build is incomplete: missing ${missingFields.join(', ')}. ` +
+        `Pick a race and alignment before saving, exporting, or sharing.`,
+    );
+    this.name = 'IncompleteBuildError';
+    this.missingFields = missingFields;
+  }
+}
+
+/**
+ * Pure predicate: returns `true` when `projectBuildDocument()` can succeed against
+ * the current live store state. Used by the Resumen action bar to disable
+ * Guardar / Exportar / Compartir when the build is not projectable — preventing the
+ * error surface rather than just handling it.
+ */
+export function isBuildProjectable(): boolean {
+  const foundation = useCharacterFoundationStore.getState();
+  return foundation.raceId !== null && foundation.alignmentId !== null;
+}
+
+/**
  * Pure selector: reads the 4 zustand stores and projects a validated BuildDocument.
  *
- * Throws ZodError if the live state is somehow invalid — that indicates a bug, not user
- * error. The projection always runs through `buildDocumentSchema.parse()` so callers can
- * rely on the returned value being strictly typed.
+ * Throws:
+ * - `IncompleteBuildError` — foundation store still has null raceId or alignmentId
+ *   (user hasn't completed the origin step yet). Call sites SHOULD catch this and
+ *   surface a user-facing toast instead of bubbling.
+ * - `ZodError` — ONLY when the live store state is internally inconsistent (e.g. a
+ *   past schema drift). Indicates a real bug.
  *
  * @param name optional build name stamped into `build.name` (used by Dexie save flow).
  *
@@ -28,6 +70,15 @@ export function projectBuildDocument(name?: string): BuildDocument {
   const progression = useLevelProgressionStore.getState();
   const skills = useSkillStore.getState();
   const feats = useFeatStore.getState();
+
+  // Pre-projection guard: fail with a typed error BEFORE Zod sees nulls. Preserves
+  // schema strictness (D-07) while giving callers an actionable surface.
+  const missing: IncompleteBuildField[] = [];
+  if (foundation.raceId === null) missing.push('raceId');
+  if (foundation.alignmentId === null) missing.push('alignmentId');
+  if (missing.length > 0) {
+    throw new IncompleteBuildError(missing);
+  }
 
   const doc: unknown = {
     schemaVersion: BUILD_ENCODING_VERSION,
