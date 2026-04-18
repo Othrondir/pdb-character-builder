@@ -29,7 +29,7 @@ export function OriginBoard({ activeStep = 'race' }: OriginBoardProps) {
     race: {
       title: shellCopyEs.stepper.stepTitles.race,
       options: originOptions.races,
-      onSelect: (id: CanonicalId) => setRace(id),
+      onSelect: (id: CanonicalId | null) => setRace(id),
       nextStep: 'alignment' as const,
       issue: foundationValidation.controlMessages.race,
       issueStatus: foundationValidation.controlStatuses.race,
@@ -37,7 +37,7 @@ export function OriginBoard({ activeStep = 'race' }: OriginBoardProps) {
     alignment: {
       title: shellCopyEs.stepper.stepTitles.alignment,
       options: originOptions.alignments,
-      onSelect: (id: CanonicalId) => setAlignment(id),
+      onSelect: (id: CanonicalId | null) => setAlignment(id),
       nextStep: 'attributes' as const,
       issue: foundationValidation.controlMessages.alignment,
       issueStatus: foundationValidation.controlStatuses.alignment,
@@ -66,7 +66,7 @@ export function OriginBoard({ activeStep = 'race' }: OriginBoardProps) {
           acceptLabel="Aceptar"
           cancelLabel="Cancelar"
           onAccept={() => setActiveOriginStep(config.nextStep)}
-          onCancel={() => config.onSelect('' as CanonicalId)}
+          onCancel={() => config.onSelect(null)}
         />
       }
     >
