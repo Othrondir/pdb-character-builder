@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: "Phase 11 complete — 3/3 plans shipped + 5/5 SC verified (FEAT-01..04 + SKIL-01..03 closed, debug + quick-task archived)"
-last_updated: "2026-04-18T16:15:00.000Z"
+stopped_at: "Phase 12-01 complete — shared getClassLabel helper extracted + P03 typecheck repaired (tsc clean, 387/387 tests green)"
+last_updated: "2026-04-18T18:06:46Z"
 last_activity: 2026-04-18
 progress:
   total_phases: 12
@@ -25,9 +25,9 @@ See: .planning/PROJECT.md (updated 2026-03-30)
 
 ## Current Position
 
-Phase: 11 (uat-openwork-closure) — COMPLETE
-Plan: 3 of 3
-Status: All 3 plans shipped + verified. 11-VERIFICATION.md records 5/5 SC PASS. FEAT-01..04 + SKIL-01..03 closed. Next: Phase 12 (tech debt sweep) or milestone v1.0 audit close.
+Phase: 12 (tech-debt-sweep) — IN PROGRESS
+Plan: 1 of 2 complete
+Status: 12-01 (Bug 1 P03 typecheck + Bug 2 IN-07 getClassLabel) shipped via 3 atomic commits (6920be9 RED, 2bbc9cf GREEN, 43ae985 Bug 1). tsc --noEmit now clean repo-wide. 387/387 vitest tests green. Next: 12-02 (Bug 3 FEAT_CATEGORY_LABELS dead code + Bug 4 extract counter).
 Last activity: 2026-04-18
 
 Progress: [██████████] 100%
@@ -121,6 +121,9 @@ Recent decisions affecting current work:
 - [Phase 08]: Share-URL uses createHashHistory() + #/share?b={fflate-deflate+base64url} for GH Pages static hosting compatibility (no server rewrites needed)
 - [Phase 08]: D-07 fail-closed version-mismatch gate via shared diffRuleset() applied to BOTH /share decode and JSON import paths; VersionMismatchDialog is single UI surface
 - [Phase 08]: IncompleteBuildError at projection boundary + isBuildProjectable() predicate for UI gating — preserves strict buildDocumentSchema (SHAR-05) while preventing ZodError leak
+- [Phase 12-01]: Shared getClassLabel helper lives in packages/rules-engine/src/feats/ as the single source of truth; accepts string|null (not CanonicalId|null) because compiledClassSchema.id is zod-typed as string via regex guard
+- [Phase 12-01]: evaluateFeatPrerequisites + evaluateAllFeatsForSearch + revalidateFeatSnapshotAfterChange all grew classCatalog: ClassCatalog param — ClassCatalog threaded through every caller in planner + rules-engine + tests
+- [Phase 12-01]: Branded-id rebuilder pattern (asCanonicalId runtime-guarded + buildDeityRecord) keeps fixture cast-free at the CanonicalId[] boundary; reusable template for future fixtures that hit branded types
 
 ### Pending Todos
 
@@ -149,6 +152,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-18T16:15:00.000Z
-Stopped at: Completed Phase 11 (uat-openwork-closure) — 3/3 plans + 5/5 SC verified. FEAT-01..04 + SKIL-01..03 closed via scripted MCP Chrome UAT. Debug session + quick task archived. Next: Phase 12 tech debt sweep or milestone v1.0 audit close.
+Last session: 2026-04-18T18:06:46Z
+Stopped at: Completed Phase 12-01 (Bug 1 P03 typecheck + Bug 2 IN-07 getClassLabel). 3 atomic commits landed (test RED / fix GREEN / fix Bug 1). tsc --noEmit clean; full 387-test suite green. Next: Phase 12-02 (Bug 3 FEAT_CATEGORY_LABELS dead code + Bug 4 extract counter).
 Resume file: None

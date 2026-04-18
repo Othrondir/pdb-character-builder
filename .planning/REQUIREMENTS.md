@@ -133,7 +133,7 @@
 | SKIL-02 | Phase 5 | Complete |
 | SKIL-03 | Phase 5 | Complete |
 | FEAT-01 | Phase 6 | Complete |
-| FEAT-02 | Phase 6 → Phase 12 | Complete (user-visible class-label bug IN-07 pending Phase 12 fix) |
+| FEAT-02 | Phase 6 → Phase 12-01 | Complete (IN-07 closed 2026-04-18 via shared getClassLabel helper) |
 | FEAT-03 | Phase 6 | Complete |
 | FEAT-04 | Phase 6 | Complete |
 | MAGI-01 | Phase 7 → — | Descoped v1 → v2 (superseded by Phase 07.2) |

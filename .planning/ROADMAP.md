@@ -301,7 +301,7 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 12-01: Fix P03 typecheck errors + P07.2 IN-07 getClassLabel bug (user-visible)
+- [x] 12-01: Fix P03 typecheck errors + P07.2 IN-07 getClassLabel bug (user-visible) — Completed 2026-04-18 (commits: 6920be9 RED / 2bbc9cf GREEN / 43ae985 Bug 1)
 - [ ] 12-02: Drop P07.2 IN-03 magic feat labels + align IN-05 extract counters
 
 ### Phase 12.1: Roster Wiring & Overflow Fixes (INSERTED)
