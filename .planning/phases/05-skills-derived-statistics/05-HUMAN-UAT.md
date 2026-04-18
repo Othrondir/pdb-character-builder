@@ -1,9 +1,10 @@
 ---
-status: diagnosed
+status: complete
 phase: 05-skills-derived-statistics
 source: [05-VERIFICATION.md]
 started: 2026-03-31T14:03:00+02:00
-updated: 2026-04-16T17:22:00Z
+updated: 2026-04-18T00:00:00Z
+closed_by: 11-uat-openwork-closure
 ---
 
 ## Current Test
@@ -45,3 +46,16 @@ blocked: 0
   missing:
     - overflow-y scroll on skill list panel
     - unified single-panel layout for skill allocation
+
+## Re-Verification Note — 2026-04-18 (Phase 11)
+
+The skill-scroll / two-panel layout issue reported in Test 1 (severity: major) was
+resolved by the Phase 05.2 UX overhaul: `skill-board.tsx` and `skill-sheet.tsx` now
+render a single unified scrollable panel with compact skill rows per the NWN1 original
+layout. Phase 09 audit re-ran the Phase 05 verification scope and confirmed **12/12
+programmatic checks + layout pass** — all SKIL-01..03 behaviours and the reported
+major gap are now green in the shipped build.
+
+UAT closed as part of Phase 11 (UAT + Open-Work Closure).
+
+Requirements closed: SKIL-01, SKIL-02, SKIL-03.
