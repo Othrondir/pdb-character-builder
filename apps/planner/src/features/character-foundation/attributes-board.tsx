@@ -2,6 +2,8 @@ import { shellCopyEs } from '@planner/lib/copy/es';
 import { SelectionScreen } from '@planner/components/ui/selection-screen';
 import { DetailPanel } from '@planner/components/ui/detail-panel';
 import { NwnButton } from '@planner/components/ui/nwn-button';
+import { ActionBar } from '@planner/components/ui/action-bar';
+import { usePlannerShellStore } from '@planner/state/planner-shell';
 import {
   ATTRIBUTE_KEYS,
   phase03FoundationFixture,
@@ -41,12 +43,29 @@ export function AttributesBoard() {
   const setBaseAttribute = useCharacterFoundationStore(
     (state) => state.setBaseAttribute,
   );
+  const setExpandedLevel = usePlannerShellStore((state) => state.setExpandedLevel);
+  const setActiveLevelSubStep = usePlannerShellStore(
+    (state) => state.setActiveLevelSubStep,
+  );
   const {
     attributeRules: { maximum, minimum },
   } = phase03FoundationFixture;
+  const canAdvance = attributeBudget.status === 'legal';
 
   return (
-    <SelectionScreen title={shellCopyEs.stepper.stepTitles.attributes}>
+    <SelectionScreen
+      title={shellCopyEs.stepper.stepTitles.attributes}
+      actionBar={
+        <ActionBar
+          acceptDisabled={!canAdvance}
+          acceptLabel="Aceptar"
+          onAccept={() => {
+            setExpandedLevel(1);
+            setActiveLevelSubStep('class');
+          }}
+        />
+      }
+    >
       <div className="attributes-editor">
         <div className="attributes-editor__header">
           <span>{shellCopyEs.foundation.remainingPoints}: {attributeBudget.remainingPoints}</span>
