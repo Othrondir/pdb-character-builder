@@ -1,9 +1,38 @@
 ---
 phase: 07-magic-full-legality-engine
 verified: 2026-04-17T13:35:00Z
-status: gaps_found
-score: 6/12 must-haves verified
+status: superseded
+superseded_by: 07.2-magic-ui-descope
+superseded_date: 2026-04-17T19:10:00Z
+superseded_reason: "Entire magic UI (MagicBoard, MagicSheetTab, spell/domain pickers, Conjuros tab, Magia sub-step) descoped by Phase 07.2 per product pivot to match `excel simulador de fichas/Plantilla Base.xlsx` reference. All 6 gaps documented below were resolved by wholesale removal, not individual fix. Historical gap record preserved intact for audit trail."
+original_status: gaps_found
+score: 6/12 must-haves verified (historical — no longer applicable to shipping product)
 overrides_applied: 0
+requirements_coverage:
+  - id: MAGI-01
+    status: descoped_v1_to_v2
+    resolution: "superseded by 07.2"
+  - id: MAGI-02
+    status: descoped_v1_to_v2
+    resolution: "superseded by 07.2"
+  - id: MAGI-03
+    status: descoped_v1_to_v2
+    resolution: "superseded by 07.2"
+  - id: MAGI-04
+    status: descoped_v1_to_v2
+    resolution: "superseded by 07.2 (extractor retains catalog behind EMIT_MAGIC_CATALOGS=1)"
+  - id: VALI-02
+    status: satisfied_non_magic
+    resolution: "non-magic explanations ship via Phase 6 (FeatBoard prereq checklist, skill repair reasons, class prereq rail); magic portion descoped by 07.2"
+  - id: VALI-01
+    status: satisfied_non_magic
+    resolution: "non-magic hard-block ships in Phase 6/7.2; magic portion descoped by 07.2"
+  - id: VALI-03
+    status: satisfied_non_magic
+    resolution: "non-magic recomputation covered by Phases 4/5/6; magic swap pathway descoped by 07.2"
+  - id: LANG-02
+    status: satisfied
+    resolution: "Spanish copy for classes/feats/skills ships via compiled catalogs; verified in Phase 05.1 VERIFICATION.md"
 gaps:
   - truth: "Illegal or unsupported selections are blocked with precise, readable explanations and the build is never presented as valid when rules are uncertain (ROADMAP SC4, VALI-01, VALI-02)"
     status: failed
@@ -85,6 +114,27 @@ human_verification:
 **Verified:** 2026-04-17T13:35:00Z
 **Status:** gaps_found
 **Re-verification:** No — initial verification
+
+## SUPERSEDED — 2026-04-17
+
+**This verification report is superseded by `.planning/phases/07.2-magic-ui-descope/07.2-VERIFICATION.md` (status: passed, 2026-04-17T19:10:00Z, 14/14 truths verified).**
+
+Phase 07 shipped the full magic feature stack (MagicBoard, MagicSheetTab, rules-engine magic module, spell/domain catalogs, paradigm dispatch, swap cadence). Independent verification on 2026-04-17T13:35:00Z identified 6 gaps — 3 critical (applySwap no-op, STATUS_ORDER divergence, hardcoded `legal` in sheet tab) and 3 secondary (multiclass cleric domain picker, empty sorcerer spell catalog, row-index latent footgun).
+
+Rather than remediate the gaps, Phase 07.2 wholesale-descoped the magic UI per product pivot to match the `excel simulador de fichas/Plantilla Base.xlsx` reference:
+- `apps/planner/src/features/magic/` DELETED
+- `packages/rules-engine/src/magic/` DELETED
+- `compiled-spells.ts` / `compiled-domains.ts` DELETED
+- `tests/phase-07/` DELETED
+- `PlannerValidationStatus.repair_needed` variant reverted
+- `ConfirmDialog` reverted to pre-07 5-prop shape
+- Extractor spell/domain assemblers preserved behind `EMIT_MAGIC_CATALOGS=1` env flag for future v2 rehabilitation
+
+All 6 gaps listed in the `gaps:` frontmatter array below are CLOSED by descope, not by fix. The historical record is preserved intact for audit traceability. MAGI-01, MAGI-02, MAGI-03, and MAGI-04 are reclassified DESCOPED v1 → v2 in `REQUIREMENTS.md`. VALI-01, VALI-02, VALI-03 are reclassified as satisfied-non-magic (explanation surfaces ship through Phase 6 feat prereqs, skill repair reasons, and class prereq rail; magic portions descoped).
+
+**The content below is retained as a historical record of the pre-pivot verification pass. It does NOT describe shipping product behavior as of 2026-04-17.**
+
+---
 
 ## Summary
 
@@ -237,3 +287,8 @@ The shell wiring, copy namespace, D-02 filter, smoke tests, and overall structur
 
 _Verified: 2026-04-17T13:35:00Z_
 _Verifier: Claude (gsd-verifier)_
+
+---
+
+_Superseded: 2026-04-17T19:10:00Z by Phase 07.2 (magic-ui-descope)_
+_Reclassification formalised: 2026-04-18 via Phase 9 (verification-traceability-closure)_
