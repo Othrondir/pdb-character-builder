@@ -25,6 +25,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 11: UAT + Open-Work Closure** (GAP) - Close P06 human UAT, archive P05/P07 UAT files, resolve open debug + quick task.
 - [x] **Phase 12: Tech Debt Sweep** (GAP) - Fix P03 typecheck errors, P07.2 IN-07 class-label bug (FEAT-02 quality), IN-03 label cleanup, IN-05 counter alignment.
 - [x] **Phase 12.1: Roster Wiring & Overflow Fixes** (INSERTED) - Wire compiled class + race catalogs (PDB TLK extractor roster) into L1 pickers and fix CSS overflow/scroll on SelectionScreen + planner-layout panels. Surfaced during Phase 11 UAT (2026-04-18).
+- [ ] **Phase 12.2: Roster Detail & Race Ability Modifiers** (INSERTED) - Surface TLK descriptions in race + class picker detail panes, wire race ability modifiers (CHAR-02 pipeline gap) through attributes computation, fix prestige-filter false positives/negatives at L1, and dedupe class-catalog duplicate IDs. Surfaced during Phase 12.1 UAT (2026-04-18).
 
 ## Phase Details
 
@@ -321,10 +322,29 @@ Plans:
 - [x] 12.1-02: Wire PDB race roster + subrace hierarchy into race picker
 - [x] 12.1-03: Restore overflow-y scroll on SelectionScreen + planner-layout panels
 
+### Phase 12.2: Roster Detail & Race Ability Modifiers (INSERTED)
+**Goal**: Close the user-visible correctness gaps Phase 12.1 surfaced — picker detail panes show the TLK description text instead of just the label, race ability modifiers flow through to attributes, prestige classes are gated correctly at L1, and the compiled class catalog stops producing duplicate React keys.
+**Depends on**: Phase 12.1 (roster already wired from compiled catalogs)
+**Requirements**: CHAR-02 (race ability modifiers fold into base attributes), FEAT-01 (class selection surface correct), visual picker quality (description readable before commit).
+**Gap Closure**: Closes the four deferred items in `.planning/phases/12.1-roster-wiring-and-overflow-fixes/deferred-items.md`: (1) TLK description surfacing (medium), (2) race ability-modifier pipeline (large, CHAR-02 structural gap from Phase 3), (3) prestige-filter false positives/negatives at L1 (Clérigo wrongly blocked; `Alma Predilecta` / `Caballero de Luz` / `Paladin Oscuro` / `Paladin Vengador` / `Artífice` wrongly enabled), (4) compiled class catalog duplicate canonical IDs (`class:harper`, `class:shadowadept`).
+**Success Criteria** (what must be TRUE):
+  1. Race picker detail pane renders the race's TLK `description` text (not just its label). Class picker detail pane renders the class's TLK `description` text.
+  2. Race ability modifiers (`abilityAdjustments` in `CompiledRace`, e.g. Elfo DEX +2 / CON −2, Enano CON +2 / CHA −2) flow through the foundation-selector adapter and are applied to the attributes-computation layer so the stats sheet reflects base + racial adjustments separately or combined (final displayed stats include the racial layer).
+  3. At L1 with a legal alignment, Clérigo is enabled; prestige classes that require BAB / specific-class-levels unreachable at L1 remain blocked with a Spanish `deferredRequirementLabel`.
+  4. The compiled class catalog no longer ships duplicate canonical IDs (or — fallback — the projection adapter applies first-wins dedupe so React key warnings disappear and no phase-04 JSX spec regresses).
+**Plans**: 4 plans (planned)
+
+Plans:
+- [ ] 12.2-01: Wire TLK descriptions through projection adapters into race + class picker detail panes
+- [ ] 12.2-02: Introduce race-ability-modifier pipeline (rules-engine helper + foundation-store integration + attributes-board display)
+- [ ] 12.2-03: Fix prestige-filter false positives/negatives + Clérigo L1 regression (projection / collectVisibleClassOptions audit)
+- [ ] 12.2-04: Dedupe compiled class catalog (extractor-level preferred; fixture-level dedupe fallback)
+**UI hint**: yes
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 12.1
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 12.1 -> 12.2
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
