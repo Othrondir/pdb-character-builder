@@ -48,10 +48,7 @@ const rogueGatedFeat: CompiledFeat = {
 /** Inline minimal FeatCatalog carrying only the gated feat. */
 const featCatalogFixture: FeatCatalog = {
   classFeatLists: {},
-  datasetId: {
-    datasetVersion: '0.0.0-test',
-    rulesetId: 'test-ruleset',
-  },
+  datasetId: 'puerta-ee-2026-04-18+test0',
   feats: [rogueGatedFeat],
   schemaVersion: '1',
 };
@@ -78,10 +75,7 @@ const classCatalogFixture: ClassCatalog = {
       spellKnownTableRef: null,
     },
   ],
-  datasetId: {
-    datasetVersion: '0.0.0-test',
-    rulesetId: 'test-ruleset',
-  },
+  datasetId: 'puerta-ee-2026-04-18+test0',
   schemaVersion: '1',
 };
 

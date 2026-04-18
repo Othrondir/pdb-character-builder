@@ -16,6 +16,7 @@ import {
   type FeatEvaluationStatus,
   type FeatLevelInput,
 } from '@rules-engine/feats/feat-revalidation';
+import { getClassLabel } from '@rules-engine/feats/get-class-label';
 
 import { shellCopyEs } from '@planner/lib/copy/es';
 import type { CharacterFoundationStoreState } from '@planner/features/character-foundation/store';
@@ -223,7 +224,12 @@ function buildPrereqSummary(
     return '';
   }
 
-  const result = evaluateFeatPrerequisites(feat, buildState, compiledFeatCatalog);
+  const result = evaluateFeatPrerequisites(
+    feat,
+    buildState,
+    compiledFeatCatalog,
+    compiledClassCatalog,
+  );
 
   if (result.checks.length === 0) {
     return '';
@@ -250,18 +256,6 @@ function buildPrereqSummary(
   });
 
   return `[${parts.join(', ')}]`;
-}
-
-// ---------------------------------------------------------------------------
-// Helper: get class label from compiled catalog
-// ---------------------------------------------------------------------------
-
-function getClassLabel(classId: CanonicalId | null): string | null {
-  if (!classId) {
-    return null;
-  }
-
-  return compiledClassCatalog.classes.find((c) => c.id === classId)?.label ?? null;
 }
 
 // ---------------------------------------------------------------------------
@@ -392,13 +386,14 @@ export function selectFeatBoardView(
   const revalidated = revalidateFeatSnapshotAfterChange({
     levels: revalidationInput,
     featCatalog: compiledFeatCatalog,
+    classCatalog: compiledClassCatalog,
   });
   const activeRevalidated =
     revalidated.find((r) => r.level === activeLevel) ?? null;
 
   const activeSheet: ActiveFeatSheetView = {
     classId,
-    classLabel: getClassLabel(classId),
+    classLabel: getClassLabel(classId, compiledClassCatalog),
     eligibleClassFeats: eligible.classBonusFeats.map((f) =>
       mapToOptionView(f, selectedClassFeatId),
     ),
@@ -494,6 +489,7 @@ export function selectFeatSheetTabView(
           feat,
           buildState,
           compiledFeatCatalog,
+          compiledClassCatalog,
         );
 
         if (!result.met) {
@@ -530,6 +526,7 @@ export function selectFeatSheetTabView(
           feat,
           buildState,
           compiledFeatCatalog,
+          compiledClassCatalog,
         );
 
         if (!result.met) {
@@ -608,6 +605,7 @@ export function selectFeatSummary(
   const revalidated = revalidateFeatSnapshotAfterChange({
     levels: revalidationInput,
     featCatalog: compiledFeatCatalog,
+    classCatalog: compiledClassCatalog,
   });
 
   const relevantLevels = featState.levels

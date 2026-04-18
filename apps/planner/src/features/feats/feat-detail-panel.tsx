@@ -4,7 +4,7 @@ import { useCharacterFoundationStore } from '@planner/features/character-foundat
 import { useLevelProgressionStore } from '@planner/features/level-progression/store';
 import { useSkillStore } from '@planner/features/skills/store';
 import { evaluateFeatPrerequisites } from '@rules-engine/feats/feat-prerequisite';
-import { compiledFeatCatalog } from './compiled-feat-catalog';
+import { compiledFeatCatalog, compiledClassCatalog } from './compiled-feat-catalog';
 import { useFeatStore } from './store';
 import { computeBuildStateAtLevel, type FeatBoardView } from './selectors';
 
@@ -51,6 +51,7 @@ export function FeatDetailPanel({ boardView, focusedFeatId }: FeatDetailPanelPro
     feat,
     buildState,
     compiledFeatCatalog,
+    compiledClassCatalog,
   );
 
   return (

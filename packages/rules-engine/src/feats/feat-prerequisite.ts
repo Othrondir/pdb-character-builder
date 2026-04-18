@@ -2,6 +2,8 @@ import type {
   CompiledFeat,
   FeatCatalog,
 } from '@data-extractor/contracts/feat-catalog';
+import type { ClassCatalog } from '@data-extractor/contracts/class-catalog';
+import { getClassLabel } from './get-class-label';
 
 /**
  * Snapshot of the character build at a specific level,
@@ -68,11 +70,16 @@ export const ABILITY_PREREQ_MAP: Record<string, string> = {
 /**
  * Evaluate all prerequisites for a single feat against the current build state.
  * Returns a per-prerequisite pass/fail report with Spanish labels.
+ *
+ * `classCatalog` is required for resolving `minLevelClass` prereqs to Spanish
+ * class labels (FEAT-02 / Phase 12 IN-07) — pass the compiled class catalog
+ * (e.g. `compiledClassCatalog` on the planner side).
  */
 export function evaluateFeatPrerequisites(
   feat: CompiledFeat,
   buildState: BuildStateAtLevel,
   featCatalog: FeatCatalog,
+  classCatalog: ClassCatalog,
 ): PrerequisiteCheckResult {
   const checks: PrerequisiteCheck[] = [];
   const prereqs = feat.prerequisites;
@@ -196,8 +203,7 @@ export function evaluateFeatPrerequisites(
     const classId = prereqs.minLevelClass;
     const requiredLevel = prereqs.minLevel ?? 1;
     const currentClassLevel = buildState.classLevels[classId] ?? 0;
-    const classDef = featCatalog.feats.find((f) => f.id === classId);
-    const classLabel = classDef?.label ?? classId;
+    const classLabel = getClassLabel(classId, classCatalog) ?? classId;
 
     checks.push({
       type: 'class-level',

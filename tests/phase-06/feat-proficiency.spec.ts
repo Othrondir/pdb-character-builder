@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { compiledFeatCatalog } from '@planner/data/compiled-feats';
+import { compiledClassCatalog } from '@planner/data/compiled-classes';
 import {
   evaluateFeatPrerequisites,
   type BuildStateAtLevel,
@@ -81,6 +82,7 @@ describe('phase 06 proficiency feats (FEAT-03)', () => {
         lightArmor,
         createBuildState(),
         compiledFeatCatalog,
+        compiledClassCatalog,
       );
 
       // Light armor has no prerequisites (empty prerequisites object)

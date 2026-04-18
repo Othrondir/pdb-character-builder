@@ -157,7 +157,12 @@ export function getEligibleFeats(
     }
 
     // Check prerequisites
-    const result = evaluateFeatPrerequisites(feat, buildState, featCatalog);
+    const result = evaluateFeatPrerequisites(
+      feat,
+      buildState,
+      featCatalog,
+      classCatalog,
+    );
 
     if (!result.met) {
       continue;
@@ -193,9 +198,15 @@ export function getEligibleFeats(
 export function evaluateAllFeatsForSearch(
   buildState: BuildStateAtLevel,
   featCatalog: FeatCatalog,
+  classCatalog: ClassCatalog,
 ): Array<{ feat: CompiledFeat; prereqResult: PrerequisiteCheckResult }> {
   return featCatalog.feats.map((feat) => ({
     feat,
-    prereqResult: evaluateFeatPrerequisites(feat, buildState, featCatalog),
+    prereqResult: evaluateFeatPrerequisites(
+      feat,
+      buildState,
+      featCatalog,
+      classCatalog,
+    ),
   }));
 }

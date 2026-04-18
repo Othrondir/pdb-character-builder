@@ -8,7 +8,7 @@ import {
   evaluateAllFeatsForSearch,
 } from '@rules-engine/feats/feat-eligibility';
 import type { PrerequisiteCheck } from '@rules-engine/feats/feat-prerequisite';
-import { compiledFeatCatalog } from './compiled-feat-catalog';
+import { compiledFeatCatalog, compiledClassCatalog } from './compiled-feat-catalog';
 import { useFeatStore } from './store';
 import { computeBuildStateAtLevel, type FeatBoardView } from './selectors';
 
@@ -68,7 +68,11 @@ export function FeatSearch({ query, boardView, onSelectFeat }: FeatSearchProps) 
       featState,
     );
 
-    const allEvaluated = evaluateAllFeatsForSearch(buildState, compiledFeatCatalog);
+    const allEvaluated = evaluateAllFeatsForSearch(
+      buildState,
+      compiledFeatCatalog,
+      compiledClassCatalog,
+    );
 
     const matchingItems: SearchResultItem[] = [];
 

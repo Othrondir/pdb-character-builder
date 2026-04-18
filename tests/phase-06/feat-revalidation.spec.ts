@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { compiledFeatCatalog } from '@planner/data/compiled-feats';
+import { compiledClassCatalog } from '@planner/data/compiled-classes';
 import {
   revalidateFeatSnapshotAfterChange,
   type FeatLevelInput,
@@ -49,6 +50,7 @@ describe('phase 06 feat revalidation', () => {
         }),
       ],
       featCatalog: compiledFeatCatalog,
+      classCatalog: compiledClassCatalog,
     });
 
     expect(revalidated[0]).toMatchObject({
@@ -72,6 +74,7 @@ describe('phase 06 feat revalidation', () => {
         }),
       ],
       featCatalog: compiledFeatCatalog,
+      classCatalog: compiledClassCatalog,
     });
 
     expect(revalidated[0]).toMatchObject({
@@ -114,6 +117,7 @@ describe('phase 06 feat revalidation', () => {
         }),
       ],
       featCatalog: compiledFeatCatalog,
+      classCatalog: compiledClassCatalog,
     });
 
     expect(revalidated[0]).toMatchObject({
@@ -139,6 +143,7 @@ describe('phase 06 feat revalidation', () => {
         createLevel(2),
       ],
       featCatalog: compiledFeatCatalog,
+      classCatalog: compiledClassCatalog,
     });
 
     expect(revalidated[0]).toMatchObject({
@@ -162,6 +167,7 @@ describe('phase 06 feat revalidation', () => {
         }),
       ],
       featCatalog: compiledFeatCatalog,
+      classCatalog: compiledClassCatalog,
     });
 
     expect(revalidated[0]).toMatchObject({

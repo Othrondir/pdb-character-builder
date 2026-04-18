@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { compiledFeatCatalog } from '@planner/data/compiled-feats';
+import { compiledClassCatalog } from '@planner/data/compiled-classes';
 import {
   evaluateFeatPrerequisites,
   type BuildStateAtLevel,
@@ -38,6 +39,7 @@ describe('phase 06 feat prerequisite evaluator', () => {
       feat,
       createBuildState({ abilityScores: { str: 13, dex: 10, con: 10, int: 10, wis: 10, cha: 10 } }),
       compiledFeatCatalog,
+      compiledClassCatalog,
     );
 
     expect(result.met).toBe(true);
@@ -53,6 +55,7 @@ describe('phase 06 feat prerequisite evaluator', () => {
       feat,
       createBuildState({ abilityScores: { str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 10 } }),
       compiledFeatCatalog,
+      compiledClassCatalog,
     );
 
     expect(result.met).toBe(false);
@@ -73,6 +76,7 @@ describe('phase 06 feat prerequisite evaluator', () => {
         selectedFeatIds: new Set(['feat:ataquepoderoso', 'feat:cleave']),
       }),
       compiledFeatCatalog,
+      compiledClassCatalog,
     );
 
     const babCheck = result.checks.find((c) => c.type === 'bab');
@@ -90,6 +94,7 @@ describe('phase 06 feat prerequisite evaluator', () => {
         selectedFeatIds: new Set(['feat:ataquepoderoso', 'feat:cleave']),
       }),
       compiledFeatCatalog,
+      compiledClassCatalog,
     );
 
     const babCheck = result.checks.find((c) => c.type === 'bab');
@@ -108,6 +113,7 @@ describe('phase 06 feat prerequisite evaluator', () => {
         selectedFeatIds: new Set(['feat:ataquepoderoso']),
       }),
       compiledFeatCatalog,
+      compiledClassCatalog,
     );
 
     const featCheck = result.checks.find((c) => c.type === 'feat');
@@ -127,6 +133,7 @@ describe('phase 06 feat prerequisite evaluator', () => {
         abilityScores: { str: 13, dex: 10, con: 10, int: 10, wis: 10, cha: 10 },
       }),
       compiledFeatCatalog,
+      compiledClassCatalog,
     );
 
     const featCheck = result.checks.find((c) => c.type === 'feat');
@@ -148,6 +155,7 @@ describe('phase 06 feat prerequisite evaluator', () => {
         selectedFeatIds: new Set(['feat:competenciaarmassimples']),
       }),
       compiledFeatCatalog,
+      compiledClassCatalog,
     );
 
     const orCheck = result.checks.find((c) => c.type === 'or-feats');
@@ -166,6 +174,7 @@ describe('phase 06 feat prerequisite evaluator', () => {
         bab: 8,
       }),
       compiledFeatCatalog,
+      compiledClassCatalog,
     );
 
     const orCheck = result.checks.find((c) => c.type === 'or-feats');
@@ -187,6 +196,7 @@ describe('phase 06 feat prerequisite evaluator', () => {
         selectedFeatIds: new Set(['feat:ataquepoderoso', 'feat:cleave']),
       }),
       compiledFeatCatalog,
+      compiledClassCatalog,
     );
 
     expect(result.met).toBe(true);
@@ -204,6 +214,7 @@ describe('phase 06 feat prerequisite evaluator', () => {
         // Missing feat:cleave
       }),
       compiledFeatCatalog,
+      compiledClassCatalog,
     );
 
     expect(result.met).toBe(false);
@@ -220,6 +231,7 @@ describe('phase 06 feat prerequisite evaluator', () => {
       feat,
       createBuildState(),
       compiledFeatCatalog,
+      compiledClassCatalog,
     );
 
     // Only preReqEpic: false -> no check generated (epic=false is not a requirement)
@@ -240,6 +252,7 @@ describe('phase 06 feat prerequisite evaluator', () => {
         epicFeat,
         createBuildState({ characterLevel: 16 }),
         compiledFeatCatalog,
+        compiledClassCatalog,
       );
 
       const epicCheck = result.checks.find((c) => c.type === 'epic');
@@ -256,6 +269,7 @@ describe('phase 06 feat prerequisite evaluator', () => {
       feat,
       createBuildState({ characterLevel: 1 }),
       compiledFeatCatalog,
+      compiledClassCatalog,
     );
 
     const maxCheckL1 = resultL1.checks.find((c) => c.type === 'max-level');
@@ -266,6 +280,7 @@ describe('phase 06 feat prerequisite evaluator', () => {
       feat,
       createBuildState({ characterLevel: 2 }),
       compiledFeatCatalog,
+      compiledClassCatalog,
     );
 
     const maxCheckL2 = resultL2.checks.find((c) => c.type === 'max-level');
@@ -282,6 +297,7 @@ describe('phase 06 feat prerequisite evaluator', () => {
         abilityScores: { str: 10, dex: 14, con: 10, int: 10, wis: 10, cha: 10 },
       }),
       compiledFeatCatalog,
+      compiledClassCatalog,
     );
 
     expect(resultPass.met).toBe(true);
@@ -292,6 +308,7 @@ describe('phase 06 feat prerequisite evaluator', () => {
         abilityScores: { str: 10, dex: 12, con: 10, int: 10, wis: 10, cha: 10 },
       }),
       compiledFeatCatalog,
+      compiledClassCatalog,
     );
 
     expect(resultFail.met).toBe(false);

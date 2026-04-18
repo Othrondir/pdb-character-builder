@@ -4,6 +4,7 @@ import {
   resolveValidationOutcome,
 } from '../contracts/validation-outcome';
 import type { FeatCatalog } from '@data-extractor/contracts/feat-catalog';
+import type { ClassCatalog } from '@data-extractor/contracts/class-catalog';
 import {
   evaluateFeatPrerequisites,
   type BuildStateAtLevel,
@@ -74,6 +75,7 @@ function createIllegalIssue(affectedIds: string[]): ValidationOutcome {
 export function revalidateFeatSnapshotAfterChange(input: {
   levels: FeatLevelInput[];
   featCatalog: FeatCatalog;
+  classCatalog: ClassCatalog;
 }): RevalidatedFeatLevel[] {
   let inheritedBreakLevel: number | null = null;
 
@@ -116,6 +118,7 @@ export function revalidateFeatSnapshotAfterChange(input: {
           feat,
           levelInput.buildState,
           input.featCatalog,
+          input.classCatalog,
         );
 
         if (!result.met) {
@@ -135,6 +138,7 @@ export function revalidateFeatSnapshotAfterChange(input: {
           feat,
           levelInput.buildState,
           input.featCatalog,
+          input.classCatalog,
         );
 
         if (!result.met) {
