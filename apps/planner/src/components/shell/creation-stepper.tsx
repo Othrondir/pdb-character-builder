@@ -2,10 +2,10 @@ import { shellCopyEs } from '@planner/lib/copy/es';
 import { originSteps } from '@planner/lib/sections';
 import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
 import {
-  selectFoundationSummary,
   selectOriginReadyForAbilities,
+  selectAttributeBudgetSnapshot,
 } from '@planner/features/character-foundation/selectors';
-import { selectAttributeBudgetSnapshot } from '@planner/features/character-foundation/selectors';
+import { phase03FoundationFixture } from '@planner/features/character-foundation/foundation-fixture';
 import { usePlannerShellStore } from '@planner/state/planner-shell';
 import { NwnFrame } from '@planner/components/ui/nwn-frame';
 import { NwnButton } from '@planner/components/ui/nwn-button';
@@ -15,12 +15,40 @@ import { LevelRail } from './level-rail';
 import { LevelSubSteps } from './level-sub-steps';
 import type { OriginStep } from '@planner/lib/sections';
 
+/**
+ * Phase 12.3-05 (UAT B7) — each origin-step branch reads ONLY the narrow
+ * foundation-store fields it needs.
+ *
+ * Before: this hook subscribed to the entire foundation store and composed
+ * `selectFoundationSummary(foundationState)` for labels, which pulled in
+ * `selectFoundationValidation` and `selectAttributeBudgetSnapshot` on every
+ * render. That created a wide dependency surface where any future
+ * regression in the composed summary (e.g. nulling labels under non-legal
+ * status) would have silently collapsed the Raza + Alineamiento rail
+ * checkmarks and summary text under overspent point-buy.
+ *
+ * After: Raza and Alineamiento branches subscribe only to `raceId` and
+ * `alignmentId` via narrow selectors and resolve their labels directly
+ * from `phase03FoundationFixture`. The Atributos branch additionally
+ * subscribes to `baseAttributes` (so its status reacts to point-buy
+ * edits) and reads the wider helpers via `getState()` — the narrow
+ * subscriptions keep the hook reactive without coupling Raza/Alineamiento
+ * to attributes-level state.
+ */
 function useOriginStepStatus(
   stepId: OriginStep,
   activeOriginStep: OriginStep | null,
 ): { status: StepperStepStatus; summary: string | undefined } {
-  const foundationState = useCharacterFoundationStore();
-  const foundationSummary = selectFoundationSummary(foundationState);
+  const raceId = useCharacterFoundationStore((state) => state.raceId);
+  const alignmentId = useCharacterFoundationStore((state) => state.alignmentId);
+  const baseAttributes = useCharacterFoundationStore(
+    (state) => state.baseAttributes,
+  );
+  // Reference `baseAttributes` so the narrow subscription is not elided by
+  // bundlers. The Atributos branch reads the full snapshot below via
+  // `getState()`, but the reactive hook must track this field to re-render
+  // on every point-buy edit.
+  void baseAttributes;
 
   if (activeOriginStep === stepId) {
     return { status: 'active', summary: undefined };
@@ -28,24 +56,32 @@ function useOriginStepStatus(
 
   switch (stepId) {
     case 'race': {
-      if (foundationState.raceId !== null) {
-        return { status: 'complete', summary: foundationSummary.selectedRaceLabel ?? undefined };
+      if (raceId !== null) {
+        const race = phase03FoundationFixture.races.find((r) => r.id === raceId);
+        return { status: 'complete', summary: race?.label ?? undefined };
       }
       return { status: 'pending', summary: undefined };
     }
     case 'alignment': {
-      if (foundationState.raceId === null) {
+      if (raceId === null) {
         return { status: 'pending', summary: undefined };
       }
-      if (foundationState.alignmentId !== null) {
-        return { status: 'complete', summary: foundationSummary.selectedAlignmentLabel ?? undefined };
+      if (alignmentId !== null) {
+        const alignment = phase03FoundationFixture.alignments.find(
+          (a) => a.id === alignmentId,
+        );
+        return { status: 'complete', summary: alignment?.label ?? undefined };
       }
       return { status: 'pending', summary: undefined };
     }
     case 'attributes': {
-      if (foundationState.alignmentId === null) {
+      if (alignmentId === null) {
         return { status: 'pending', summary: undefined };
       }
+      // Read the full foundation snapshot non-reactively; reactivity is
+      // supplied by the narrow `raceId`, `alignmentId`, and `baseAttributes`
+      // subscriptions above, which cover every field the helpers consume.
+      const foundationState = useCharacterFoundationStore.getState();
       const originReady = selectOriginReadyForAbilities(foundationState);
       const budgetSnapshot = selectAttributeBudgetSnapshot(foundationState);
       if (originReady && budgetSnapshot.status === 'legal') {
