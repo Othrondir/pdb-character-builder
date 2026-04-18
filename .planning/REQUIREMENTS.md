@@ -21,7 +21,7 @@
 
 - [x] **CHAR-01**: El usuario puede elegir raza y subraza de entre las soportadas por el servidor.
 - [x] **CHAR-02**: El usuario puede elegir alineamiento de forma compatible con las restricciones del servidor.
-- [x] **CHAR-03**: El usuario puede elegir deidad cuando la build lo requiera.
+- [ ] ~~**CHAR-03**: El usuario puede elegir deidad cuando la build lo requiera.~~ _Descoped v1 → v2 (2026-04-18) — servidor Puerta gestiona deidades via scripts, no 2DA; catálogo de deidades del extractor emite null; no existe picker end-to-end ni setter en foundation store._
 - [x] **CHAR-04**: El usuario puede ver restricciones o incompatibilidades provocadas por raza, subraza, alineamiento o deidad.
 
 ### Caracteristicas y progresion base
@@ -48,21 +48,21 @@
 ### Dotes y competencias
 
 - [x] **FEAT-01**: El usuario puede elegir dotes generales, dotes custom y dotes de clase disponibles en el servidor.
-- [ ] **FEAT-02**: El usuario puede ver prerrequisitos incumplidos y razones exactas por las que una dote no es legal.
-- [ ] **FEAT-03**: El planner modela las competencias con armas, armaduras y escudos segun la version custom del servidor.
-- [ ] **FEAT-04**: El planner modela divisiones o cambios custom de competencias y dotes que difieren del NWN base.
+- [x] **FEAT-02**: El usuario puede ver prerrequisitos incumplidos y razones exactas por las que una dote no es legal.
+- [x] **FEAT-03**: El planner modela las competencias con armas, armaduras y escudos segun la version custom del servidor.
+- [x] **FEAT-04**: El planner modela divisiones o cambios custom de competencias y dotes que difieren del NWN base.
 
 ### Conjuros y dominios
 
-- [x] **MAGI-01**: El usuario puede elegir dominios de clerigo soportados por Puerta de Baldur, incluidos los custom.
-- [ ] **MAGI-02**: El usuario puede ver como los dominios, clases y progreso del personaje afectan a los conjuros disponibles.
-- [x] **MAGI-03**: El usuario puede elegir conjuros, conjuros conocidos u otras selecciones magicas relevantes segun su clase y nivel.
-- [x] **MAGI-04**: El planner usa la lista de conjuros custom y revisados del servidor en lugar de limitarse al NWN base.
+- [ ] ~~**MAGI-01**: El usuario puede elegir dominios de clerigo soportados por Puerta de Baldur, incluidos los custom.~~ _Descoped v1 → v2 (superseded by Phase 07.2) — domain picker eliminado; extractor conserva catálogo tras flag `EMIT_MAGIC_CATALOGS=1`._
+- [ ] ~~**MAGI-02**: El usuario puede ver como los dominios, clases y progreso del personaje afectan a los conjuros disponibles.~~ _Descoped v1 → v2 (superseded by Phase 07.2) — UI de selección de conjuros eliminada._
+- [ ] ~~**MAGI-03**: El usuario puede elegir conjuros, conjuros conocidos u otras selecciones magicas relevantes segun su clase y nivel.~~ _Descoped v1 → v2 (superseded by Phase 07.2) — pestaña Conjuros eliminada._
+- [ ] ~~**MAGI-04**: El planner usa la lista de conjuros custom y revisados del servidor en lugar de limitarse al NWN base.~~ _Descoped v1 → v2 (superseded by Phase 07.2) — extractor conserva catálogo tras flag `EMIT_MAGIC_CATALOGS=1`, runtime no lo consume._
 
 ### Validacion y explicaciones
 
 - [x] **VALI-01**: El planner bloquea builds ilegales en lugar de permitirlas con simples avisos.
-- [ ] **VALI-02**: El usuario recibe explicaciones precisas y legibles cuando una eleccion es invalida.
+- [ ] **VALI-02**: El usuario recibe explicaciones precisas y legibles cuando una eleccion es invalida. _Non-magic shipped via Phase 06 (FeatBoard prereq checklist, skill repair reasons, class prereq rail); magic portion descoped por Phase 07.2; pendiente reclasificación explícita en Phase 9._
 - [x] **VALI-03**: El planner recalcula automaticamente la build completa cuando cambia cualquier decision.
 - [x] **VALI-04**: El planner evita marcar una build como valida cuando falten datos o exista conflicto entre fuentes de reglas.
 
@@ -91,6 +91,11 @@
 - **LORE-01**: El usuario puede consultar una enciclopedia interna de clases, dotes y conjuros sin salir del planner.
 - **PROG-04**: El usuario puede planificar por encima de nivel 16 cuando el proyecto amplie el alcance.
 
+### Descoped from v1 (2026-04-18)
+
+- **CHAR-03** _(re-evaluar)_: Picker de deidad end-to-end — servidor Puerta gestiona deidades via scripts, no 2DA; extractor emite null. Decisión: diferido a v2.
+- **MAGI-01..04** _(superseded by Phase 07.2)_: UI de magia completa eliminada (dominios de clérigo, selección de conjuros, per-level spell view, listas custom). Data-extractor conserva catálogos tras flag `EMIT_MAGIC_CATALOGS=1` para rehabilitación futura.
+
 ## Out of Scope
 
 | Feature | Reason |
@@ -105,15 +110,15 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| LANG-01 | Phase 2 | Complete |
-| LANG-02 | Phase 7 | Complete |
+| LANG-01 | Phase 2 → Phase 9 | Pending (verification closure) |
+| LANG-02 | Phase 7 → Phase 9 | Pending (verification closure) |
 | LANG-03 | Phase 8 | Complete |
-| FLOW-01 | Phase 2 | Complete |
-| FLOW-02 | Phase 2 | Complete |
+| FLOW-01 | Phase 2 → Phase 9 + Phase 10 | Pending (verification closure + attributes→level1 integration fix) |
+| FLOW-02 | Phase 2 → Phase 9 | Pending (verification closure) |
 | FLOW-03 | Phase 4 | Complete |
 | CHAR-01 | Phase 3 | Complete |
 | CHAR-02 | Phase 3 | Complete |
-| CHAR-03 | Phase 3 | Complete |
+| CHAR-03 | — | Descoped v1 → v2 (2026-04-18) |
 | CHAR-04 | Phase 3 | Complete |
 | ABIL-01 | Phase 3 | Complete |
 | ABIL-02 | Phase 4 | Complete |
@@ -128,28 +133,29 @@
 | SKIL-02 | Phase 5 | Complete |
 | SKIL-03 | Phase 5 | Complete |
 | FEAT-01 | Phase 6 | Complete |
-| FEAT-02 | Phase 6 | Pending |
-| FEAT-03 | Phase 6 | Pending |
-| FEAT-04 | Phase 6 | Pending |
-| MAGI-01 | Phase 7 | Complete |
-| MAGI-02 | Phase 7 | Pending |
-| MAGI-03 | Phase 7 | Complete |
-| MAGI-04 | Phase 7 | Complete |
-| VALI-01 | Phase 7 | Complete |
-| VALI-02 | Phase 7 | Pending |
+| FEAT-02 | Phase 6 → Phase 12 | Complete (user-visible class-label bug IN-07 pending Phase 12 fix) |
+| FEAT-03 | Phase 6 | Complete |
+| FEAT-04 | Phase 6 | Complete |
+| MAGI-01 | Phase 7 → — | Descoped v1 → v2 (superseded by Phase 07.2) |
+| MAGI-02 | Phase 7 → — | Descoped v1 → v2 (superseded by Phase 07.2) |
+| MAGI-03 | Phase 7 → — | Descoped v1 → v2 (superseded by Phase 07.2) |
+| MAGI-04 | Phase 7 → — | Descoped v1 → v2 (superseded by Phase 07.2) |
+| VALI-01 | Phase 7 | Complete (non-magic; shell aggregate `validationStatus` orphan tracked in Phase 10) |
+| VALI-02 | Phase 7 → Phase 9 | Pending (non-magic satisfied; explicit audit pass required) |
 | VALI-03 | Phase 7 | Complete |
-| VALI-04 | Phase 1 | Complete |
+| VALI-04 | Phase 1 → Phase 9 | Pending (verification closure) |
 | SHAR-01 | Phase 8 | Complete |
-| SHAR-02 | Phase 8 | Complete |
+| SHAR-02 | Phase 8 → Phase 10 | Complete (loadSlot diffRuleset gate added in Phase 10) |
 | SHAR-03 | Phase 8 | Complete |
 | SHAR-04 | Phase 8 | Complete |
-| SHAR-05 | Phase 8 | Complete |
+| SHAR-05 | Phase 8 → Phase 10 | Complete (slot-load fail-closed parity in Phase 10) |
 
 **Coverage:**
 - v1 requirements: 39 total
-- Mapped to phases: 39
+- Active in v1: 34 (5 descoped: CHAR-03, MAGI-01, MAGI-02, MAGI-03, MAGI-04)
+- Mapped to phases: 34
 - Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-03-29*
-*Last updated: 2026-03-30 after Phase 4 verification*
+*Last updated: 2026-04-18 after milestone v1.0 audit + gap closure plan (Phases 9-12)*

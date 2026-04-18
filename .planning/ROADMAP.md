@@ -20,6 +20,10 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 6: Feats & Proficiencies** - Model Puerta feat choices, proficiencies, and exact prerequisite failures.
 - [ ] **Phase 7: Magic & Full Legality Engine** - Complete domains, spells, Spanish rules text, and full-build recomputation.
 - [x] **Phase 8: Summary, Persistence & Shared Builds** - Preserve and share exact dataset-pinned builds through local storage, JSON, and URLs.
+- [ ] **Phase 9: Verification + Traceability Closure** (GAP) - Close unverified phases (01, 02, 05.1), reclassify descoped requirements, reconcile REQUIREMENTS.md traceability.
+- [ ] **Phase 10: Integration Fixes** (GAP) - Close integration defects surfaced by milestone audit — attributes→level1 forward action, slot-load fail-closed parity, orphan shell `validationStatus` cleanup.
+- [ ] **Phase 11: UAT + Open-Work Closure** (GAP) - Close P06 human UAT, archive P05/P07 UAT files, resolve open debug + quick task.
+- [ ] **Phase 12: Tech Debt Sweep** (GAP) - Fix P03 typecheck errors, P07.2 IN-07 class-label bug (FEAT-02 quality), IN-03 label cleanup, IN-05 counter alignment.
 
 ## Phase Details
 
@@ -227,10 +231,82 @@ Plans:
 - [x] 08-02: Implement URL sharing, dataset pinning, and mismatch handling
 **UI hint**: yes
 
+### Phase 9: Verification + Traceability Closure (GAP)
+**Goal**: Close unverified phases (01, 02, 05.1), supersede stale Phase 07 verification, reclassify descoped requirements, and reconcile REQUIREMENTS.md traceability so milestone v1.0 audit can pass cleanly.
+**Depends on**: Phase 8
+**Requirements**: VALI-04, LANG-01, LANG-02, FLOW-01, FLOW-02, VALI-02 (verification closures); CHAR-03, MAGI-01, MAGI-02, MAGI-03, MAGI-04 (descope reclassification); FEAT-02, FEAT-03, FEAT-04 (stale traceability)
+**Gap Closure**: Closes all verification-only partials + descope reclassification gaps from v1.0-MILESTONE-AUDIT.md
+**Success Criteria** (what must be TRUE):
+  1. `01-VERIFICATION.md` exists and verifies VALI-04 goal-backward.
+  2. `02-VERIFICATION.md` exists (or 07.2 transitive verification is explicitly accepted) covering LANG-01, FLOW-01, FLOW-02.
+  3. `05.1-VERIFICATION.md` exists and verifies LANG-02, FEAT-01, MAGI-01, MAGI-04 data-pipeline claims (magic portion noted as descoped).
+  4. `07-VERIFICATION.md` marked `superseded_by: 07.2` (not `gaps_found`).
+  5. REQUIREMENTS.md reflects: CHAR-03 + MAGI-01..04 as descoped v1 → v2; VALI-02 explicit audit pass (non-magic satisfied, magic descoped); FEAT-02/03/04 as Complete.
+  6. REQUIREMENTS.md coverage count shows 34 active v1 + 5 descoped with explicit mapping.
+**Plans**: 2 plans
+
+Plans:
+- [ ] 09-01: Produce missing VERIFICATION.md trio (01, 02, 05.1) via `/gsd-verify-work`
+- [ ] 09-02: Mark 07 superseded, reclassify descoped requirements, reconcile traceability + coverage
+
+### Phase 10: Integration Fixes (GAP)
+**Goal**: Close integration defects surfaced by milestone v1.0 integration check — recurring attributes→level1 blocker, slot-load fail-closed parity, and orphan shell aggregate state.
+**Depends on**: Phase 8
+**Requirements**: FLOW-01 (attributes forward action), SHAR-02 + SHAR-05 (loadSlot diffRuleset gate), VALI-01 (shell aggregate `validationStatus` cleanup or completion)
+**Gap Closure**: Closes HIGH/MEDIUM/LOW integration gaps from v1.0-MILESTONE-AUDIT.md integration check
+**Success Criteria** (what must be TRUE):
+  1. `AttributesBoard` renders an ActionBar "Aceptar" action that advances to `setExpandedLevel(1)` + `setActiveLevelSubStep('class')` — creation wizard chain unbroken end to end.
+  2. `LoadSlotDialog.onPick` calls `diffRuleset` before `hydrateBuildDocument` and routes mismatches through `VersionMismatchDialog`, matching the URL-share and JSON-import paths.
+  3. `PlannerShellState.validationStatus` is either deleted (if unused) or wired to an aggregate severity surface — no orphan state.
+  4. `origin-board.tsx` empty-string fallback is normalised to `null` in the foundation setters so downstream `buildDocumentSchema` never sees a raw `'' as CanonicalId`.
+  5. Regression tests cover the three fixes (attributes→level1 advance, slot-load mismatch branch, shell aggregate state removal/use).
+**Plans**: 3 plans
+
+Plans:
+- [ ] 10-01: AttributesBoard ActionBar + forward action wiring (unblocks recurring attributes blocker)
+- [ ] 10-02: loadSlot diffRuleset gate + VersionMismatchDialog branch + regression tests
+- [ ] 10-03: Shell `validationStatus` cleanup + origin-board empty-string normalisation
+**UI hint**: yes
+
+### Phase 11: UAT + Open-Work Closure (GAP)
+**Goal**: Close outstanding human UAT scenarios and archive open workflow artifacts (debug session, quick task, stale UAT files).
+**Depends on**: Phase 10
+**Requirements**: FEAT-01, FEAT-02, FEAT-03, FEAT-04 (P06 human UAT); SKIL-01..03 (P05 UAT close); descope reconciliation (P07 UAT)
+**Gap Closure**: Closes human UAT debt + open debug/quick tasks from v1.0-MILESTONE-AUDIT.md
+**Success Criteria** (what must be TRUE):
+  1. P06 5-scenario human UAT run (FeatBoard visual flow, search accent-insensitive, Dotes tab grouping, revalidation markers, proficiency feats visibility) — all signed off.
+  2. `05-HUMAN-UAT.md` closed with re-verification note (12/12 programmatic + layout pass).
+  3. `07-UAT.md` marked descoped per Phase 07.2.
+  4. `.planning/debug/guardar-slot-zoderror.md` verified (4f03865 fix confirmed) and closed.
+  5. `.planning/quick/260414-gxx-ignorar-artefactos-locales-del-workspace/SUMMARY.md` written and quick task closed.
+**Plans**: 3 plans
+
+Plans:
+- [ ] 11-01: Run P06 5-scenario human UAT + archive P05/P07 UAT files
+- [ ] 11-02: Close debug session `guardar-slot-zoderror` (verify 4f03865 fix)
+- [ ] 11-03: Write SUMMARY.md for quick task `260414-gxx`
+**UI hint**: yes
+
+### Phase 12: Tech Debt Sweep (GAP)
+**Goal**: Clear documented tech debt surfaced by audit so milestone v1.0 can close without known defects leaking into v2.
+**Depends on**: Phase 8
+**Requirements**: FEAT-02 (user-visible class-label bug IN-07 degrades FEAT-02 quality)
+**Gap Closure**: Closes tech debt items from v1.0-MILESTONE-AUDIT.md (P03 typecheck, P07.2 IN-03/05/07)
+**Success Criteria** (what must be TRUE):
+  1. `tests/phase-03/foundation-validation.spec.ts` compiles without the 3 DeityRuleRecord[] vs branded CanonicalId typecheck errors (tests still pass).
+  2. `getClassLabel` helper in `packages/rules-engine/src/feats/feat-prerequisite.ts` looks up class IDs in CLASSES (not FEATS) — FEAT-02 class-prerequisite labels render Spanish class names, not raw canonical IDs.
+  3. `FEAT_CATEGORY_LABELS` no longer maps `'3' → 'Arcana'` or `'15' → 'Divina'` — magic-flavoured feat chips gone.
+  4. `[N/7]` extract-progress counters align when `EMIT_MAGIC_CATALOGS=0` (cosmetic, default run state).
+**Plans**: 2 plans
+
+Plans:
+- [ ] 12-01: Fix P03 typecheck errors + P07.2 IN-07 getClassLabel bug (user-visible)
+- [ ] 12-02: Drop P07.2 IN-03 magic feat labels + align IN-05 extract counters
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -> 8
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -246,3 +322,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -
 | 07.2 Magic UI descope (INSERTED) | 2/2 | Complete | 2026-04-17 |
 | 07.1 Shell narrow viewport nav fix (INSERTED) | 1/1 | Complete   | 2026-04-17 |
 | 8. Summary, Persistence & Shared Builds | 2/2 | Complete | 2026-04-18 |
+| 9. Verification + Traceability Closure (GAP) | 0/2 | Pending | - |
+| 10. Integration Fixes (GAP) | 0/3 | Pending | - |
+| 11. UAT + Open-Work Closure (GAP) | 0/3 | Pending | - |
+| 12. Tech Debt Sweep (GAP) | 0/2 | Pending | - |
