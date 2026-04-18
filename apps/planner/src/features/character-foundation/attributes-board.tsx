@@ -5,6 +5,7 @@ import { NwnButton } from '@planner/components/ui/nwn-button';
 import { ActionBar } from '@planner/components/ui/action-bar';
 import { usePlannerShellStore } from '@planner/state/planner-shell';
 import { applyRaceModifiers } from '@rules-engine/foundation/apply-race-modifiers';
+import { canIncrementAttribute } from '@rules-engine/foundation/ability-budget';
 import {
   ATTRIBUTE_KEYS,
   phase03FoundationFixture,
@@ -62,7 +63,7 @@ export function AttributesBoard() {
     (state) => state.setActiveLevelSubStep,
   );
   const {
-    attributeRules: { maximum, minimum },
+    attributeRules: { costByScore, maximum, minimum },
   } = phase03FoundationFixture;
   const canAdvance = attributeBudget.status === 'legal';
   const finalAttributes = applyRaceModifiers(
@@ -117,7 +118,14 @@ export function AttributesBoard() {
                 <span className="attributes-editor__value">{baseValue}</span>
                 <NwnButton
                   aria-label={`Aumentar ${ATTRIBUTE_LABELS[key]}`}
-                  disabled={baseValue >= maximum}
+                  disabled={
+                    !canIncrementAttribute(
+                      baseValue,
+                      attributeBudget.remainingPoints,
+                      costByScore,
+                      maximum,
+                    )
+                  }
                   onClick={() => setBaseAttribute(key, baseValue + 1)}
                   variant="secondary"
                 >

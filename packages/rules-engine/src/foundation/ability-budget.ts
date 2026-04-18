@@ -22,6 +22,46 @@ export interface AbilityBudgetSnapshot {
   status: ValidationStatus;
 }
 
+/**
+ * Phase 12.3-01 (D-01) — cost delta of raising `currentValue` by 1 on the
+ * point-buy table. Returns null when at/above maximum or when either
+ * cost-table key is missing (defensive: out-of-range values should never
+ * be bumpable).
+ *
+ * Framework-agnostic: no React, no store reads. Safe to call from
+ * selectors, tests, and UI.
+ */
+export function nextIncrementCost(
+  currentValue: number,
+  costByScore: Record<string, number>,
+  maximum: number,
+): number | null {
+  if (currentValue >= maximum) return null;
+  const nextValue = currentValue + 1;
+  const currentCost = costByScore[String(currentValue)];
+  const nextCost = costByScore[String(nextValue)];
+  if (currentCost === undefined || nextCost === undefined) return null;
+  return nextCost - currentCost;
+}
+
+/**
+ * Phase 12.3-01 (D-01) — UAT B1 overspend gate. Returns false when the
+ * `+` button would push `remainingPoints` negative OR when the attribute
+ * is already at maximum. The UI mirrors this at the button's `disabled`
+ * prop; the store never rejects setter calls, so UI gating is the single
+ * source of truth for the user-driven path.
+ */
+export function canIncrementAttribute(
+  currentValue: number,
+  remainingPoints: number,
+  costByScore: Record<string, number>,
+  maximum: number,
+): boolean {
+  const nextCost = nextIncrementCost(currentValue, costByScore, maximum);
+  if (nextCost === null) return false;
+  return remainingPoints - nextCost >= 0;
+}
+
 export function calculateAbilityBudgetSnapshot(
   input: CalculateAbilityBudgetSnapshotInput,
 ): AbilityBudgetSnapshot {
