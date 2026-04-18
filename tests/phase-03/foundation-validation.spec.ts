@@ -1,7 +1,42 @@
 import { describe, expect, it } from 'vitest';
 import { calculateAbilityBudgetSnapshot } from '@rules-engine/foundation/ability-budget';
 import { evaluateOriginSelection } from '@rules-engine/foundation/origin-rules';
+import {
+  canonicalIdRegex,
+  type CanonicalId,
+} from '@rules-engine/contracts/canonical-id';
 import { phase03FoundationFixture } from '@planner/features/character-foundation/foundation-fixture';
+
+/**
+ * Branded-id rebuilder helper. Validates that `raw` matches canonicalIdRegex
+ * at runtime before asserting the CanonicalId brand — preserves the branded
+ * invariant at the test fixture boundary without leaking `as CanonicalId`
+ * casts across the spec (Phase 12 Bug 1 / D-01 per 12-CONTEXT.md).
+ */
+function asCanonicalId(raw: string): CanonicalId {
+  if (!canonicalIdRegex.test(raw)) {
+    throw new Error(
+      `asCanonicalId: '${raw}' does not match canonicalIdRegex`,
+    );
+  }
+
+  return raw as CanonicalId;
+}
+
+/**
+ * Build a DeityRuleRecord-shaped value with both id and allowedAlignmentIds
+ * branded as CanonicalId — the single cast site lives inside asCanonicalId
+ * under the runtime regex guard, so fixture code stays cast-free.
+ */
+function buildDeityRecord(
+  id: string,
+  allowedAlignmentIds: readonly string[],
+): { id: CanonicalId; allowedAlignmentIds: CanonicalId[] } {
+  return {
+    id: asCanonicalId(id),
+    allowedAlignmentIds: allowedAlignmentIds.map(asCanonicalId),
+  };
+}
 
 function createOriginSelection(
   overrides: Partial<Parameters<typeof evaluateOriginSelection>[0]>,
@@ -10,7 +45,7 @@ function createOriginSelection(
     alignmentId: null,
     alignments: phase03FoundationFixture.alignments,
     deityId: null,
-    deities: [{ id: 'deity:none' as const, allowedAlignmentIds: [] as string[] }],
+    deities: [buildDeityRecord('deity:none', [])],
     raceId: null,
     races: phase03FoundationFixture.races,
     subraceId: null,
