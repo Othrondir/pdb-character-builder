@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { NwnButton } from '@planner/components/ui/nwn-button';
 import { ConfirmDialog } from '@planner/components/ui/confirm-dialog';
+import { VersionMismatchDialog } from '@planner/components/ui/version-mismatch-dialog';
 import { shellCopyEs } from '@planner/lib/copy/es';
 import {
   listSlots,
@@ -10,7 +11,11 @@ import {
   projectBuildDocument,
   hydrateBuildDocument,
   IncompleteBuildError,
+  diffRuleset,
+  downloadBuildAsJson,
   type BuildSlotRow,
+  type BuildDocument,
+  type RulesetDiff,
 } from '@planner/features/persistence';
 import { pushToast } from '@planner/components/ui/toast';
 
@@ -118,10 +123,17 @@ interface LoadDialogProps {
 }
 
 /**
- * Cargar flow: lists slots newest-first; clicking one runs loadSlot + hydrateBuildDocument.
+ * Cargar flow: lists slots newest-first; clicking one runs loadSlot, then gates on
+ * diffRuleset (D-07 / SHAR-05 fail-closed) BEFORE hydrateBuildDocument. On mismatch,
+ * renders VersionMismatchDialog with the same two terminal actions as share-entry
+ * (Descargar JSON, Cancelar); neither hydrates. Single UI surface with share + JSON-import.
  */
 export function LoadSlotDialog({ open, onClose }: LoadDialogProps) {
   const [slots, setSlots] = useState<BuildSlotRow[] | null>(null);
+  const [mismatch, setMismatch] = useState<{
+    doc: BuildDocument;
+    diff: RulesetDiff;
+  } | null>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const copy = shellCopyEs.persistence.loadDialog;
 
@@ -136,9 +148,22 @@ export function LoadSlotDialog({ open, onClose }: LoadDialogProps) {
     } else if (!open && el.open) el.close();
   }, [open]);
 
+  // Reset local mismatch state when the parent closes the dialog so it does not
+  // leak across reopens.
+  useEffect(() => {
+    if (!open) setMismatch(null);
+  }, [open]);
+
   async function onPick(slotName: string) {
     const doc = await loadSlot(slotName);
     if (!doc) return;
+    const diff = diffRuleset(doc);
+    if (diff) {
+      // Fail-closed: do NOT hydrate. Route the user through the shared
+      // VersionMismatchDialog surface — same precedent as share-entry.tsx:62-72.
+      setMismatch({ doc, diff });
+      return;
+    }
     hydrateBuildDocument(doc);
     pushToast(
       shellCopyEs.persistence.loadSuccess.replace('{name}', slotName),
@@ -148,34 +173,51 @@ export function LoadSlotDialog({ open, onClose }: LoadDialogProps) {
   }
 
   return (
-    <dialog
-      ref={dialogRef}
-      className="nwn-frame load-slot-dialog"
-      onCancel={onClose}
-    >
-      <h2>{copy.title}</h2>
-      <p>{copy.body}</p>
-      {slots === null && <p>{shellCopyEs.resumen.loadingState}</p>}
-      {slots !== null && slots.length === 0 && (
-        <p>{shellCopyEs.resumen.noSlotsMessage}</p>
+    <>
+      <dialog
+        ref={dialogRef}
+        className="nwn-frame load-slot-dialog"
+        onCancel={onClose}
+      >
+        <h2>{copy.title}</h2>
+        <p>{copy.body}</p>
+        {slots === null && <p>{shellCopyEs.resumen.loadingState}</p>}
+        {slots !== null && slots.length === 0 && (
+          <p>{shellCopyEs.resumen.noSlotsMessage}</p>
+        )}
+        {slots !== null && slots.length > 0 && (
+          <ul className="load-slot-dialog__list">
+            {slots.map((row) => (
+              <li key={row.name}>
+                <button type="button" onClick={() => onPick(row.name)}>
+                  <strong>{row.name}</strong>
+                  <small> — {new Date(row.updatedAt).toLocaleString()}</small>
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+        <div className="load-slot-dialog__actions">
+          <NwnButton variant="secondary" onClick={onClose}>
+            {copy.cancel}
+          </NwnButton>
+        </div>
+      </dialog>
+      {mismatch && (
+        <VersionMismatchDialog
+          open
+          diff={mismatch.diff}
+          onDownloadJson={() => {
+            downloadBuildAsJson(mismatch.doc, 'build-incompatible');
+            setMismatch(null);
+            onClose();
+          }}
+          onCancel={() => {
+            setMismatch(null);
+            onClose();
+          }}
+        />
       )}
-      {slots !== null && slots.length > 0 && (
-        <ul className="load-slot-dialog__list">
-          {slots.map((row) => (
-            <li key={row.name}>
-              <button type="button" onClick={() => onPick(row.name)}>
-                <strong>{row.name}</strong>
-                <small> — {new Date(row.updatedAt).toLocaleString()}</small>
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
-      <div className="load-slot-dialog__actions">
-        <NwnButton variant="secondary" onClick={onClose}>
-          {copy.cancel}
-        </NwnButton>
-      </div>
-    </dialog>
+    </>
   );
 }
