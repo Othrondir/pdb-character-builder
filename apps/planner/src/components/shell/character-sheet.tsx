@@ -8,6 +8,8 @@ import {
 } from '@planner/features/character-foundation/selectors';
 import { selectProgressionSummary } from '@planner/features/level-progression/selectors';
 import { applyRaceModifiers } from '@rules-engine/foundation/apply-race-modifiers';
+import { computeHitPoints } from '@rules-engine/progression/compute-hit-points';
+import { compiledClassCatalog } from '@planner/data/compiled-classes';
 import { usePlannerShellStore } from '@planner/state/planner-shell';
 import { shellCopyEs } from '@planner/lib/copy/es';
 import {
@@ -51,6 +53,13 @@ function StatsPanel() {
     foundationState.baseAttributes,
     foundationState.racialModifiers,
   );
+  const conModifier = computeModifier(finalAttributes.con);
+  const hitPoints = computeHitPoints(
+    progressionState.levels,
+    compiledClassCatalog,
+    conModifier,
+  );
+  const hitPointsDisplay = hitPoints > 0 ? String(hitPoints) : '--';
 
   return (
     <div role="tabpanel" id="sheet-panel-stats" aria-labelledby="sheet-tab-stats">
@@ -77,7 +86,7 @@ function StatsPanel() {
         </div>
         <div>
           <dt>{DERIVED_STAT_LABELS.hp}</dt>
-          <dd>--</dd>
+          <dd>{hitPointsDisplay}</dd>
         </div>
         <div>
           <dt>{DERIVED_STAT_LABELS.bab}</dt>
