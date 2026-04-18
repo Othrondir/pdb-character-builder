@@ -218,6 +218,44 @@ const CATALOG_CONFIGS: Record<string, CatalogEmitConfig> = {
 };
 
 // ---------------------------------------------------------------------------
+// Emitter plan — single source of truth for the [N/TOTAL] progress counter
+// ---------------------------------------------------------------------------
+
+/**
+ * Declarative list of catalogs the extractor emits, in fixed run order.
+ * `magicGated: true` entries (spells, domains) filter out when
+ * `EMIT_MAGIC_CATALOGS=0`, so the default run collapses to 5 active emitters
+ * and the opt-in run uses all 7. Add new catalogs here rather than adding a
+ * new hardcoded `[N/X]` counter literal.
+ */
+const EMITTERS: ReadonlyArray<{ name: string; magicGated: boolean }> = [
+  { name: 'classes', magicGated: false },
+  { name: 'races',   magicGated: false },
+  { name: 'skills',  magicGated: false },
+  { name: 'feats',   magicGated: false },
+  { name: 'spells',  magicGated: true  },
+  { name: 'domains', magicGated: true  },
+  { name: 'deities', magicGated: false },
+];
+
+/**
+ * Build the ordered emitter plan for one extractor run.
+ *
+ * @param opts.emitMagic When false, drops magic-gated emitters (spells, domains)
+ *   so the default run reports `[1/5]..[5/5]`; when true, keeps all 7.
+ * @returns An array of `{ index, total, name }` descriptors; `index` is 1-based
+ *   and `total === active.length` for every entry, so `[${index}/${total}]`
+ *   renders the correct counter string regardless of how many emitters ran.
+ */
+export function buildEmitterPlan(
+  opts: { emitMagic: boolean },
+): Array<{ index: number; total: number; name: string }> {
+  const active = EMITTERS.filter((e) => !e.magicGated || opts.emitMagic);
+  const total = active.length;
+  return active.map((e, i) => ({ index: i + 1, total, name: e.name }));
+}
+
+// ---------------------------------------------------------------------------
 // Main orchestrator
 // ---------------------------------------------------------------------------
 
@@ -230,6 +268,16 @@ export async function main(): Promise<void> {
   // The assembler source is preserved per .planning/phases/07.2-magic-ui-descope/07.2-CONTEXT.md
   // so any future reintroduction uses the existing pipeline. Set EMIT_MAGIC_CATALOGS=1 to re-enable.
   const EMIT_MAGIC_CATALOGS = process.env.EMIT_MAGIC_CATALOGS === '1';
+
+  // Compute the per-run emitter plan and a `step(name)` helper to render
+  // `[index/total]` counters. Defaults to '[?/?]' if a name is not in the plan
+  // -- that branch is unreachable today (all 7 EMITTERS names are spelled
+  // below) but keeps the failure mode loud if someone renames a catalog.
+  const emitterPlan = buildEmitterPlan({ emitMagic: EMIT_MAGIC_CATALOGS });
+  const step = (name: string): string => {
+    const s = emitterPlan.find((p) => p.name === name);
+    return s ? `[${s.index}/${s.total}]` : '[?/?]';
+  };
 
   // -------------------------------------------------------------------------
   // a. Open readers
@@ -274,7 +322,7 @@ export async function main(): Promise<void> {
 
   // 1. Classes (needed by skill, feat, spell assemblers)
   try {
-    console.log('  [1/7] Assembling classes...');
+    console.log(`  ${step('classes')} Assembling classes...`);
     const result = assembleClassCatalog(nwsyncReader, baseGameReader, tlkResolver, datasetId);
     catalogs.classes = result.catalog;
     log.addCatalog('classes', result.catalog.classes.length);
@@ -288,7 +336,7 @@ export async function main(): Promise<void> {
 
   // 2. Races
   try {
-    console.log('  [2/7] Assembling races...');
+    console.log(`  ${step('races')} Assembling races...`);
     const result = assembleRaceCatalog(nwsyncReader, baseGameReader, tlkResolver, datasetId);
     catalogs.races = result.catalog;
     log.addCatalog('races', result.catalog.races.length);
@@ -302,7 +350,7 @@ export async function main(): Promise<void> {
 
   // 3. Skills
   try {
-    console.log('  [3/7] Assembling skills...');
+    console.log(`  ${step('skills')} Assembling skills...`);
     const result = assembleSkillCatalog(nwsyncReader, baseGameReader, tlkResolver, datasetId);
     catalogs.skills = result.catalog;
     log.addCatalog('skills', result.catalog.skills.length);
@@ -316,7 +364,7 @@ export async function main(): Promise<void> {
 
   // 4. Feats (needs classRows from classes)
   try {
-    console.log('  [4/7] Assembling feats...');
+    console.log(`  ${step('feats')} Assembling feats...`);
     const classCatalog = catalogs.classes as { classes: Array<{ id: string; sourceRow: number; featTableRef: string | null }> } | undefined;
     const featClassRows = classCatalog
       ? buildFeatClassRows(classCatalog.classes)
@@ -339,7 +387,7 @@ export async function main(): Promise<void> {
   // 5. Spells (needs classRows from classes) — gated behind EMIT_MAGIC_CATALOGS
   if (EMIT_MAGIC_CATALOGS) {
     try {
-      console.log('  [5/7] Assembling spells...');
+      console.log(`  ${step('spells')} Assembling spells...`);
       const classCatalog = catalogs.classes as {
         classes: Array<{
           id: string;
@@ -370,7 +418,7 @@ export async function main(): Promise<void> {
   // 6. Domains (needs featIdsByRow, spellIdsByRow) — gated behind EMIT_MAGIC_CATALOGS
   if (EMIT_MAGIC_CATALOGS) {
     try {
-      console.log('  [6/7] Assembling domains...');
+      console.log(`  ${step('domains')} Assembling domains...`);
       const result = assembleDomainCatalog(
         nwsyncReader, baseGameReader, tlkResolver,
         featIdsByRow, spellIdsByRow, datasetId,
@@ -388,7 +436,7 @@ export async function main(): Promise<void> {
 
   // 7. Deities (gap documentation)
   try {
-    console.log('  [7/7] Checking deity data...');
+    console.log(`  ${step('deities')} Checking deity data...`);
     const result = assembleDeityData(nwsyncReader, baseGameReader, tlkResolver);
     // Deity returns null catalog -- document the gap
     for (const w of result.warnings) log.addWarning('deities', w);
@@ -492,7 +540,29 @@ export async function main(): Promise<void> {
 // Entry point
 // ---------------------------------------------------------------------------
 
-main().catch((err) => {
-  console.error('Fatal extraction error:', err);
-  process.exit(1);
-});
+/**
+ * Only run the extractor when cli.ts is invoked directly (via `tsx src/cli.ts`
+ * or `pnpm extract`), NOT when it is imported by a unit test that just wants
+ * `buildEmitterPlan`. Without this guard, importing `@data-extractor/cli` from
+ * tests/phase-12/extract-counter-magic-off.spec.ts would trigger a full
+ * extraction run, clobber apps/planner/src/data/compiled-*.ts timestamps, and
+ * drop extraction-report.txt into the repo root on every test run.
+ *
+ * The guard is a simple match between `import.meta.url` (the module's own
+ * file:// URL) and the script path reported by the runtime. `pathToFileURL`
+ * normalizes Windows-style paths to the same `file:///C:/...` shape
+ * `import.meta.url` uses.
+ */
+import { pathToFileURL } from 'node:url';
+
+const invokedDirectly =
+  typeof process !== 'undefined'
+  && process.argv[1] !== undefined
+  && import.meta.url === pathToFileURL(process.argv[1]).href;
+
+if (invokedDirectly) {
+  main().catch((err) => {
+    console.error('Fatal extraction error:', err);
+    process.exit(1);
+  });
+}
