@@ -24,6 +24,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 10: Integration Fixes** (GAP) - Close integration defects surfaced by milestone audit — attributes→level1 forward action, slot-load fail-closed parity, orphan shell `validationStatus` cleanup.
 - [x] **Phase 11: UAT + Open-Work Closure** (GAP) - Close P06 human UAT, archive P05/P07 UAT files, resolve open debug + quick task.
 - [ ] **Phase 12: Tech Debt Sweep** (GAP) - Fix P03 typecheck errors, P07.2 IN-07 class-label bug (FEAT-02 quality), IN-03 label cleanup, IN-05 counter alignment.
+- [ ] **Phase 12.1: Roster Wiring & Overflow Fixes** (INSERTED) - Wire compiled class + race catalogs (PDB TLK extractor roster) into L1 pickers and fix CSS overflow/scroll on SelectionScreen + planner-layout panels. Surfaced during Phase 11 UAT (2026-04-18).
 
 ## Phase Details
 
@@ -303,10 +304,27 @@ Plans:
 - [ ] 12-01: Fix P03 typecheck errors + P07.2 IN-07 getClassLabel bug (user-visible)
 - [ ] 12-02: Drop P07.2 IN-03 magic feat labels + align IN-05 extract counters
 
+### Phase 12.1: Roster Wiring & Overflow Fixes (INSERTED)
+**Goal**: Planner UI consumes the full PDB TLK extractor roster for classes and races, and scrollable panels expose their overflow so no information is clipped.
+**Depends on**: Phase 05.1 (extractor output), Phase 05.2 (shell layout)
+**Requirements**: FEAT-01 (correct class selection surface), RACE-01..n (race picker completeness), SHEL-01 (shell usability — no clipped panels)
+**Gap Closure**: Closes UAT observations surfaced during Phase 11 browser walk-through (2026-04-18): L1 class picker rendered 7 entries vs full PDB roster; race picker rendered 3 parent races with only 2 subrace dropdowns; SelectionScreen + planner-layout center lack `overflow-y: auto` and clip content.
+**Success Criteria** (what must be TRUE):
+  1. The L1 class picker renders exactly the set of classes emitted by the PDB extractor into `compiled-classes` — no hand-trimmed subset, no NWN1-canon extras. `selectClassOptionsForLevel` does not filter below the compiled roster for base classes.
+  2. The race picker renders every parent race emitted by the PDB extractor into `compiled-races`, with subraces attached to their parents per the compiled hierarchy. `phase03FoundationFixture.races` (or its replacement) sources from the compiled catalog, not from a hand-authored array.
+  3. SelectionScreen, planner-layout center, and any other panel whose content exceeds the viewport exposes `overflow-y: auto` (or equivalent) so the user can scroll to see the full list. No panel clips content silently.
+  4. A regression test (or negative grep) asserts that the class + race catalogs are wired through the full data path; a manual UAT re-run of Phase 11 scenarios 1 + 4 succeeds against the expanded roster.
+**Plans**: 3 plans (planned)
+
+Plans:
+- [ ] 12.1-01: Wire PDB class roster into L1 picker (verify compiled catalog ≡ extractor output)
+- [ ] 12.1-02: Wire PDB race roster + subrace hierarchy into race picker
+- [ ] 12.1-03: Restore overflow-y scroll on SelectionScreen + planner-layout panels
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 12.1
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|

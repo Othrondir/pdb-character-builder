@@ -132,6 +132,7 @@ None yet.
 - Phase 05.2 inserted after Phase 5.1: UX Overhaul — User identified that the current planner is not navigable: endless vertical scroll, no visual hierarchy, no wizard flow, low information density. Must fix before adding more feature phases.
 - Phase 07.1 inserted after Phase 7: Shell narrow viewport nav fix (URGENT) — Phase 07 UAT surfaced that at viewports ≤1023px the creation-stepper is hidden by media query and no hamburger toggle consumes `toggleMobileNav`, leaving the shell unusable at small resolutions. Blocks downstream UAT until fixed.
 - Phase 07.2 inserted after Phase 7: Magic UI descope (URGENT) — Product pivot. User clarified the planner should match `excel simulador de fichas/Plantilla Base.xlsx` (Resumen Ficha / Caracteristicas&Dotes / Puntos de habilidad / Dotes). No per-level spell selection, no sorcerer swap, no cleric domain picker, no Conjuros tab. Phase 07 magic UI, cleric domains, rules-engine magic module, spell+domain compiled catalogs, and related tests to be purged. Run 07.2 before 07.1 so the drawer lands over a slim shell.
+- Phase 12.1 inserted after Phase 12: Roster Wiring & Overflow Fixes (INSERTED) — Phase 11 UAT (2026-04-18) surfaced that L1 class picker shows only 7 classes, race picker only 3 parent races (vs full PDB TLK extractor roster), and several panels lack `overflow-y: auto` and clip content. User-visible blocker for character creation; separated from Phase 12 (cosmetic tech debt) to keep Phase 12's audit scope tight.
 
 ### Blockers/Concerns
 
