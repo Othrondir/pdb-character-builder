@@ -7,6 +7,7 @@ import {
   selectFoundationSummary,
 } from '@planner/features/character-foundation/selectors';
 import { selectProgressionSummary } from '@planner/features/level-progression/selectors';
+import { applyRaceModifiers } from '@rules-engine/foundation/apply-race-modifiers';
 import { usePlannerShellStore } from '@planner/state/planner-shell';
 import { shellCopyEs } from '@planner/lib/copy/es';
 import {
@@ -46,6 +47,10 @@ function StatsPanel() {
   const progressionState = useLevelProgressionStore();
   const budgetSnapshot = selectAttributeBudgetSnapshot(foundationState);
   const progressionSummary = selectProgressionSummary(progressionState, foundationState);
+  const finalAttributes = applyRaceModifiers(
+    foundationState.baseAttributes,
+    foundationState.racialModifiers,
+  );
 
   return (
     <div role="tabpanel" id="sheet-panel-stats" aria-labelledby="sheet-tab-stats">
@@ -53,7 +58,7 @@ function StatsPanel() {
 
       <dl className="character-sheet__stat-grid">
         {ATTRIBUTE_KEYS.map((key) => {
-          const value = foundationState.baseAttributes[key];
+          const value = finalAttributes[key];
           const mod = computeModifier(value);
           return (
             <div key={key}>
@@ -68,7 +73,7 @@ function StatsPanel() {
       <dl className="character-sheet__derived">
         <div>
           <dt>{DERIVED_STAT_LABELS.ac}</dt>
-          <dd>{10 + computeModifier(foundationState.baseAttributes.dex)}</dd>
+          <dd>{10 + computeModifier(finalAttributes.dex)}</dd>
         </div>
         <div>
           <dt>{DERIVED_STAT_LABELS.hp}</dt>
@@ -80,15 +85,15 @@ function StatsPanel() {
         </div>
         <div>
           <dt>{DERIVED_STAT_LABELS.fortitude}</dt>
-          <dd>{computeModifier(foundationState.baseAttributes.con)}</dd>
+          <dd>{computeModifier(finalAttributes.con)}</dd>
         </div>
         <div>
           <dt>{DERIVED_STAT_LABELS.reflex}</dt>
-          <dd>{computeModifier(foundationState.baseAttributes.dex)}</dd>
+          <dd>{computeModifier(finalAttributes.dex)}</dd>
         </div>
         <div>
           <dt>{DERIVED_STAT_LABELS.will}</dt>
-          <dd>{computeModifier(foundationState.baseAttributes.wis)}</dd>
+          <dd>{computeModifier(finalAttributes.wis)}</dd>
         </div>
       </dl>
     </div>

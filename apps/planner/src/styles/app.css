@@ -105,6 +105,21 @@ a {
   text-align: center;
 }
 .attributes-editor__mod { color: var(--color-text-muted); font-size: 14px; min-width: 40px; text-align: right; }
+.attributes-editor__column-headers {
+  color: var(--color-text-muted);
+  display: flex;
+  font-size: 12px;
+  gap: var(--space-sm);
+  letter-spacing: 0.06em;
+  padding: var(--space-xs) 0;
+  text-transform: uppercase;
+}
+.attributes-editor__column-headers-label { flex: 1; }
+.attributes-editor__column-headers-cell { min-width: 72px; text-align: center; }
+.attributes-editor__column-headers-mod { min-width: 40px; }
+.attributes-editor__cell { align-items: center; display: inline-flex; gap: var(--space-xs); justify-content: center; min-width: 72px; }
+.attributes-editor__cell--racial { color: var(--color-text-muted); font-family: var(--font-display); font-size: 16px; }
+.attributes-editor__cell--final { color: var(--color-text); font-family: var(--font-display); font-size: 20px; font-weight: 600; }
 .attributes-editor__actions { margin-top: var(--space-md); }
 .attributes-editor__summary { display: flex; flex-direction: column; gap: var(--space-xs); margin-top: var(--space-md); }
 .attributes-editor__summary > div { display: flex; justify-content: space-between; }
