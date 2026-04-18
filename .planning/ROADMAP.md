@@ -20,7 +20,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 6: Feats & Proficiencies** - Model Puerta feat choices, proficiencies, and exact prerequisite failures.
 - [ ] **Phase 7: Magic & Full Legality Engine** - Complete domains, spells, Spanish rules text, and full-build recomputation.
 - [x] **Phase 8: Summary, Persistence & Shared Builds** - Preserve and share exact dataset-pinned builds through local storage, JSON, and URLs.
-- [ ] **Phase 9: Verification + Traceability Closure** (GAP) - Close unverified phases (01, 02, 05.1), reclassify descoped requirements, reconcile REQUIREMENTS.md traceability.
+- [x] **Phase 9: Verification + Traceability Closure** (GAP) - Close unverified phases (01, 02, 05.1), reclassify descoped requirements, reconcile REQUIREMENTS.md traceability.
 - [ ] **Phase 10: Integration Fixes** (GAP) - Close integration defects surfaced by milestone audit — attributes→level1 forward action, slot-load fail-closed parity, orphan shell `validationStatus` cleanup.
 - [ ] **Phase 11: UAT + Open-Work Closure** (GAP) - Close P06 human UAT, archive P05/P07 UAT files, resolve open debug + quick task.
 - [ ] **Phase 12: Tech Debt Sweep** (GAP) - Fix P03 typecheck errors, P07.2 IN-07 class-label bug (FEAT-02 quality), IN-03 label cleanup, IN-05 counter alignment.
@@ -246,8 +246,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 09-01: Produce missing VERIFICATION.md trio (01, 02, 05.1) via `/gsd-verify-work`
-- [ ] 09-02: Mark 07 superseded, reclassify descoped requirements, reconcile traceability + coverage
+- [x] 09-01: Produce missing VERIFICATION.md trio (01, 02, 05.1) via `/gsd-verify-work`
+- [x] 09-02: Mark 07 superseded, reclassify descoped requirements, reconcile traceability + coverage
 
 ### Phase 10: Integration Fixes (GAP)
 **Goal**: Close integration defects surfaced by milestone v1.0 integration check — recurring attributes→level1 blocker, slot-load fail-closed parity, and orphan shell aggregate state.
