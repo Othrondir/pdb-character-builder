@@ -3,6 +3,10 @@ import type { ClassCatalog } from '@data-extractor/contracts/class-catalog';
 /**
  * Phase 12.3-04 (UAT B6, D-04) — pure NWN1 hit-point selector.
  *
+ * Fixes UAT-FINDINGS-2026-04-18 B6 (HIGH): character sheet `PG` was
+ * permanently rendered as `--`. The StatsPanel now reads this selector's
+ * output against the live progression + foundation stores.
+ *
  * Formula (Puerta de Baldur server convention, matching NWN1 Aurora):
  *   - First configured level: hitDie + conModifier (max roll — L1 convention).
  *   - Every subsequent configured level: floor(hitDie / 2) + 1 + conModifier
@@ -19,6 +23,8 @@ import type { ClassCatalog } from '@data-extractor/contracts/class-catalog';
  *     treats inheritance from upstream configured levels.
  *
  * Framework-agnostic: no React, no store reads, no browser APIs.
+ *
+ * Regression coverage: tests/phase-12.3/hit-points-selector.spec.ts (15 cases).
  */
 export interface ProgressionLevelRecordLike {
   classId: string | null;
