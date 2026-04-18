@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: "Phase 12-01 complete — shared getClassLabel helper extracted + P03 typecheck repaired (tsc clean, 387/387 tests green)"
-last_updated: "2026-04-18T18:06:46Z"
+stopped_at: "Phase 12 complete — SC1-SC4 green; Plan 12-02 shipped (FEAT_CATEGORY_LABELS deletion + buildEmitterPlan) via 3 atomic commits 305f51c / 4b34bbe / cf05b9f; 390/390 tests green"
+last_updated: "2026-04-18T18:26:22Z"
 last_activity: 2026-04-18
 progress:
   total_phases: 12
@@ -25,9 +25,9 @@ See: .planning/PROJECT.md (updated 2026-03-30)
 
 ## Current Position
 
-Phase: 12 (tech-debt-sweep) — IN PROGRESS
-Plan: 1 of 2 complete
-Status: 12-01 (Bug 1 P03 typecheck + Bug 2 IN-07 getClassLabel) shipped via 3 atomic commits (6920be9 RED, 2bbc9cf GREEN, 43ae985 Bug 1). tsc --noEmit now clean repo-wide. 387/387 vitest tests green. Next: 12-02 (Bug 3 FEAT_CATEGORY_LABELS dead code + Bug 4 extract counter).
+Phase: 12 (tech-debt-sweep) — COMPLETE
+Plan: 2 of 2 complete
+Status: 12-02 (Bug 3 FEAT_CATEGORY_LABELS dead code + Bug 4 extract counter) shipped via 3 atomic commits (305f51c Bug 3 full-map deletion, 4b34bbe RED spec, cf05b9f GREEN + test-hygiene direct-invoke guard). tsc --noEmit clean repo-wide. 390/390 vitest tests green (387 pre-existing + 3 new Phase 12). All 4 Phase 12 success criteria satisfied. Next: Phase 12.1 (Roster Wiring & Overflow Fixes, inserted per Phase 11 UAT).
 Last activity: 2026-04-18
 
 Progress: [██████████] 100%
@@ -124,6 +124,9 @@ Recent decisions affecting current work:
 - [Phase 12-01]: Shared getClassLabel helper lives in packages/rules-engine/src/feats/ as the single source of truth; accepts string|null (not CanonicalId|null) because compiledClassSchema.id is zod-typed as string via regex guard
 - [Phase 12-01]: evaluateFeatPrerequisites + evaluateAllFeatsForSearch + revalidateFeatSnapshotAfterChange all grew classCatalog: ClassCatalog param — ClassCatalog threaded through every caller in planner + rules-engine + tests
 - [Phase 12-01]: Branded-id rebuilder pattern (asCanonicalId runtime-guarded + buildDeityRecord) keeps fixture cast-free at the CanonicalId[] boundary; reusable template for future fixtures that hit branded types
+- [Phase 12-02]: buildEmitterPlan exported as a pure helper from packages/data-extractor/src/cli.ts; counter math lives in one place so add-a-catalog requires adding an EMITTERS entry, not another '[N/X]' console.log literal
+- [Phase 12-02]: cli.ts main() gated behind import.meta.url === pathToFileURL(process.argv[1]).href so unit-test imports of '@data-extractor/cli' no longer trigger a full extractor run on every `vitest run`; Windows-safe ESM direct-invocation idiom
+- [Phase 12-02]: FEAT_CATEGORY_LABELS + FeatOptionView.categoryLabel + mapToOptionView assignment fully deleted (not keys-only fallback) because scout grep confirmed zero JSX consumers across apps/planner/src, packages/, tests/
 
 ### Pending Todos
 
@@ -152,6 +155,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-18T18:06:46Z
-Stopped at: Completed Phase 12-01 (Bug 1 P03 typecheck + Bug 2 IN-07 getClassLabel). 3 atomic commits landed (test RED / fix GREEN / fix Bug 1). tsc --noEmit clean; full 387-test suite green. Next: Phase 12-02 (Bug 3 FEAT_CATEGORY_LABELS dead code + Bug 4 extract counter).
+Last session: 2026-04-18T18:26:22Z
+Stopped at: Completed Phase 12-02 (Bug 3 FEAT_CATEGORY_LABELS dead code + Bug 4 extract counter). 3 atomic commits landed (305f51c Bug 3 full-map deletion / 4b34bbe RED spec / cf05b9f GREEN + test-hygiene direct-invoke guard for cli.ts). tsc --noEmit clean; 390/390 tests green. Phase 12 closed (4/4 SCs). Next: Phase 12.1 (Roster Wiring & Overflow Fixes, inserted per Phase 11 UAT).
 Resume file: None

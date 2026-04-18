@@ -302,7 +302,7 @@ Plans:
 
 Plans:
 - [x] 12-01: Fix P03 typecheck errors + P07.2 IN-07 getClassLabel bug (user-visible) — Completed 2026-04-18 (commits: 6920be9 RED / 2bbc9cf GREEN / 43ae985 Bug 1)
-- [ ] 12-02: Drop P07.2 IN-03 magic feat labels + align IN-05 extract counters
+- [x] 12-02: Drop P07.2 IN-03 magic feat labels + align IN-05 extract counters — Completed 2026-04-18 (commits: 305f51c Bug 3 / 4b34bbe RED / cf05b9f GREEN+hygiene)
 
 ### Phase 12.1: Roster Wiring & Overflow Fixes (INSERTED)
 **Goal**: Planner UI consumes the full PDB TLK extractor roster for classes and races, and scrollable panels expose their overflow so no information is clipped.
@@ -343,4 +343,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -
 | 9. Verification + Traceability Closure (GAP) | 0/2 | Pending | - |
 | 10. Integration Fixes (GAP) | 0/3 | Pending | - |
 | 11. UAT + Open-Work Closure (GAP) | 0/3 | Pending | - |
-| 12. Tech Debt Sweep (GAP) | 0/2 | Pending | - |
+| 12. Tech Debt Sweep (GAP) | 2/2 | Complete | 2026-04-18 |
