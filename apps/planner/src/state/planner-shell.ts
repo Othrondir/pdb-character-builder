@@ -17,7 +17,6 @@ interface PlannerShellState {
   datasetId: string;
   expandedLevel: ProgressionLevel | null;
   mobileNavOpen: boolean;
-  validationStatus: PlannerValidationStatus;
 
   setActiveOriginStep: (step: OriginStep | null) => void;
   setActiveLevelSubStep: (subStep: LevelSubStep | null) => void;
@@ -36,7 +35,6 @@ export const usePlannerShellStore = create<PlannerShellState>((set) => ({
   datasetId: 'dataset:pendiente',
   expandedLevel: null,
   mobileNavOpen: false,
-  validationStatus: 'pending',
 
   setActiveOriginStep: (activeOriginStep) =>
     set({

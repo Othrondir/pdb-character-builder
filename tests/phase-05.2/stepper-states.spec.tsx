@@ -20,7 +20,6 @@ describe('phase 05.2 stepper states', () => {
       datasetId: 'dataset:pendiente',
       expandedLevel: null,
       mobileNavOpen: false,
-      validationStatus: 'pending',
     });
   });
 
