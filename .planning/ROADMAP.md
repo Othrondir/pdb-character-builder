@@ -22,7 +22,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 8: Summary, Persistence & Shared Builds** - Preserve and share exact dataset-pinned builds through local storage, JSON, and URLs.
 - [x] **Phase 9: Verification + Traceability Closure** (GAP) - Close unverified phases (01, 02, 05.1), reclassify descoped requirements, reconcile REQUIREMENTS.md traceability.
 - [x] **Phase 10: Integration Fixes** (GAP) - Close integration defects surfaced by milestone audit — attributes→level1 forward action, slot-load fail-closed parity, orphan shell `validationStatus` cleanup.
-- [ ] **Phase 11: UAT + Open-Work Closure** (GAP) - Close P06 human UAT, archive P05/P07 UAT files, resolve open debug + quick task.
+- [x] **Phase 11: UAT + Open-Work Closure** (GAP) - Close P06 human UAT, archive P05/P07 UAT files, resolve open debug + quick task.
 - [ ] **Phase 12: Tech Debt Sweep** (GAP) - Fix P03 typecheck errors, P07.2 IN-07 class-label bug (FEAT-02 quality), IN-03 label cleanup, IN-05 counter alignment.
 
 ## Phase Details
@@ -282,9 +282,9 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 11-01: Run P06 5-scenario human UAT + archive P05/P07 UAT files
-- [ ] 11-02: Close debug session `guardar-slot-zoderror` (verify 4f03865 fix)
-- [ ] 11-03: Write SUMMARY.md for quick task `260414-gxx`
+- [x] 11-01: Run P06 5-scenario human UAT + archive P05/P07 UAT files
+- [x] 11-02: Close debug session `guardar-slot-zoderror` (verify 4f03865 fix)
+- [x] 11-03: Write SUMMARY.md for quick task `260414-gxx`
 **UI hint**: yes
 
 ### Phase 12: Tech Debt Sweep (GAP)
