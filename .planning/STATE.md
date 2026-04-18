@@ -2,9 +2,9 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: planning
-stopped_at: "Phase 10 planned (3 plans, 2 waves, verification passed) — ready to execute"
-last_updated: "2026-04-18T14:35:00.000Z"
+status: verified
+stopped_at: "Phase 10 complete (5/5 success criteria verified, 9/9 phase-10 tests green) — ready for Phase 11"
+last_updated: "2026-04-18T15:10:00.000Z"
 last_activity: 2026-04-18
 progress:
   total_phases: 12
@@ -21,13 +21,13 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-30)
 
 **Core value:** A player can build a Puerta de Baldur character from level 1 to 16 with strict server-valid validation and share that exact build reliably.
-**Current focus:** Phase 10 — integration-fixes (GAP)
+**Current focus:** Phase 11 — UAT + open-work closure (GAP, next)
 
 ## Current Position
 
-Phase: 10 (integration-fixes) — READY TO EXECUTE
-Plan: 0 of 3
-Status: Plans generated + verified (3 plans, 2 waves). Wave 1 parallel: 10-01 + 10-03. Wave 2: 10-02.
+Phase: 10 (integration-fixes) — COMPLETE
+Plan: 3 of 3
+Status: Phase verified 5/5 must-haves. AttributesBoard advance wired, LoadSlotDialog version-gated, validationStatus orphan deleted, origin-board null-normalised. 9 regression tests green.
 Last activity: 2026-04-18
 
 Progress: [██████████] 100%
