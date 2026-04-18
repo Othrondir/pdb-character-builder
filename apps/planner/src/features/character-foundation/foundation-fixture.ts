@@ -24,6 +24,7 @@ export interface FoundationRaceOption {
   description: string;
   id: CanonicalId;
   label: string;
+  racialModifiers: Record<AttributeKey, number>;
 }
 
 export interface FoundationSubraceOption {
@@ -89,7 +90,24 @@ function projectCompiledRace(compiled: CompiledRace): FoundationRaceOption {
     description: compiled.description,
     id: compiled.id as CanonicalId,
     label: compiled.label,
+    racialModifiers: projectRacialModifiers(compiled.abilityAdjustments),
   };
+}
+
+/**
+ * Phase 12.2-02 — project the compiled race's `abilityAdjustments` (a partial
+ * `Record<AttributeKey, number>` per Zod schema `z.record(z.enum(...), ...)`)
+ * into a dense `Record<AttributeKey, number>`, zero-filling missing keys.
+ * Defensive spread keeps the planner's zustand state isolated from the Zod-
+ * parsed source object.
+ */
+function projectRacialModifiers(
+  source: Partial<Record<AttributeKey, number>>,
+): Record<AttributeKey, number> {
+  return ATTRIBUTE_KEYS.reduce((acc, key) => {
+    acc[key] = source[key] ?? 0;
+    return acc;
+  }, {} as Record<AttributeKey, number>);
 }
 
 function projectCompiledSubrace(

@@ -43,6 +43,7 @@ function createEmptyFoundationState(): CharacterFoundationStoreState {
     baseAttributes: { str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 10 },
     datasetId: 'test',
     raceId: null,
+    racialModifiers: null,
     resetFoundation: () => undefined,
     setAlignment: () => undefined,
     setBaseAttribute: () => undefined,

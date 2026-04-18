@@ -15,6 +15,7 @@ export interface CharacterFoundationStoreState {
   baseAttributes: BaseAttributes;
   datasetId: string;
   raceId: CanonicalId | null;
+  racialModifiers: Record<AttributeKey, number> | null;
   resetFoundation: () => void;
   setAlignment: (alignmentId: CanonicalId | null) => void;
   setBaseAttribute: (key: AttributeKey, value: number) => void;
@@ -38,6 +39,7 @@ function createInitialFoundationState() {
     baseAttributes: createBaseAttributes(),
     datasetId: CURRENT_DATASET_ID,
     raceId: null,
+    racialModifiers: null as Record<AttributeKey, number> | null,
     subraceId: null,
   };
 }
@@ -55,6 +57,22 @@ function subraceMatchesRace(
   );
 }
 
+/**
+ * Phase 12.2-02 — look up the projected race option's `racialModifiers` by id.
+ * Returns null when `raceId` is null or the id does not match any projected
+ * race (defensive: the planner's fixture dedupes + projects the full catalog,
+ * so misses should not happen in normal flow but must not crash the setter).
+ */
+function lookupRacialModifiers(
+  raceId: CanonicalId | null,
+): Record<AttributeKey, number> | null {
+  if (!raceId) {
+    return null;
+  }
+  const race = phase03FoundationFixture.races.find((r) => r.id === raceId);
+  return race ? { ...race.racialModifiers } : null;
+}
+
 export const useCharacterFoundationStore = create<CharacterFoundationStoreState>(
   (set) => ({
     ...createInitialFoundationState(),
@@ -70,6 +88,7 @@ export const useCharacterFoundationStore = create<CharacterFoundationStoreState>
     setRace: (raceId) =>
       set((state) => ({
         raceId,
+        racialModifiers: lookupRacialModifiers(raceId),
         subraceId: subraceMatchesRace(raceId, state.subraceId)
           ? state.subraceId
           : null,

@@ -82,6 +82,7 @@ describe('phase 03 foundation validation helpers', () => {
             description: 'Test race with required deity (spec-local).',
             id: 'race:test-required-deity',
             label: 'Test race with required deity',
+            racialModifiers: { str: 0, dex: 0, con: 0, int: 0, wis: 0, cha: 0 },
           },
         ],
       }),
