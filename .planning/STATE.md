@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: "Phase 12.1 Plan 02 shipped — race roster wired via compiledRaceCatalog projection + groupRacesByParent helper (2 atomic commits b070f6a RED / 4450733 GREEN). 406/406 tests green. Class-catalog dup-key bug logged to deferred-items for 12.1-01 follow-up."
-last_updated: "2026-04-18T21:12:00Z"
+stopped_at: "Phase 12.1 complete — 3/3 plans shipped + 4/4 SC verified. Roster: 41 classes + 45 parent races wired from PDB compiled catalogs; SelectionScreen overflow-y restored; 16 Phase 12.1 regression tests + 406/406 full suite green. Follow-ups queued for Phase 12.2: TLK descriptions + race ability modifiers + prestige-filter fix + class dup-key."
+last_updated: "2026-04-18T22:00:00Z"
 last_activity: 2026-04-18
 progress:
   total_phases: 12
@@ -21,13 +21,13 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-30)
 
 **Core value:** A player can build a Puerta de Baldur character from level 1 to 16 with strict server-valid validation and share that exact build reliably.
-**Current focus:** Phase 12 complete — milestone v1.0 awaiting Phase 12.1 (Roster Wiring & Overflow Fixes) for audit closure.
+**Current focus:** Phase 12.1 complete — milestone v1.0 awaiting Phase 12.2 (Roster Detail + Race Ability Modifiers) to clear deferred UAT findings before audit close.
 
 ## Current Position
 
-Phase: 12.1 (roster-wiring-and-overflow-fixes) — IN PROGRESS
-Plan: 2 of 3 complete
-Status: 12.1-02 (race roster wiring) shipped via 2 atomic commits (b070f6a RED regression spec, 4450733 GREEN projection + groupRacesByParent helper + dedupe Rule-2 guard). tsc --noEmit clean repo-wide. 406/406 vitest tests green (72 files). Race picker now surfaces 45 unique PDB parent races (vs 3 hand-authored). Class-catalog duplicate-key bug (class:harper / class:shadowadept) surfaced by 12.1-01 logged to deferred-items.md — out of scope for 12.1-02 per boundary rule. Next: Plan 12.1-03 (CSS overflow fix).
+Phase: 12.1 (roster-wiring-and-overflow-fixes) — COMPLETE
+Plan: 3 of 3 complete
+Status: 12.1-03 (CSS overflow fix + human-verify UAT) shipped via 1 CSS commit (d037b77) + 1 summary commit (a17b31b). 12.1-VERIFICATION.md (fe65a99) records 4/4 SC PASS. UAT evidence: 45 parent races + 41 classes rendered in-browser; SelectionScreen scrolls. 16 Phase 12.1 regression tests green; full suite 406/406. Deferred to Phase 12.2: TLK description surfacing in picker detail panes, race ability-modifier pipeline (large), prestige-filter false pos/neg, class dup-key (class:harper / class:shadowadept). Next: `/gsd-insert-phase` for Phase 12.2, then discuss/plan/execute.
 Last activity: 2026-04-18
 
 Progress: [██████████] 100%
@@ -159,6 +159,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-18T21:12:00Z
-Stopped at: Completed Phase 12.1-02 (race roster wiring + groupRacesByParent helper). 2 atomic commits landed (b070f6a RED regression spec / 4450733 GREEN projection + dedupe + helper). tsc --noEmit clean; 406/406 tests green (72 files). Race picker now surfaces 45 unique PDB parent races. Class-catalog duplicate-key bug (class:harper / class:shadowadept) from 12.1-01 logged to deferred-items.md for separate fix. Next: Plan 12.1-03 (CSS overflow fix).
+Last session: 2026-04-18T22:00:00Z
+Stopped at: Completed Phase 12.1 (3/3 plans + 4/4 SC verified). Roster wiring: 41 classes + 45 parent races now sourced from PDB compiled catalogs; SelectionScreen overflow-y restored. 16 Phase 12.1 regression tests + 406/406 full suite green. Phase 12 + Phase 12.1 shipped — milestone v1.0 scope otherwise closed. Deferred to Phase 12.2: TLK description surfacing in pickers, race ability-modifier pipeline (large gap — CHAR-02 structural issue), prestige-filter false positives/negatives at L1, class-catalog duplicate-key bug. Next: `/gsd-insert-phase 12.2` to register Phase 12.2 (Roster Detail + Race Ability Modifiers), then discuss/plan/execute.
 Resume file: None

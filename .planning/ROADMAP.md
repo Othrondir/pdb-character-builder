@@ -24,7 +24,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 10: Integration Fixes** (GAP) - Close integration defects surfaced by milestone audit — attributes→level1 forward action, slot-load fail-closed parity, orphan shell `validationStatus` cleanup.
 - [x] **Phase 11: UAT + Open-Work Closure** (GAP) - Close P06 human UAT, archive P05/P07 UAT files, resolve open debug + quick task.
 - [x] **Phase 12: Tech Debt Sweep** (GAP) - Fix P03 typecheck errors, P07.2 IN-07 class-label bug (FEAT-02 quality), IN-03 label cleanup, IN-05 counter alignment.
-- [ ] **Phase 12.1: Roster Wiring & Overflow Fixes** (INSERTED) - Wire compiled class + race catalogs (PDB TLK extractor roster) into L1 pickers and fix CSS overflow/scroll on SelectionScreen + planner-layout panels. Surfaced during Phase 11 UAT (2026-04-18).
+- [x] **Phase 12.1: Roster Wiring & Overflow Fixes** (INSERTED) - Wire compiled class + race catalogs (PDB TLK extractor roster) into L1 pickers and fix CSS overflow/scroll on SelectionScreen + planner-layout panels. Surfaced during Phase 11 UAT (2026-04-18).
 
 ## Phase Details
 
@@ -317,9 +317,9 @@ Plans:
 **Plans**: 3 plans (planned)
 
 Plans:
-- [ ] 12.1-01: Wire PDB class roster into L1 picker (verify compiled catalog ≡ extractor output)
-- [ ] 12.1-02: Wire PDB race roster + subrace hierarchy into race picker
-- [ ] 12.1-03: Restore overflow-y scroll on SelectionScreen + planner-layout panels
+- [x] 12.1-01: Wire PDB class roster into L1 picker (verify compiled catalog ≡ extractor output)
+- [x] 12.1-02: Wire PDB race roster + subrace hierarchy into race picker
+- [x] 12.1-03: Restore overflow-y scroll on SelectionScreen + planner-layout panels
 
 ## Progress
 
