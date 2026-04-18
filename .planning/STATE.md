@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: "Phase 12 complete — SC1-SC4 green; Plan 12-02 shipped (FEAT_CATEGORY_LABELS deletion + buildEmitterPlan) via 3 atomic commits 305f51c / 4b34bbe / cf05b9f; 390/390 tests green"
-last_updated: "2026-04-18T18:26:22Z"
+stopped_at: "Phase 12.1 Plan 02 shipped — race roster wired via compiledRaceCatalog projection + groupRacesByParent helper (2 atomic commits b070f6a RED / 4450733 GREEN). 406/406 tests green. Class-catalog dup-key bug logged to deferred-items for 12.1-01 follow-up."
+last_updated: "2026-04-18T21:12:00Z"
 last_activity: 2026-04-18
 progress:
   total_phases: 12
@@ -25,9 +25,9 @@ See: .planning/PROJECT.md (updated 2026-03-30)
 
 ## Current Position
 
-Phase: 12 (tech-debt-sweep) — COMPLETE
-Plan: 2 of 2 complete
-Status: 12-02 (Bug 3 FEAT_CATEGORY_LABELS dead code + Bug 4 extract counter) shipped via 3 atomic commits (305f51c Bug 3 full-map deletion, 4b34bbe RED spec, cf05b9f GREEN + test-hygiene direct-invoke guard). tsc --noEmit clean repo-wide. 390/390 vitest tests green (387 pre-existing + 3 new Phase 12). All 4 Phase 12 success criteria satisfied. Next: Phase 12.1 (Roster Wiring & Overflow Fixes, inserted per Phase 11 UAT).
+Phase: 12.1 (roster-wiring-and-overflow-fixes) — IN PROGRESS
+Plan: 2 of 3 complete
+Status: 12.1-02 (race roster wiring) shipped via 2 atomic commits (b070f6a RED regression spec, 4450733 GREEN projection + groupRacesByParent helper + dedupe Rule-2 guard). tsc --noEmit clean repo-wide. 406/406 vitest tests green (72 files). Race picker now surfaces 45 unique PDB parent races (vs 3 hand-authored). Class-catalog duplicate-key bug (class:harper / class:shadowadept) surfaced by 12.1-01 logged to deferred-items.md — out of scope for 12.1-02 per boundary rule. Next: Plan 12.1-03 (CSS overflow fix).
 Last activity: 2026-04-18
 
 Progress: [██████████] 100%
@@ -127,6 +127,10 @@ Recent decisions affecting current work:
 - [Phase 12-02]: buildEmitterPlan exported as a pure helper from packages/data-extractor/src/cli.ts; counter math lives in one place so add-a-catalog requires adding an EMITTERS entry, not another '[N/X]' console.log literal
 - [Phase 12-02]: cli.ts main() gated behind import.meta.url === pathToFileURL(process.argv[1]).href so unit-test imports of '@data-extractor/cli' no longer trigger a full extractor run on every `vitest run`; Windows-safe ESM direct-invocation idiom
 - [Phase 12-02]: FEAT_CATEGORY_LABELS + FeatOptionView.categoryLabel + mapToOptionView assignment fully deleted (not keys-only fallback) because scout grep confirmed zero JSX consumers across apps/planner/src, packages/, tests/
+- [Phase 12.1-01]: projectCompiledClass + CLASS_SERVER_RULE_OVERLAY adapter preserves non-roster server rules (minimumClassCommitment, exceptionOverrides, implementedRequirements) without touching the stamped compiled-classes.ts — overlay map keyed by canonical class id is the portable pattern for 12.1-02 race projection.
+- [Phase 12.1-02]: projectCompiledRace / projectCompiledSubrace + dedupeByCanonicalId first-wins guard at foundation-fixture.ts handles extractor-emitted duplicate IDs (race:drow rows 196+676) and missing alignment/deity metadata (permissive ALL_ALIGNMENT_IDS default, deityPolicy: 'optional'). Sub-race emission is deferred — extractor currently emits compiledRaceCatalog.subraces === [].
+- [Phase 12.1-02]: groupRacesByParent is the first helper under packages/rules-engine/src/foundation/ barrel (index.ts newly created). Pure framework-agnostic Map<parentId, {parent, subraces[]}>; O(n+m); orphan-tolerant; reusable by any future derivation helper (preview panels, share-URL validators).
+- [Phase 12.1-02]: Regression-spec floors use `new Set(...).size` (UNIQUE IDs) not raw array length so extractor duplicate emissions cannot silently break the wiring contract.
 
 ### Pending Todos
 
@@ -155,6 +159,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-18T18:26:22Z
-Stopped at: Completed Phase 12-02 (Bug 3 FEAT_CATEGORY_LABELS dead code + Bug 4 extract counter). 3 atomic commits landed (305f51c Bug 3 full-map deletion / 4b34bbe RED spec / cf05b9f GREEN + test-hygiene direct-invoke guard for cli.ts). tsc --noEmit clean; 390/390 tests green. Phase 12 closed (4/4 SCs). Next: Phase 12.1 (Roster Wiring & Overflow Fixes, inserted per Phase 11 UAT).
+Last session: 2026-04-18T21:12:00Z
+Stopped at: Completed Phase 12.1-02 (race roster wiring + groupRacesByParent helper). 2 atomic commits landed (b070f6a RED regression spec / 4450733 GREEN projection + dedupe + helper). tsc --noEmit clean; 406/406 tests green (72 files). Race picker now surfaces 45 unique PDB parent races. Class-catalog duplicate-key bug (class:harper / class:shadowadept) from 12.1-01 logged to deferred-items.md for separate fix. Next: Plan 12.1-03 (CSS overflow fix).
 Resume file: None
