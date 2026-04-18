@@ -360,7 +360,7 @@ Plans:
 - [ ] 12.3-01: Disable attributes `+` when cost exceeds remaining budget (B1)
 - [ ] 12.3-02: Multiclass per-level switching (B2 + B8 + B9)
 - [ ] 12.3-03: Per-level Dotes gate + slot-count prompt (B3 + B4)
-- [ ] 12.3-04: Hit-points pipeline through rules-engine + sheet (B6)
+- [x] 12.3-04: Hit-points pipeline through rules-engine + sheet (B6)
 - [ ] 12.3-05: Origin-stepper decoupling from atributos validity (B7)
 - [ ] 12.3-06: Description paragraph rendering in DetailPanel (B5)
 **UI hint**: yes
