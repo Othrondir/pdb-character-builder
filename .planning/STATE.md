@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: "Phase 12.1 complete — 3/3 plans shipped + 4/4 SC verified. Roster: 41 classes + 45 parent races wired from PDB compiled catalogs; SelectionScreen overflow-y restored; 16 Phase 12.1 regression tests + 406/406 full suite green. Follow-ups queued for Phase 12.2: TLK descriptions + race ability modifiers + prestige-filter fix + class dup-key."
-last_updated: "2026-04-18T22:00:00Z"
+stopped_at: "Phase 12.2 plan 02 complete — race ability modifier pipeline shipped (applyRaceModifiers selector + store.racialModifiers + three-column Atributos board + character-sheet Final attributes). 10 new phase-12.2 regression tests + full suite 424/424 green. 2 deviations auto-fixed (Rule 3 TS fixture gaps, Rule 1 font-weight theme-contract). Next: 12.2-03 class-fixture plan (parallel wave) + 12.2 prestige-filter fix."
+last_updated: "2026-04-18T21:58:21Z"
 last_activity: 2026-04-18
 progress:
   total_phases: 12
@@ -25,9 +25,9 @@ See: .planning/PROJECT.md (updated 2026-03-30)
 
 ## Current Position
 
-Phase: 12.1 (roster-wiring-and-overflow-fixes) — COMPLETE
-Plan: 3 of 3 complete
-Status: 12.1-03 (CSS overflow fix + human-verify UAT) shipped via 1 CSS commit (d037b77) + 1 summary commit (a17b31b). 12.1-VERIFICATION.md (fe65a99) records 4/4 SC PASS. UAT evidence: 45 parent races + 41 classes rendered in-browser; SelectionScreen scrolls. 16 Phase 12.1 regression tests green; full suite 406/406. Deferred to Phase 12.2: TLK description surfacing in picker detail panes, race ability-modifier pipeline (large), prestige-filter false pos/neg, class dup-key (class:harper / class:shadowadept). Next: `/gsd-insert-phase` for Phase 12.2, then discuss/plan/execute.
+Phase: 12.2 (roster-detail-and-race-modifiers) — IN PROGRESS
+Plan: 02 of N complete (12.2-01 done, 12.2-02 done; 12.2-03 wave 2 parallel still pending)
+Status: 12.2-02 shipped — CHAR-02 structural gap closed end-to-end. applyRaceModifiers pure rules-engine selector + FoundationRaceOption.racialModifiers projection + store racialModifiers field/setter + Atributos three-column board (Base/Racial/Final) + character-sheet Final attributes. 3 atomic commits (3e3e6ba RED + a46bc9f GREEN data/rules + da29fff GREEN UI). 10 new phase-12.2 regression tests; full suite 424/424. Rule 3 auto-fix: racialModifiers added to 3 pre-existing inline fixtures (phase-03 + 2× phase-12.1). Rule 1 auto-fix: font-weight 700→600 to honor phase-05.2 theme contract. Next: 12.2-03 class-fixture plan parallel continuation.
 Last activity: 2026-04-18
 
 Progress: [██████████] 100%
