@@ -1,4 +1,10 @@
 import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
+import type {
+  ClassCatalog,
+  CompiledClass,
+} from '@data-extractor/contracts/class-catalog';
+
+import { compiledClassCatalog } from '@planner/data/compiled-classes';
 
 export type PlannerAbilityKey = 'cha' | 'con' | 'dex' | 'int' | 'str' | 'wis';
 export type PlannerClassKind = 'base' | 'prestige';
@@ -45,229 +51,102 @@ export interface Phase04ClassFixture {
   classes: PlannerClassRecord[];
 }
 
+/**
+ * Server-rule overlay — per-class planner data that the compiled extractor
+ * does not yet emit (Phase 12.1-01 D-01 "keep non-roster content"):
+ *  - `minimumClassCommitment`: Puerta de Baldur multiclass commitment rules.
+ *  - `exceptionOverrides`: server-specific prestige-entry bridges
+ *    (e.g. `puerta.shadowdancer-rogue-bridge`).
+ *  - `implementedRequirements`: alignment / ability / deity gates that
+ *    `evaluateClassEntry` reads.
+ *
+ * The overlay is scoped to known server rules. Future extractor enrichment
+ * (tracked in phase CONTEXT.md deferred section) will move these into
+ * compiled-classes.ts; the overlay shrinks to empty in lockstep.
+ */
+interface ClassServerRuleOverlay {
+  exceptionOverrides?: PlannerClassExceptionOverride[];
+  exclusiveClassIds?: CanonicalId[];
+  implementedRequirements?: PlannerClassImplementedRequirements;
+  minimumClassCommitment?: number;
+  tags?: string[];
+}
+
+const CLASS_SERVER_RULE_OVERLAY: Record<string, ClassServerRuleOverlay> = {
+  'class:fighter': { tags: ['martial'] },
+  'class:rogue': { minimumClassCommitment: 2, tags: ['skillful'] },
+  'class:wizard': {
+    implementedRequirements: { minimumAbilityScores: [{ key: 'int', score: 11 }] },
+    tags: ['arcane'],
+  },
+  'class:cleric': {
+    implementedRequirements: { requiresDeity: true },
+    tags: ['divine'],
+  },
+  'class:paladin': {
+    implementedRequirements: {
+      allowedAlignmentIds: ['alignment:lawful-good' as CanonicalId],
+    },
+    minimumClassCommitment: 2,
+    tags: ['divine', 'martial'],
+  },
+  'class:shadowdancer': {
+    exceptionOverrides: [
+      {
+        code: 'puerta.shadowdancer-rogue-bridge',
+        sourceClassId: 'class:rogue' as CanonicalId,
+        targetClassId: 'class:shadowdancer' as CanonicalId,
+      },
+    ],
+    tags: ['prestige', 'stealth'],
+  },
+  'class:weapon-master': { tags: ['martial', 'prestige'] },
+};
+
+/**
+ * Projection adapter — bridges the compiled-extractor schema
+ * (`CompiledClass`) to the planner's `PlannerClassRecord` shape consumed by
+ * `selectClassOptionsForLevel` / `evaluateMulticlassLegality`.
+ *
+ * Per plan 12.1-01 D-01/D-02:
+ *  - Keep non-roster content (abilityIncreaseLevels, getPhase04ClassRecord).
+ *  - Input swap only: no rules-engine contract change.
+ *
+ * Prestige classes synthesize a single deferred-requirement label so
+ * `evaluateClassEntry` continues to gate them as `blocked` at L1 for
+ * unqualified foundations, mirroring the hand-authored shadowdancer /
+ * weapon-master pattern. Base classes receive an empty deferred list.
+ */
+function projectCompiledClass(compiled: CompiledClass): PlannerClassRecord {
+  const isBase = compiled.isBase;
+  const overlay = CLASS_SERVER_RULE_OVERLAY[compiled.id] ?? {};
+
+  return {
+    deferredRequirementLabels: isBase
+      ? []
+      : ['Pendiente de dotes o habilidades de fases posteriores.'],
+    exceptionOverrides: overlay.exceptionOverrides ?? [],
+    exclusiveClassIds: overlay.exclusiveClassIds ?? [],
+    gainTable: [],
+    hitDie: compiled.hitDie,
+    id: compiled.id as CanonicalId,
+    implementedRequirements: overlay.implementedRequirements ?? {},
+    kind: isBase ? 'base' : 'prestige',
+    label: compiled.label,
+    ...(overlay.minimumClassCommitment !== undefined
+      ? { minimumClassCommitment: overlay.minimumClassCommitment }
+      : {}),
+    tags: overlay.tags ?? [],
+  };
+}
+
+function projectCompiledClasses(catalog: ClassCatalog): PlannerClassRecord[] {
+  return catalog.classes.map(projectCompiledClass);
+}
+
 export const phase04ClassFixture: Phase04ClassFixture = {
   abilityIncreaseLevels: [4, 8, 12, 16],
-  classes: [
-    {
-      deferredRequirementLabels: [],
-      exceptionOverrides: [],
-      exclusiveClassIds: [],
-      gainTable: [
-        {
-          choicePrompts: [],
-          classLevel: 1,
-          features: ['Dado de golpe d10', 'Competencias marciales'],
-        },
-        {
-          choicePrompts: [],
-          classLevel: 2,
-          features: ['Dado de golpe d10', 'Mejora de ataque base'],
-        },
-        {
-          choicePrompts: [],
-          classLevel: 3,
-          features: ['Dado de golpe d10', 'Afinar especialización marcial'],
-        },
-        {
-          choicePrompts: [],
-          classLevel: 4,
-          features: ['Dado de golpe d10', 'Talento adicional de combate'],
-        },
-      ],
-      hitDie: 10,
-      id: 'class:fighter',
-      implementedRequirements: {},
-      kind: 'base',
-      label: 'Guerrero',
-      tags: ['martial'],
-    },
-    {
-      deferredRequirementLabels: [],
-      exceptionOverrides: [],
-      exclusiveClassIds: [],
-      gainTable: [
-        {
-          choicePrompts: [],
-          classLevel: 1,
-          features: ['Dado de golpe d6', 'Ataque furtivo +1d6'],
-        },
-        {
-          choicePrompts: [],
-          classLevel: 2,
-          features: ['Dado de golpe d6', 'Evasión'],
-        },
-        {
-          choicePrompts: [],
-          classLevel: 3,
-          features: ['Dado de golpe d6', 'Ataque furtivo +2d6'],
-        },
-        {
-          choicePrompts: [],
-          classLevel: 4,
-          features: ['Dado de golpe d6', 'Sentido de las trampas +1'],
-        },
-      ],
-      hitDie: 6,
-      id: 'class:rogue',
-      implementedRequirements: {},
-      kind: 'base',
-      label: 'Pícaro',
-      minimumClassCommitment: 2,
-      tags: ['skillful'],
-    },
-    {
-      deferredRequirementLabels: [],
-      exceptionOverrides: [],
-      exclusiveClassIds: [],
-      gainTable: [
-        {
-          choicePrompts: ['Seleccionar escuela o enfoque futuro'],
-          classLevel: 1,
-          features: ['Dado de golpe d4', 'Libro de conjuros'],
-        },
-        {
-          choicePrompts: [],
-          classLevel: 2,
-          features: ['Dado de golpe d4', 'Talento adicional de magia futura'],
-        },
-        {
-          choicePrompts: [],
-          classLevel: 3,
-          features: ['Dado de golpe d4', 'Progresión arcana'],
-        },
-        {
-          choicePrompts: ['Reservar especialización adicional para fases posteriores'],
-          classLevel: 4,
-          features: ['Dado de golpe d4', 'Nivel de conjuro aumentado'],
-        },
-      ],
-      hitDie: 4,
-      id: 'class:wizard',
-      implementedRequirements: {
-        minimumAbilityScores: [{ key: 'int', score: 11 }],
-      },
-      kind: 'base',
-      label: 'Mago',
-      tags: ['arcane'],
-    },
-    {
-      deferredRequirementLabels: [],
-      exceptionOverrides: [],
-      exclusiveClassIds: [],
-      gainTable: [
-        {
-          choicePrompts: ['Reservar dominios para fases posteriores'],
-          classLevel: 1,
-          features: ['Dado de golpe d8', 'Canalización divina'],
-        },
-        {
-          choicePrompts: [],
-          classLevel: 2,
-          features: ['Dado de golpe d8', 'Progresión divina'],
-        },
-        {
-          choicePrompts: [],
-          classLevel: 3,
-          features: ['Dado de golpe d8', 'Mejora de lanzamiento divino'],
-        },
-        {
-          choicePrompts: ['Preparar incremento de conjuros de dominio'],
-          classLevel: 4,
-          features: ['Dado de golpe d8', 'Canalización fortalecida'],
-        },
-      ],
-      hitDie: 8,
-      id: 'class:cleric',
-      implementedRequirements: {
-        requiresDeity: true,
-      },
-      kind: 'base',
-      label: 'Clérigo',
-      tags: ['divine'],
-    },
-    {
-      deferredRequirementLabels: [],
-      exceptionOverrides: [],
-      exclusiveClassIds: [],
-      gainTable: [
-        {
-          choicePrompts: [],
-          classLevel: 1,
-          features: ['Dado de golpe d10', 'Gracia divina'],
-        },
-        {
-          choicePrompts: [],
-          classLevel: 2,
-          features: ['Dado de golpe d10', 'Salud divina'],
-        },
-        {
-          choicePrompts: [],
-          classLevel: 3,
-          features: ['Dado de golpe d10', 'Aura de valentía'],
-        },
-        {
-          choicePrompts: [],
-          classLevel: 4,
-          features: ['Dado de golpe d10', 'Imposición de manos reforzada'],
-        },
-      ],
-      hitDie: 10,
-      id: 'class:paladin',
-      implementedRequirements: {
-        allowedAlignmentIds: ['alignment:lawful-good'],
-      },
-      kind: 'base',
-      label: 'Paladín',
-      minimumClassCommitment: 2,
-      tags: ['divine', 'martial'],
-    },
-    {
-      deferredRequirementLabels: [
-        'Pendiente de dotes o habilidades de fases posteriores.',
-      ],
-      exceptionOverrides: [
-        {
-          code: 'puerta.shadowdancer-rogue-bridge',
-          sourceClassId: 'class:rogue',
-          targetClassId: 'class:shadowdancer',
-        },
-      ],
-      exclusiveClassIds: [],
-      gainTable: [
-        {
-          choicePrompts: [],
-          classLevel: 1,
-          features: ['Esquiva asombrosa'],
-        },
-      ],
-      hitDie: 8,
-      id: 'class:shadowdancer',
-      implementedRequirements: {},
-      kind: 'prestige',
-      label: 'Sombra danzante',
-      tags: ['prestige', 'stealth'],
-    },
-    {
-      deferredRequirementLabels: [
-        'Pendiente de dotes o habilidades de fases posteriores.',
-      ],
-      exceptionOverrides: [],
-      exclusiveClassIds: [],
-      gainTable: [
-        {
-          choicePrompts: [],
-          classLevel: 1,
-          features: ['Arma predilecta futura'],
-        },
-      ],
-      hitDie: 10,
-      id: 'class:weapon-master',
-      implementedRequirements: {},
-      kind: 'prestige',
-      label: 'Maestro de armas',
-      tags: ['martial', 'prestige'],
-    },
-  ],
+  classes: projectCompiledClasses(compiledClassCatalog),
 };
 
 export function getPhase04ClassRecord(classId: CanonicalId | null) {
