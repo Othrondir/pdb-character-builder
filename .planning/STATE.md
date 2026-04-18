@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: "Phase 12.2 plan 02 complete — race ability modifier pipeline shipped (applyRaceModifiers selector + store.racialModifiers + three-column Atributos board + character-sheet Final attributes). 10 new phase-12.2 regression tests + full suite 424/424 green. 2 deviations auto-fixed (Rule 3 TS fixture gaps, Rule 1 font-weight theme-contract). Next: 12.2-03 class-fixture plan (parallel wave) + 12.2 prestige-filter fix."
-last_updated: "2026-04-18T21:58:21Z"
+stopped_at: "Phase 12.2 plan 03 complete — prestige-filter + AlignRestrict decoder shipped (decodeAlignRestrict + BASE_CLASS_ALLOWLIST + rewritten projectCompiledClass). 16 new phase-12.2 regression tests + full suite 440/440 green. 1 deviation auto-fixed (Rule 1 spec canary reconciliation: class:caballero-de-luz → class:paladin-antiguos). Closes Phase 12.1 UAT Bug 3 at the adapter layer. Next: 12.2-04 duplicate-canonical-id fix or phase close."
+last_updated: "2026-04-18T22:17:00Z"
 last_activity: 2026-04-18
 progress:
   total_phases: 12
@@ -26,8 +26,8 @@ See: .planning/PROJECT.md (updated 2026-03-30)
 ## Current Position
 
 Phase: 12.2 (roster-detail-and-race-modifiers) — IN PROGRESS
-Plan: 02 of N complete (12.2-01 done, 12.2-02 done; 12.2-03 wave 2 parallel still pending)
-Status: 12.2-02 shipped — CHAR-02 structural gap closed end-to-end. applyRaceModifiers pure rules-engine selector + FoundationRaceOption.racialModifiers projection + store racialModifiers field/setter + Atributos three-column board (Base/Racial/Final) + character-sheet Final attributes. 3 atomic commits (3e3e6ba RED + a46bc9f GREEN data/rules + da29fff GREEN UI). 10 new phase-12.2 regression tests; full suite 424/424. Rule 3 auto-fix: racialModifiers added to 3 pre-existing inline fixtures (phase-03 + 2× phase-12.1). Rule 1 auto-fix: font-weight 700→600 to honor phase-05.2 theme contract. Next: 12.2-03 class-fixture plan parallel continuation.
+Plan: 03 of N complete (12.2-01 done, 12.2-02 done, 12.2-03 done; 12.2-04 duplicate-canonical-id fix still pending)
+Status: 12.2-03 shipped — Phase 12.1 UAT Bug 3 closed at the adapter layer. decodeAlignRestrict pure helper (NWN Aurora hex-bit mask 0x001=LG..0x100=CE with InvertRestrict complement) + decodePrerequisiteMaxLevel helper + BASE_CLASS_ALLOWLIST fail-closed escape hatch (11 classic NWN base classes) + extended projectCompiledClass merging decoded allowedAlignmentIds under CLASS_SERVER_RULE_OVERLAY (overlay wins per-field). 2 atomic commits (3d0f50d RED + 852023b GREEN). 16 new phase-12.2 regression tests; full suite 440/440. Rule 1 auto-fix: spec canary reconciliation (class:caballero-de-luz → class:paladin-antiguos; plan's label-derived canary vs feat-table-ref slug). L1 Legal Bueno Humano: Clérigo no longer mis-blocked on alignment (deity block still applies); Alma Predilecta/Paladin Antiguos/Paladin Oscuro/Paladin Vengador/Artifice correctly blocked with deferred label; Guerrero + Shadowdancer unchanged. Next: 12.2-04 duplicate-canonical-id fix (harper/shadowadept React-key warnings).
 Last activity: 2026-04-18
 
 Progress: [██████████] 100%
@@ -131,6 +131,9 @@ Recent decisions affecting current work:
 - [Phase 12.1-02]: projectCompiledRace / projectCompiledSubrace + dedupeByCanonicalId first-wins guard at foundation-fixture.ts handles extractor-emitted duplicate IDs (race:drow rows 196+676) and missing alignment/deity metadata (permissive ALL_ALIGNMENT_IDS default, deityPolicy: 'optional'). Sub-race emission is deferred — extractor currently emits compiledRaceCatalog.subraces === [].
 - [Phase 12.1-02]: groupRacesByParent is the first helper under packages/rules-engine/src/foundation/ barrel (index.ts newly created). Pure framework-agnostic Map<parentId, {parent, subraces[]}>; O(n+m); orphan-tolerant; reusable by any future derivation helper (preview panels, share-URL validators).
 - [Phase 12.1-02]: Regression-spec floors use `new Set(...).size` (UNIQUE IDs) not raw array length so extractor duplicate emissions cannot silently break the wiring contract.
+- [Phase 12.2-03]: AlignRestrict decoding lives in the projection adapter (class-fixture.ts), not in the rules engine — evaluateClassEntry stays shape-stable and framework-agnostic; overlay spreads LAST so CLASS_SERVER_RULE_OVERLAY wins per-field over decoded values (paladin LG-only / cleric requiresDeity / wizard INT 11 preserved).
+- [Phase 12.2-03]: BASE_CLASS_ALLOWLIST (11 classic NWN base classes) is the fail-closed escape hatch for isBase=true compiled rows whose real prereqs (BAB/class-level/feat/spellcasting) the extractor does not yet surface — non-allowlisted base classes emit DEFERRED_LABEL_UNVETTED_BASE. Long-term fix is extractor enrichment (PreReqTable decoding or reachableAtLevelOne:boolean); allowlist shrinks to empty in lockstep.
+- [Phase 12.2-03]: 0x00 AlignRestrict (with or without InvertRestrict) decodes to undefined (no gate), not "all 9 alignments" — matches NWN 2DA empty-mask convention and lets evaluateClassEntry skip the alignment row entirely when no restriction applies.
 
 ### Pending Todos
 
@@ -160,6 +163,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-18T22:00:00Z
-Stopped at: Completed Phase 12.1 (3/3 plans + 4/4 SC verified). Roster wiring: 41 classes + 45 parent races now sourced from PDB compiled catalogs; SelectionScreen overflow-y restored. 16 Phase 12.1 regression tests + 406/406 full suite green. Phase 12 + Phase 12.1 shipped — milestone v1.0 scope otherwise closed. Deferred to Phase 12.2: TLK description surfacing in pickers, race ability-modifier pipeline (large gap — CHAR-02 structural issue), prestige-filter false positives/negatives at L1, class-catalog duplicate-key bug. Next: `/gsd-insert-phase 12.2` to register Phase 12.2 (Roster Detail + Race Ability Modifiers), then discuss/plan/execute.
+Last session: 2026-04-18T22:17:00Z
+Stopped at: Completed Phase 12.2 Plan 03 (prestige-filter + AlignRestrict decoder). 2 atomic commits (3d0f50d RED + 852023b GREEN) + 12.2-03-SUMMARY.md. 16 new phase-12.2 regression tests; full suite 440/440 green. 1 deviation auto-fixed (Rule 1 spec canary: caballero-de-luz → paladin-antiguos). Phase 12.1 UAT Bug 3 closed at the adapter layer. Decoder helpers (decodeAlignRestrict, decodePrerequisiteMaxLevel) + BASE_CLASS_ALLOWLIST exported from class-fixture.ts; projectCompiledClass now merges decoded allowedAlignmentIds under CLASS_SERVER_RULE_OVERLAY (overlay wins). Next: 12.2-04 (duplicate-canonical-id fix for class:harper / class:shadowadept React-key warnings) or phase close.
 Resume file: None

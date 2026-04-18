@@ -337,7 +337,7 @@ Plans:
 Plans:
 - [ ] 12.2-01: Wire TLK descriptions through projection adapters into race + class picker detail panes
 - [ ] 12.2-02: Introduce race-ability-modifier pipeline (rules-engine helper + foundation-store integration + attributes-board display)
-- [ ] 12.2-03: Fix prestige-filter false positives/negatives + Clérigo L1 regression (projection / collectVisibleClassOptions audit)
+- [x] 12.2-03: Fix prestige-filter false positives/negatives + Clérigo L1 regression (projection / collectVisibleClassOptions audit)
 - [ ] 12.2-04: Dedupe compiled class catalog (extractor-level preferred; fixture-level dedupe fallback)
 **UI hint**: yes
 
@@ -364,3 +364,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -
 | 10. Integration Fixes (GAP) | 0/3 | Pending | - |
 | 11. UAT + Open-Work Closure (GAP) | 0/3 | Pending | - |
 | 12. Tech Debt Sweep (GAP) | 2/2 | Complete | 2026-04-18 |
+| 12.1 Roster Wiring & Overflow Fixes (INSERTED) | 3/3 | Complete | 2026-04-18 |
+| 12.2 Roster Detail & Race Ability Modifiers (INSERTED) | 3/4 | In progress | - |
