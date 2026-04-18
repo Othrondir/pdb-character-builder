@@ -247,8 +247,41 @@ function projectCompiledClass(compiled: CompiledClass): PlannerClassRecord {
   };
 }
 
+/**
+ * Phase 12.2-04 (D-05) — fixture-level first-wins dedupe. Mirrors the
+ * race-fixture pattern at apps/planner/src/features/character-foundation/
+ * foundation-fixture.ts:135-146. The compiled class catalog currently emits
+ * duplicate canonical IDs for prestige variants that collapse to the same
+ * slug (`class:harper` at sourceRows 28 + 54 for Arcano/Divino; and
+ * `class:shadowadept` at sourceRows 46 + 55). First-wins keeps the lowest-
+ * sourceRow occurrence; a console.warn records the dropped row so the
+ * extractor backlog stays visible.
+ *
+ * Long-term fix: extractor emits slug-disambiguated IDs (class:harper-arcane,
+ * class:harper-divine). Tracked in 12.2-CONTEXT.md `<deferred>`.
+ */
+function dedupeCompiledClassesByCanonicalId(
+  entries: readonly CompiledClass[],
+): CompiledClass[] {
+  const seen = new Set<string>();
+  const unique: CompiledClass[] = [];
+  for (const entry of entries) {
+    if (seen.has(entry.id)) {
+      console.warn(
+        `[12.2-04] Dropped duplicate class id \`${entry.id}\` from compiled-classes.ts (sourceRow=${entry.sourceRow}). Upstream extractor slug-disambiguation tracked in 12.2-CONTEXT.md deferred.`,
+      );
+      continue;
+    }
+    seen.add(entry.id);
+    unique.push(entry);
+  }
+  return unique;
+}
+
 function projectCompiledClasses(catalog: ClassCatalog): PlannerClassRecord[] {
-  return catalog.classes.map(projectCompiledClass);
+  return dedupeCompiledClassesByCanonicalId(catalog.classes).map(
+    projectCompiledClass,
+  );
 }
 
 export const phase04ClassFixture: Phase04ClassFixture = {
