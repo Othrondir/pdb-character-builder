@@ -23,7 +23,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 9: Verification + Traceability Closure** (GAP) - Close unverified phases (01, 02, 05.1), reclassify descoped requirements, reconcile REQUIREMENTS.md traceability.
 - [x] **Phase 10: Integration Fixes** (GAP) - Close integration defects surfaced by milestone audit — attributes→level1 forward action, slot-load fail-closed parity, orphan shell `validationStatus` cleanup.
 - [x] **Phase 11: UAT + Open-Work Closure** (GAP) - Close P06 human UAT, archive P05/P07 UAT files, resolve open debug + quick task.
-- [ ] **Phase 12: Tech Debt Sweep** (GAP) - Fix P03 typecheck errors, P07.2 IN-07 class-label bug (FEAT-02 quality), IN-03 label cleanup, IN-05 counter alignment.
+- [x] **Phase 12: Tech Debt Sweep** (GAP) - Fix P03 typecheck errors, P07.2 IN-07 class-label bug (FEAT-02 quality), IN-03 label cleanup, IN-05 counter alignment.
 - [ ] **Phase 12.1: Roster Wiring & Overflow Fixes** (INSERTED) - Wire compiled class + race catalogs (PDB TLK extractor roster) into L1 pickers and fix CSS overflow/scroll on SelectionScreen + planner-layout panels. Surfaced during Phase 11 UAT (2026-04-18).
 
 ## Phase Details

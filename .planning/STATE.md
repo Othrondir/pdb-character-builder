@@ -21,7 +21,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-30)
 
 **Core value:** A player can build a Puerta de Baldur character from level 1 to 16 with strict server-valid validation and share that exact build reliably.
-**Current focus:** Phase 11 — UAT + open-work closure (GAP)
+**Current focus:** Phase 12 complete — milestone v1.0 awaiting Phase 12.1 (Roster Wiring & Overflow Fixes) for audit closure.
 
 ## Current Position
 
