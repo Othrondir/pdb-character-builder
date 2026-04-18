@@ -26,6 +26,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 12: Tech Debt Sweep** (GAP) - Fix P03 typecheck errors, P07.2 IN-07 class-label bug (FEAT-02 quality), IN-03 label cleanup, IN-05 counter alignment.
 - [x] **Phase 12.1: Roster Wiring & Overflow Fixes** (INSERTED) - Wire compiled class + race catalogs (PDB TLK extractor roster) into L1 pickers and fix CSS overflow/scroll on SelectionScreen + planner-layout panels. Surfaced during Phase 11 UAT (2026-04-18).
 - [x] **Phase 12.2: Roster Detail & Race Ability Modifiers** (INSERTED) - Surface TLK descriptions in race + class picker detail panes, wire race ability modifiers (CHAR-02 pipeline gap) through attributes computation, fix prestige-filter false positives/negatives at L1, and dedupe class-catalog duplicate IDs. Surfaced during Phase 12.1 UAT (2026-04-18).
+- [ ] **Phase 12.3: UAT Correctness Closure** (INSERTED) - Close 9 blockers surfaced by deep UAT (2026-04-18) before milestone v1.0: B1 attributes overspend, B2 multiclass level picker, B3 Dotes per-level gate, B4 slot count prompt, B5 description paragraphs, B6 HP pipeline, B7 origin stepper decoupling, B8/B9 header + sub-step ripples. Milestone v1.0 close blocked on B1/B2/B3/B6.
 
 ## Phase Details
 
@@ -341,10 +342,33 @@ Plans:
 - [x] 12.2-04: Dedupe compiled class catalog (extractor-level preferred; fixture-level dedupe fallback)
 **UI hint**: yes
 
+### Phase 12.3: UAT Correctness Closure (INSERTED)
+**Goal**: Clear the 9 correctness blockers deep UAT (2026-04-18) surfaced so milestone v1.0 can close. Fix attributes overspend gate, multiclass level picker, per-level Dotes gate, HP computation, origin-step decoupling, description paragraph rendering, and the ripple bugs on header + sub-step progress.
+**Depends on**: Phase 12.2 (roster + race modifiers already wired)
+**Requirements**: ABIL-01 (attribute budget enforcement), ABIL-02 (HP derived), CLAS-01..04 (multiclass progression), PROG-01..03 (per-level progression), FEAT-01 (feat selection + slot clarity).
+**Gap Closure**: Closes the 9 bugs documented in `.planning/UAT-FINDINGS-2026-04-18.md` (B1..B9). Milestone v1.0 close is blocked on B1, B2, B3, B6.
+**Success Criteria** (what must be TRUE):
+  1. Attributes `+` button is disabled when the next-increment cost exceeds `Puntos restantes`. `Puntos restantes` cannot go negative. Regression test locks the boundary.
+  2. Clicking a level N button in the progression rail activates N as the current level: header title reads `SELECCIONA LA CLASE DEL NIVEL N`, class picks persist to level N (not L1), and the rail reflects `1<class1> 2<class2>` after multiclassing.
+  3. Dotes sub-step surfaces per-level feat slots: the center panel shows how many class-bonus + general feats are available at the active level and the "Completa una progresion valida" block only appears when the active level genuinely lacks a class.
+  4. Character-sheet `PG` reports hit points at L1 as `hitDie + conMod` (class die + CON modifier) and updates on later levels; no permanent `--`.
+  5. Origin rail `✓` on Raza + Alineamiento remains intact regardless of downstream Atributos validity. Stepper "origin complete" predicate depends on race+alignment only.
+  6. Race + class DetailPanel bodies render multi-paragraph descriptions with readable paragraph breaks (no wall-of-text).
+**Plans**: 6 plans (planned)
+
+Plans:
+- [ ] 12.3-01: Disable attributes `+` when cost exceeds remaining budget (B1)
+- [ ] 12.3-02: Multiclass per-level switching (B2 + B8 + B9)
+- [ ] 12.3-03: Per-level Dotes gate + slot-count prompt (B3 + B4)
+- [ ] 12.3-04: Hit-points pipeline through rules-engine + sheet (B6)
+- [ ] 12.3-05: Origin-stepper decoupling from atributos validity (B7)
+- [ ] 12.3-06: Description paragraph rendering in DetailPanel (B5)
+**UI hint**: yes
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 12.1 -> 12.2
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 12.1 -> 12.2 -> 12.3
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
