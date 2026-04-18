@@ -1,4 +1,9 @@
 import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
+import type {
+  CompiledRace,
+  CompiledSubrace,
+} from '@data-extractor/contracts/race-catalog';
+import { compiledRaceCatalog } from '@planner/data/compiled-races';
 import { CURRENT_DATASET_ID } from '@planner/data/ruleset-version';
 
 export const ATTRIBUTE_KEYS = [
@@ -61,6 +66,64 @@ const ALL_ALIGNMENT_IDS: CanonicalId[] = [
   'alignment:neutral-evil',
   'alignment:chaotic-evil',
 ];
+
+/**
+ * Phase 12.1 Plan 02 — projection adapters that bridge the compiled-extractor
+ * race catalog (`CompiledRace` / `CompiledSubrace`) to the planner's
+ * `FoundationRaceOption` / `FoundationSubraceOption` shape consumed by
+ * `selectOriginOptions`.
+ *
+ * Per plan D-01 (compiled catalog has no alignment/deity fields):
+ *  - `allowedAlignmentIds` defaults to ALL_ALIGNMENT_IDS. Alignment gating
+ *    for PDB-custom races is upstream in extractor overrides (tracked in
+ *    12.1-CONTEXT.md deferred section).
+ *  - `deityPolicy` defaults to `'optional'` — CHAR-03 was descoped v1 → v2
+ *    per REQUIREMENTS.md; `'optional'` is the safe no-op default that
+ *    foundation selectors already treat as "no deity required".
+ */
+function projectCompiledRace(compiled: CompiledRace): FoundationRaceOption {
+  return {
+    allowedAlignmentIds: ALL_ALIGNMENT_IDS,
+    deityPolicy: 'optional',
+    id: compiled.id as CanonicalId,
+    label: compiled.label,
+  };
+}
+
+function projectCompiledSubrace(
+  compiled: CompiledSubrace,
+): FoundationSubraceOption {
+  return {
+    allowedAlignmentIds: ALL_ALIGNMENT_IDS,
+    id: compiled.id as CanonicalId,
+    label: compiled.label,
+    parentRaceId: compiled.parentRaceId as CanonicalId,
+  };
+}
+
+/**
+ * Phase 12.1 Plan 02 Rule 2 auto-fix — the compiled race catalog emitted by
+ * the extractor on 2026-04-17 contains duplicate IDs (e.g. `race:drow`
+ * appears at rows 196 + 676). The hand-authored 3-race fixture never
+ * surfaced this because those IDs were not rendered. Projecting the full
+ * catalog exposes the duplicates as React-key collisions in the picker.
+ *
+ * Dedupe at the projection boundary (first-wins) so the UI stays safe
+ * regardless of when the extractor backlog lands a canonical-ID uniqueness
+ * gate. Tracked as an extractor-side follow-up in 12.1-CONTEXT.md deferred.
+ */
+function dedupeByCanonicalId<T extends { id: CanonicalId }>(entries: T[]): T[] {
+  const seen = new Set<CanonicalId>();
+  const unique: T[] = [];
+  for (const entry of entries) {
+    if (seen.has(entry.id)) {
+      continue;
+    }
+    seen.add(entry.id);
+    unique.push(entry);
+  }
+  return unique;
+}
 
 export const phase03FoundationFixture: Phase03FoundationFixture = {
   alignments: [
@@ -139,66 +202,8 @@ export const phase03FoundationFixture: Phase03FoundationFixture = {
     minimum: 8,
   },
   datasetId: CURRENT_DATASET_ID,
-  races: [
-    {
-      allowedAlignmentIds: ALL_ALIGNMENT_IDS,
-      deityPolicy: 'optional',
-      id: 'race:human',
-      label: 'Humano',
-    },
-    {
-      allowedAlignmentIds: [
-        'alignment:neutral-good',
-        'alignment:chaotic-good',
-        'alignment:true-neutral',
-        'alignment:chaotic-neutral',
-      ],
-      deityPolicy: 'optional',
-      id: 'race:elf',
-      label: 'Elfo',
-    },
-    {
-      allowedAlignmentIds: [
-        'alignment:lawful-good',
-        'alignment:neutral-good',
-        'alignment:lawful-neutral',
-        'alignment:true-neutral',
-      ],
-      deityPolicy: 'optional',
-      id: 'race:dwarf',
-      label: 'Enano',
-    },
-  ],
-  subraces: [
-    {
-      allowedAlignmentIds: [
-        'alignment:neutral-good',
-        'alignment:chaotic-good',
-        'alignment:true-neutral',
-      ],
-      id: 'subrace:moon-elf',
-      label: 'Elfo lunar',
-      parentRaceId: 'race:elf',
-    },
-    {
-      allowedAlignmentIds: [
-        'alignment:neutral-good',
-        'alignment:chaotic-good',
-        'alignment:chaotic-neutral',
-      ],
-      id: 'subrace:wild-elf',
-      label: 'Elfo salvaje',
-      parentRaceId: 'race:elf',
-    },
-    {
-      allowedAlignmentIds: [
-        'alignment:lawful-good',
-        'alignment:neutral-good',
-        'alignment:lawful-neutral',
-      ],
-      id: 'subrace:shield-dwarf',
-      label: 'Enano escudero',
-      parentRaceId: 'race:dwarf',
-    },
-  ],
+  races: dedupeByCanonicalId(compiledRaceCatalog.races.map(projectCompiledRace)),
+  subraces: dedupeByCanonicalId(
+    compiledRaceCatalog.subraces.map(projectCompiledSubrace),
+  ),
 };

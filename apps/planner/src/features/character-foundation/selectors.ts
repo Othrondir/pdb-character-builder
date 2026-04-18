@@ -5,6 +5,8 @@ import {
   evaluateOriginSelection,
   getAllowedSubraces,
 } from '@rules-engine/foundation/origin-rules';
+import { groupRacesByParent } from '@rules-engine/foundation/group-races-by-parent';
+import { compiledRaceCatalog } from '@planner/data/compiled-races';
 import { shellCopyEs } from '@planner/lib/copy/es';
 
 import {
@@ -142,6 +144,23 @@ export function selectOriginOptions(state: CharacterFoundationStoreState) {
   const selectedSubrace = findSubrace(state.subraceId);
   const subraceLocked = state.raceId === null;
   const alignmentLocked = state.raceId === null;
+
+  // Phase 12.1 Plan 02 D-03: parent→subrace tree is derived via a pure
+  // rules-engine helper so the dropdown-pair contract is explicit and
+  // unit-testable without a DOM. The alignment/deity gating still runs
+  // through `getAllowedSubraces` below — the tree only scopes which subraces
+  // are candidates for the currently selected parent.
+  const raceTree = groupRacesByParent(
+    compiledRaceCatalog.races,
+    compiledRaceCatalog.subraces,
+  );
+  const childrenOfSelectedParent = state.raceId
+    ? (raceTree.get(state.raceId)?.subraces ?? [])
+    : [];
+  const candidateSubraceIds = new Set(
+    childrenOfSelectedParent.map((subrace) => subrace.id),
+  );
+
   const visibleSubraceIds = new Set(
     getAllowedSubraces({
       alignmentId: state.alignmentId,
@@ -154,8 +173,9 @@ export function selectOriginOptions(state: CharacterFoundationStoreState) {
       subraces: phase03FoundationFixture.subraces,
     }).map((subrace) => subrace.id),
   );
-  const visibleSubraces = phase03FoundationFixture.subraces.filter((subrace) =>
-    visibleSubraceIds.has(subrace.id),
+  const visibleSubraces = phase03FoundationFixture.subraces.filter(
+    (subrace) =>
+      visibleSubraceIds.has(subrace.id) && candidateSubraceIds.has(subrace.id),
   );
 
   return {

@@ -44,10 +44,18 @@ describe('phase 12.1-02 — race roster wiring', () => {
   it('returns every race from the compiled catalog at foundation L1', () => {
     const options = selectOriginOptions(createEmptyFoundationState());
 
-    // Every parent race from the extractor must surface in the race picker —
-    // count-based floor, not a magic number.
+    // Every UNIQUE parent race ID from the extractor must surface in the
+    // race picker — count-based floor over unique IDs, not raw array
+    // length. The extractor's 2026-04-17 emission contains a duplicate
+    // `race:drow` entry (rows 196 + 676); the foundation-fixture projection
+    // applies first-wins dedupe (Rule 2 auto-fix, Plan 12.1-02). The true
+    // wiring contract is "every unique parent race is surfaced", and that
+    // is what this floor locks regardless of extractor duplicate noise.
+    const uniqueCompiledRaceIds = new Set(
+      compiledRaceCatalog.races.map((race) => race.id),
+    );
     expect(options.races.length).toBeGreaterThanOrEqual(
-      compiledRaceCatalog.races.length,
+      uniqueCompiledRaceIds.size,
     );
   });
 
