@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: "Phase 12.2 plan 03 complete — prestige-filter + AlignRestrict decoder shipped (decodeAlignRestrict + BASE_CLASS_ALLOWLIST + rewritten projectCompiledClass). 16 new phase-12.2 regression tests + full suite 440/440 green. 1 deviation auto-fixed (Rule 1 spec canary reconciliation: class:caballero-de-luz → class:paladin-antiguos). Closes Phase 12.1 UAT Bug 3 at the adapter layer. Next: 12.2-04 duplicate-canonical-id fix or phase close."
-last_updated: "2026-04-18T22:17:00Z"
+stopped_at: "Phase 12.2 complete — 4/4 plans shipped + 4/4 SC verified. TLK descriptions + race ability modifier pipeline (CHAR-02 structural close) + prestige-filter decoder + class-catalog dedupe. 39 Phase 12.2 regression tests + full suite 445/445 green. Milestone v1.0 scope closed — audit + complete-milestone next."
+last_updated: "2026-04-18T23:00:00Z"
 last_activity: 2026-04-18
 progress:
   total_phases: 12
@@ -21,13 +21,13 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-30)
 
 **Core value:** A player can build a Puerta de Baldur character from level 1 to 16 with strict server-valid validation and share that exact build reliably.
-**Current focus:** Phase 12.1 complete — milestone v1.0 awaiting Phase 12.2 (Roster Detail + Race Ability Modifiers) to clear deferred UAT findings before audit close.
+**Current focus:** Phase 12.2 complete — milestone v1.0 scope closed. Next: `/gsd-audit-milestone v1.0` + `/gsd-complete-milestone` to ship v1.0.
 
 ## Current Position
 
-Phase: 12.2 (roster-detail-and-race-modifiers) — IN PROGRESS
-Plan: 03 of N complete (12.2-01 done, 12.2-02 done, 12.2-03 done; 12.2-04 duplicate-canonical-id fix still pending)
-Status: 12.2-03 shipped — Phase 12.1 UAT Bug 3 closed at the adapter layer. decodeAlignRestrict pure helper (NWN Aurora hex-bit mask 0x001=LG..0x100=CE with InvertRestrict complement) + decodePrerequisiteMaxLevel helper + BASE_CLASS_ALLOWLIST fail-closed escape hatch (11 classic NWN base classes) + extended projectCompiledClass merging decoded allowedAlignmentIds under CLASS_SERVER_RULE_OVERLAY (overlay wins per-field). 2 atomic commits (3d0f50d RED + 852023b GREEN). 16 new phase-12.2 regression tests; full suite 440/440. Rule 1 auto-fix: spec canary reconciliation (class:caballero-de-luz → class:paladin-antiguos; plan's label-derived canary vs feat-table-ref slug). L1 Legal Bueno Humano: Clérigo no longer mis-blocked on alignment (deity block still applies); Alma Predilecta/Paladin Antiguos/Paladin Oscuro/Paladin Vengador/Artifice correctly blocked with deferred label; Guerrero + Shadowdancer unchanged. Next: 12.2-04 duplicate-canonical-id fix (harper/shadowadept React-key warnings).
+Phase: 12.2 (roster-detail-and-race-modifiers) — COMPLETE
+Plan: 4 of 4 complete
+Status: 12.2-04 shipped — class:harper + class:shadowadept duplicates deduped at fixture layer via first-wins + sourceRow warn log (mirrors 12.1-02 race pattern). 2 atomic commits (8065f45 RED + ea1dbea GREEN) + summary (9167447). 5 new dedupe regression tests; full suite 445/445 green. 12.2-VERIFICATION.md (eb39113) records 4/4 SC PASS. In-browser UAT confirmed Enano description TLK prose rendered + CON 8→10 + CAR 8→6 racial modifiers applied. Phase 12.2 closes all 4 Phase 12.1 UAT deferred items: descriptions, CHAR-02 pipeline, prestige-filter, dup-IDs. Milestone v1.0 ready for audit + close.
 Last activity: 2026-04-18
 
 Progress: [██████████] 100%
@@ -163,6 +163,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-18T22:17:00Z
-Stopped at: Completed Phase 12.2 Plan 03 (prestige-filter + AlignRestrict decoder). 2 atomic commits (3d0f50d RED + 852023b GREEN) + 12.2-03-SUMMARY.md. 16 new phase-12.2 regression tests; full suite 440/440 green. 1 deviation auto-fixed (Rule 1 spec canary: caballero-de-luz → paladin-antiguos). Phase 12.1 UAT Bug 3 closed at the adapter layer. Decoder helpers (decodeAlignRestrict, decodePrerequisiteMaxLevel) + BASE_CLASS_ALLOWLIST exported from class-fixture.ts; projectCompiledClass now merges decoded allowedAlignmentIds under CLASS_SERVER_RULE_OVERLAY (overlay wins). Next: 12.2-04 (duplicate-canonical-id fix for class:harper / class:shadowadept React-key warnings) or phase close.
+Last session: 2026-04-18T23:00:00Z
+Stopped at: Completed Phase 12.2 (4/4 plans + 4/4 SC verified). TLK descriptions + race ability-modifier pipeline (CHAR-02 structural close) + prestige-filter decoder + class-catalog dedupe. 39 Phase 12.2 regression tests + full suite 445/445 green. In-browser UAT confirmed Enano description TLK prose rendered and race modifiers applied (CON 8→10, CAR 8→6). Milestone v1.0 scope closed — all 13 planned phases + 3 inserted gap phases (12.1, 12.2) shipped. Next: `/gsd-audit-milestone v1.0` to confirm milestone closure readiness, then `/gsd-complete-milestone` to ship v1.0.
 Resume file: None

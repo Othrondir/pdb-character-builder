@@ -25,7 +25,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 11: UAT + Open-Work Closure** (GAP) - Close P06 human UAT, archive P05/P07 UAT files, resolve open debug + quick task.
 - [x] **Phase 12: Tech Debt Sweep** (GAP) - Fix P03 typecheck errors, P07.2 IN-07 class-label bug (FEAT-02 quality), IN-03 label cleanup, IN-05 counter alignment.
 - [x] **Phase 12.1: Roster Wiring & Overflow Fixes** (INSERTED) - Wire compiled class + race catalogs (PDB TLK extractor roster) into L1 pickers and fix CSS overflow/scroll on SelectionScreen + planner-layout panels. Surfaced during Phase 11 UAT (2026-04-18).
-- [ ] **Phase 12.2: Roster Detail & Race Ability Modifiers** (INSERTED) - Surface TLK descriptions in race + class picker detail panes, wire race ability modifiers (CHAR-02 pipeline gap) through attributes computation, fix prestige-filter false positives/negatives at L1, and dedupe class-catalog duplicate IDs. Surfaced during Phase 12.1 UAT (2026-04-18).
+- [x] **Phase 12.2: Roster Detail & Race Ability Modifiers** (INSERTED) - Surface TLK descriptions in race + class picker detail panes, wire race ability modifiers (CHAR-02 pipeline gap) through attributes computation, fix prestige-filter false positives/negatives at L1, and dedupe class-catalog duplicate IDs. Surfaced during Phase 12.1 UAT (2026-04-18).
 
 ## Phase Details
 
@@ -335,10 +335,10 @@ Plans:
 **Plans**: 4 plans (planned)
 
 Plans:
-- [ ] 12.2-01: Wire TLK descriptions through projection adapters into race + class picker detail panes
-- [ ] 12.2-02: Introduce race-ability-modifier pipeline (rules-engine helper + foundation-store integration + attributes-board display)
+- [x] 12.2-01: Wire TLK descriptions through projection adapters into race + class picker detail panes
+- [x] 12.2-02: Introduce race-ability-modifier pipeline (rules-engine helper + foundation-store integration + attributes-board display)
 - [x] 12.2-03: Fix prestige-filter false positives/negatives + Clérigo L1 regression (projection / collectVisibleClassOptions audit)
-- [ ] 12.2-04: Dedupe compiled class catalog (extractor-level preferred; fixture-level dedupe fallback)
+- [x] 12.2-04: Dedupe compiled class catalog (extractor-level preferred; fixture-level dedupe fallback)
 **UI hint**: yes
 
 ## Progress
