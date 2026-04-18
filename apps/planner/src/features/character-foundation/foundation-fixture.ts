@@ -21,6 +21,7 @@ export type FoundationStatus = 'blocked' | 'illegal' | 'legal';
 export interface FoundationRaceOption {
   allowedAlignmentIds: CanonicalId[];
   deityPolicy: 'optional' | 'required';
+  description: string;
   id: CanonicalId;
   label: string;
 }
@@ -85,6 +86,7 @@ function projectCompiledRace(compiled: CompiledRace): FoundationRaceOption {
   return {
     allowedAlignmentIds: ALL_ALIGNMENT_IDS,
     deityPolicy: 'optional',
+    description: compiled.description,
     id: compiled.id as CanonicalId,
     label: compiled.label,
   };

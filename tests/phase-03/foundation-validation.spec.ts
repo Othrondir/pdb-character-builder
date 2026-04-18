@@ -79,6 +79,7 @@ describe('phase 03 foundation validation helpers', () => {
           {
             allowedAlignmentIds: phase03FoundationFixture.alignments.map((a) => a.id),
             deityPolicy: 'required',
+            description: 'Test race with required deity (spec-local).',
             id: 'race:test-required-deity',
             label: 'Test race with required deity',
           },

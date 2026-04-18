@@ -9,6 +9,7 @@ import {
   selectFoundationValidation,
   selectOriginOptions,
 } from '@planner/features/character-foundation/selectors';
+import { phase03FoundationFixture } from '@planner/features/character-foundation/foundation-fixture';
 import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
 import { usePlannerShellStore } from '@planner/state/planner-shell';
 
@@ -47,6 +48,12 @@ export function OriginBoard({ activeStep = 'race' }: OriginBoardProps) {
   const config = stepConfig[activeStep];
   const selectedOption = config.options.find((o) => o.selected);
 
+  const selectedRaceDescription =
+    activeStep === 'race' && selectedOption
+      ? phase03FoundationFixture.races.find((r) => r.id === selectedOption.id)
+          ?.description ?? null
+      : null;
+
   const items: OptionItem[] = config.options.map((o) => ({
     blocked: o.blocked,
     disabled: o.disabled,
@@ -79,9 +86,11 @@ export function OriginBoard({ activeStep = 'race' }: OriginBoardProps) {
         body={
           config.issue
             ? config.issue
-            : selectedOption
-              ? `${selectedOption.label} seleccionado.`
-              : 'Selecciona una opcion para ver su descripcion.'
+            : selectedRaceDescription
+              ? selectedRaceDescription
+              : selectedOption
+                ? `${selectedOption.label} seleccionado.`
+                : 'Selecciona una opcion para ver su descripcion.'
         }
       >
         {hasSubraces && (

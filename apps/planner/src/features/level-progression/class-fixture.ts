@@ -34,6 +34,7 @@ export interface PlannerClassExceptionOverride {
 
 export interface PlannerClassRecord {
   deferredRequirementLabels: string[];
+  description: string;
   exceptionOverrides?: PlannerClassExceptionOverride[];
   exclusiveClassIds?: CanonicalId[];
   gainTable: PlannerClassGainRow[];
@@ -125,6 +126,7 @@ function projectCompiledClass(compiled: CompiledClass): PlannerClassRecord {
     deferredRequirementLabels: isBase
       ? []
       : ['Pendiente de dotes o habilidades de fases posteriores.'],
+    description: compiled.description,
     exceptionOverrides: overlay.exceptionOverrides ?? [],
     exclusiveClassIds: overlay.exclusiveClassIds ?? [],
     gainTable: [],
