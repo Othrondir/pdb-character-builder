@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: "Phase 12.2 complete — 4/4 plans shipped + 4/4 SC verified. TLK descriptions + race ability modifier pipeline (CHAR-02 structural close) + prestige-filter decoder + class-catalog dedupe. 39 Phase 12.2 regression tests + full suite 445/445 green. Milestone v1.0 scope closed — audit + complete-milestone next."
-last_updated: "2026-04-18T23:00:00Z"
+stopped_at: "Phase 12.3-01 shipped — attributes `+` button now blocked fail-closed at overspend OR ceiling via new `nextIncrementCost` + `canIncrementAttribute` pure helpers (`@rules-engine/foundation/ability-budget`). 18 regression assertions lock the full point-buy cost curve + the UAT B1 repro (14/14/14/12/12/12 @ 0 remaining). 2 atomic commits (5a39544 RED + 45fe596 GREEN). Full vitest 482/482 green."
+last_updated: "2026-04-18T23:56:00Z"
 last_activity: 2026-04-18
 progress:
   total_phases: 12
@@ -25,9 +25,9 @@ See: .planning/PROJECT.md (updated 2026-03-30)
 
 ## Current Position
 
-Phase: 12.2 (roster-detail-and-race-modifiers) — COMPLETE
-Plan: 4 of 4 complete
-Status: 12.2-04 shipped — class:harper + class:shadowadept duplicates deduped at fixture layer via first-wins + sourceRow warn log (mirrors 12.1-02 race pattern). 2 atomic commits (8065f45 RED + ea1dbea GREEN) + summary (9167447). 5 new dedupe regression tests; full suite 445/445 green. 12.2-VERIFICATION.md (eb39113) records 4/4 SC PASS. In-browser UAT confirmed Enano description TLK prose rendered + CON 8→10 + CAR 8→6 racial modifiers applied. Phase 12.2 closes all 4 Phase 12.1 UAT deferred items: descriptions, CHAR-02 pipeline, prestige-filter, dup-IDs. Milestone v1.0 ready for audit + close.
+Phase: 12.3 (uat-correctness-closure) — IN PROGRESS
+Plan: 1 of 6 complete (Wave 1: 12.3-01 shipped; 12.3-04 + 12.3-05 + 12.3-06 running in parallel)
+Status: 12.3-01 shipped — attributes overspend gate (UAT B1). `nextIncrementCost` + `canIncrementAttribute` pure helpers exported from `@rules-engine/foundation/ability-budget`; `AttributesBoard` `+` button `disabled` prop now reads `!canIncrementAttribute(baseValue, remainingPoints, costByScore, maximum)`. 18 regression assertions lock the cost curve (8→9=1, 14→15=2, 16→17=3, 18→null) + UAT B1 repro (30-pt build drained to 0 remaining cannot be pushed further). 2 atomic commits (5a39544 RED + 45fe596 GREEN). Full vitest 482/482 green. `Puntos restantes: -2` path closed fail-closed.
 Last activity: 2026-04-18
 
 Progress: [██████████] 100%
@@ -134,6 +134,7 @@ Recent decisions affecting current work:
 - [Phase 12.2-03]: AlignRestrict decoding lives in the projection adapter (class-fixture.ts), not in the rules engine — evaluateClassEntry stays shape-stable and framework-agnostic; overlay spreads LAST so CLASS_SERVER_RULE_OVERLAY wins per-field over decoded values (paladin LG-only / cleric requiresDeity / wizard INT 11 preserved).
 - [Phase 12.2-03]: BASE_CLASS_ALLOWLIST (11 classic NWN base classes) is the fail-closed escape hatch for isBase=true compiled rows whose real prereqs (BAB/class-level/feat/spellcasting) the extractor does not yet surface — non-allowlisted base classes emit DEFERRED_LABEL_UNVETTED_BASE. Long-term fix is extractor enrichment (PreReqTable decoding or reachableAtLevelOne:boolean); allowlist shrinks to empty in lockstep.
 - [Phase 12.2-03]: 0x00 AlignRestrict (with or without InvertRestrict) decodes to undefined (no gate), not "all 9 alignments" — matches NWN 2DA empty-mask convention and lets evaluateClassEntry skip the alignment row entirely when no restriction applies.
+- [Phase 12.3-01]: UAT B1 overspend gate lands at the UI layer — `canIncrementAttribute` is consumed by the `+` button `disabled` prop; the store's `setBaseAttribute` is not hardened. Mirrors existing `-` button gate semantics and keeps the store framework-agnostic. `calculateAbilityBudgetSnapshot` stays shape-stable (post-hoc validation copy); the new helpers are forward-looking per-click guards exported alongside it from `@rules-engine/foundation/ability-budget`.
 
 ### Pending Todos
 
@@ -164,6 +165,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-18T23:00:00Z
-Stopped at: Completed Phase 12.2 (4/4 plans + 4/4 SC verified). TLK descriptions + race ability-modifier pipeline (CHAR-02 structural close) + prestige-filter decoder + class-catalog dedupe. 39 Phase 12.2 regression tests + full suite 445/445 green. In-browser UAT confirmed Enano description TLK prose rendered and race modifiers applied (CON 8→10, CAR 8→6). Milestone v1.0 scope closed — all 13 planned phases + 3 inserted gap phases (12.1, 12.2) shipped. Next: `/gsd-audit-milestone v1.0` to confirm milestone closure readiness, then `/gsd-complete-milestone` to ship v1.0.
+Last session: 2026-04-18T23:56:00Z
+Stopped at: Shipped Phase 12.3-01 (UAT B1 overspend gate). Added two pure rules-engine helpers — `nextIncrementCost` + `canIncrementAttribute` — and rewired the `AttributesBoard` `+` button's `disabled` prop. 18/18 new regression assertions green; full vitest 482/482 green. 2 atomic commits (5a39544 RED + 45fe596 GREEN). Parallel Wave 1 plans 12.3-04 (HP), 12.3-05 (stepper), 12.3-06 (CSS) already landed commits on master. Remaining: Wave 2 (12.3-02 multiclass L2+, 12.3-03 Dotes gate).
 Resume file: None
