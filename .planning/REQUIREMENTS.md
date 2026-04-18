@@ -62,7 +62,7 @@
 ### Validacion y explicaciones
 
 - [x] **VALI-01**: El planner bloquea builds ilegales en lugar de permitirlas con simples avisos.
-- [ ] **VALI-02**: El usuario recibe explicaciones precisas y legibles cuando una eleccion es invalida. _Non-magic shipped via Phase 06 (FeatBoard prereq checklist, skill repair reasons, class prereq rail); magic portion descoped por Phase 07.2; pendiente reclasificación explícita en Phase 9._
+- [x] **VALI-02**: El usuario recibe explicaciones precisas y legibles cuando una eleccion es invalida. _Non-magic satisfied via Phase 06 (FeatBoard prereq checklist, skill repair reasons, class prereq rail); magic portion descoped por Phase 07.2. Reclasificado 2026-04-18 via Phase 9 → audit pass: v1 ships satisfied-non-magic + descoped-magic as final disposition._
 - [x] **VALI-03**: El planner recalcula automaticamente la build completa cuando cambia cualquier decision.
 - [x] **VALI-04**: El planner evita marcar una build como valida cuando falten datos o exista conflicto entre fuentes de reglas.
 
@@ -110,11 +110,11 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| LANG-01 | Phase 2 → Phase 9 | Pending (verification closure) |
-| LANG-02 | Phase 7 → Phase 9 | Pending (verification closure) |
+| LANG-01 | Phase 2 → Phase 9 | Complete (verified 2026-04-18 via 02-VERIFICATION.md + transitive evidence from 07.2-VERIFICATION.md) |
+| LANG-02 | Phase 5.1 → Phase 9 | Complete (verified 2026-04-18 via 05.1-VERIFICATION.md active-runtime scope) |
 | LANG-03 | Phase 8 | Complete |
-| FLOW-01 | Phase 2 → Phase 9 + Phase 10 | Pending (verification closure + attributes→level1 integration fix) |
-| FLOW-02 | Phase 2 → Phase 9 | Pending (verification closure) |
+| FLOW-01 | Phase 2 → Phase 9 + Phase 10 | Complete for verification scope (verified 2026-04-18 via 02-VERIFICATION.md + transitive 07.2); attributes→level1 integration fix still scheduled for Phase 10 |
+| FLOW-02 | Phase 2 → Phase 9 | Complete (verified 2026-04-18 via 02-VERIFICATION.md + transitive 07.2; "conjuros" sub-clause retired by Phase 07.2 product pivot) |
 | FLOW-03 | Phase 4 | Complete |
 | CHAR-01 | Phase 3 | Complete |
 | CHAR-02 | Phase 3 | Complete |
@@ -141,9 +141,9 @@
 | MAGI-03 | Phase 7 → — | Descoped v1 → v2 (superseded by Phase 07.2) |
 | MAGI-04 | Phase 7 → — | Descoped v1 → v2 (superseded by Phase 07.2) |
 | VALI-01 | Phase 7 | Complete (non-magic; shell aggregate `validationStatus` orphan tracked in Phase 10) |
-| VALI-02 | Phase 7 → Phase 9 | Pending (non-magic satisfied; explicit audit pass required) |
+| VALI-02 | Phase 6 + Phase 07.2 → Phase 9 | Complete (non-magic satisfied via Phase 6 FeatBoard/skill/class surfaces; magic portion descoped by 07.2; reclassified 2026-04-18 via Phase 9 explicit audit pass) |
 | VALI-03 | Phase 7 | Complete |
-| VALI-04 | Phase 1 → Phase 9 | Pending (verification closure) |
+| VALI-04 | Phase 1 → Phase 9 | Complete (verified 2026-04-18 via 01-VERIFICATION.md) |
 | SHAR-01 | Phase 8 | Complete |
 | SHAR-02 | Phase 8 → Phase 10 | Complete (loadSlot diffRuleset gate added in Phase 10) |
 | SHAR-03 | Phase 8 | Complete |
@@ -158,4 +158,4 @@
 
 ---
 *Requirements defined: 2026-03-29*
-*Last updated: 2026-04-18 after milestone v1.0 audit + gap closure plan (Phases 9-12)*
+*Last updated: 2026-04-18 after milestone v1.0 audit + Phase 9 verification-traceability closure (pending Phases 10-12 integration/UAT/tech-debt closures)*
