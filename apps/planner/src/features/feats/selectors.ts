@@ -31,20 +31,6 @@ import type { FeatLevelRecord, FeatStoreState } from './store';
 // Constants
 // ---------------------------------------------------------------------------
 
-const FEAT_CATEGORY_LABELS: Record<string, string> = {
-  '0': 'General',
-  '2': 'Combate',
-  '3': 'Arcana',
-  '7': 'Arma',
-  '8': 'Armadura',
-  '10': 'Escudo',
-  '12': 'Habilidad',
-  '15': 'Divina',
-  '17': 'Epica',
-  '22': 'Clase',
-  'general': 'General',
-};
-
 const STATUS_ORDER: Record<FeatEvaluationStatus, number> = {
   illegal: 0,
   blocked: 1,
@@ -58,7 +44,6 @@ const STATUS_ORDER: Record<FeatEvaluationStatus, number> = {
 
 export interface FeatOptionView {
   category: string;
-  categoryLabel: string;
   description: string;
   featId: string;
   label: string;
@@ -350,7 +335,6 @@ export function selectFeatBoardView(
     selectedId: string | null,
   ): FeatOptionView => ({
     category: feat.category,
-    categoryLabel: FEAT_CATEGORY_LABELS[feat.category] ?? feat.category,
     description: feat.description,
     featId: feat.id,
     label: feat.label,
