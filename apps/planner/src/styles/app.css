@@ -1937,3 +1937,67 @@ a {
   letter-spacing: 0;
   text-transform: none;
 }
+
+/* ── Phase 12.4-06 — Class picker grouping (SPEC R1) ───────── */
+/* Scoped namespace .class-picker__*. Plan 12.4-06 owns the full
+   .class-picker__list definition. */
+.class-picker {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+.class-picker__section-heading {
+  border-bottom: 1px solid var(--color-gold);
+  color: var(--color-text);
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  line-height: 1.2;
+  margin: 0 0 var(--space-sm) 0;
+  padding-bottom: var(--space-xs);
+  text-transform: uppercase;
+}
+.class-picker__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+}
+.class-picker__row {
+  align-items: flex-start;
+  background: transparent;
+  border: 1px solid var(--color-panel-edge);
+  color: var(--color-text);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-sm) var(--space-md);
+  text-align: left;
+  width: 100%;
+}
+.class-picker__row--blocked {
+  border-color: var(--color-blocked);
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+.class-picker__row--active {
+  background: var(--color-selection);
+  border-color: var(--color-selection-border);
+}
+.class-picker__reason {
+  color: var(--color-text-muted);
+  font-size: 14px;
+  font-style: italic;
+  margin-top: var(--space-xs);
+  /* Defeat cascade per UI-SPEC.md contrast mitigation — reason copy must
+     stay legible when the row itself is 0.55 opacity. */
+  opacity: 1;
+}
+.class-picker__row:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
