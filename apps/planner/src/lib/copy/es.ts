@@ -205,6 +205,11 @@ export const shellCopyEs = {
     statsPenaltiesHeading: 'Penalizaciones y bloqueos',
     statsTotalsHeading: 'Totales',
     trainedOnlyLabel: 'Solo entrenada',
+    // Phase 12.4-05 — R4 Habilidades class/transclase section split (SPEC R4, CONTEXT D-09).
+    sectionClassHeading: 'Habilidades de clase',
+    sectionClassCostHint: '· coste 1 pt/rango',
+    sectionCrossClassHeading: 'Habilidades transclase',
+    sectionCrossClassCostHint: '· coste 2 pts/rango',
     planStates: {
       empty: 'Sin reparto de habilidades',
       inProgress: 'Habilidades en curso',

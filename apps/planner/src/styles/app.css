@@ -1914,3 +1914,26 @@ a {
   max-width: 40rem;
   margin: 2rem auto;
 }
+
+/* Phase 12.4-05 — R4 Habilidades class/transclase split + cost hint (SPEC R4, CONTEXT D-09).
+ * Mirrors `.feat-board__section-heading` idiom (app.css L1590-1603). Scoped namespace
+ * `.skill-board__*` keeps append-only discipline for Wave 2 parallel merges. */
+.skill-board__section-heading {
+  border-bottom: 1px solid var(--color-gold);
+  color: var(--color-text);
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  line-height: 1.2;
+  margin-bottom: var(--space-sm);
+  padding-bottom: var(--space-xs);
+  text-transform: uppercase;
+}
+.skill-board__cost-hint {
+  color: var(--color-text-muted);
+  font-size: 12px; /* R4 acceptance: cost hint renders at >= 12px */
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+}
