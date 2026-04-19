@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: "Phase 12.3-01 shipped — attributes `+` button now blocked fail-closed at overspend OR ceiling via new `nextIncrementCost` + `canIncrementAttribute` pure helpers (`@rules-engine/foundation/ability-budget`). 18 regression assertions lock the full point-buy cost curve + the UAT B1 repro (14/14/14/12/12/12 @ 0 remaining). 2 atomic commits (5a39544 RED + 45fe596 GREEN). Full vitest 482/482 green."
-last_updated: "2026-04-18T23:56:00Z"
+stopped_at: "Phase 12.3-02 shipped — multiclass L2+ picker repaired. LevelRail.onClick now dispatches BOTH setActiveLevel (progression store) AND setExpandedLevel (shell store) atomically, so clicking level N activates level N's picker (header reads NIVEL N, class pick persists to levels[N-1], sub-step ✓ per-level). Closes UAT B2 (CRITICAL) + B8 + B9 via one 5-line edit to apps/planner/src/components/shell/level-rail.tsx (selectors + title already read progressionState.activeLevel). 2 atomic commits (541b4ef RED + cfc52a9 GREEN). Full vitest 490/490 green."
+last_updated: "2026-04-19T00:20:00Z"
 last_activity: 2026-04-18
 progress:
   total_phases: 12
@@ -26,9 +26,9 @@ See: .planning/PROJECT.md (updated 2026-03-30)
 ## Current Position
 
 Phase: 12.3 (uat-correctness-closure) — IN PROGRESS
-Plan: 1 of 6 complete (Wave 1: 12.3-01 shipped; 12.3-04 + 12.3-05 + 12.3-06 running in parallel)
-Status: 12.3-01 shipped — attributes overspend gate (UAT B1). `nextIncrementCost` + `canIncrementAttribute` pure helpers exported from `@rules-engine/foundation/ability-budget`; `AttributesBoard` `+` button `disabled` prop now reads `!canIncrementAttribute(baseValue, remainingPoints, costByScore, maximum)`. 18 regression assertions lock the cost curve (8→9=1, 14→15=2, 16→17=3, 18→null) + UAT B1 repro (30-pt build drained to 0 remaining cannot be pushed further). 2 atomic commits (5a39544 RED + 45fe596 GREEN). Full vitest 482/482 green. `Puntos restantes: -2` path closed fail-closed.
-Last activity: 2026-04-18
+Plan: 2 of 6 complete (Wave 1: 12.3-01/-04/-05/-06 shipped; Wave 2: 12.3-02 shipped; Wave 3: 12.3-03 pending)
+Status: 12.3-02 shipped — multiclass L2+ picker repaired. `LevelRail.onClick` now dispatches BOTH `setActiveLevel` (progression store) AND `setExpandedLevel` (shell store) atomically; selectors and header title already read `progressionState.activeLevel`, so the one-edit fix closes UAT B2 (CRITICAL) + B8 + B9 in lockstep. Board header now reads `Selecciona la clase del nivel N` for the clicked level, class picks persist to `levels[N-1].classId` (no L1 overwrite), and the Clase sub-step ✓ reflects per-level status via the existing selector chain. 8-assertion regression spec (`tests/phase-12.3/multiclass-active-level.spec.tsx`) locks rail dispatch, per-level persistence, title binding, and selector follow-through. 2 atomic commits (541b4ef RED + cfc52a9 GREEN). Full vitest 490/490 green.
+Last activity: 2026-04-19
 
 Progress: [██████████] 100%
 
@@ -135,6 +135,7 @@ Recent decisions affecting current work:
 - [Phase 12.2-03]: BASE_CLASS_ALLOWLIST (11 classic NWN base classes) is the fail-closed escape hatch for isBase=true compiled rows whose real prereqs (BAB/class-level/feat/spellcasting) the extractor does not yet surface — non-allowlisted base classes emit DEFERRED_LABEL_UNVETTED_BASE. Long-term fix is extractor enrichment (PreReqTable decoding or reachableAtLevelOne:boolean); allowlist shrinks to empty in lockstep.
 - [Phase 12.2-03]: 0x00 AlignRestrict (with or without InvertRestrict) decodes to undefined (no gate), not "all 9 alignments" — matches NWN 2DA empty-mask convention and lets evaluateClassEntry skip the alignment row entirely when no restriction applies.
 - [Phase 12.3-01]: UAT B1 overspend gate lands at the UI layer — `canIncrementAttribute` is consumed by the `+` button `disabled` prop; the store's `setBaseAttribute` is not hardened. Mirrors existing `-` button gate semantics and keeps the store framework-agnostic. `calculateAbilityBudgetSnapshot` stays shape-stable (post-hoc validation copy); the new helpers are forward-looking per-click guards exported alongside it from `@rules-engine/foundation/ability-budget`.
+- [Phase 12.3-02]: Multiclass active-level repair lives entirely in the UI dispatch site — `LevelRail.onClick` fires `setActiveLevel` + `setExpandedLevel` atomically. No store/selector/selector-chain changes: `selectActiveLevelSheet` already reads `progressionState.activeLevel`; the board title already concatenates `${copy} ${activeSheet.level}`; the Clase sub-step already evaluates per-level. The single missing wire was the rail's onClick dispatch. Copy string `'Selecciona la clase del nivel'` (no hardcoded number) was already correct. Minimal-surface repair that closes B2 CRITICAL + B8 + B9 in one edit.
 
 ### Pending Todos
 
@@ -165,6 +166,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-18T23:56:00Z
-Stopped at: Shipped Phase 12.3-01 (UAT B1 overspend gate). Added two pure rules-engine helpers — `nextIncrementCost` + `canIncrementAttribute` — and rewired the `AttributesBoard` `+` button's `disabled` prop. 18/18 new regression assertions green; full vitest 482/482 green. 2 atomic commits (5a39544 RED + 45fe596 GREEN). Parallel Wave 1 plans 12.3-04 (HP), 12.3-05 (stepper), 12.3-06 (CSS) already landed commits on master. Remaining: Wave 2 (12.3-02 multiclass L2+, 12.3-03 Dotes gate).
+Last session: 2026-04-19T00:20:00Z
+Stopped at: Shipped Phase 12.3-02 (UAT B2 CRITICAL + B8 + B9 — multiclass L2+ picker). Wired `setActiveLevel` alongside `setExpandedLevel` in `LevelRail.onClick` (+5/-1 in `apps/planner/src/components/shell/level-rail.tsx`); selectors + header title already read `progressionState.activeLevel`, so the one-line dispatch fix closes three user-visible blockers at once. 8-assertion regression spec (`tests/phase-12.3/multiclass-active-level.spec.tsx`) locks rail dispatch (Suite A, was RED), per-level class persistence (Suite B), title binding to live activeLevel (Suite C), and selector follow-through (Suite D). 2 atomic commits (541b4ef RED + cfc52a9 GREEN). Full vitest 490/490 green (up from 482 with +8 new assertions). Remaining: Wave 3 (12.3-03 Dotes gate).
 Resume file: None
