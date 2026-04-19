@@ -142,9 +142,11 @@ describe('Phase 12.4-07 — Dotes selectability states (SPEC R5)', () => {
     it('B1: selectable row has aria-disabled="false" and no blocked class', () => {
       setupL1Guerrero();
       render(createElement(FeatBoard));
-      // feat:alertness has no prereqs, allClassesCanUse=true — must be selectable for L1 Guerrero.
+      // feat:carrera is in Guerrero's class-bonus pool (list=1, no prereqs).
+      // At L1 Guerrero sequentialStep='class-bonus' so the class-bonus section
+      // renders — feat:carrera must show up as selectable.
       const row = document.querySelector<HTMLElement>(
-        '[data-feat-id="feat:alertness"]',
+        '[data-feat-id="feat:carrera"]',
       );
       expect(row).not.toBeNull();
       expect(row!.getAttribute('aria-disabled')).toBe('false');
@@ -193,10 +195,10 @@ describe('Phase 12.4-07 — Dotes selectability states (SPEC R5)', () => {
 
     it('B4: blocked-already-taken pill reads "Tomada en N1" for feat chosen at L1 when editing L2', () => {
       setupL1Guerrero();
-      // Take feat:alertness as the L1 general feat.
+      // Take feat:carrera as the L1 class-bonus feat (list=1 for Guerrero).
       useFeatStore
         .getState()
-        .setGeneralFeat(1 as ProgressionLevel, 'feat:alertness' as CanonicalId);
+        .setClassFeat(1 as ProgressionLevel, 'feat:carrera' as CanonicalId);
       useLevelProgressionStore
         .getState()
         .setLevelClassId(2 as ProgressionLevel, 'class:fighter' as CanonicalId);
@@ -205,8 +207,11 @@ describe('Phase 12.4-07 — Dotes selectability states (SPEC R5)', () => {
         .setActiveLevel(2 as ProgressionLevel);
       useFeatStore.getState().setActiveLevel(2 as ProgressionLevel);
       render(createElement(FeatBoard));
+      // At L2 Guerrero classBonus slot is available; feat:carrera appears in
+      // the class-bonus section but MUST be `blocked-already-taken` because
+      // it was chosen at L1.
       const row = document.querySelector<HTMLElement>(
-        '[data-feat-id="feat:alertness"]',
+        '[data-feat-id="feat:carrera"]',
       );
       expect(row).not.toBeNull();
       expect(row!.classList.contains('feat-picker__row--blocked')).toBe(true);
@@ -236,9 +241,11 @@ describe('Phase 12.4-07 — Dotes selectability states (SPEC R5)', () => {
   describe('Suite C — Collapse-on-complete + Modificar selección', () => {
     function fillBothL1GuerreroSlots(): void {
       // L1 non-Humano Guerrero has exactly 2 store slots: class-bonus + general.
+      // `feat:carrera` = Guerrero class-bonus pool (list=1, no prereqs).
+      // `feat:alertness` = general pool (allClassesCanUse=true, no prereqs).
       useFeatStore
         .getState()
-        .setClassFeat(1 as ProgressionLevel, 'feat:derribo' as CanonicalId);
+        .setClassFeat(1 as ProgressionLevel, 'feat:carrera' as CanonicalId);
       useFeatStore
         .getState()
         .setGeneralFeat(1 as ProgressionLevel, 'feat:alertness' as CanonicalId);
@@ -261,7 +268,7 @@ describe('Phase 12.4-07 — Dotes selectability states (SPEC R5)', () => {
       expect(modifyBtn).toBeInTheDocument();
       // Summary card lists both chosen feat labels.
       const summaryText = summaryCard!.textContent ?? '';
-      expect(summaryText).toMatch(/Derribo/);
+      expect(summaryText).toMatch(/Carrera/);
       expect(summaryText).toMatch(/Alerta/);
     });
 
@@ -278,14 +285,15 @@ describe('Phase 12.4-07 — Dotes selectability states (SPEC R5)', () => {
       expect(chosenRow).not.toBeNull();
     });
 
-    it('C3: in the re-expanded list, chosen feat row still carries data-feat-id matching store state', () => {
+    it('C3: in the re-expanded list, chosen feat rows carry data-feat-id matching store state', () => {
       setupL1Guerrero();
       fillBothL1GuerreroSlots();
       render(createElement(FeatBoard));
       fireEvent.click(
         screen.getByRole('button', { name: /Modificar selección/ }),
       );
-      // feat:derribo (class-bonus) or feat:alertness (general) should be present as a chosen row.
+      // feat:carrera (class-bonus) + feat:alertness (general) — both chosen rows
+      // must render in the re-expanded list.
       const chosenRows = document.querySelectorAll<HTMLElement>(
         '.feat-picker__row--chosen',
       );
@@ -293,7 +301,7 @@ describe('Phase 12.4-07 — Dotes selectability states (SPEC R5)', () => {
         r.getAttribute('data-feat-id'),
       );
       expect(ids).toEqual(
-        expect.arrayContaining(['feat:derribo', 'feat:alertness']),
+        expect.arrayContaining(['feat:carrera', 'feat:alertness']),
       );
     });
   });

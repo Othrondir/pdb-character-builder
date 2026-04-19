@@ -2001,3 +2001,106 @@ a {
   outline: 2px solid var(--color-gold);
   outline-offset: 2px;
 }
+
+/* ── Phase 12.4-07 — Dotes selectability + collapse (SPEC R5) ────── */
+/* Scoped namespace `.feat-picker__*`. Append-only; existing
+ * `.feat-picker__list { overflow-y: auto; }` (plan 12.4-02) is NOT
+ * redefined here — the list-column scroll contract stays owned by that
+ * plan. This block adds row selectability states, the panel-header
+ * counter, the cascade-defeat rule for reason + pill legibility, and
+ * the summary-card visuals.
+ */
+.feat-picker__header {
+  align-items: baseline;
+  display: flex;
+  font-variant-numeric: lining-nums tabular-nums;
+  justify-content: space-between;
+  margin-bottom: var(--space-sm);
+}
+.feat-picker__counter {
+  border-bottom: 1px solid var(--color-gold);
+  color: var(--color-text);
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+  font-variant-numeric: lining-nums tabular-nums;
+  letter-spacing: 0.10em;
+  line-height: 1.2;
+  margin: 0;
+  padding-bottom: var(--space-xs);
+  text-transform: uppercase;
+  width: 100%;
+}
+.feat-picker__row {
+  align-items: flex-start;
+  background: transparent;
+  border: 1px solid var(--color-panel-edge);
+  color: var(--color-text);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-sm) var(--space-md);
+  text-align: left;
+  width: 100%;
+}
+.feat-picker__row--blocked {
+  border-color: var(--color-blocked);
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+.feat-picker__row--chosen {
+  background: var(--color-selection);
+  border: 1px solid var(--color-selection-border);
+}
+.feat-picker__row--focused {
+  /* Subtle active marker when the row is the detail-panel focus target. */
+  background: var(--color-selection);
+}
+.feat-picker__label {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 400;
+}
+.feat-picker__reason {
+  color: var(--color-text-muted);
+  font-size: 12px;
+  font-style: italic;
+  margin-top: var(--space-xs);
+}
+.feat-picker__pill {
+  align-self: flex-end;
+  border: 1px solid var(--color-blocked);
+  color: var(--color-text-muted);
+  font-size: 12px;
+  letter-spacing: 0.10em;
+  padding: 2px 8px;
+  text-transform: uppercase;
+}
+/* Cascade-defeat per UI-SPEC.md contrast mitigation — reason + pill
+ * must stay legible when the row itself is at 0.55 opacity. RTL spec
+ * Phase 12.4-07 D2 locks this contract. */
+.feat-picker__row--blocked .feat-picker__reason,
+.feat-picker__row--blocked .feat-picker__pill {
+  opacity: 1;
+}
+.feat-picker__row:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+.feat-summary-card {
+  padding: var(--space-lg);
+}
+.feat-summary-card__list {
+  list-style: none;
+  margin: 0 0 var(--space-md) 0;
+  padding: 0;
+}
+.feat-summary-card__item {
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  padding: var(--space-xs) 0;
+}
+.feat-summary-card__modify {
+  align-self: flex-end;
+}

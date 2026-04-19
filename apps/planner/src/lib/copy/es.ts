@@ -267,6 +267,30 @@ export const shellCopyEs = {
     autoGrantedLabel: 'Automatica',
     slotPromptClassAvailable: 'Dote de clase disponible.',
     slotPromptGeneralAvailable: 'Dote general disponible.',
+    // Phase 12.4-07 — Dotes selectability states + slot counter + collapse
+    // (SPEC R5 / CONTEXT D-03 + D-04). Template copy is rendered directly by
+    // the feat-board selector; pill / reason labels emitted per row state.
+    slotCounterTemplate: 'Dotes del nivel {N}: {chosen}/{slots}',
+    blockedPills: {
+      prereq: 'Bloqueada',
+      alreadyTakenTemplate: 'Tomada en N{level}',
+      budget: 'Sin slots',
+    },
+    blockedReasons: {
+      prereqFeatTemplate: 'Requiere dote: {featName}',
+      prereqAbilityTemplate: 'Requiere {abilityLabel} {N}',
+      prereqBabTemplate: 'Requiere BAB ≥ {N}',
+      prereqSkillRankSingularTemplate: 'Requiere 1 rango de {skillName}',
+      prereqSkillRankPluralTemplate: 'Requiere {N} rangos de {skillName}',
+      prereqClassLevelSingularTemplate: 'Requiere 1 nivel de {className}',
+      prereqClassLevelPluralTemplate: 'Requiere {N} niveles de {className}',
+      prereqFortSaveTemplate: 'Requiere Fortaleza ≥ {N}',
+      prereqCharacterLevelTemplate: 'Requiere nivel de personaje ≥ {N}',
+      prereqOrFeatsTemplate: 'Requiere una de: {featNames}',
+      prereqGeneric: 'Requisitos no cumplidos',
+      budgetExhausted: 'Sin slots disponibles en este nivel',
+    },
+    modifySelectionLabel: 'Modificar selección',
   },
   stepper: {
     heading: 'Creacion de personajes',

@@ -6,18 +6,22 @@ import {
 import {
   evaluateFeatPrerequisites,
   type BuildStateAtLevel,
+  type PrerequisiteCheck,
 } from '@rules-engine/feats/feat-prerequisite';
-import {
-  determineFeatSlots,
-  getEligibleFeats,
-} from '@rules-engine/feats/feat-eligibility';
+import { determineFeatSlots } from '@rules-engine/feats/feat-eligibility';
 import {
   revalidateFeatSnapshotAfterChange,
   type FeatEvaluationStatus,
   type FeatLevelInput,
 } from '@rules-engine/feats/feat-revalidation';
 import { getClassLabel } from '@rules-engine/feats/get-class-label';
+import {
+  computePerLevelBudget,
+  type BuildSnapshot,
+  type PerLevelBudget,
+} from '@rules-engine/progression/per-level-budget';
 import { isSentinelLabel } from '@data-extractor/lib/sentinel-regex';
+import type { CompiledFeat } from '@data-extractor/contracts/feat-catalog';
 
 import { shellCopyEs } from '@planner/lib/copy/es';
 import type { CharacterFoundationStoreState } from '@planner/features/character-foundation/store';
@@ -26,7 +30,7 @@ import type { LevelProgressionStoreState } from '@planner/features/level-progres
 import type { SkillStoreState } from '@planner/features/skills/store';
 
 import { compiledFeatCatalog, compiledClassCatalog } from './compiled-feat-catalog';
-import type { FeatLevelRecord, FeatStoreState } from './store';
+import type { FeatStoreState } from './store';
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -43,6 +47,25 @@ const STATUS_ORDER: Record<FeatEvaluationStatus, number> = {
 // View model interfaces
 // ---------------------------------------------------------------------------
 
+/**
+ * Phase 12.4-07 (SPEC R5, CONTEXT D-03) — four mutually-exclusive row states
+ * the feat-board selector resolves for every feat row. Priority (first match):
+ *   already-taken > prereq > budget > selectable.
+ */
+export type FeatRowState =
+  | 'selectable'
+  | 'blocked-prereq'
+  | 'blocked-already-taken'
+  | 'blocked-budget';
+
+export interface FeatBlockedReason {
+  kind: 'prereq' | 'already-taken' | 'budget';
+  /** Short pill badge copy — 'Bloqueada' | 'Tomada en N{level}' | 'Sin slots'. */
+  pillLabel: string;
+  /** Italic inline reason rendered beneath the label. Optional for `already-taken`. */
+  reasonLabel?: string;
+}
+
 export interface FeatOptionView {
   category: string;
   description: string;
@@ -51,6 +74,24 @@ export interface FeatOptionView {
   /** D-04: inline prereq text e.g. "[Fue 13, Poder]" */
   prereqSummary: string;
   selected: boolean;
+  /** Phase 12.4-07 (SPEC R5 / D-03) — resolved per-row selectability state. */
+  rowState: FeatRowState;
+  /** Phase 12.4-07 — non-null when `rowState !== 'selectable'`. */
+  blockedReason: FeatBlockedReason | null;
+  /** Phase 12.4-07 (D-04) — true when this feat is already chosen at the active level. */
+  isChosenAtLevel: boolean;
+}
+
+export interface FeatBoardCounters {
+  /** Count of feats chosen at the active level (class + general + race bonuses). */
+  chosen: number;
+  /** Total feat slots available at the active level (per `computePerLevelBudget`). */
+  slots: number;
+}
+
+export interface FeatSummaryChosenEntry {
+  featId: string;
+  label: string;
 }
 
 export interface ActiveFeatSheetView {
@@ -79,6 +120,12 @@ export interface FeatBoardView {
   emptyStateBody: string | null;
   /** D-03: which step is active in the sequential flow */
   sequentialStep: 'class-bonus' | 'general' | null;
+  /** Phase 12.4-07 (SPEC R5 / D-04) — per-level feat-slot counters. */
+  counters: FeatBoardCounters;
+  /** Phase 12.4-07 (D-04) — chosen feats at the active level, for the summary card. */
+  chosenFeats: FeatSummaryChosenEntry[];
+  /** Phase 12.4-07 — counter copy `Dotes del nivel N: {chosen}/{slots}`. */
+  counterLabel: string;
 }
 
 export interface FeatSheetTabRowView {
@@ -251,6 +298,248 @@ function buildPrereqSummary(
 }
 
 // ---------------------------------------------------------------------------
+// Phase 12.4-07 helpers (SPEC R5 / CONTEXT D-03 + D-04)
+// ---------------------------------------------------------------------------
+
+/**
+ * Format the first failing prerequisite check into a Spanish inline reason
+ * string. Copy templates live in `shellCopyEs.feats.blockedReasons`. Falls
+ * back to a generic label if the check shape is not recognised (keeps the
+ * UI legible even if rules-engine adds a new check type later).
+ */
+function formatBlockedReason(check: PrerequisiteCheck): string {
+  const tpl = shellCopyEs.feats.blockedReasons;
+
+  if (check.type === 'ability') {
+    // `check.label` is already the Spanish ability label (e.g. "Destreza").
+    return tpl.prereqAbilityTemplate
+      .replace('{abilityLabel}', check.label)
+      .replace('{N}', check.required);
+  }
+
+  if (check.type === 'bab') {
+    // `check.required` is of shape "+N" — strip the "+".
+    const n = check.required.replace(/^\+/, '');
+    return tpl.prereqBabTemplate.replace('{N}', n);
+  }
+
+  if (check.type === 'feat') {
+    return tpl.prereqFeatTemplate.replace('{featName}', check.label);
+  }
+
+  if (check.type === 'or-feats') {
+    return tpl.prereqOrFeatsTemplate.replace('{featNames}', check.label);
+  }
+
+  if (check.type === 'skill') {
+    // `check.required` is of shape "N rangos"; extract the integer.
+    const match = check.required.match(/\d+/);
+    const n = match ? parseInt(match[0], 10) : 0;
+    const template =
+      n === 1
+        ? tpl.prereqSkillRankSingularTemplate
+        : tpl.prereqSkillRankPluralTemplate;
+    return template.replace('{N}', String(n)).replace(
+      '{skillName}',
+      check.label,
+    );
+  }
+
+  if (check.type === 'class-level') {
+    // `check.label` is "Nivel de {className}"; `check.required` is the integer.
+    const n = parseInt(check.required, 10) || 0;
+    const className = check.label.replace(/^Nivel de\s+/, '');
+    const template =
+      n === 1
+        ? tpl.prereqClassLevelSingularTemplate
+        : tpl.prereqClassLevelPluralTemplate;
+    return template.replace('{N}', String(n)).replace(
+      '{className}',
+      className,
+    );
+  }
+
+  if (check.type === 'fort-save') {
+    const n = check.required.replace(/^\+/, '');
+    return tpl.prereqFortSaveTemplate.replace('{N}', n);
+  }
+
+  if (check.type === 'level') {
+    return tpl.prereqCharacterLevelTemplate.replace('{N}', check.required);
+  }
+
+  return tpl.prereqGeneric;
+}
+
+/**
+ * Scan the feat store for the earliest level at which `featId` was already
+ * chosen (class-bonus or general slot). Returns the level number or `null`.
+ * Excludes `activeLevel` itself so the user can see their own current pick
+ * as `selectable` rather than `blocked-already-taken`.
+ */
+function findAlreadyTakenAtLevel(
+  featState: FeatStoreState,
+  featId: string,
+  activeLevel: ProgressionLevel,
+): number | null {
+  for (const record of featState.levels) {
+    if (record.level === activeLevel) continue;
+    if (record.classFeatId === featId || record.generalFeatId === featId) {
+      return record.level;
+    }
+  }
+  return null;
+}
+
+/**
+ * Build a `BuildSnapshot` adapter that pipes the planner's zustand stores
+ * into the pure `computePerLevelBudget` selector. Closes over the store
+ * states; no side effects.
+ */
+function buildSnapshotForBudget(
+  foundationState: CharacterFoundationStoreState,
+  progressionState: LevelProgressionStoreState,
+  skillState: SkillStoreState,
+  featState: FeatStoreState,
+): BuildSnapshot {
+  const classByLevel: Record<number, string | null> = {};
+  for (const rec of progressionState.levels) {
+    classByLevel[rec.level] = rec.classId;
+  }
+
+  const intAbilityIncreasesBeforeLevel = (level: number): number => {
+    let count = 0;
+    for (const rec of progressionState.levels) {
+      if (rec.level < level && rec.abilityIncrease === 'int') count += 1;
+    }
+    return count;
+  };
+
+  const chosenFeatIdsAtLevel = (level: number): string[] => {
+    const rec = featState.levels.find((r) => r.level === level);
+    if (!rec) return [];
+    const out: string[] = [];
+    if (rec.classFeatId) out.push(rec.classFeatId);
+    if (rec.generalFeatId) out.push(rec.generalFeatId);
+    return out;
+  };
+
+  const spentSkillPointsAtLevel = (level: number): number => {
+    const rec = skillState.levels.find((r) => r.level === level);
+    if (!rec) return 0;
+    return rec.allocations.reduce((sum, a) => sum + a.rank, 0);
+  };
+
+  return {
+    raceId: foundationState.raceId,
+    classByLevel,
+    abilityScores: {
+      int:
+        foundationState.baseAttributes.int +
+        (foundationState.racialModifiers?.int ?? 0),
+    },
+    intAbilityIncreasesBeforeLevel,
+    chosenFeatIdsAtLevel,
+    spentSkillPointsAtLevel,
+  };
+}
+
+/**
+ * Resolve the per-row state + blocked reason for a single feat at the
+ * active level. Priority (first-match):
+ *   already-taken > prereq > budget > selectable.
+ */
+function resolveFeatRowState(params: {
+  feat: CompiledFeat;
+  buildState: BuildStateAtLevel;
+  featState: FeatStoreState;
+  activeLevel: ProgressionLevel;
+  isChosenAtLevel: boolean;
+  budget: PerLevelBudget;
+}): { rowState: FeatRowState; blockedReason: FeatBlockedReason | null } {
+  const { feat, buildState, featState, activeLevel, isChosenAtLevel, budget } =
+    params;
+
+  // 1) already-taken at a DIFFERENT level (never block the user's own pick
+  //    at the active level — that row stays selectable so they can toggle).
+  const takenAtLevel = findAlreadyTakenAtLevel(
+    featState,
+    feat.id,
+    activeLevel,
+  );
+  if (takenAtLevel !== null) {
+    return {
+      rowState: 'blocked-already-taken',
+      blockedReason: {
+        kind: 'already-taken',
+        pillLabel: shellCopyEs.feats.blockedPills.alreadyTakenTemplate.replace(
+          '{level}',
+          String(takenAtLevel),
+        ),
+      },
+    };
+  }
+
+  // 2) prereq — evaluate against the build-state snapshot AT the active level
+  //    (so an ability bump or earlier feat selection lets later feats unlock).
+  const prereqResult = evaluateFeatPrerequisites(
+    feat,
+    buildState,
+    compiledFeatCatalog,
+    compiledClassCatalog,
+  );
+  if (!prereqResult.met) {
+    const firstFailing = prereqResult.checks.find((c) => !c.met);
+    const reasonLabel = firstFailing
+      ? formatBlockedReason(firstFailing)
+      : shellCopyEs.feats.blockedReasons.prereqGeneric;
+    return {
+      rowState: 'blocked-prereq',
+      blockedReason: {
+        kind: 'prereq',
+        pillLabel: shellCopyEs.feats.blockedPills.prereq,
+        reasonLabel,
+      },
+    };
+  }
+
+  // 3) budget — all slots used up at the active level AND this feat is not
+  //    the user's current pick (i.e. they can still toggle their own choice
+  //    off; toggling others is blocked).
+  if (
+    budget.featSlots.total > 0 &&
+    budget.featSlots.chosen >= budget.featSlots.total &&
+    !isChosenAtLevel
+  ) {
+    return {
+      rowState: 'blocked-budget',
+      blockedReason: {
+        kind: 'budget',
+        pillLabel: shellCopyEs.feats.blockedPills.budget,
+        reasonLabel: shellCopyEs.feats.blockedReasons.budgetExhausted,
+      },
+    };
+  }
+
+  return { rowState: 'selectable', blockedReason: null };
+}
+
+/**
+ * Format the panel header counter — `Dotes del nivel {N}: {chosen}/{slots}`.
+ * Kept as a named helper so tests can grep the template without ambiguity.
+ */
+function formatCounterLabel(
+  level: number,
+  chosen: number,
+  slots: number,
+): string {
+  return shellCopyEs.feats.slotCounterTemplate
+    .replace('{N}', String(level))
+    .replace('{chosen}', String(chosen))
+    .replace('{slots}', String(slots));
+}
+
+// ---------------------------------------------------------------------------
 // Helper: compute class level in class
 // ---------------------------------------------------------------------------
 
@@ -332,6 +621,9 @@ export function selectFeatBoardView(
       activeSheet: emptySheet,
       emptyStateBody: shellCopyEs.feats.emptyStateBodyPerLevel,
       sequentialStep: null,
+      counters: { chosen: 0, slots: 0 },
+      chosenFeats: [],
+      counterLabel: formatCounterLabel(activeLevel, 0, 0),
     };
   }
   const classLevelInClass = getClassLevelInClass(
@@ -354,25 +646,45 @@ export function selectFeatBoardView(
     classLevelInClass,
     compiledFeatCatalog.classFeatLists,
   );
-  const eligible = getEligibleFeats(
-    buildState,
-    classId,
-    classLevelInClass,
-    compiledFeatCatalog,
-    compiledClassCatalog,
+
+  // Phase 12.4-07 — per-level budget supplies authoritative slot counter
+  // (general + classBonus + raceBonus). See computePerLevelBudget (12.4-03).
+  const buildSnapshot = buildSnapshotForBudget(
+    foundationState,
+    progressionState,
+    skillState,
+    featState,
+  );
+  const budget: PerLevelBudget = computePerLevelBudget(
+    buildSnapshot,
+    activeLevel,
+    {
+      classes: compiledClassCatalog.classes.map((c) => ({
+        id: c.id,
+        skillPointsPerLevel: c.skillPointsPerLevel,
+      })),
+    },
+    { classFeatLists: compiledFeatCatalog.classFeatLists },
+    { races: [] },
   );
 
-  const mapToOptionView = (
-    feat: { id: string; label: string; description: string; category: string },
-    selectedId: string | null,
-  ): FeatOptionView => ({
-    category: feat.category,
-    description: feat.description,
-    featId: feat.id,
-    label: feat.label,
-    prereqSummary: buildPrereqSummary(feat.id, buildState),
-    selected: feat.id === selectedId,
-  });
+  // Bucket membership: whether a feat belongs to the class-bonus pool or
+  // the general pool for the active class. Used for section-assignment
+  // below.  Feats can belong to both (e.g. Esquiva — allClassesCanUse
+  // AND listed as class-bonus for Guerrero); they get rendered in both
+  // sections but the row state + chosen flag are shared.
+  const classBonusFeatIds = new Set<string>();
+  const generalListZeroFeatIds = new Set<string>();
+  if (compiledFeatCatalog.classFeatLists[classId]) {
+    for (const entry of compiledFeatCatalog.classFeatLists[classId]) {
+      if (entry.list === 1 || entry.list === 2) {
+        classBonusFeatIds.add(entry.featId);
+      }
+      if (entry.list === 0) {
+        generalListZeroFeatIds.add(entry.featId);
+      }
+    }
+  }
 
   const selectedClassFeatId = activeFeatRecord?.classFeatId ?? null;
   const selectedGeneralFeatId = activeFeatRecord?.generalFeatId ?? null;
@@ -407,19 +719,53 @@ export function selectFeatBoardView(
   const activeRevalidated =
     revalidated.find((r) => r.level === activeLevel) ?? null;
 
-  // 12.4-01 (SPEC R8) belt-and-braces: even if the shipped extractor
-  // artifact contains a residual sentinel row (hand-patched or an
-  // unreached 2DA variant), drop it before view mapping so the Dotes
-  // picker never renders DELETED / UNUSED / PADDING rows.
+  // Phase 12.4-07 (SPEC R5 / D-03) — map the full feat catalog into option
+  // views preserving ALL rows (visibility lock: blocked rows remain in the
+  // DOM). Epic + sentinel rows stay filtered (belt-and-braces for 12.4-01).
+  const classBonusOptions: FeatOptionView[] = [];
+  const generalOptions: FeatOptionView[] = [];
+
+  for (const feat of compiledFeatCatalog.feats) {
+    if (feat.prerequisites.preReqEpic === true) continue;
+    if (isSentinelLabel(feat.label)) continue;
+
+    const inClassBonusPool = classBonusFeatIds.has(feat.id);
+    const inGeneralPool =
+      feat.allClassesCanUse || generalListZeroFeatIds.has(feat.id);
+    if (!inClassBonusPool && !inGeneralPool) continue;
+
+    const isChosenAtLevel =
+      selectedClassFeatId === feat.id || selectedGeneralFeatId === feat.id;
+    const { rowState, blockedReason } = resolveFeatRowState({
+      feat,
+      buildState,
+      featState,
+      activeLevel,
+      isChosenAtLevel,
+      budget,
+    });
+    const optionView: FeatOptionView = {
+      category: feat.category,
+      description: feat.description,
+      featId: feat.id,
+      label: feat.label,
+      prereqSummary: buildPrereqSummary(feat.id, buildState),
+      selected:
+        feat.id === selectedClassFeatId || feat.id === selectedGeneralFeatId,
+      rowState,
+      blockedReason,
+      isChosenAtLevel,
+    };
+
+    if (inClassBonusPool) classBonusOptions.push(optionView);
+    if (inGeneralPool) generalOptions.push(optionView);
+  }
+
   const activeSheet: ActiveFeatSheetView = {
     classId,
     classLabel: getClassLabel(classId, compiledClassCatalog),
-    eligibleClassFeats: eligible.classBonusFeats
-      .filter((f) => !isSentinelLabel(f.label))
-      .map((f) => mapToOptionView(f, selectedClassFeatId)),
-    eligibleGeneralFeats: eligible.generalFeats
-      .filter((f) => !isSentinelLabel(f.label))
-      .map((f) => mapToOptionView(f, selectedGeneralFeatId)),
+    eligibleClassFeats: classBonusOptions,
+    eligibleGeneralFeats: generalOptions,
     emptyMessage: classId
       ? shellCopyEs.feats.emptyStateBody
       : shellCopyEs.stepper.levelEmptyHint,
@@ -437,10 +783,39 @@ export function selectFeatBoardView(
     title: shellCopyEs.stepper.stepTitles.feats,
   };
 
+  // Phase 12.4-07 (D-04) — chosen feats at the active level, for the
+  // FeatSummaryCard collapse view. Dedupe in case the same feat id lands
+  // in both store slots (defensive — store should prevent this).
+  const chosenIds: string[] = [];
+  if (selectedClassFeatId) chosenIds.push(selectedClassFeatId);
+  if (selectedGeneralFeatId && !chosenIds.includes(selectedGeneralFeatId)) {
+    chosenIds.push(selectedGeneralFeatId);
+  }
+  const chosenFeats: FeatSummaryChosenEntry[] = chosenIds.map((id) => {
+    const feat = compiledFeatCatalog.feats.find((f) => f.id === id);
+    return { featId: id, label: feat?.label ?? id };
+  });
+
+  // Slot counter reads budget.featSlots (authoritative; includes raceBonus).
+  // `chosen` matches what the store actually holds (class + general at this
+  // level) so collapse-on-complete triggers correctly for non-Humano and
+  // for Humano when all store-addressable slots are filled.
+  const counters: FeatBoardCounters = {
+    chosen: chosenIds.length,
+    slots: budget.featSlots.total,
+  };
+
   return {
     activeSheet,
     emptyStateBody: null,
     sequentialStep,
+    counters,
+    chosenFeats,
+    counterLabel: formatCounterLabel(
+      activeLevel,
+      counters.chosen,
+      counters.slots,
+    ),
   };
 }
 
