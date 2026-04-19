@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: "Phase 12.4-06 complete (Wave 2 parallel / R1 class picker grouping + prestige gate). Pure reachableAtLevelN helper lands in @rules-engine/progression/prestige-gate.ts with inline ClassPrereqInput structural type (zero @data-extractor imports — framework purity grep = 0). <ClassPicker> extracted from level-sheet.tsx renders two <section> blocks (Clases básicas / Clases de prestigio) with aria-labelledby wiring, all BASE_CLASS_ALLOWLIST ids in base section, all prestige rows at L1 disabled with inline italic 'Disponible a partir del nivel 2'. CLAS-03 regression lock: ClassPickerRow aria-disabled driven by OR of option.status==='blocked' (evaluateMulticlassLegality bridge) AND !reachableAtLevelN.reachable. 17 new tests (12 fixture + 5 RTL); full suite 568/569 (1 pre-existing DEF-12.4-02 unrelated). Scoped .class-picker__* CSS namespace (this plan owns .class-picker__list)."
-last_updated: "2026-04-19T18:14:41Z"
-last_activity: 2026-04-19 -- Phase 12.4-06 complete (Wave 2 parallel / R1 class picker grouping + prestige gate)
+stopped_at: "Phase 12.4-07 complete (Wave 3 sequential / R5 Dotes selectability + slot counter + collapse-on-complete). Dotes picker now resolves four row states (selectable / blocked-prereq / blocked-already-taken / blocked-budget) with priority-ordered state resolution (already-taken > prereq > budget > selectable), preserves blocked-row visibility (no display:none; cascade-defeat CSS keeps reason + pill at opacity 1 while row stays at 0.55 per UI-SPEC.md contrast mitigation), surfaces `Dotes del nivel N: {chosen}/{slots}` panel counter with tabular-nums (budget from computePerLevelBudget per 12.4-03), and collapses to a <FeatSummaryCard> when chosen === slots with a `Modificar selección` auxiliary button that re-expands with .feat-picker__row--chosen gold outline on chosen rows. selectFeatBoardView walks the full feat catalog (not getEligibleFeats) so blocked-prereq rows stay in the DOM. OptionList-based row rendering replaced with scoped <FeatPickerRow> buttons carrying data-feat-id + aria-disabled + state-based classes + inline italic reason + right-aligned pill. Store→BuildSnapshot adapter (buildSnapshotForBudget) added at the apps/planner boundary — rules-engine framework purity preserved. 15 new tests (4 suites: counter / four states / collapse / CSS contract); full suite 605/606 (1 pre-existing DEF-12.4-02 `font-weight: 700` — out of scope). Commits 8b38a51 (RED) + fe60354 (GREEN)."
+last_updated: "2026-04-19T21:35:00Z"
+last_activity: 2026-04-19 -- Phase 12.4-07 complete (Wave 3 sequential / R5 Dotes selectability + slot counter + collapse)
 progress:
   total_phases: 20
   completed_phases: 19
   total_plans: 72
-  completed_plans: 63
-  percent: 88
+  completed_plans: 64
+  percent: 89
 ---
 
 # Project State
@@ -82,6 +82,7 @@ Progress: [██████████] 100%
 | Phase 08 P02 | 32m | 4 tasks | 18 files |
 | Phase 12.4-01 | 8m | 3 tasks | 9 files |
 | Phase 12.4-06 | 10m | 3 tasks | 7 files |
+| Phase 12.4-07 | 25m | 3 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -149,6 +150,7 @@ Recent decisions affecting current work:
 - [Phase 12.3-02]: Multiclass active-level repair lives entirely in the UI dispatch site — `LevelRail.onClick` fires `setActiveLevel` + `setExpandedLevel` atomically. No store/selector/selector-chain changes: `selectActiveLevelSheet` already reads `progressionState.activeLevel`; the board title already concatenates `${copy} ${activeSheet.level}`; the Clase sub-step already evaluates per-level. The single missing wire was the rail's onClick dispatch. Copy string `'Selecciona la clase del nivel'` (no hardcoded number) was already correct. Minimal-surface repair that closes B2 CRITICAL + B8 + B9 in one edit.
 - [Phase 12.4-01]: Shared sentinel regex lives in packages/data-extractor/src/lib/sentinel-regex.ts — SENTINEL_REGEX covers DELETED / ***DELETED*** / UNUSED / PADDING / DELETED_* / **** in one case-insensitive pattern; isSentinelLabel helper trims + null-guards + delegates. Fail-closed at producer across all 4 assemblers (feat x2, skill x1, class x1, race x1) AND belt-and-braces at consumer in apps/planner/src/features/feats/selectors.ts::selectFeatBoardView. compiled-feats.ts manually scrubbed of sourceRow 385 + 403 DELETED objects (no cross-references elsewhere in catalog, so excision is schema-safe). Future `pnpm extract` runs will reproduce the scrubbed artifact automatically via the new guards.
 - [Phase 12.4-06]: ClassPicker extracted from level-sheet.tsx into features/level-progression/class-picker.tsx; renders two <section> (Clases básicas + Clases de prestigio) with aria-labelledby wiring. reachableAtLevelN pure helper in @rules-engine/progression/prestige-gate.ts returns {reachable, blockers:[{kind, threshold, label}]}; fail-closed to 'Requisitos en revisión' for unenriched prestige; all prestige rows blocked at L1 with 'Disponible a partir del nivel 2'. Framework purity: inline ClassPrereqInput type (no @data-extractor imports; grep gate = 0). CLAS-03 regression locked via RTL spec (option.status==='blocked' from evaluateMulticlassLegality → aria-disabled='true'). Scoped CSS .class-picker__* namespace (this plan owns .class-picker__list). Cross-wave Rule-3 fix: tests/phase-12.4/feat-picker-scroll.spec.tsx A2 assertion updated from `not.toMatch` to `matches.length===1 + co-location proof` so the guard still detects 12.4-02 re-injection without false-firing on 12.4-06's legitimate rule.
+- [Phase 12.4-07]: Dotes picker exposes 4 row states (selectable/blocked-prereq/blocked-already-taken/blocked-budget) via extended FeatOptionView.rowState + blockedReason; priority-ordered (already-taken > prereq > budget > selectable). Blocked rows stay in DOM (visibility-lock contract); cascade-defeat CSS `.feat-picker__row--blocked .feat-picker__reason, .feat-picker__row--blocked .feat-picker__pill { opacity: 1 }` keeps reason + pill legible while row itself sits at opacity 0.55 per UI-SPEC.md contrast mitigation. Panel header shows `Dotes del nivel N: {chosen}/{slots}` with tabular-nums via new FeatBoardView.counters + counterLabel fields (budget sourced from computePerLevelBudget 12.4-03 via buildSnapshotForBudget boundary adapter — rules-engine stays framework-agnostic). Collapse-on-complete swaps FeatSheet for new <FeatSummaryCard> (NwnFrame + chosen-feats list + NwnButton variant="auxiliary" `Modificar selección`); re-expand flow uses isEditingCompleted local state (reset on activeLevel change via useEffect). selectFeatBoardView walks full compiledFeatCatalog.feats (not getEligibleFeats) so blocked-prereq rows stay in DOM; pool scoping via classBonusFeatIds (list=1/2) + allClassesCanUse || list=0 for general. OptionList replaced with bespoke <FeatPickerRow> buttons carrying data-feat-id + aria-disabled + state-based classes + inline italic reason + pill; .feat-picker__list class on wrapper preserves 12.4-02 scroll-on-list contract. formatBlockedReason(check) routes every PrerequisiteCheck.type to its Spanish template (shellCopyEs.feats.blockedReasons — 12 templates incl. singular/plural for skill-rank + class-level). findAlreadyTakenAtLevel excludes activeLevel so user's own current pick stays toggleable. Known limitation: Humano L1 budget.featSlots.total = 3 but useFeatStore holds only 2 slots (classFeatId + generalFeatId); counter displays 3 but collapse-on-complete only fires for non-Humano cases. Tracked as deferred for 12.4-08 (family expander) or a future store-shape plan.
 
 ### Pending Todos
 
@@ -182,14 +184,14 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-19T18:14:41Z
-Stopped at: Phase 12.4-06 complete (Wave 2 parallel / R1 class picker grouping + prestige gate). Commits 7805025 (RED test) + 23b4338 (GREEN fix). 17 new tests green; full suite 568/569 (1 pre-existing DEF-12.4-02 unrelated). Framework-purity gate enforced: `grep -c '@data-extractor' prestige-gate.ts` = 0. Cross-wave 12.4-02 spec A2 assertion updated via Rule-3 auto-fix. Wave 3 plans (12.4-07/08/09) now unblocked.
+Last session: 2026-04-19T21:35:00Z
+Stopped at: Phase 12.4-07 complete (Wave 3 sequential / R5 Dotes selectability + slot counter + collapse-on-complete). Commits 8b38a51 (RED test) + fe60354 (GREEN fix). 15 new tests green (4 suites: counter / four states / collapse / CSS contract); full suite 605/606 (only pre-existing DEF-12.4-02 `font-weight: 700` remains — out of scope). Framework purity preserved: selectFeatBoardView adapts store → BuildSnapshot at the apps/planner boundary (buildSnapshotForBudget), packages/rules-engine stays framework-agnostic. selectors.ts walks compiledFeatCatalog.feats directly (not getEligibleFeats) so blocked-prereq rows stay in DOM (SPEC R5 visibility-lock). Wave 3 plans 12.4-08 (family expander) + 12.4-09 (LevelEditorActionBar) remain; they run sequentially after this plan per wave-3-sequential coordination.
 
 Resume options next session:
 
-1. `/gsd-plan-phase 12.4` — planner consumes SPEC.md + CONTEXT.md to produce 9 plans.
-2. `/gsd-audit-milestone v1.0` — close v1.0 before opening 12.4 execution wave.
-3. Small fix-up: fold `font-weight: 700` at `app.css:113` into `var(--font-weight-bold)` token (or delete) to restore theme-contract green.
+1. Continue Wave 3: execute `12.4-08-PLAN.md` (R7 parameterizedFeatFamily + inline <fieldset> expander). This plan inherits 12.4-07's rowState scaffolding for family target rows.
+2. Continue Wave 3: execute `12.4-09-PLAN.md` (R2 LevelEditorActionBar sticky footer + atomic dispatch). Depends on 12.4-07's counter wiring for the dynamic advance-button label.
+3. Hygiene: fold pre-existing `font-weight: 700` at `app.css:113` to close DEF-12.4-02 — restores theme-contract green and takes full suite to 606/606.
 
-Dev server running background task `b3q1v2d52` on port 5173 (Vite HMR active). Browser tab 761726062 open at http://localhost:5173/.
-Resume file: `.planning/phases/12.4-construccion-correctness-clarity/12.4-CONTEXT.md`
+Dev server running background task `blemh0vo7` on port 5173 (Vite HMR active). Browser tab 761726195 open at http://localhost:5173/.
+Resume file: `.planning/phases/12.4-construccion-correctness-clarity/12.4-07-SUMMARY.md`

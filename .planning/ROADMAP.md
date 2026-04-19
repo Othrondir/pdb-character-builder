@@ -389,7 +389,7 @@ Plans:
 - [ ] 12.4-04-PLAN.md — R6+X1 L1 neutral sub-steps + predicates + vitest jsdom glob (Wave 0 infra)
 - [ ] 12.4-05-PLAN.md — R4 Habilidades class/transclase section split + cost hint
 - [x] 12.4-06-PLAN.md — R1 ClassPicker extracted + reachableAtLevelN prestige gate
-- [ ] 12.4-07-PLAN.md — R5 Dotes four selectability states + slot counter + collapse-on-complete
+- [x] 12.4-07-PLAN.md — R5 Dotes four selectability states + slot counter + collapse-on-complete
 - [ ] 12.4-08-PLAN.md — R7 parameterizedFeatFamily schema + inline <fieldset> expander
 - [ ] 12.4-09-PLAN.md — R2 LevelEditorActionBar sticky footer + atomic dispatch + E2E
 **UI hint**: yes
