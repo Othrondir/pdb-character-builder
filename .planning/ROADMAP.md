@@ -26,7 +26,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 12: Tech Debt Sweep** (GAP) - Fix P03 typecheck errors, P07.2 IN-07 class-label bug (FEAT-02 quality), IN-03 label cleanup, IN-05 counter alignment.
 - [x] **Phase 12.1: Roster Wiring & Overflow Fixes** (INSERTED) - Wire compiled class + race catalogs (PDB TLK extractor roster) into L1 pickers and fix CSS overflow/scroll on SelectionScreen + planner-layout panels. Surfaced during Phase 11 UAT (2026-04-18).
 - [x] **Phase 12.2: Roster Detail & Race Ability Modifiers** (INSERTED) - Surface TLK descriptions in race + class picker detail panes, wire race ability modifiers (CHAR-02 pipeline gap) through attributes computation, fix prestige-filter false positives/negatives at L1, and dedupe class-catalog duplicate IDs. Surfaced during Phase 12.1 UAT (2026-04-18).
-- [ ] **Phase 12.3: UAT Correctness Closure** (INSERTED) - Close 9 blockers surfaced by deep UAT (2026-04-18) before milestone v1.0: B1 attributes overspend, B2 multiclass level picker, B3 Dotes per-level gate, B4 slot count prompt, B5 description paragraphs, B6 HP pipeline, B7 origin stepper decoupling, B8/B9 header + sub-step ripples. Milestone v1.0 close blocked on B1/B2/B3/B6.
+- [x] **Phase 12.3: UAT Correctness Closure** (INSERTED) - Close 9 blockers surfaced by deep UAT (2026-04-18) before milestone v1.0: B1 attributes overspend, B2 multiclass level picker, B3 Dotes per-level gate, B4 slot count prompt, B5 description paragraphs, B6 HP pipeline, B7 origin stepper decoupling, B8/B9 header + sub-step ripples. Milestone v1.0 close blocked on B1/B2/B3/B6.
 
 ## Phase Details
 
@@ -357,12 +357,12 @@ Plans:
 **Plans**: 6 plans (planned)
 
 Plans:
-- [ ] 12.3-01: Disable attributes `+` when cost exceeds remaining budget (B1)
-- [ ] 12.3-02: Multiclass per-level switching (B2 + B8 + B9)
-- [ ] 12.3-03: Per-level Dotes gate + slot-count prompt (B3 + B4)
+- [x] 12.3-01: Disable attributes `+` when cost exceeds remaining budget (B1)
+- [x] 12.3-02: Multiclass per-level switching (B2 + B8 + B9)
+- [x] 12.3-03: Per-level Dotes gate + slot-count prompt (B3 + B4)
 - [x] 12.3-04: Hit-points pipeline through rules-engine + sheet (B6)
-- [ ] 12.3-05: Origin-stepper decoupling from atributos validity (B7)
-- [ ] 12.3-06: Description paragraph rendering in DetailPanel (B5)
+- [x] 12.3-05: Origin-stepper decoupling from atributos validity (B7)
+- [x] 12.3-06: Description paragraph rendering in DetailPanel (B5)
 **UI hint**: yes
 
 ## Progress

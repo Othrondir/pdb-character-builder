@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: "Phase 12.3-03 shipped — Dotes sub-step per-level gate + slot prompt. selectFeatBoardView's empty-state gate now reads the ACTIVE level's classId (was a global `any-level-has-a-class` check). ActiveFeatSheetView.slotPrompt field + pure computeSlotPrompt helper compose Spanish copy (`Dote de clase disponible.` / `Dote general disponible.`) rendered above the FeatSheet when slots exist + are unfilled. Closes UAT B3 (CRITICAL false-block) + B4 (HIGH missing slot count). 3 files modified + 1 test file (9 assertions across 4 suites). 2 atomic commits (01a0208 RED + 99cff07 GREEN). Full vitest 499/499 green."
-last_updated: "2026-04-18T02:40:00Z"
+stopped_at: "Phase 12.3 complete — 6/6 plans + 6/6 SC verified. All 9 UAT blockers (B1..B9) resolved: attributes overspend gate, multiclass L2+ wiring, per-level Dotes gate + slot prompt, HP pipeline, origin-stepper decoupling, description paragraph CSS. 499/499 tests green. In-browser UAT confirms Enano+Guerrero L1+Pícaro L2 multiclass flow produces correct rail, header NIVEL 2, PG 20, slot prompts, paragraph descriptions. Milestone v1.0 UNBLOCKED — ready for audit + close."
+last_updated: "2026-04-19T00:30:00Z"
 last_activity: 2026-04-18
 progress:
   total_phases: 12
@@ -21,13 +21,20 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-30)
 
 **Core value:** A player can build a Puerta de Baldur character from level 1 to 16 with strict server-valid validation and share that exact build reliably.
-**Current focus:** Phase 12.2 complete — milestone v1.0 scope closed. Next: `/gsd-audit-milestone v1.0` + `/gsd-complete-milestone` to ship v1.0.
+**Current focus:** Phase 12.3 complete — milestone v1.0 ready to close. Next: `/gsd-audit-milestone v1.0` + `/gsd-complete-milestone` to ship v1.0.
 
 ## Current Position
 
-Phase: 12.3 (uat-correctness-closure) — IN PROGRESS
-Plan: 3 of 6 complete (Wave 1: 12.3-01/-04/-05/-06 shipped; Wave 2: 12.3-02 shipped; Wave 3: 12.3-03 shipped)
-Status: 12.3-03 shipped — Dotes sub-step per-level gate + slot prompt (B3 + B4). `selectFeatBoardView` empty-state gate scoped to the ACTIVE level's classId (was a global `some(l => l.classId !== null)` check); when the active level has no class the selector emits the new per-level copy `shellCopyEs.feats.emptyStateBodyPerLevel` instead of the confusing global "Completa una progresion valida" message. Added `ActiveFeatSheetView.slotPrompt: string | null` + pure `computeSlotPrompt()` helper that joins Spanish copy parts (`Dote de clase disponible.` / `Dote general disponible.`) for each unfilled slot at the active level; null when both slots are filled or no slots exist. `FeatBoard` renders `<p className="feat-board__slot-prompt">` above the sheet/detail-panel pair when the prompt is truthy. 9-assertion regression spec (`tests/phase-12.3/dotes-per-level-gate.spec.tsx`) locks empty-state scope (A1-A3), slotPrompt shape (B1-B3), multiclass no-regression (C1), and FeatBoard render (D1-D2). 2 atomic commits (01a0208 RED + 99cff07 GREEN). Full vitest 499/499 green.
+Phase: 12.3 (uat-correctness-closure) — COMPLETE
+Plan: 6 of 6 complete
+Status: All 6 plans shipped across 3 waves; 12.3-VERIFICATION.md (2e8ce42) records 6/6 SC PASS. All 9 UAT blockers resolved end-to-end:
+- B1 attributes overspend gate (nextIncrementCost + canIncrementAttribute, 12.3-01)
+- B2+B8+B9 multiclass active-level wiring (LevelRail dispatch, 12.3-02)
+- B3+B4 per-level Dotes gate + slotPrompt (12.3-03)
+- B6 HP pipeline (computeHitPoints selector + StatsPanel wiring, 12.3-04)
+- B7 origin-stepper decoupling (narrow zustand subscriptions, 12.3-05)
+- B5 description paragraph CSS (white-space: pre-wrap, 12.3-06)
+499/499 tests green. In-browser UAT confirmed (Enano+Guerrero L1+Pícaro L2): rail 1Guerrero/2Pícaro, header NIVEL 2, PG 20, slot prompts rendered, description paragraph breaks visible. Milestone v1.0 UNBLOCKED.
 Last activity: 2026-04-18
 
 Progress: [██████████] 100%
