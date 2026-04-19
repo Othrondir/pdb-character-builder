@@ -4,8 +4,8 @@ milestone: v1.0
 milestone_name: milestone
 status: executing
 stopped_at: "Phase 12.4 CONTEXT.md + DISCUSSION-LOG.md written under `/gsd-discuss-phase 12.4`. User answered "tú decides" on gray area selection → Claude applied recommended defaults across D-01..D-10. Decisions: (D-01) single picker + two `<section>` for base/prestige, (D-02) inline italic prereq copy threshold-only, (D-03) opacity+cursor+inline+pill-badge for blocked feat states, (D-04) summary card + `Modificar selección` re-expand, (D-05) inline expander for feat-family targets, (D-06) sticky footer `LevelEditorActionBar`, (D-07) single `per-level-budget.ts` module, (D-08) L1 neutral + predicate owners named, (D-09) Habilidades sections with ≥12px cost copy, (D-10) 9 plans across 3 waves (Wave 1: R8/R9/R3; Wave 2: R6+X1/R4/R1; Wave 3: R5/R7/R2)."
-last_updated: "2026-04-19T16:36:54.954Z"
-last_activity: 2026-04-19 -- Phase 12.4 planning complete
+last_updated: "2026-04-19T16:54:29Z"
+last_activity: 2026-04-19 -- Phase 12.4-02 complete (Wave 1 parallel / R9 scroll relocation)
 progress:
   total_phases: 20
   completed_phases: 19
@@ -145,6 +145,7 @@ Recent decisions affecting current work:
 - [Phase 12.2-03]: 0x00 AlignRestrict (with or without InvertRestrict) decodes to undefined (no gate), not "all 9 alignments" — matches NWN 2DA empty-mask convention and lets evaluateClassEntry skip the alignment row entirely when no restriction applies.
 - [Phase 12.3-01]: UAT B1 overspend gate lands at the UI layer — `canIncrementAttribute` is consumed by the `+` button `disabled` prop; the store's `setBaseAttribute` is not hardened. Mirrors existing `-` button gate semantics and keeps the store framework-agnostic. `calculateAbilityBudgetSnapshot` stays shape-stable (post-hoc validation copy); the new helpers are forward-looking per-click guards exported alongside it from `@rules-engine/foundation/ability-budget`.
 - [Phase 12.3-02]: Multiclass active-level repair lives entirely in the UI dispatch site — `LevelRail.onClick` fires `setActiveLevel` + `setExpandedLevel` atomically. No store/selector/selector-chain changes: `selectActiveLevelSheet` already reads `progressionState.activeLevel`; the board title already concatenates `${copy} ${activeSheet.level}`; the Clase sub-step already evaluates per-level. The single missing wire was the rail's onClick dispatch. Copy string `'Selecciona la clase del nivel'` (no hardcoded number) was already correct. Minimal-surface repair that closes B2 CRITICAL + B8 + B9 in one edit.
+- [Phase 12.4-02]: .feat-picker__list owns overflow-y: auto; class-picker audit deferred to plan 12.4-06 (no CSS stub from 12.4-02 — prevents cross-wave merge); race-picker audit confirms .option-list already satisfies contract; description panel retains internal scroll unchanged. Wrapper-scroll removal is SCOPED via `.feat-board .selection-screen__content { overflow-y: visible }` descendant selector — class/race/skills pickers keep the existing `.selection-screen__content { overflow-y: auto }` until their own plans relocate scroll to `__list` classes.
 
 ### Pending Todos
 
