@@ -25,6 +25,7 @@ import { RESTYPE_2DA } from '../config';
 import type { NwsyncReader } from '../readers/nwsync-reader';
 import type { BaseGameReader } from '../readers/base-game-reader';
 import type { TlkResolver } from '../readers/tlk-resolver';
+import { isSentinelLabel } from '../lib/sentinel-regex';
 import { canonicalId, slugify } from './slug-utils';
 
 // ---------------------------------------------------------------------------
@@ -192,6 +193,13 @@ export function assembleFeatCatalog(
       continue;
     }
 
+    // 12.4-01 (SPEC R8): fail-closed sentinel filter — DELETED / UNUSED /
+    // PADDING / ***DELETED*** / DELETED_* rows never enter the catalog.
+    if (isSentinelLabel(label)) {
+      warnings.push(`Feat row ${rowIndex}: sentinel label '${label}' — skipped`);
+      continue;
+    }
+
     let id = canonicalId('feat', label);
 
     // Handle duplicate IDs by appending sourceRow
@@ -237,6 +245,13 @@ export function assembleFeatCatalog(
     const displayLabel = resolvedName || label;
     if (!displayLabel) {
       warnings.push(`Feat row ${rowIndex}: no display label, skipping`);
+      continue;
+    }
+
+    // 12.4-01 (SPEC R8): belt-and-braces — the TLK-resolved displayLabel
+    // can be sentinel even when the 2DA Label is a real slug. Drop here too.
+    if (isSentinelLabel(displayLabel)) {
+      warnings.push(`Feat row ${rowIndex}: sentinel displayLabel '${displayLabel}' — skipped`);
       continue;
     }
 

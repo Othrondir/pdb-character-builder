@@ -17,6 +17,7 @@ import {
   type FeatLevelInput,
 } from '@rules-engine/feats/feat-revalidation';
 import { getClassLabel } from '@rules-engine/feats/get-class-label';
+import { isSentinelLabel } from '@data-extractor/lib/sentinel-regex';
 
 import { shellCopyEs } from '@planner/lib/copy/es';
 import type { CharacterFoundationStoreState } from '@planner/features/character-foundation/store';
@@ -406,15 +407,19 @@ export function selectFeatBoardView(
   const activeRevalidated =
     revalidated.find((r) => r.level === activeLevel) ?? null;
 
+  // 12.4-01 (SPEC R8) belt-and-braces: even if the shipped extractor
+  // artifact contains a residual sentinel row (hand-patched or an
+  // unreached 2DA variant), drop it before view mapping so the Dotes
+  // picker never renders DELETED / UNUSED / PADDING rows.
   const activeSheet: ActiveFeatSheetView = {
     classId,
     classLabel: getClassLabel(classId, compiledClassCatalog),
-    eligibleClassFeats: eligible.classBonusFeats.map((f) =>
-      mapToOptionView(f, selectedClassFeatId),
-    ),
-    eligibleGeneralFeats: eligible.generalFeats.map((f) =>
-      mapToOptionView(f, selectedGeneralFeatId),
-    ),
+    eligibleClassFeats: eligible.classBonusFeats
+      .filter((f) => !isSentinelLabel(f.label))
+      .map((f) => mapToOptionView(f, selectedClassFeatId)),
+    eligibleGeneralFeats: eligible.generalFeats
+      .filter((f) => !isSentinelLabel(f.label))
+      .map((f) => mapToOptionView(f, selectedGeneralFeatId)),
     emptyMessage: classId
       ? shellCopyEs.feats.emptyStateBody
       : shellCopyEs.stepper.levelEmptyHint,

@@ -46290,17 +46290,6 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
     {
       "allClassesCanUse": true,
       "category": "general",
-      "description": "",
-      "id": "feat:deleted",
-      "label": "DELETED",
-      "prerequisites": {
-        "preReqEpic": false
-      },
-      "sourceRow": 385
-    },
-    {
-      "allClassesCanUse": true,
-      "category": "general",
       "description": "Tipo de dote: General\nPrerrequisito: Esta dote solo se puede escoger a 1er. nivel.\nDetalles: El personaje gana un bonificador +2 a las salvaciones de Reflejos. Además, todos los tiros de salvación contra veneno ganan un bonificador +2 adicional de Fortaleza.\nUso: Automática.",
       "id": "feat:snakeblood",
       "label": "Sangre serpentina",
@@ -46481,17 +46470,6 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
         "preReqEpic": false
       },
       "sourceRow": 402
-    },
-    {
-      "allClassesCanUse": true,
-      "category": "general",
-      "description": "",
-      "id": "feat:deleted-403",
-      "label": "DELETED",
-      "prerequisites": {
-        "preReqEpic": false
-      },
-      "sourceRow": 403
     },
     {
       "allClassesCanUse": true,

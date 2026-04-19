@@ -14,6 +14,7 @@ import { RESTYPE_2DA } from '../config';
 import type { NwsyncReader } from '../readers/nwsync-reader';
 import type { BaseGameReader } from '../readers/base-game-reader';
 import type { TlkResolver } from '../readers/tlk-resolver';
+import { isSentinelLabel } from '../lib/sentinel-regex';
 import { canonicalId } from './slug-utils';
 
 /** Map PrimaryAbil column values to normalized ability keys. */
@@ -132,6 +133,13 @@ export function assembleClassCatalog(
     const label = row.Label;
     if (!label) {
       warnings.push(`Row ${rowIndex}: missing Label column, skipped`);
+      continue;
+    }
+
+    // 12.4-01 (SPEC R8): fail-closed sentinel filter — DELETED / UNUSED /
+    // PADDING / ***DELETED*** / DELETED_* rows never enter the catalog.
+    if (isSentinelLabel(label)) {
+      warnings.push(`Class row ${rowIndex}: sentinel label '${label}' — skipped`);
       continue;
     }
 
