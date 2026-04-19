@@ -148,6 +148,23 @@ export const shellCopyEs = {
     abilityHelper:
       'Este nivel concede un aumento de característica que se reflejará en Atributos.',
     classSectionHeading: 'Clase del nivel',
+    // Phase 12.4-06 — class-picker two-section render (SPEC R1 / D-01).
+    classSectionBase: 'Clases básicas',
+    classSectionPrestige: 'Clases de prestigio',
+    // Phase 12.4-06 — threshold-only prereq evidence copy (D-02).
+    // Labels are primary-rendered by `reachableAtLevelN`
+    // (packages/rules-engine/src/progression/prestige-gate.ts); these
+    // templates stay here as the UI-layer contract and grep anchor.
+    prestigePrereqTemplates: {
+      l1Only: 'Disponible a partir del nivel 2',
+      bab: 'Requiere BAB ≥ {N}',
+      skillRankSingular: 'Requiere 1 rango de {skillName}',
+      skillRankPlural: 'Requiere {N} rangos de {skillName}',
+      feat: 'Requiere dote: {featName}',
+      classLevelSingular: 'Requiere 1 nivel de {className}',
+      classLevelPlural: 'Requiere {N} niveles de {className}',
+      unvetted: 'Requisitos en revisión',
+    },
     editOrigin: 'Editar origen',
     foundationStripHeading: 'Base del personaje',
     gainsHeading: 'Ganancias del nivel',
