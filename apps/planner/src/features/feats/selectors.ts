@@ -89,6 +89,48 @@ export interface FeatBoardCounters {
   slots: number;
 }
 
+// ---------------------------------------------------------------------------
+// Phase 12.4-08 (SPEC R7 / CONTEXT D-05) — parameterized feat family view
+// ---------------------------------------------------------------------------
+
+/**
+ * Groups per-target feat variants (e.g. `Soltura con una habilidad (Trato...)`)
+ * under a single folded row. The main Dotes list renders one `FeatFamilyView`
+ * per family (groupKey) instead of ~N rows per variant; clicking opens an
+ * inline `<fieldset class="feat-family-expander">` with the target radio list.
+ *
+ * The row state resolves to `selectable` when at least one target is
+ * selectable; else the most-restrictive-but-not-blocking state wins (prereq
+ * > budget > already-taken). A `selectedTarget` is non-null when the user
+ * has picked any variant at the active level.
+ */
+export interface FeatFamilyView {
+  /** Short canonical id of the family (e.g. `feat:skill-focus`). */
+  canonicalId: string;
+  /** Short groupKey — usually === canonicalId. Used by UI for `data-family-id`. */
+  groupKey: string;
+  /** User-facing family label (e.g. `Soltura con una habilidad`). */
+  label: string;
+  /** Parameter word fed into the expander legend (e.g. `habilidad`). */
+  paramLabel: string;
+  /** Family's resolved row state — SELECTABLE unless every target is blocked. */
+  rowState: FeatRowState;
+  /** Non-null when rowState !== 'selectable'. */
+  blockedReason: FeatBlockedReason | null;
+  /** Per-target variant rows (each carries its own rowState + blockedReason). */
+  targets: FeatOptionView[];
+  /** The target chosen at the active level, or null. */
+  selectedTarget: FeatOptionView | null;
+}
+
+/**
+ * Union the main Dotes list consumes: either a plain feat row, or a folded
+ * family row. FeatSheet discriminates on the presence of `targets`.
+ */
+export type FeatListEntry =
+  | { kind: 'feat'; option: FeatOptionView }
+  | { kind: 'family'; family: FeatFamilyView };
+
 export interface FeatSummaryChosenEntry {
   featId: string;
   label: string;
@@ -126,6 +168,19 @@ export interface FeatBoardView {
   chosenFeats: FeatSummaryChosenEntry[];
   /** Phase 12.4-07 — counter copy `Dotes del nivel N: {chosen}/{slots}`. */
   counterLabel: string;
+  /**
+   * Phase 12.4-08 (SPEC R7 / D-05) — class-bonus pool entries grouped by
+   * family. Each entry is either a single feat (FeatListEntry.kind === 'feat')
+   * or a folded family row (kind === 'family'). FeatSheet renders these
+   * instead of iterating `activeSheet.eligibleClassFeats` directly.
+   */
+  classBonusEntries: FeatListEntry[];
+  /**
+   * Phase 12.4-08 — general pool entries grouped by family. Same shape as
+   * classBonusEntries. Entries are ordered by label (families mixed with
+   * non-family rows, alphabetically).
+   */
+  generalEntries: FeatListEntry[];
 }
 
 export interface FeatSheetTabRowView {
@@ -540,6 +595,143 @@ function formatCounterLabel(
 }
 
 // ---------------------------------------------------------------------------
+// Phase 12.4-08 (SPEC R7 / CONTEXT D-05) — family grouping helpers
+// ---------------------------------------------------------------------------
+
+/**
+ * Strip the trailing `(X)` parameter from a family-variant label so the
+ * folded family row shows the bare family label. Example:
+ *   'Soltura con una habilidad (Trato con los animales)' → 'Soltura con una habilidad'
+ */
+function stripFamilyParameter(label: string): string {
+  const idx = label.lastIndexOf('(');
+  if (idx === -1) return label.trim();
+  return label.slice(0, idx).trim();
+}
+
+/**
+ * Format the pill badge count on a folded family row — `{N} objetivos`
+ * (plural-aware). Counts targets that are NOT blocked-already-taken: those
+ * are effectively "gone" for this family at future levels.
+ */
+function formatFamilyTargetsPill(targets: FeatOptionView[]): string {
+  const available = targets.filter(
+    (t) => t.rowState !== 'blocked-already-taken',
+  ).length;
+  return available === 1
+    ? shellCopyEs.feats.familyPillSingular
+    : shellCopyEs.feats.familyPillPluralTemplate.replace(
+        '{N}',
+        String(available),
+      );
+}
+
+/**
+ * Fold a pool of FeatOptionView rows into FeatListEntry[]. Variants that
+ * share a `parameterizedFeatFamily.groupKey` collapse into a single
+ * `FeatFamilyView`; non-family rows stay as `kind: 'feat'`. Final order
+ * is alphabetical by primary label (family label or feat label).
+ *
+ * Family row state rollup:
+ *   - SELECTABLE if at least one target is selectable
+ *   - else blocked-prereq if any target is prereq-only-blocked
+ *   - else blocked-budget / blocked-already-taken as last resorts
+ */
+function groupIntoFamilyEntries(options: FeatOptionView[]): FeatListEntry[] {
+  const familyBuckets = new Map<string, FeatOptionView[]>();
+  const singletons: FeatOptionView[] = [];
+
+  // We need the CompiledFeat to read its parameterizedFeatFamily; rebuild
+  // a map once for this call.
+  const featById = new Map(compiledFeatCatalog.feats.map((f) => [f.id, f]));
+
+  for (const opt of options) {
+    const feat = featById.get(opt.featId);
+    const family = feat?.parameterizedFeatFamily ?? null;
+    if (family && family.groupKey) {
+      const list = familyBuckets.get(family.groupKey) ?? [];
+      list.push(opt);
+      familyBuckets.set(family.groupKey, list);
+    } else {
+      singletons.push(opt);
+    }
+  }
+
+  const entries: FeatListEntry[] = [];
+
+  for (const [groupKey, targets] of familyBuckets) {
+    // Stable alphabetical order inside the expander radio list.
+    targets.sort((a, b) => a.label.localeCompare(b.label));
+    const firstTarget = targets[0];
+    const firstFeat = featById.get(firstTarget.featId);
+    const familyMeta = firstFeat?.parameterizedFeatFamily ?? null;
+    if (!familyMeta) continue;
+
+    const selectedTarget = targets.find((t) => t.isChosenAtLevel) ?? null;
+
+    // Rollup the family row state.
+    const anySelectable = targets.some((t) => t.rowState === 'selectable');
+    let rowState: FeatRowState;
+    let blockedReason: FeatBlockedReason | null;
+    if (anySelectable) {
+      rowState = 'selectable';
+      blockedReason = null;
+    } else {
+      // No selectable target. Pick the most informative blocked flavor.
+      const prereqTarget = targets.find(
+        (t) => t.rowState === 'blocked-prereq',
+      );
+      const budgetTarget = targets.find(
+        (t) => t.rowState === 'blocked-budget',
+      );
+      const takenTarget = targets.find(
+        (t) => t.rowState === 'blocked-already-taken',
+      );
+      const picked = prereqTarget ?? budgetTarget ?? takenTarget ?? firstTarget;
+      rowState = picked.rowState;
+      blockedReason = picked.blockedReason;
+    }
+
+    entries.push({
+      kind: 'family',
+      family: {
+        canonicalId: familyMeta.canonicalId,
+        groupKey,
+        label: stripFamilyParameter(firstTarget.label),
+        paramLabel: familyMeta.paramLabel,
+        rowState,
+        blockedReason,
+        targets,
+        selectedTarget,
+      },
+    });
+  }
+
+  for (const opt of singletons) {
+    entries.push({ kind: 'feat', option: opt });
+  }
+
+  entries.sort((a, b) => {
+    const labelA =
+      a.kind === 'family' ? a.family.label : a.option.label;
+    const labelB =
+      b.kind === 'family' ? b.family.label : b.option.label;
+    return labelA.localeCompare(labelB);
+  });
+
+  return entries;
+}
+
+/** Exported for unit-test introspection of the grouping contract. */
+export function __internalGroupIntoFamilyEntriesForTest(
+  options: FeatOptionView[],
+): FeatListEntry[] {
+  return groupIntoFamilyEntries(options);
+}
+
+export { formatFamilyTargetsPill as __internalFormatFamilyTargetsPillForTest };
+
+// ---------------------------------------------------------------------------
 // Helper: compute class level in class
 // ---------------------------------------------------------------------------
 
@@ -624,6 +816,8 @@ export function selectFeatBoardView(
       counters: { chosen: 0, slots: 0 },
       chosenFeats: [],
       counterLabel: formatCounterLabel(activeLevel, 0, 0),
+      classBonusEntries: [],
+      generalEntries: [],
     };
   }
   const classLevelInClass = getClassLevelInClass(
@@ -805,6 +999,11 @@ export function selectFeatBoardView(
     slots: budget.featSlots.total,
   };
 
+  // Phase 12.4-08 — family fold for each pool. The main Dotes list renders
+  // entries instead of flat FeatOptionView arrays. See FeatSheet consumer.
+  const classBonusEntries = groupIntoFamilyEntries(classBonusOptions);
+  const generalEntries = groupIntoFamilyEntries(generalOptions);
+
   return {
     activeSheet,
     emptyStateBody: null,
@@ -816,6 +1015,8 @@ export function selectFeatBoardView(
       counters.chosen,
       counters.slots,
     ),
+    classBonusEntries,
+    generalEntries,
   };
 }
 

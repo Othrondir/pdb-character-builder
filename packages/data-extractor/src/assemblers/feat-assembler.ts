@@ -49,6 +49,81 @@ function parseIntOrNull(value: string | null | undefined): number | null {
   return Number.isFinite(n) ? n : null;
 }
 
+// ---------------------------------------------------------------------------
+// Phase 12.4-08 (SPEC R7 / CONTEXT D-05) — parameterized feat family detection
+// ---------------------------------------------------------------------------
+
+/**
+ * Detect the 6 parameterized feat families by display-label prefix. The
+ * Puerta de Baldur feat catalog does NOT use canonical-id prefixes like
+ * `feat:skill-focus:...` — it uses opaque slugs (`feat:skillfocusanim`,
+ * `feat:weapfocclub`, ...). We therefore key detection on the Spanish
+ * display label which IS structured:
+ *
+ *   'Soltura con una habilidad (X)'         → feat:skill-focus
+ *   'Soltura con una escuela de magia (X)'  → feat:spell-focus
+ *   'Soltura mayor con una escuela de magia (X)' → feat:greater-spell-focus
+ *   'Soltura con un arma (X)'               → feat:weapon-focus
+ *   'Especialización en arma (X)'           → feat:weapon-specialization
+ *   'Soltura mayor con un arma (X)'         → feat:greater-weapon-focus
+ *
+ * Returns null for non-family feats. Called from the main assembler loop
+ * after display-label resolution so TLK text is already populated.
+ */
+export function detectFamily(displayLabel: string): {
+  canonicalId: string;
+  groupKey: string;
+  paramLabel: string;
+} | null {
+  const label = displayLabel.trim();
+
+  // Order matters: the "mayor" variants must match BEFORE the shorter
+  // "Soltura con..." so we never misclassify a greater variant.
+  if (/^Soltura\s+mayor\s+con\s+una\s+escuela\s+de\s+magia\s*\(/i.test(label)) {
+    return {
+      canonicalId: 'feat:greater-spell-focus',
+      groupKey: 'feat:greater-spell-focus',
+      paramLabel: 'escuela de magia',
+    };
+  }
+  if (/^Soltura\s+mayor\s+con\s+un\s+arma\s*\(/i.test(label)) {
+    return {
+      canonicalId: 'feat:greater-weapon-focus',
+      groupKey: 'feat:greater-weapon-focus',
+      paramLabel: 'arma',
+    };
+  }
+  if (/^Soltura\s+con\s+una\s+habilidad\s*\(/i.test(label)) {
+    return {
+      canonicalId: 'feat:skill-focus',
+      groupKey: 'feat:skill-focus',
+      paramLabel: 'habilidad',
+    };
+  }
+  if (/^Soltura\s+con\s+una\s+escuela\s+de\s+magia\s*\(/i.test(label)) {
+    return {
+      canonicalId: 'feat:spell-focus',
+      groupKey: 'feat:spell-focus',
+      paramLabel: 'escuela de magia',
+    };
+  }
+  if (/^Soltura\s+con\s+un\s+arma\s*\(/i.test(label)) {
+    return {
+      canonicalId: 'feat:weapon-focus',
+      groupKey: 'feat:weapon-focus',
+      paramLabel: 'arma',
+    };
+  }
+  if (/^Especializaci[oó]n\s+en\s+armas?\s*\(/i.test(label)) {
+    return {
+      canonicalId: 'feat:weapon-specialization',
+      groupKey: 'feat:weapon-specialization',
+      paramLabel: 'arma',
+    };
+  }
+  return null;
+}
+
 /**
  * Load a 2DA table by resref, trying nwsync first then base game BIF fallback.
  */
@@ -391,12 +466,18 @@ export function assembleFeatCatalog(
       prerequisites.preReqEpic = false;
     }
 
+    // Phase 12.4-08 (SPEC R7 / CONTEXT D-05): detect parameterized feat
+    // family (Soltura con una habilidad, escuela de magia, un arma, etc.).
+    // Null for non-family feats — UI renders them as normal rows.
+    const parameterizedFeatFamily = detectFamily(displayLabel);
+
     feats.push({
       allClassesCanUse,
       category: category || 'general',
       description: resolvedDesc,
       id,
       label: displayLabel,
+      parameterizedFeatFamily,
       prerequisites,
       sourceRow: rowIndex,
     });

@@ -39,12 +39,33 @@ export const featPrerequisitesSchema = z.object({
     .optional(),
 });
 
+/**
+ * Phase 12.4-08 (SPEC R7 / CONTEXT D-05) — parameterized feat-family
+ * metadata. Optional + nullable (Open Question 4 resolution): rows with
+ * and without this field parse cleanly so the Phase 8 SHAR-05 share-URL
+ * schema invariant is preserved (no schema version bump required).
+ *
+ * UI groups feats by `groupKey` client-side → one main list row per
+ * family (`Soltura con una habilidad`, etc.) instead of ~N rows per
+ * variant. `paramLabel` feeds the expander <legend> copy (`Elige
+ * habilidad`, `Elige escuela de magia`, `Elige arma`).
+ */
+export const parameterizedFeatFamilySchema = z
+  .object({
+    canonicalId: z.string().regex(/^feat:[a-z0-9-]+$/),
+    groupKey: z.string(),
+    paramLabel: z.string(),
+  })
+  .nullable()
+  .optional();
+
 export const compiledFeatSchema = z.object({
   allClassesCanUse: z.boolean(),
   category: z.string(),
   description: z.string(),
   id: z.string().regex(/^feat:[A-Za-z0-9._-]+$/),
   label: z.string().min(1),
+  parameterizedFeatFamily: parameterizedFeatFamilySchema,
   prerequisites: featPrerequisitesSchema,
   sourceRow: z.number().int().nonnegative(),
 });

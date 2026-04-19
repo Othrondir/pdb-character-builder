@@ -2104,3 +2104,61 @@ a {
 .feat-summary-card__modify {
   align-self: flex-end;
 }
+
+/* ── Phase 12.4-08 — Feat-family fold + inline expander (SPEC R7) ───────
+ * Scoped namespace `.feat-family-expander__*` + `.feat-picker__row--family`.
+ * Family row reuses .feat-picker__row base; expander is a separate element
+ * rendered directly below the row inside the <li>.
+ */
+.feat-picker__row--family {
+  /* Base row styling inherited; nothing else changes yet. Future polish
+   * could add a caret/chevron to signal expandability. */
+}
+.feat-picker__pill--family {
+  /* Reuses .feat-picker__pill border/padding; non-blocked color variant. */
+  border-color: var(--color-panel-edge);
+  color: var(--color-text);
+}
+.feat-family-expander {
+  background: var(--color-panel);
+  border: 1px solid var(--color-panel-edge);
+  margin: var(--space-xs) 0 var(--space-sm) 0;
+  padding: var(--space-sm) var(--space-md);
+}
+.feat-family-expander:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+.feat-family-expander__legend {
+  color: var(--color-text);
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  padding: 0 var(--space-xs);
+  text-transform: uppercase;
+}
+.feat-family-expander__options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  max-height: 320px;
+  overflow-y: auto;
+}
+.feat-family-expander__option {
+  align-items: center;
+  color: var(--color-text);
+  cursor: pointer;
+  display: flex;
+  font-family: var(--font-body);
+  font-size: 14px;
+  gap: var(--space-sm);
+  padding: var(--space-xs) 0;
+}
+.feat-family-expander__option--blocked {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+.feat-family-expander__option-label {
+  flex: 1;
+}

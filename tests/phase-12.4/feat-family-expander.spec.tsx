@@ -39,9 +39,13 @@ import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
 // --------------------------------------------------------------------------
 
 /**
- * L1 Humano+Guerrero — most feats are selectable so the family row lands in
- * the general section. Guerrero is used so `sequentialStep` eventually flows
- * to 'general' (where Soltura con una habilidad lives via allClassesCanUse).
+ * L1 Humano+Guerrero with the class-bonus slot pre-filled so the general
+ * section renders (where `Soltura con una habilidad` lives via
+ * `allClassesCanUse`). sequentialStep flows from 'class-bonus' → 'general'
+ * once the class feat is set.
+ *
+ * `feat:carrera` is list=1 for Guerrero (class-bonus pool) with no prereqs,
+ * per the 12.4-07 fixture that validated the same flow.
  */
 function setupL1HumanoGuerrero(): void {
   useCharacterFoundationStore
@@ -57,6 +61,10 @@ function setupL1HumanoGuerrero(): void {
     .getState()
     .setActiveLevel(1 as ProgressionLevel);
   useFeatStore.getState().setActiveLevel(1 as ProgressionLevel);
+  // Fill class-bonus slot so the general section (with skill-focus family) renders.
+  useFeatStore
+    .getState()
+    .setClassFeat(1 as ProgressionLevel, 'feat:carrera' as CanonicalId);
 }
 
 // --------------------------------------------------------------------------

@@ -291,6 +291,13 @@ export const shellCopyEs = {
       budgetExhausted: 'Sin slots disponibles en este nivel',
     },
     modifySelectionLabel: 'Modificar selección',
+    // Phase 12.4-08 — parameterized feat-family fold + inline expander
+    // (SPEC R7 / CONTEXT D-05). Pill reads `{N} objetivos` or `1 objetivo`;
+    // expander legend reads `Elige {paramLabel}` (`habilidad`, `escuela de
+    // magia`, `arma`) fed by the extractor `parameterizedFeatFamily.paramLabel`.
+    familyPillSingular: '1 objetivo',
+    familyPillPluralTemplate: '{N} objetivos',
+    familyLegendPrefix: 'Elige',
   },
   stepper: {
     heading: 'Creacion de personajes',

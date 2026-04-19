@@ -42779,6 +42779,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Capacidad para usar la habilidad.\nDetalles: Un personaje con esta dote es especialista en una habilidad, obteniendo un bonificador +3 a todas las pruebas realizadas con ella.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una habilidad diferente.",
       "id": "feat:skillfocusanim",
       "label": "Soltura con una habilidad (Trato con los animales)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:skill-focus",
+        "groupKey": "feat:skill-focus",
+        "paramLabel": "habilidad"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -42790,6 +42795,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Aptitud para lanzar conjuros de primer nivel.\nNecesaria para: Defensa arcana y Soltura mayor con una escuela de magia.\nDetalles: Un personaje con esta dote es experto en una escuela de magia, y obtiene un bonificador +2 a la CD de salvación contra conjuro de todos los sortilegios que lance de esa escuela.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una escuela diferente. Los gnomos reciben Soltura con una escuela de magia (Ilusión) de forma gratuita en el primer nivel.",
       "id": "feat:spellfocusabj",
       "label": "Soltura con una escuela de magia (Abjuración)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:spell-focus",
+        "groupKey": "feat:spell-focus",
+        "paramLabel": "escuela de magia"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -42872,6 +42882,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfocclub",
       "label": "Soltura con un arma (clava)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "orReqFeats": [
@@ -42913,6 +42928,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspeclub",
       "label": "Especialización en arma (clava)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -43512,6 +43532,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfocdagger",
       "label": "Soltura con un arma (daga)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "orReqFeats": [
@@ -43531,6 +43556,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfocdart",
       "label": "Soltura con un arma (dardo)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "orReqFeats": [
@@ -43550,6 +43580,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfochxbow",
       "label": "Soltura con un arma (ballesta pesada)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "orReqFeats": [
@@ -43568,6 +43603,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfoclgxbow",
       "label": "Soltura con un arma (ballesta ligera)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "orReqFeats": [
@@ -43586,6 +43626,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfoclgmace",
       "label": "Soltura con un arma (maza)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "orReqFeats": [
@@ -43602,6 +43647,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfocmorn",
       "label": "Soltura con un arma (maza de armas)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "orReqFeats": [
@@ -43618,6 +43668,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfocstaff",
       "label": "Soltura con un arma (bastón)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "orReqFeats": [
@@ -43637,6 +43692,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfocwspear",
       "label": "Soltura con un arma (lanza)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "orReqFeats": [
@@ -43652,6 +43712,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfocsickle",
       "label": "Soltura con un arma (hoz)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "orReqFeats": [
@@ -43668,6 +43733,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfocsling",
       "label": "Soltura con un arma (honda)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "orReqFeats": [
@@ -43686,6 +43756,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfocunarm",
       "label": "Soltura con un arma (impacto sin arma)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "preReqEpic": false
@@ -43698,6 +43773,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfoclongbow",
       "label": "Soltura con un arma (arco largo)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "orReqFeats": [
@@ -43714,6 +43794,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfocshortbow",
       "label": "Soltura con un arma (arco corto)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "orReqFeats": [
@@ -43731,6 +43816,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfocshortsword",
       "label": "Soltura con un arma (espada corta)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "orReqFeats": [
@@ -43747,6 +43837,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfocrapier",
       "label": "Soltura con un arma (estoque)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "orReqFeats": [
@@ -43764,6 +43859,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfocscim",
       "label": "Soltura con un arma (cimitarra)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "orReqFeats": [
@@ -43780,6 +43880,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfoclsw",
       "label": "Soltura con un arma (espada larga)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "orReqFeats": [
@@ -43796,6 +43901,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfocgsw",
       "label": "Soltura con un arma (espadón)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "preReqEpic": false,
@@ -43809,6 +43919,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfochaxe",
       "label": "Soltura con un arma (hacha de mano)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "orReqFeats": [
@@ -43826,6 +43941,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfoctaxe",
       "label": "Soltura con un arma (hacha arrojadiza)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "preReqEpic": false,
@@ -43839,6 +43959,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfocbaxe",
       "label": "Soltura con un arma (hacha de batalla)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "preReqEpic": false,
@@ -43852,6 +43977,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfocgaxe",
       "label": "Soltura con un arma (gran hacha)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "preReqEpic": false,
@@ -43865,6 +43995,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfochalb",
       "label": "Soltura con un arma (alabarda)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "preReqEpic": false,
@@ -43878,6 +44013,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfoclgham",
       "label": "Soltura con un arma (martillo ligero)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "preReqEpic": false,
@@ -43891,6 +44031,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfoclgflail",
       "label": "Soltura con un arma (mangual ligero)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "preReqEpic": false,
@@ -43904,6 +44049,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfocwham",
       "label": "Soltura con un arma (martillo de guerra)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "preReqEpic": false,
@@ -43917,6 +44067,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfochflail",
       "label": "Soltura con un arma (mangual pesado)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "preReqEpic": false,
@@ -43930,6 +44085,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfockama",
       "label": "Soltura con un arma (kama)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "orReqFeats": [
@@ -43946,6 +44106,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfockukri",
       "label": "Soltura con un arma (kukri)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "preReqEpic": false,
@@ -43959,6 +44124,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfocshur",
       "label": "Soltura con un arma (shuriken)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "orReqFeats": [
@@ -43975,6 +44145,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfocscy",
       "label": "Soltura con un arma (guadaña)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "preReqEpic": false,
@@ -43988,6 +44163,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfockatana",
       "label": "Soltura con un arma (katana)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "preReqEpic": false,
@@ -44001,6 +44181,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfocbsw",
       "label": "Soltura con un arma (espada bastarda)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "preReqEpic": false,
@@ -44014,6 +44199,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfocdmace",
       "label": "Soltura con un arma (maza terrible)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "preReqEpic": false,
@@ -44027,6 +44217,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfocdaxe",
       "label": "Soltura con un arma (hacha doble)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "preReqEpic": false,
@@ -44040,6 +44235,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfoc2sw",
       "label": "Soltura con un arma (espada de dos hojas)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "preReqEpic": false,
@@ -44053,6 +44253,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspedagger",
       "label": "Especialización en armas (daga)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -44068,6 +44273,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspedart",
       "label": "Especialización en armas (dardo)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -44083,6 +44293,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspehxbow",
       "label": "Especialización en armas (ballesta pesada)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -44098,6 +44313,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspelgxbow",
       "label": "Especialización en armas (ballesta ligera)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -44113,6 +44333,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspelgmace",
       "label": "Especialización en armas (maza ligera)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -44128,6 +44353,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspemorn",
       "label": "Especialización en armas (maza de armas)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -44143,6 +44373,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspestaff",
       "label": "Especialización en armas (bastón)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -44158,6 +44393,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspewspear",
       "label": "Especialización en armas (lanza)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -44173,6 +44413,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspesickle",
       "label": "Especialización en armas (hoz)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -44188,6 +44433,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspesling",
       "label": "Especialización en armas (honda)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -44203,6 +44453,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspeunarm",
       "label": "Especialización en armas (impacto sin arma)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -44218,6 +44473,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspelongbow",
       "label": "Especialización en armas (arco largo)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -44233,6 +44493,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspeshortbow",
       "label": "Especialización en armas (arco corto)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -44248,6 +44513,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspeshortsword",
       "label": "Especialización en armas (espada corta)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -44263,6 +44533,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapsperapier",
       "label": "Especialización en armas (estoque)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -44278,6 +44553,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspescim",
       "label": "Especialización en armas (cimitarra)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -44293,6 +44573,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspelsw",
       "label": "Especialización en armas (espada larga)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -44308,6 +44593,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspegsw",
       "label": "Especialización en armas (espadón)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -44323,6 +44613,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspehaxe",
       "label": "Especialización en armas (hacha de mano)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -44338,6 +44633,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspetaxe",
       "label": "Especialización en armas (hacha arrojadiza)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -44353,6 +44653,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspebaxe",
       "label": "Especialización en armas (hacha de batalla)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -44368,6 +44673,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspegaxe",
       "label": "Especialización en armas (gran hacha)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -44383,6 +44693,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspehalb",
       "label": "Especialización en armas (alabarda)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -44398,6 +44713,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspelgham",
       "label": "Especialización en armas (martillo ligero)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -44413,6 +44733,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspelgflail",
       "label": "Especialización en armas (mangual ligero)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -44428,6 +44753,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspewham",
       "label": "Especialización en armas (martillo de guerra)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -44443,6 +44773,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspehflail",
       "label": "Especialización en armas (mangual pesado)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -44458,6 +44793,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspekama",
       "label": "Especialización en armas (kama)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -44473,6 +44813,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspekukri",
       "label": "Especialización en armas (kukri)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -44488,6 +44833,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspeshur",
       "label": "Especialización en armas (shuriken)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -44503,6 +44853,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspescy",
       "label": "Especialización en armas (guadaña)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -44518,6 +44873,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspekatana",
       "label": "Especialización en armas (katana)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -44533,6 +44893,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspebsw",
       "label": "Especialización en armas (espada bastarda)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -44548,6 +44913,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspedmace",
       "label": "Especialización en armas (maza terrible)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -44563,6 +44933,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspedaxe",
       "label": "Especialización en armas (hacha doble)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -44578,6 +44953,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspe2sw",
       "label": "Especialización en armas (espada de dos hojas)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -44593,6 +44973,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Aptitud para lanzar conjuros de primer nivel.\nNecesaria para: Defensa arcana y Soltura mayor con una escuela de magia.\nDetalles: Un personaje con esta dote es experto en una escuela de magia, y obtiene un bonificador +2 a la CD de salvación contra conjuro de todos los sortilegios que lance de esa escuela.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una escuela diferente. Los gnomos reciben Soltura con una escuela de magia (Ilusión) de forma gratuita en el primer nivel.",
       "id": "feat:spellfocuscon",
       "label": "Soltura con una escuela de magia (Conjuración)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:spell-focus",
+        "groupKey": "feat:spell-focus",
+        "paramLabel": "escuela de magia"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -44604,6 +44989,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Aptitud para lanzar conjuros de primer nivel.\nNecesaria para: Defensa arcana y Soltura mayor con una escuela de magia.\nDetalles: Un personaje con esta dote es experto en una escuela de magia, y obtiene un bonificador +2 a la CD de salvación contra conjuro de todos los sortilegios que lance de esa escuela.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una escuela diferente. Los gnomos reciben Soltura con una escuela de magia (Ilusión) de forma gratuita en el primer nivel.",
       "id": "feat:spellfocusdiv",
       "label": "Soltura con una escuela de magia (Adivinación)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:spell-focus",
+        "groupKey": "feat:spell-focus",
+        "paramLabel": "escuela de magia"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -44615,6 +45005,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Aptitud para lanzar conjuros de primer nivel.\nNecesaria para: Defensa arcana y Soltura mayor con una escuela de magia.\nDetalles: Un personaje con esta dote es experto en una escuela de magia, y obtiene un bonificador +2 a la CD de salvación contra conjuro de todos los sortilegios que lance de esa escuela.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una escuela diferente. Los gnomos reciben Soltura con una escuela de magia (Ilusión) de forma gratuita en el primer nivel.",
       "id": "feat:spellfocusenc",
       "label": "Soltura con una escuela de magia (Encantamiento)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:spell-focus",
+        "groupKey": "feat:spell-focus",
+        "paramLabel": "escuela de magia"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -44626,6 +45021,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Aptitud para lanzar conjuros de primer nivel.\nNecesaria para: Defensa arcana y Soltura mayor con una escuela de magia.\nDetalles: Un personaje con esta dote es experto en una escuela de magia, y obtiene un bonificador +2 a la CD de salvación contra conjuro de todos los sortilegios que lance de esa escuela.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una escuela diferente. Los gnomos reciben Soltura con una escuela de magia (Ilusión) de forma gratuita en el primer nivel.",
       "id": "feat:spellfocusevo",
       "label": "Soltura con una escuela de magia (Evocación)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:spell-focus",
+        "groupKey": "feat:spell-focus",
+        "paramLabel": "escuela de magia"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -44637,6 +45037,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Aptitud para lanzar conjuros de primer nivel.\nNecesaria para: Defensa arcana y Soltura mayor con una escuela de magia.\nDetalles: Un personaje con esta dote es experto en una escuela de magia, y obtiene un bonificador +2 a la CD de salvación contra conjuro de todos los sortilegios que lance de esa escuela.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una escuela diferente. Los gnomos reciben Soltura con una escuela de magia (Ilusión) de forma gratuita en el primer nivel.",
       "id": "feat:spellfocusill",
       "label": "Soltura con una escuela de magia (Ilusión)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:spell-focus",
+        "groupKey": "feat:spell-focus",
+        "paramLabel": "escuela de magia"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -44648,6 +45053,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Aptitud para lanzar conjuros de primer nivel.\nNecesaria para: Defensa arcana y Soltura mayor con una escuela de magia.\nDetalles: Un personaje con esta dote es experto en una escuela de magia, y obtiene un bonificador +2 a la CD de salvación contra conjuro de todos los sortilegios que lance de esa escuela.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una escuela diferente. Los gnomos reciben Soltura con una escuela de magia (Ilusión) de forma gratuita en el primer nivel.",
       "id": "feat:spellfocusnec",
       "label": "Soltura con una escuela de magia (Nigromancia)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:spell-focus",
+        "groupKey": "feat:spell-focus",
+        "paramLabel": "escuela de magia"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -44659,6 +45069,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Aptitud para lanzar conjuros de primer nivel.\nNecesaria para: Defensa arcana y Soltura mayor con una escuela de magia.\nDetalles: Un personaje con esta dote es experto en una escuela de magia, y obtiene un bonificador +2 a la CD de salvación contra conjuro de todos los sortilegios que lance de esa escuela.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una escuela diferente. Los gnomos reciben Soltura con una escuela de magia (Ilusión) de forma gratuita en el primer nivel.",
       "id": "feat:spellfocustra",
       "label": "Soltura con una escuela de magia (Transmutación)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:spell-focus",
+        "groupKey": "feat:spell-focus",
+        "paramLabel": "escuela de magia"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -44670,6 +45085,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Capacidad para usar la habilidad.\nDetalles: Un personaje con esta dote es especialista en una habilidad, obteniendo un bonificador +3 a todas las pruebas realizadas con ella.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una habilidad diferente.",
       "id": "feat:skillfocusconc",
       "label": "Soltura con una habilidad (Concentración)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:skill-focus",
+        "groupKey": "feat:skill-focus",
+        "paramLabel": "habilidad"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -44681,6 +45101,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Capacidad para usar la habilidad.\nDetalles: Un personaje con esta dote es especialista en una habilidad, obteniendo un bonificador +3 a todas las pruebas realizadas con ella.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una habilidad diferente.",
       "id": "feat:skillfocusdisa",
       "label": "Soltura con una habilidad (Inutilizar mecanismo)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:skill-focus",
+        "groupKey": "feat:skill-focus",
+        "paramLabel": "habilidad"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -44692,6 +45117,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Capacidad para usar la habilidad.\nDetalles: Un personaje con esta dote es especialista en una habilidad, obteniendo un bonificador +3 a todas las pruebas realizadas con ella.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una habilidad diferente.",
       "id": "feat:skillfocusdisc",
       "label": "Soltura con una habilidad (Saber local)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:skill-focus",
+        "groupKey": "feat:skill-focus",
+        "paramLabel": "habilidad"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -44703,6 +45133,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Capacidad para usar la habilidad.\nDetalles: Un personaje con esta dote es especialista en una habilidad, obteniendo un bonificador +3 a todas las pruebas realizadas con ella.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una habilidad diferente.",
       "id": "feat:skillfocusheal",
       "label": "Soltura con una habilidad (Sanar)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:skill-focus",
+        "groupKey": "feat:skill-focus",
+        "paramLabel": "habilidad"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -44714,6 +45149,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Capacidad para usar la habilidad.\nDetalles: Un personaje con esta dote es especialista en una habilidad, obteniendo un bonificador +3 a todas las pruebas realizadas con ella.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una habilidad diferente.",
       "id": "feat:skillfocushide",
       "label": "Soltura con una habilidad (Esconderse)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:skill-focus",
+        "groupKey": "feat:skill-focus",
+        "paramLabel": "habilidad"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -44725,6 +45165,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Capacidad para usar la habilidad.\nDetalles: Un personaje con esta dote es especialista en una habilidad, obteniendo un bonificador +3 a todas las pruebas realizadas con ella.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una habilidad diferente.",
       "id": "feat:skillfocuslist",
       "label": "Soltura con una habilidad (Escuchar)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:skill-focus",
+        "groupKey": "feat:skill-focus",
+        "paramLabel": "habilidad"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -44736,6 +45181,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Capacidad para usar la habilidad.\nDetalles: Un personaje con esta dote es especialista en una habilidad, obteniendo un bonificador +3 a todas las pruebas realizadas con ella.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una habilidad diferente.",
       "id": "feat:skillfocuslore",
       "label": "Soltura con una habilidad (Saber arcano)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:skill-focus",
+        "groupKey": "feat:skill-focus",
+        "paramLabel": "habilidad"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -44747,6 +45197,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Capacidad para usar la habilidad.\nDetalles: Un personaje con esta dote es especialista en una habilidad, obteniendo un bonificador +3 a todas las pruebas realizadas con ella.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una habilidad diferente.",
       "id": "feat:skillfocusmove",
       "label": "Soltura con una habilidad (Moverse sigilosamente)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:skill-focus",
+        "groupKey": "feat:skill-focus",
+        "paramLabel": "habilidad"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -44758,6 +45213,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Capacidad para usar la habilidad.\nDetalles: Un personaje con esta dote es especialista en una habilidad, obteniendo un bonificador +3 a todas las pruebas realizadas con ella.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una habilidad diferente.",
       "id": "feat:skillfocusopen",
       "label": "Soltura con una habilidad (Abrir cerraduras)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:skill-focus",
+        "groupKey": "feat:skill-focus",
+        "paramLabel": "habilidad"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -44769,6 +45229,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Capacidad para usar la habilidad.\nDetalles: Un personaje con esta dote es especialista en una habilidad, obteniendo un bonificador +3 a todas las pruebas realizadas con ella.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una habilidad diferente.",
       "id": "feat:skillfocusparr",
       "label": "Soltura con una habilidad (Saber religión)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:skill-focus",
+        "groupKey": "feat:skill-focus",
+        "paramLabel": "habilidad"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -44780,6 +45245,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Capacidad para usar la habilidad.\nDetalles: Un personaje con esta dote es especialista en una habilidad, obteniendo un bonificador +3 a todas las pruebas realizadas con ella.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una habilidad diferente.",
       "id": "feat:skillfocusperf",
       "label": "Soltura con una habilidad (Interpretar)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:skill-focus",
+        "groupKey": "feat:skill-focus",
+        "paramLabel": "habilidad"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -44791,6 +45261,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Capacidad para usar la habilidad.\nDetalles: Un personaje con esta dote es especialista en una habilidad, obteniendo un bonificador +3 a todas las pruebas realizadas con ella.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una habilidad diferente.",
       "id": "feat:skillfocuspers",
       "label": "Soltura con una habilidad (Diplomacia)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:skill-focus",
+        "groupKey": "feat:skill-focus",
+        "paramLabel": "habilidad"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -44802,6 +45277,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Capacidad para usar la habilidad.\nDetalles: Un personaje con esta dote es especialista en una habilidad, obteniendo un bonificador +3 a todas las pruebas realizadas con ella.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una habilidad diferente.",
       "id": "feat:skillfocuspick",
       "label": "Soltura con una habilidad (Juego de manos)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:skill-focus",
+        "groupKey": "feat:skill-focus",
+        "paramLabel": "habilidad"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -44813,6 +45293,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Capacidad para usar la habilidad.\nDetalles: Un personaje con esta dote es especialista en una habilidad, obteniendo un bonificador +3 a todas las pruebas realizadas con ella.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una habilidad diferente.",
       "id": "feat:skillfocussearch",
       "label": "Soltura con una habilidad (Buscar)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:skill-focus",
+        "groupKey": "feat:skill-focus",
+        "paramLabel": "habilidad"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -44824,6 +45309,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Capacidad para usar la habilidad.\nDetalles: Un personaje con esta dote es especialista en una habilidad, obteniendo un bonificador +3 a todas las pruebas realizadas con ella.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una habilidad diferente.",
       "id": "feat:skillfocusset",
       "label": "Soltura con una habilidad (Poner trampas)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:skill-focus",
+        "groupKey": "feat:skill-focus",
+        "paramLabel": "habilidad"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -44835,6 +45325,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Capacidad para usar la habilidad.\nDetalles: Un personaje con esta dote es especialista en una habilidad, obteniendo un bonificador +3 a todas las pruebas realizadas con ella.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una habilidad diferente.",
       "id": "feat:skillfocusspell",
       "label": "Soltura con una habilidad (Conocimiento de conjuros)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:skill-focus",
+        "groupKey": "feat:skill-focus",
+        "paramLabel": "habilidad"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -44846,6 +45341,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Capacidad para usar la habilidad.\nDetalles: Un personaje con esta dote es especialista en una habilidad, obteniendo un bonificador +3 a todas las pruebas realizadas con ella.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una habilidad diferente.",
       "id": "feat:skillfocusspot",
       "label": "Soltura con una habilidad (Avistar)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:skill-focus",
+        "groupKey": "feat:skill-focus",
+        "paramLabel": "habilidad"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -44857,6 +45357,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Capacidad para usar la habilidad.\nDetalles: Un personaje con esta dote es especialista en una habilidad, obteniendo un bonificador +3 a todas las pruebas realizadas con ella.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una habilidad diferente.",
       "id": "feat:skillfocustaunt",
       "label": "Soltura con una habilidad (Saber otros)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:skill-focus",
+        "groupKey": "feat:skill-focus",
+        "paramLabel": "habilidad"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -44868,6 +45373,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Capacidad para usar la habilidad.\nDetalles: Un personaje con esta dote es especialista en una habilidad, obteniendo un bonificador +3 a todas las pruebas realizadas con ella.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una habilidad diferente.",
       "id": "feat:skillfocusdevi",
       "label": "Soltura con una habilidad (Usar objeto mágico)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:skill-focus",
+        "groupKey": "feat:skill-focus",
+        "paramLabel": "habilidad"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -46358,6 +46868,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Soltura con una escuela de magia.\nDetalles: El personaje se hace más competente todavía con los conjuros de una escuela de magia en particular. Obtiene un bonificador +4 a la CD de salvación contra todos los sortilegios de la escuela elegida.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una escuela de magia diferente.",
       "id": "feat:grspllfcsabj",
       "label": "Soltura mayor con una escuela de magia (Abjuración)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-spell-focus",
+        "groupKey": "feat:greater-spell-focus",
+        "paramLabel": "escuela de magia"
+      },
       "prerequisites": {
         "preReqEpic": false,
         "requiredFeat1": "feat:spellfocusabj"
@@ -46370,6 +46885,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Soltura con una escuela de magia.\nDetalles: El personaje se hace más competente todavía con los conjuros de una escuela de magia en particular. Obtiene un bonificador +4 a la CD de salvación contra todos los sortilegios de la escuela elegida.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una escuela de magia diferente.",
       "id": "feat:grspllfcscnj",
       "label": "Soltura mayor con una escuela de magia (Conjuración)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-spell-focus",
+        "groupKey": "feat:greater-spell-focus",
+        "paramLabel": "escuela de magia"
+      },
       "prerequisites": {
         "preReqEpic": false,
         "requiredFeat1": "feat:spellfocuscon"
@@ -46382,6 +46902,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Soltura con una escuela de magia.\nDetalles: El personaje se hace más competente todavía con los conjuros de una escuela de magia en particular. Obtiene un bonificador +4 a la CD de salvación contra todos los sortilegios de la escuela elegida.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una escuela de magia diferente.",
       "id": "feat:grspllfcsdiv",
       "label": "Soltura mayor con una escuela de magia (Adivinación)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-spell-focus",
+        "groupKey": "feat:greater-spell-focus",
+        "paramLabel": "escuela de magia"
+      },
       "prerequisites": {
         "preReqEpic": false,
         "requiredFeat1": "feat:spellfocusdiv"
@@ -46394,6 +46919,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Soltura con una escuela de magia.\nDetalles: El personaje se hace más competente todavía con los conjuros de una escuela de magia en particular. Obtiene un bonificador +4 a la CD de salvación contra todos los sortilegios de la escuela elegida.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una escuela de magia diferente.",
       "id": "feat:grspllfcsench",
       "label": "Soltura mayor con una escuela de magia (Encantamiento)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-spell-focus",
+        "groupKey": "feat:greater-spell-focus",
+        "paramLabel": "escuela de magia"
+      },
       "prerequisites": {
         "preReqEpic": false,
         "requiredFeat1": "feat:spellfocusenc"
@@ -46406,6 +46936,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Soltura con una escuela de magia.\nDetalles: El personaje se hace más competente todavía con los conjuros de una escuela de magia en particular. Obtiene un bonificador +4 a la CD de salvación contra todos los sortilegios de la escuela elegida.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una escuela de magia diferente.",
       "id": "feat:grspllfcsevc",
       "label": "Soltura mayor con una escuela de magia (Evocación)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-spell-focus",
+        "groupKey": "feat:greater-spell-focus",
+        "paramLabel": "escuela de magia"
+      },
       "prerequisites": {
         "preReqEpic": false,
         "requiredFeat1": "feat:spellfocusevo"
@@ -46418,6 +46953,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Soltura con una escuela de magia.\nDetalles: El personaje se hace más competente todavía con los conjuros de una escuela de magia en particular. Obtiene un bonificador +4 a la CD de salvación contra todos los sortilegios de la escuela elegida.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una escuela de magia diferente.",
       "id": "feat:grspllfcsill",
       "label": "Soltura mayor con una escuela de magia (Ilusión)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-spell-focus",
+        "groupKey": "feat:greater-spell-focus",
+        "paramLabel": "escuela de magia"
+      },
       "prerequisites": {
         "preReqEpic": false,
         "requiredFeat1": "feat:spellfocusill"
@@ -46430,6 +46970,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Soltura con una escuela de magia.\nDetalles: El personaje se hace más competente todavía con los conjuros de una escuela de magia en particular. Obtiene un bonificador +4 a la CD de salvación contra todos los sortilegios de la escuela elegida.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una escuela de magia diferente.",
       "id": "feat:grspllfcsnec",
       "label": "Soltura mayor con una escuela de magia (Nigromancia)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-spell-focus",
+        "groupKey": "feat:greater-spell-focus",
+        "paramLabel": "escuela de magia"
+      },
       "prerequisites": {
         "preReqEpic": false,
         "requiredFeat1": "feat:spellfocusnec"
@@ -46442,6 +46987,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Soltura con una escuela de magia.\nDetalles: El personaje se hace más competente todavía con los conjuros de una escuela de magia en particular. Obtiene un bonificador +4 a la CD de salvación contra todos los sortilegios de la escuela elegida.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una escuela de magia diferente.",
       "id": "feat:grspllfcstran",
       "label": "Soltura mayor con una escuela de magia (Transmutación)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-spell-focus",
+        "groupKey": "feat:greater-spell-focus",
+        "paramLabel": "escuela de magia"
+      },
       "prerequisites": {
         "preReqEpic": false,
         "requiredFeat1": "feat:spellfocustra"
@@ -46477,6 +47027,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Capacidad para usar la habilidad.\nDetalles: Un personaje con esta dote es especialista en una habilidad, obteniendo un bonificador +3 a todas las pruebas realizadas con ella.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una habilidad diferente.",
       "id": "feat:skillfocappraise",
       "label": "Soltura con una habilidad (Tasación)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:skill-focus",
+        "groupKey": "feat:skill-focus",
+        "paramLabel": "habilidad"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -46488,6 +47043,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Capacidad para usar la habilidad.\nDetalles: Un personaje con esta dote es especialista en una habilidad, obteniendo un bonificador +3 a todas las pruebas realizadas con ella.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una habilidad diferente.",
       "id": "feat:skillfoctumble",
       "label": "Soltura con una habilidad (Piruetas)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:skill-focus",
+        "groupKey": "feat:skill-focus",
+        "paramLabel": "habilidad"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -46499,6 +47059,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Capacidad para usar la habilidad.\nDetalles: Un personaje con esta dote es especialista en una habilidad, obteniendo un bonificador +3 a todas las pruebas realizadas con ella.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una habilidad diferente.",
       "id": "feat:skillfoccrfttrap",
       "label": "Soltura con una habilidad (Artesanía)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:skill-focus",
+        "groupKey": "feat:skill-focus",
+        "paramLabel": "habilidad"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -48819,6 +49384,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-club",
       "label": "Soltura mayor con un arma (clava)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -48833,6 +49403,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-dagger",
       "label": "Soltura mayor con un arma (daga)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -48847,6 +49422,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-dart",
       "label": "Soltura mayor con un arma (dardo)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -48861,6 +49441,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-heavycrossbow",
       "label": "Soltura mayor con un arma (ballesta pesada)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -48875,6 +49460,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-lightcrossbow",
       "label": "Soltura mayor con un arma (ballesta ligera)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -48889,6 +49479,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-lightmace",
       "label": "Soltura mayor con un arma (maza)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -48903,6 +49498,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-morningstar",
       "label": "Soltura mayor con un arma (maza de armas)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -48917,6 +49517,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-quarterstaff",
       "label": "Soltura mayor con un arma (bastón)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -48931,6 +49536,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-warspear",
       "label": "Soltura mayor con un arma (lanza)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -48945,6 +49555,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-sickle",
       "label": "Soltura mayor con un arma (hoz)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -48959,6 +49574,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-sling",
       "label": "Soltura mayor con un arma (honda)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -48973,6 +49593,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-unarmed",
       "label": "Soltura mayor con un arma (impacto sin arma)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -48987,6 +49612,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-longbow",
       "label": "Soltura mayor con un arma (arco largo)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -49001,6 +49631,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-shortbow",
       "label": "Soltura mayor con un arma (arco corto)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -49015,6 +49650,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-shortsword",
       "label": "Soltura mayor con un arma (espada corta)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -49029,6 +49669,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-rapier",
       "label": "Soltura mayor con un arma (estoque)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -49043,6 +49688,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-scimitar",
       "label": "Soltura mayor con un arma (cimitarra)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -49057,6 +49707,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-longsword",
       "label": "Soltura mayor con un arma (espada larga)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -49071,6 +49726,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-greatsword",
       "label": "Soltura mayor con un arma (espadón)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -49085,6 +49745,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-handaxe",
       "label": "Soltura mayor con un arma (hacha de mano)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -49099,6 +49764,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-throwingaxe",
       "label": "Soltura mayor con un arma (hacha arrojadiza)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -49113,6 +49783,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-battleaxe",
       "label": "Soltura mayor con un arma (hacha de batalla)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -49127,6 +49802,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-greataxe",
       "label": "Soltura mayor con un arma (gran hacha)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -49141,6 +49821,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-halberd",
       "label": "Soltura mayor con un arma (alabarda)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -49155,6 +49840,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-lighthammer",
       "label": "Soltura mayor con un arma (matillo ligero)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -49169,6 +49859,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-lightflail",
       "label": "Soltura mayor con un arma (mangual ligero)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -49183,6 +49878,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-warhammer",
       "label": "Soltura mayor con un arma (martilo de guerra)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -49197,6 +49897,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-heavyflail",
       "label": "Soltura mayor con un arma (mangual pesado)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -49211,6 +49916,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-kama",
       "label": "Soltura mayor con un arma (kama)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -49225,6 +49935,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-kukri",
       "label": "Soltura mayor con un arma (kukri)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -49239,6 +49954,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-shuriken",
       "label": "Soltura mayor con un arma (shuriken)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -49253,6 +49973,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-scythe",
       "label": "Soltura mayor con un arma (guadaña)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -49267,6 +49992,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-katana",
       "label": "Soltura mayor con un arma (katana)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -49281,6 +50011,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-bastardsword",
       "label": "Soltura mayor con un arma (espada bastarda)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -49295,6 +50030,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-diremace",
       "label": "Soltura mayor con un arma (maza terrible)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -49309,6 +50049,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-doubleaxe",
       "label": "Soltura mayor con un arma (hacha doble)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -49323,6 +50068,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-twobladedsword",
       "label": "Soltura mayor con un arma (espada de dos hojas)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -52504,6 +53254,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Capacidad para usar la habilidad.\nDetalles: Un personaje con esta dote es especialista en una habilidad, obteniendo un bonificador +3 a todas las pruebas realizadas con ella.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una habilidad diferente.",
       "id": "feat:feat-skill-focus-craft-armor",
       "label": "Soltura con una habilidad (Nadar)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:skill-focus",
+        "groupKey": "feat:skill-focus",
+        "paramLabel": "habilidad"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -52515,6 +53270,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Capacidad para usar la habilidad.\nDetalles: Un personaje con esta dote es especialista en una habilidad, obteniendo un bonificador +3 a todas las pruebas realizadas con ella.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una habilidad diferente.",
       "id": "feat:feat-skill-focus-craft-weapon",
       "label": "Soltura con una habilidad (Saltar)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:skill-focus",
+        "groupKey": "feat:skill-focus",
+        "paramLabel": "habilidad"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -52556,6 +53316,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Capacidad para usar la habilidad.\nDetalles: Un personaje con esta dote es especialista en una habilidad, obteniendo un bonificador +3 a todas las pruebas realizadas con ella.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una habilidad diferente.",
       "id": "feat:feat-skill-focus-bluff",
       "label": "Soltura con una habilidad (Engañar)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:skill-focus",
+        "groupKey": "feat:skill-focus",
+        "paramLabel": "habilidad"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -52567,6 +53332,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Capacidad para usar la habilidad.\nDetalles: Un personaje con esta dote es especialista en una habilidad, obteniendo un bonificador +3 a todas las pruebas realizadas con ella.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una habilidad diferente.",
       "id": "feat:feat-skill-focus-intimidate",
       "label": "Soltura con una habilidad (Intimidar)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:skill-focus",
+        "groupKey": "feat:skill-focus",
+        "paramLabel": "habilidad"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -53013,6 +53783,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:feat-weapon-focus-dwaxe",
       "label": "Soltura con un arma (hacha de guerra enana)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "preReqEpic": false,
@@ -53026,6 +53801,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:feat-weapon-specialization-dwaxe",
       "label": "Especialización en armas (hacha de guerra enana)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -53068,6 +53848,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-dwaxe",
       "label": "Soltura mayor con un arma (hacha de guerra enana)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -53444,6 +54229,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:feat-weapon-focus-whip",
       "label": "Soltura con un arma (látigo)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "preReqEpic": false,
@@ -53457,6 +54247,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:feat-weapon-specialization-whip",
       "label": "Especialización en armas (látigo)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -53499,6 +54294,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-whip",
       "label": "Soltura mayor con un arma (látigo)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -54242,6 +55042,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:feat-weapon-focus-trident",
       "label": "Soltura con un arma (tridente)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "preReqEpic": false,
@@ -54255,6 +55060,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:feat-weapon-specialization-trident",
       "label": "Especialización en armas (tridente)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -54297,6 +55107,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-trident",
       "label": "Soltura mayor con un arma (tridente)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -55605,6 +56420,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:solturaconunarma-presa",
       "label": "Soltura con un arma (presa)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "preReqEpic": false
@@ -55641,6 +56461,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Capacidad para usar la habilidad.\nDetalles: Un personaje con esta dote es especialista en una habilidad, obteniendo un bonificador +3 a todas las pruebas realizadas con ella.\nEspecial: El bonificador no se sumará a tu ficha por limitaciones del NwN, sino que se tomará en cuenta en scripts y por los DMs también.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una habilidad diferente.",
       "id": "feat:skillfocusmontar",
       "label": "Soltura con una habilidad (Montar)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:skill-focus",
+        "groupKey": "feat:skill-focus",
+        "paramLabel": "habilidad"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -55652,6 +56477,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Capacidad para usar la habilidad.\nDetalles: Un personaje con esta dote es especialista en una habilidad, obteniendo un bonificador +3 a todas las pruebas realizadas con ella.\nEspecial: El bonificador no se sumará a tu ficha por limitaciones del NwN, sino que se tomará en cuenta en scripts y por los DMs también.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una habilidad diferente.",
       "id": "feat:skillfocusaverintenciones",
       "label": "Soltura con una habilidad (Averiguar intenciones)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:skill-focus",
+        "groupKey": "feat:skill-focus",
+        "paramLabel": "habilidad"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -55675,6 +56505,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Capacidad para usar la habilidad.\nDetalles: Un personaje con esta dote es especialista en una habilidad, obteniendo un bonificador +3 a todas las pruebas realizadas con ella.\nEspecial: El bonificador no se sumará a tu ficha por limitaciones del NwN, sino que se tomará en cuenta en scripts y por los DMs también.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una habilidad diferente.",
       "id": "feat:skillfocusdescescritura",
       "label": "Soltura con una habilidad (Descifrar escritura)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:skill-focus",
+        "groupKey": "feat:skill-focus",
+        "paramLabel": "habilidad"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -55686,6 +56521,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Capacidad para usar la habilidad.\nDetalles: Un personaje con esta dote es especialista en una habilidad, obteniendo un bonificador +3 a todas las pruebas realizadas con ella.\nEspecial: El bonificador no se sumará a tu ficha por limitaciones del NwN, sino que se tomará en cuenta en scripts y por los DMs también.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una habilidad diferente.",
       "id": "feat:skillfocusdisfrazarse",
       "label": "Soltura con una habilidad (Disfrazarse)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:skill-focus",
+        "groupKey": "feat:skill-focus",
+        "paramLabel": "habilidad"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -55711,6 +56551,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Capacidad para usar la habilidad.\nDetalles: Un personaje con esta dote es especialista en una habilidad, obteniendo un bonificador +3 a todas las pruebas realizadas con ella.\nEspecial: El bonificador no se sumará a tu ficha por limitaciones del NwN, sino que se tomará en cuenta en scripts y por los DMs también.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una habilidad diferente.",
       "id": "feat:skillfocusequilibrio",
       "label": "Soltura con una habilidad (Equilibrio)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:skill-focus",
+        "groupKey": "feat:skill-focus",
+        "paramLabel": "habilidad"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -55722,6 +56567,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Capacidad para usar la habilidad.\nDetalles: Un personaje con esta dote es especialista en una habilidad, obteniendo un bonificador +3 a todas las pruebas realizadas con ella.\nEspecial: El bonificador no se sumará a tu ficha por limitaciones del NwN, sino que se tomará en cuenta en scripts y por los DMs también.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una habilidad diferente.",
       "id": "feat:skillfocusescapismo",
       "label": "Soltura con una habilidad (Escapismo)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:skill-focus",
+        "groupKey": "feat:skill-focus",
+        "paramLabel": "habilidad"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -55770,6 +56620,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Capacidad para usar la habilidad.\nDetalles: Un personaje con esta dote es especialista en una habilidad, obteniendo un bonificador +3 a todas las pruebas realizadas con ella.\nEspecial: El bonificador no se sumará a tu ficha por limitaciones del NwN, sino que se tomará en cuenta en scripts y por los DMs también.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una habilidad diferente.",
       "id": "feat:skillfocusfalsificar",
       "label": "Soltura con una habilidad (Falsificar)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:skill-focus",
+        "groupKey": "feat:skill-focus",
+        "paramLabel": "habilidad"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -55781,6 +56636,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Capacidad para usar la habilidad.\nDetalles: Un personaje con esta dote es especialista en una habilidad, obteniendo un bonificador +3 a todas las pruebas realizadas con ella.\nEspecial: El bonificador no se sumará a tu ficha por limitaciones del NwN, sino que se tomará en cuenta en scripts y por los DMs también.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una habilidad diferente.",
       "id": "feat:skillfocushablarunidioma",
       "label": "Soltura con una habilidad (Hablar un idioma)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:skill-focus",
+        "groupKey": "feat:skill-focus",
+        "paramLabel": "habilidad"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -55792,6 +56652,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Capacidad para usar la habilidad.\nDetalles: Un personaje con esta dote es especialista en una habilidad, obteniendo un bonificador +3 a todas las pruebas realizadas con ella.\nEspecial: El bonificador no se sumará a tu ficha por limitaciones del NwN, sino que se tomará en cuenta en scripts y por los DMs también.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una habilidad diferente.",
       "id": "feat:skillfocusreunirinformacion",
       "label": "Soltura con una habilidad (Reunir información)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:skill-focus",
+        "groupKey": "feat:skill-focus",
+        "paramLabel": "habilidad"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -55803,6 +56668,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Capacidad para usar la habilidad.\nDetalles: Un personaje con esta dote es especialista en una habilidad, obteniendo un bonificador +3 a todas las pruebas realizadas con ella.\nEspecial: El bonificador no se sumará a tu ficha por limitaciones del NwN, sino que se tomará en cuenta en scripts y por los DMs también.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una habilidad diferente.",
       "id": "feat:skillfocussupervivivencia",
       "label": "Soltura con una habilidad (Supervivencia)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:skill-focus",
+        "groupKey": "feat:skill-focus",
+        "paramLabel": "habilidad"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -55814,6 +56684,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Capacidad para usar la habilidad.\nDetalles: Un personaje con esta dote es especialista en una habilidad, obteniendo un bonificador +3 a todas las pruebas realizadas con ella.\nEspecial: El bonificador no se sumará a tu ficha por limitaciones del NwN, sino que se tomará en cuenta en scripts y por los DMs también.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una habilidad diferente.",
       "id": "feat:skillfocustrepar",
       "label": "Soltura con una habilidad (Trepar)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:skill-focus",
+        "groupKey": "feat:skill-focus",
+        "paramLabel": "habilidad"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -55825,6 +56700,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Capacidad para usar la habilidad.\nDetalles: Un personaje con esta dote es especialista en una habilidad, obteniendo un bonificador +3 a todas las pruebas realizadas con ella.\nEspecial: El bonificador no se sumará a tu ficha por limitaciones del NwN, sino que se tomará en cuenta en scripts y por los DMs también.\nUso: Automática. Esta dote se puede seleccionar varias veces, pero los efectos no se apilan, sino que en cada caso se aplican a una habilidad diferente.",
       "id": "feat:skillfocususodecuerdas",
       "label": "Soltura con una habilidad (Uso de cuerdas)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:skill-focus",
+        "groupKey": "feat:skill-focus",
+        "paramLabel": "habilidad"
+      },
       "prerequisites": {
         "preReqEpic": false
       },
@@ -58617,6 +59497,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfocsspear",
       "label": "Soltura con un arma (lanza corta)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "orReqFeats": [
@@ -58633,6 +59518,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspesspear",
       "label": "Especialización en armas (lanza corta)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -58648,6 +59538,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-short-spear",
       "label": "Soltura mayor con un arma (lanza corta)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -58735,6 +59630,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfoclspear",
       "label": "Soltura con un arma (lanza larga)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "orReqFeats": [
@@ -58751,6 +59651,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspelspear",
       "label": "Especialización en armas (lanza larga)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -58766,6 +59671,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-long-spear",
       "label": "Soltura mayor con un arma (lanza larga)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -58853,6 +59763,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfochpick",
       "label": "Soltura con un arma (pico pesado)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "preReqEpic": false,
@@ -58866,6 +59781,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspehpick",
       "label": "Especialización en armas (pico pesado)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -58881,6 +59801,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-heavy-pick",
       "label": "Soltura mayor con un arma (pico pesado)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -58965,6 +59890,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfoclpick",
       "label": "Soltura con un arma (pico ligero)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "preReqEpic": false,
@@ -58978,6 +59908,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspelpick",
       "label": "Especialización en armas (pico ligero)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -58993,6 +59928,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-light-pick",
       "label": "Soltura mayor con un arma (pico ligero)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -59077,6 +60017,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfocsai",
       "label": "Soltura con un arma (sai)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "preReqEpic": false,
@@ -59090,6 +60035,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspesai",
       "label": "Especialización en armas (sai)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -59105,6 +60055,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-sai",
       "label": "Soltura mayor con un arma (sai)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -59189,6 +60144,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfocassdagger",
       "label": "Soltura con un arma (daga de asesino)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "orReqFeats": [
@@ -59208,6 +60168,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspeassdagger",
       "label": "Especialización en armas (daga de asesinoi)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -59223,6 +60188,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-assdagger",
       "label": "Soltura mayor con un arma (daga de asesino)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -59313,6 +60283,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfockatar",
       "label": "Soltura con un arma (katar)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "orReqFeats": [
@@ -59332,6 +60307,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspekatar",
       "label": "Especialización en armas (katar)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -59347,6 +60327,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-katar",
       "label": "Soltura mayor con un arma (katar)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -59437,6 +60422,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfochmace",
       "label": "Soltura con un arma (maza pesada)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "orReqFeats": [
@@ -59456,6 +60446,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspehmace",
       "label": "Especialización en armas (maza pesada)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -59471,6 +60466,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-heavy-mace",
       "label": "Soltura mayor con un arma (maza pesada)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -59561,6 +60561,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfoc2swmaug",
       "label": "Soltura con un arma (espada doble maug)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "orReqFeats": [
@@ -59576,6 +60581,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspe2swmaug",
       "label": "Especialización en armas (espada doble maug)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -59591,6 +60601,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-2swmaug",
       "label": "Soltura mayor con un arma (espada doble maug)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -59675,6 +60690,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfoc1htri",
       "label": "Soltura con un arma (tridente ligero)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "preReqEpic": false,
@@ -59688,6 +60708,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspe1htri",
       "label": "Especialización en armas (tridente ligero)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -59703,6 +60728,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-1htri",
       "label": "Soltura mayor con un arma (tridente ligero)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -59787,6 +60817,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfocfalchion",
       "label": "Soltura con un arma (alfanje)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "preReqEpic": false,
@@ -59800,6 +60835,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspefalchion",
       "label": "Especialización en armas (alfanje)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -59815,6 +60855,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-falchion",
       "label": "Soltura mayor con un arma (alfanje)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -59899,6 +60944,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfocmaul",
       "label": "Soltura con un arma (mazo)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "preReqEpic": false,
@@ -59912,6 +60962,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspemaul",
       "label": "Especialización en armas (mazo)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -59927,6 +60982,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-maul",
       "label": "Soltura mayor con un arma (mazo)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -60011,6 +61071,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfocnunc",
       "label": "Soltura con un arma (nunchaku)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "preReqEpic": false,
@@ -60024,6 +61089,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspenunc",
       "label": "Especialización en armas (nunchaku)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -60039,6 +61109,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-nunchaku",
       "label": "Soltura mayor con un arma (nunchaku)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -60123,6 +61198,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfoc2wsci",
       "label": "Soltura con un arma (cimitarra doble)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "preReqEpic": false,
@@ -60136,6 +61216,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspe2wsci",
       "label": "Especialización en armas (cimitarra doble)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -60151,6 +61236,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-2wscimitar",
       "label": "Soltura mayor con un arma (cimitarra doble)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -60235,6 +61325,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfocwfwheel",
       "label": "Soltura con un arma (Rueda de viento y fuego)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "preReqEpic": false,
@@ -60248,6 +61343,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspewfwheel",
       "label": "Especialización en armas (Rueda de viento y fuego)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -60263,6 +61363,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-wfwheel",
       "label": "Soltura mayor con un arma (Rueda de viento y fuego)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -60346,6 +61451,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfochmaul",
       "label": "Soltura con un arma (Mazo enorme)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "preReqEpic": false,
@@ -60359,6 +61469,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspehmaul",
       "label": "Especialización en armas (Mazo enorme)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -60374,6 +61489,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-hmaul",
       "label": "Soltura mayor con un arma (Mazo enorme)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -60458,6 +61578,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfochgsword",
       "label": "Soltura con un arma (Espadón enorme)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "preReqEpic": false,
@@ -60471,6 +61596,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspehgsword",
       "label": "Especialización en armas (Espadón enorme)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -60486,6 +61616,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-hgsword",
       "label": "Soltura mayor con un arma (Espadón enorme)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
@@ -60570,6 +61705,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: General\nPrerrequisito: Competencia con el tipo de arma elegida, ataque base +1 ó superior.\nNecesaria para: Especialización en armas (sólo guerrero).\nDetalles: Un personaje con esta dote es especialmente hábil con un arma concreta, obteniendo un bonificador +1 al ataque con ella.\nUso: Automática. Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapfochgaxe",
       "label": "Soltura con un arma (Hacha enorme)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-focus",
+        "groupKey": "feat:weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 1,
         "preReqEpic": false,
@@ -60583,6 +61723,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Especial\nPrerrequisito: Se ha de ser guerrero, ataque base +4, Soltura con un arma en el grupo del arma elegida.\nDetalles: Un personaje con esta dote está especialmente entrenado con un grupo específico de armas, y obtiene un bonificador +2 al daño cuando usa tales armas en combate.\nUso: Esta dote se puede elegir varias veces, pero el efecto no se apila, sino que en cada caso se aplica a una nueva arma.\nEspecial: Los medianos y los gnomos son criaturas pequeñas y como tales nunca podrán usar las siguientes armas grandes: alabarda, espada bastarda, espada de dos hojas, espadón, gran hacha, guadaña, hacha doble, mangual pesado y maza terrible.",
       "id": "feat:weapspehgaxe",
       "label": "Especialización en armas (Hacha enorme)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:weapon-specialization",
+        "groupKey": "feat:weapon-specialization",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minBab": 4,
         "minLevel": 4,
@@ -60598,6 +61743,11 @@ export const compiledFeatCatalog: FeatCatalog = featCatalogSchema.parse({
       "description": "Tipo de dote: Combate.\nPrerrequisito: Guerrero de nivel 8º, Soltura con un arma (con el arma escogida).\nDetalles: El personaje recibe un bonificador +1 a todas las tiradas de ataque con el arma seleccionada.\nUso: Automática.",
       "id": "feat:feat-epic-weapon-focus-hgaxe",
       "label": "Soltura mayor con un arma (Hacha enorme)",
+      "parameterizedFeatFamily": {
+        "canonicalId": "feat:greater-weapon-focus",
+        "groupKey": "feat:greater-weapon-focus",
+        "paramLabel": "arma"
+      },
       "prerequisites": {
         "minLevel": 8,
         "minLevelClass": "class:fighter",
