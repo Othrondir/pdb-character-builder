@@ -34,7 +34,14 @@ function SkillRankRow({
         <h4>{row.label}</h4>
         <span className="skill-sheet__meta-inline">
           <span>{row.costTypeLabel}</span>
-          {row.trainedOnly ? <span>{shellCopyEs.skills.trainedOnlyLabel}</span> : null}
+          {row.trainedOnly ? (
+            // Phase 12.4-05 — R4: `Solo entrenada` badge stays per-row (orthogonal
+            // to class/transclase section grouping). `data-trained-only` exposes
+            // a queryable attribute for regression specs + future UI treatments.
+            <span data-trained-only="true">
+              {shellCopyEs.skills.trainedOnlyLabel}
+            </span>
+          ) : null}
         </span>
       </div>
 
@@ -145,17 +152,39 @@ export function SkillSheet() {
       ) : null}
 
       {activeSheet.classId ? (
+        // Phase 12.4-05 — R4 two-section render. Class section (1 pt/rango) above
+        // transclase section (2 pts/rango) per UI-SPEC.md §"R4 — Skill board split".
+        // Scoped namespace `.skill-board__*` mirrors `.feat-board__section-heading`.
         <div className="skill-sheet__groups">
-          {activeSheet.groups.map((group) => (
-            <section className="skill-sheet__group" key={group.category}>
-              <h3>{group.heading}</h3>
-              <div className="skill-sheet__rows">
-                {group.rows.map((row) => (
-                  <SkillRankRow key={row.skillId} level={activeSheet.level} row={row} />
-                ))}
-              </div>
-            </section>
-          ))}
+          {activeSheet.groups.map((group) => {
+            const headingId = `skill-board__${group.sectionId}`;
+            return (
+              <section
+                aria-labelledby={headingId}
+                className={`skill-sheet__group skill-board__section skill-board__section--${group.sectionId}`}
+                key={group.sectionId}
+              >
+                <h3
+                  className="skill-board__section-heading"
+                  id={headingId}
+                >
+                  {group.heading}
+                  <span
+                    className="skill-board__cost-hint"
+                    style={{ fontSize: '12px' }}
+                  >
+                    {' '}
+                    {group.costHint}
+                  </span>
+                </h3>
+                <div className="skill-sheet__rows skill-board__rows">
+                  {group.rows.map((row) => (
+                    <SkillRankRow key={row.skillId} level={activeSheet.level} row={row} />
+                  ))}
+                </div>
+              </section>
+            );
+          })}
         </div>
       ) : (
         <div className="level-sheet__placeholder">

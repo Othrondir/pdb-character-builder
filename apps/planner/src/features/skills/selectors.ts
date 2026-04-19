@@ -148,9 +148,17 @@ export interface SkillSummaryView {
   summaryStatus: SkillEvaluationStatus;
 }
 
+export type SkillSectionId = 'class' | 'cross-class';
+
 export interface SkillSheetGroupView {
-  category: string;
+  /**
+   * Phase 12.4-05 — R4 Habilidades split (SPEC R4, CONTEXT D-09).
+   * Grouping flipped from category-keyed to costType-keyed; `sectionId`
+   * drives section render order + heading choice in skill-sheet.tsx.
+   */
+  sectionId: SkillSectionId;
   heading: string;
+  costHint: string;
   rows: SkillSheetRowView[];
 }
 
@@ -525,13 +533,17 @@ export function selectActiveSkillSheetView(
     progressionState.levels.find((entry) => entry.level === skillState.activeLevel) ?? null;
   const classLabel = getPhase04ClassRecord(activeProgression?.classId ?? null)?.label ?? null;
   const rows = activeLevel && activeInput ? buildActiveSkillRows(activeLevel, activeInput) : [];
-  const groupedRows = rows.reduce<Record<string, SkillSheetRowView[]>>(
+  // Phase 12.4-05 — R4 Habilidades split (SPEC R4 / CONTEXT D-09).
+  // Bucket rows by `costType` (class | cross-class) instead of category so
+  // skill-sheet.tsx can render two headered sections with cost-per-rank copy.
+  const groupedRows = rows.reduce<Record<SkillSectionId, SkillSheetRowView[]>>(
     (accumulator, row) => {
-      accumulator[row.category] ??= [];
-      accumulator[row.category].push(row);
+      const sectionId: SkillSectionId =
+        row.costType === 'class' ? 'class' : 'cross-class';
+      accumulator[sectionId].push(row);
       return accumulator;
     },
-    {},
+    { class: [], 'cross-class': [] } as Record<SkillSectionId, SkillSheetRowView[]>,
   );
 
   return {
@@ -541,11 +553,22 @@ export function selectActiveSkillSheetView(
     emptyMessage: selectOriginReadyForAbilities(foundationState)
       ? shellCopyEs.skills.emptyStateBody
       : shellCopyEs.skills.lockedBody,
-    groups: Object.entries(groupedRows).map(([category, groupRows]) => ({
-      category,
-      heading: CATEGORY_LABELS[category] ?? category,
-      rows: groupRows,
-    })),
+    // Phase 12.4-05 — two-section emission. Section order is locked:
+    // class (1 pt/rango) above cross-class (2 pts/rango) per UI-SPEC.md §"R4".
+    groups: [
+      {
+        sectionId: 'class' as const,
+        heading: shellCopyEs.skills.sectionClassHeading,
+        costHint: shellCopyEs.skills.sectionClassCostHint,
+        rows: groupedRows.class,
+      },
+      {
+        sectionId: 'cross-class' as const,
+        heading: shellCopyEs.skills.sectionCrossClassHeading,
+        costHint: shellCopyEs.skills.sectionCrossClassCostHint,
+        rows: groupedRows['cross-class'],
+      },
+    ],
     inheritedFromLevel: activeRepair?.inheritedFromLevel ?? null,
     issues:
       activeLevel?.issues.map((issue) =>
