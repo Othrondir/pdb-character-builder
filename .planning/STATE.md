@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: "Phase 12.3 complete — 6/6 plans + 6/6 SC verified. All 9 UAT blockers (B1..B9) resolved: attributes overspend gate, multiclass L2+ wiring, per-level Dotes gate + slot prompt, HP pipeline, origin-stepper decoupling, description paragraph CSS. 499/499 tests green. In-browser UAT confirms Enano+Guerrero L1+Pícaro L2 multiclass flow produces correct rail, header NIVEL 2, PG 20, slot prompts, paragraph descriptions. Milestone v1.0 UNBLOCKED — ready for audit + close."
-last_updated: "2026-04-19T00:30:00Z"
+stopped_at: "Phase 12.4-01 shipped (Wave 1/3) — SPEC R8 closed via shared sentinel-regex helper + 4 extractor assembler guards (feat x2, skill x1, class x1, race x1) + UI belt-and-braces filter in feat selectors + compiled-feats.ts artifact scrubbed (sourceRow 385 + 403 DELETED rows removed). 20/20 regression assertions green in tests/phase-12.4/extractor-deleted-sentinel.spec.ts. Fail-closed at both producer and consumer: catalogs can no longer leak DELETED / UNUSED / PADDING / DELETED_* rows, and UI never renders them even if a future artifact regresses. Phase 12.4-02 + 12.4-03 remain in-flight on parallel worktrees; 12.4-04..09 across Waves 2-3 still pending."
+last_updated: "2026-04-19T16:56:05Z"
 last_activity: 2026-04-18
 progress:
   total_phases: 12
@@ -21,21 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-30)
 
 **Core value:** A player can build a Puerta de Baldur character from level 1 to 16 with strict server-valid validation and share that exact build reliably.
-**Current focus:** Phase 12.3 complete — milestone v1.0 ready to close. Next: `/gsd-audit-milestone v1.0` + `/gsd-complete-milestone` to ship v1.0.
+**Current focus:** Phase 12.4 (construccion-correctness-clarity) in flight — Wave 1 parallel execution. 12.4-01 complete (R8 sentinel filter); 12.4-02 + 12.4-03 running on sibling worktrees.
 
 ## Current Position
 
-Phase: 12.3 (uat-correctness-closure) — COMPLETE
-Plan: 6 of 6 complete
-Status: All 6 plans shipped across 3 waves; 12.3-VERIFICATION.md (2e8ce42) records 6/6 SC PASS. All 9 UAT blockers resolved end-to-end:
-- B1 attributes overspend gate (nextIncrementCost + canIncrementAttribute, 12.3-01)
-- B2+B8+B9 multiclass active-level wiring (LevelRail dispatch, 12.3-02)
-- B3+B4 per-level Dotes gate + slotPrompt (12.3-03)
-- B6 HP pipeline (computeHitPoints selector + StatsPanel wiring, 12.3-04)
-- B7 origin-stepper decoupling (narrow zustand subscriptions, 12.3-05)
-- B5 description paragraph CSS (white-space: pre-wrap, 12.3-06)
-499/499 tests green. In-browser UAT confirmed (Enano+Guerrero L1+Pícaro L2): rail 1Guerrero/2Pícaro, header NIVEL 2, PG 20, slot prompts rendered, description paragraph breaks visible. Milestone v1.0 UNBLOCKED.
-Last activity: 2026-04-18
+Phase: 12.4 (construccion-correctness-clarity) — IN PROGRESS (Wave 1 of 3)
+Plan: 1 of 9 complete (12.4-01 R8 sentinel filter shipped; 12.4-02 + 12.4-03 in parallel)
+Status: 12.4-01 closes SPEC R8 via shared `packages/data-extractor/src/lib/sentinel-regex.ts` (SENTINEL_REGEX + isSentinelLabel predicate) wired into all 4 catalog assemblers (feat-assembler 2 guards, skill/class/race-assembler 1 each) and the UI feat selector as belt-and-braces. Compiled-feats.ts artifact scrubbed of the two DELETED rows at sourceRow 385 + 403. 20/20 regression assertions green. RED commit `2c89215`, GREEN commit `52cffe4`.
+Last activity: 2026-04-19
 
 Progress: [██████████] 100%
 
@@ -78,6 +71,7 @@ Progress: [██████████] 100%
 | Phase 07 P04 | 9min | 4 tasks | 12 files |
 | Phase 07 P05 | 17m | 4 tasks | 12 files |
 | Phase 08 P02 | 32m | 4 tasks | 18 files |
+| Phase 12.4-01 | 8m | 3 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -143,6 +137,7 @@ Recent decisions affecting current work:
 - [Phase 12.2-03]: 0x00 AlignRestrict (with or without InvertRestrict) decodes to undefined (no gate), not "all 9 alignments" — matches NWN 2DA empty-mask convention and lets evaluateClassEntry skip the alignment row entirely when no restriction applies.
 - [Phase 12.3-01]: UAT B1 overspend gate lands at the UI layer — `canIncrementAttribute` is consumed by the `+` button `disabled` prop; the store's `setBaseAttribute` is not hardened. Mirrors existing `-` button gate semantics and keeps the store framework-agnostic. `calculateAbilityBudgetSnapshot` stays shape-stable (post-hoc validation copy); the new helpers are forward-looking per-click guards exported alongside it from `@rules-engine/foundation/ability-budget`.
 - [Phase 12.3-02]: Multiclass active-level repair lives entirely in the UI dispatch site — `LevelRail.onClick` fires `setActiveLevel` + `setExpandedLevel` atomically. No store/selector/selector-chain changes: `selectActiveLevelSheet` already reads `progressionState.activeLevel`; the board title already concatenates `${copy} ${activeSheet.level}`; the Clase sub-step already evaluates per-level. The single missing wire was the rail's onClick dispatch. Copy string `'Selecciona la clase del nivel'` (no hardcoded number) was already correct. Minimal-surface repair that closes B2 CRITICAL + B8 + B9 in one edit.
+- [Phase 12.4-01]: Shared sentinel regex lives in packages/data-extractor/src/lib/sentinel-regex.ts — SENTINEL_REGEX covers DELETED / ***DELETED*** / UNUSED / PADDING / DELETED_* / **** in one case-insensitive pattern; isSentinelLabel helper trims + null-guards + delegates. Fail-closed at producer across all 4 assemblers (feat x2, skill x1, class x1, race x1) AND belt-and-braces at consumer in apps/planner/src/features/feats/selectors.ts::selectFeatBoardView. compiled-feats.ts manually scrubbed of sourceRow 385 + 403 DELETED objects (no cross-references elsewhere in catalog, so excision is schema-safe). Future `pnpm extract` runs will reproduce the scrubbed artifact automatically via the new guards.
 
 ### Pending Todos
 
@@ -173,6 +168,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-19T00:20:00Z
-Stopped at: Shipped Phase 12.3-02 (UAT B2 CRITICAL + B8 + B9 — multiclass L2+ picker). Wired `setActiveLevel` alongside `setExpandedLevel` in `LevelRail.onClick` (+5/-1 in `apps/planner/src/components/shell/level-rail.tsx`); selectors + header title already read `progressionState.activeLevel`, so the one-line dispatch fix closes three user-visible blockers at once. 8-assertion regression spec (`tests/phase-12.3/multiclass-active-level.spec.tsx`) locks rail dispatch (Suite A, was RED), per-level class persistence (Suite B), title binding to live activeLevel (Suite C), and selector follow-through (Suite D). 2 atomic commits (541b4ef RED + cfc52a9 GREEN). Full vitest 490/490 green (up from 482 with +8 new assertions). Remaining: Wave 3 (12.3-03 Dotes gate).
+Last session: 2026-04-19T16:56:05Z
+Stopped at: Shipped Phase 12.4-01 (R8 extractor + UI sentinel filter, Wave 1 of 3). Parallel-worktree execution. Added packages/data-extractor/src/lib/sentinel-regex.ts (SENTINEL_REGEX + isSentinelLabel); injected guards into feat-assembler (2 sites: id-map loop + post-TLK displayLabel), skill-assembler (1), class-assembler (1), race-assembler (1); added belt-and-braces filter in apps/planner/src/features/feats/selectors.ts::selectFeatBoardView; excised sourceRow 385 + 403 DELETED objects from apps/planner/src/data/compiled-feats.ts (manual-patch fallback per plan because pnpm extract cannot run from isolated worktree). 20-assertion regression spec tests/phase-12.4/extractor-deleted-sentinel.spec.ts is 20/20 green (16 predicate + SENTINEL_REGEX typecheck + 4 catalog hygiene across feat/skill/class/race). 3 commits: `2c89215` RED + `52cffe4` GREEN + `docs(12.4-01)` pending. Parallel plans 12.4-02 (R9 Dotes scroll) + 12.4-03 (R3 per-level-budget selector) still running on sibling worktrees.
 Resume file: None
