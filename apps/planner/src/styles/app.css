@@ -2162,3 +2162,15 @@ a {
 .feat-family-expander__option-label {
   flex: 1;
 }
+
+/* ── Phase 12.4-09 — LevelEditorActionBar sticky footer (SPEC R2 / D-06) ─── */
+.level-editor__action-bar {
+  background: var(--color-panel);
+  border-top: 1px solid var(--color-panel-edge);
+  bottom: 0;
+  display: flex;
+  justify-content: flex-end;
+  padding: var(--space-md);
+  position: sticky;
+  z-index: 1;
+}

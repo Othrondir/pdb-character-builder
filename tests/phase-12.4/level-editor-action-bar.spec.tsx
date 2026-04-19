@@ -92,10 +92,12 @@ function fillL1ElfoGuerreroFeats(): void {
   useFeatStore.getState().setGeneralFeat(1 as ProgressionLevel, 'feat:alertness' as CanonicalId);
 }
 
-/** Fill 8/8 skill points across Guerrero class skills (trepar/saltar/intimidar each at rank=2 → 6; plus 2 more). */
+/**
+ * Fill all 4 skill points at L1 Elfo+Guerrero (INT base=8 → mod=-1 → max(1, 2-1)=1 base;
+ * L1 ×4 = 4 total). Default fixture baseScore=8 drives the floor-1 branch.
+ */
 function fillL1ElfoGuerreroSkills(): void {
   useSkillStore.getState().setSkillRank(1 as ProgressionLevel, 'skill:trepar' as CanonicalId, 4);
-  useSkillStore.getState().setSkillRank(1 as ProgressionLevel, 'skill:saltar' as CanonicalId, 4);
 }
 
 // --------------------------------------------------------------------------
@@ -125,16 +127,19 @@ describe('Phase 12.4-09 — LevelEditorActionBar (SPEC R2)', () => {
       expect(button).toBeDisabled();
     });
 
-    it('A2: L1 Elfo+Guerrero with all feats chosen, 0 skills — label `Faltan 8 puntos de habilidad por gastar`, disabled (deficit priority feat→skill)', () => {
+    it('A2: L1 Elfo+Guerrero with all feats chosen, 0 skills — label `Faltan 4 puntos de habilidad por gastar`, disabled (deficit priority feat→skill)', () => {
+      // Elfo INT base 8 (foundation-fixture baseScore=8) → mod=-1 → max(1, 2-1)=1
+      // base; L1 ×4 = 4 skill points. Locks priority: feat deficit cleared first,
+      // then skill deficit copy surfaces.
       setupL1ElfoGuerrero();
       fillL1ElfoGuerreroFeats();
       render(createElement(LevelEditorActionBar));
       const button = screen.getByRole('button');
-      expect(button.textContent).toMatch(/Faltan 8 puntos de habilidad por gastar/);
+      expect(button.textContent).toMatch(/Faltan 4 puntos de habilidad por gastar/);
       expect(button).toBeDisabled();
     });
 
-    it('A3: L1 Elfo+Guerrero with 2/2 feats + 8/8 skills — label `Continuar al nivel 2`, enabled', () => {
+    it('A3: L1 Elfo+Guerrero with 2/2 feats + 4/4 skills — label `Continuar al nivel 2`, enabled', () => {
       setupL1ElfoGuerrero();
       fillL1ElfoGuerreroFeats();
       fillL1ElfoGuerreroSkills();
@@ -220,12 +225,12 @@ describe('Phase 12.4-09 — LevelEditorActionBar (SPEC R2)', () => {
     });
 
     it('D2: when skill deficit === 1 → singular label `Falta 1 punto de habilidad por gastar`', () => {
-      // L1 Elfo+Guerrero: 2 feats filled + 7 of 8 skill points spent → skill deficit = 1.
+      // L1 Elfo+Guerrero: 2/2 feats filled + 3/4 skill points spent → deficit=1.
       setupL1ElfoGuerrero();
       fillL1ElfoGuerreroFeats();
-      // Spend 7 of 8 skill points.
-      useSkillStore.getState().setSkillRank(1 as ProgressionLevel, 'skill:trepar' as CanonicalId, 4);
-      useSkillStore.getState().setSkillRank(1 as ProgressionLevel, 'skill:saltar' as CanonicalId, 3);
+      useSkillStore
+        .getState()
+        .setSkillRank(1 as ProgressionLevel, 'skill:trepar' as CanonicalId, 3);
       render(createElement(LevelEditorActionBar));
       const button = screen.getByRole('button');
       expect(button.textContent).toMatch(/Falta 1 punto de habilidad por gastar/);
@@ -245,15 +250,18 @@ describe('Phase 12.4-09 — LevelEditorActionBar (SPEC R2)', () => {
       expect(footer!.getAttribute('data-testid')).toBe('level-editor-action-bar');
     });
 
-    it('E2: computed style has `position: sticky` and non-zero `border-top-width` when app.css injected', () => {
-      injectAppCss();
-      setupL1HumanoGuerrero();
-      render(createElement(LevelEditorActionBar));
-      const footer = document.querySelector('.level-editor__action-bar') as HTMLElement | null;
-      expect(footer).not.toBeNull();
-      const style = window.getComputedStyle(footer!);
-      expect(style.position).toBe('sticky');
-      expect(parseFloat(style.borderTopWidth)).toBeGreaterThan(0);
+    it('E2: app.css declares `.level-editor__action-bar` with `position: sticky` + `border-top` using `--color-panel-edge`', () => {
+      // jsdom's getComputedStyle does not cascade `position: sticky` or
+      // border-top from a sibling <style> tag for class selectors reliably —
+      // 12.4-07 parses app.css as text (source-of-truth pattern). We mirror
+      // that contract here so the CSS rule regression is caught at the
+      // text-source level without depending on jsdom cascade fidelity.
+      expect(appCss).toMatch(
+        /\.level-editor__action-bar\s*\{[^}]*position:\s*sticky/,
+      );
+      expect(appCss).toMatch(
+        /\.level-editor__action-bar\s*\{[^}]*border-top:\s*1px\s+solid\s+var\(--color-panel-edge\)/,
+      );
     });
 
     it('E3: advance button carries `data-testid="advance-to-level-{N+1}"` for deterministic E2E selection', () => {

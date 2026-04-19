@@ -188,6 +188,16 @@ export const shellCopyEs = {
       legal: 'Legal',
       pending: 'Pendiente',
     },
+    // Phase 12.4-09 — LevelEditorActionBar dynamic advance button (SPEC R2, CONTEXT D-06).
+    // Three mutually-exclusive label states driven by selectLevelCompletionState +
+    // computeAdvanceLabel (feat deficit > skill deficit > enabled continue). Plural-aware.
+    advanceButton: {
+      continueTemplate: 'Continuar al nivel {N}',
+      deficitFeatsSingular: 'Falta 1 dote que asignar en este nivel',
+      deficitFeatsPluralTemplate: 'Faltan {N} dotes que asignar en este nivel',
+      deficitSkillsSingular: 'Falta 1 punto de habilidad por gastar',
+      deficitSkillsPluralTemplate: 'Faltan {N} puntos de habilidad por gastar',
+    },
   },
   skills: {
     availablePointsLabel: 'Puntos disponibles',

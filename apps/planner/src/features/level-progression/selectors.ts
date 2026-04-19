@@ -469,3 +469,77 @@ export function isDotesLevelComplete(
   if (budget.featSlots.total === 0) return false;
   return budget.featSlots.chosen === budget.featSlots.total;
 }
+
+// ---------------------------------------------------------------------------
+// Phase 12.4-09 — Level completion state + advance-button label (SPEC R2 / D-06).
+//
+// Pure selectors that feed <LevelEditorActionBar>. Given the four planner
+// store snapshots they compute {featDeficit, skillDeficit, isComplete} via
+// the same computePerLevelBudget pipeline used by the sub-step predicates.
+// computeAdvanceLabel is copy-layer: maps LevelCompletionState → {label,
+// disabled} honoring the UI-SPEC R2 priority (feat deficit > skill deficit)
+// and plural-aware copy. Store-capacity caveat inherited from 12.4-07: Humano
+// L1 budget.featSlots.total=3 but the store only holds 2 feat slots, so the
+// enabled state is unreachable for Humano L1 in the current store shape —
+// same known limitation documented in 12.4-07's SUMMARY. Non-Humano paths
+// reach enabled state deterministically.
+// ---------------------------------------------------------------------------
+
+export interface LevelCompletionState {
+  level: ProgressionLevel;
+  featDeficit: number;
+  skillDeficit: number;
+  isComplete: boolean;
+}
+
+export function selectLevelCompletionState(
+  progressionState: LevelProgressionStoreState,
+  foundationState: CharacterFoundationStoreState,
+  featState: FeatStoreState,
+  skillState: SkillStoreState,
+  level: ProgressionLevel,
+): LevelCompletionState {
+  const snapshot = buildSnapshotFromStores(
+    progressionState,
+    foundationState,
+    featState,
+    skillState,
+  );
+  const budget = computePerLevelBudget(
+    snapshot,
+    level,
+    CLASS_CATALOG_INPUT,
+    FEAT_CATALOG_INPUT,
+    RACE_CATALOG_INPUT,
+  );
+  const featDeficit = Math.max(0, budget.featSlots.total - budget.featSlots.chosen);
+  const skillDeficit = Math.max(0, budget.skillPoints.budget - budget.skillPoints.spent);
+  const isComplete =
+    featDeficit === 0 && skillDeficit === 0 && budget.featSlots.total > 0;
+  return { level, featDeficit, skillDeficit, isComplete };
+}
+
+export function computeAdvanceLabel(
+  state: LevelCompletionState,
+): { label: string; disabled: boolean } {
+  const copy = shellCopyEs.progression.advanceButton;
+  // Priority: feat deficit > skill deficit (UI-SPEC.md R2 "both unfilled" rule).
+  if (state.featDeficit > 0) {
+    const label =
+      state.featDeficit === 1
+        ? copy.deficitFeatsSingular
+        : copy.deficitFeatsPluralTemplate.replace('{N}', String(state.featDeficit));
+    return { label, disabled: true };
+  }
+  if (state.skillDeficit > 0) {
+    const label =
+      state.skillDeficit === 1
+        ? copy.deficitSkillsSingular
+        : copy.deficitSkillsPluralTemplate.replace('{N}', String(state.skillDeficit));
+    return { label, disabled: true };
+  }
+  return {
+    label: copy.continueTemplate.replace('{N}', String(state.level + 1)),
+    disabled: false,
+  };
+}

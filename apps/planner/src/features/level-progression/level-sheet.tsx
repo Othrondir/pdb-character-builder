@@ -8,6 +8,7 @@ import type { ProgressionLevel } from './progression-fixture';
 import { useLevelProgressionStore } from './store';
 import { AbilityIncreaseControl } from './ability-increase-control';
 import { ClassPicker } from './class-picker';
+import { LevelEditorActionBar } from './level-editor-action-bar';
 
 export function LevelSheet() {
   const foundationState = useCharacterFoundationStore();
@@ -84,6 +85,8 @@ export function LevelSheet() {
           />
         </section>
       ) : null}
+
+      <LevelEditorActionBar />
     </aside>
   );
 }
