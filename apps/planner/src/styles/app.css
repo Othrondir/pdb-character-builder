@@ -88,7 +88,7 @@ a {
 
 /* ── Attributes editor ── */
 .attributes-editor { display: flex; flex-direction: column; gap: var(--space-sm); overflow-y: auto; padding: var(--space-md); }
-.attributes-editor__header { color: var(--color-text-muted); font-size: 14px; padding-bottom: var(--space-sm); border-bottom: 1px solid var(--color-panel-edge); }
+.attributes-editor__header { color: var(--color-text-muted); font-size: 14px; font-variant-numeric: lining-nums tabular-nums; padding-bottom: var(--space-sm); border-bottom: 1px solid var(--color-panel-edge); }
 .attributes-editor__row {
   align-items: center;
   display: grid;
@@ -101,11 +101,12 @@ a {
   color: var(--color-text);
   font-family: var(--font-display);
   font-size: 20px;
+  font-variant-numeric: lining-nums tabular-nums;
   font-weight: 600;
   min-width: 32px;
   text-align: center;
 }
-.attributes-editor__mod { color: var(--color-text-muted); font-size: 14px; justify-self: end; text-align: right; }
+.attributes-editor__mod { color: var(--color-text-muted); font-size: 14px; font-variant-numeric: lining-nums tabular-nums; justify-self: end; text-align: right; }
 .attributes-editor__column-headers {
   color: var(--color-text-muted);
   display: grid;
@@ -128,13 +129,13 @@ a {
   min-height: 36px;
   padding: var(--space-xs) var(--space-sm);
 }
-.attributes-editor__cell--racial { color: var(--color-text-muted); font-family: var(--font-display); font-size: 16px; }
-.attributes-editor__cell--final { color: var(--color-text); font-family: var(--font-display); font-size: 20px; font-weight: 600; }
+.attributes-editor__cell--racial { color: var(--color-text-muted); font-family: var(--font-display); font-size: 16px; font-variant-numeric: lining-nums tabular-nums; }
+.attributes-editor__cell--final { color: var(--color-text); font-family: var(--font-display); font-size: 20px; font-variant-numeric: lining-nums tabular-nums; font-weight: 600; }
 .attributes-editor__actions { margin-top: var(--space-md); }
 .attributes-editor__summary { display: flex; flex-direction: column; gap: var(--space-xs); margin-top: var(--space-md); }
 .attributes-editor__summary > div { display: flex; justify-content: space-between; }
 .attributes-editor__summary dt { color: var(--color-text-muted); font-size: 14px; }
-.attributes-editor__summary dd { color: var(--color-text); font-family: var(--font-display); font-size: 16px; font-weight: 600; margin: 0; }
+.attributes-editor__summary dd { color: var(--color-text); font-family: var(--font-display); font-size: 16px; font-variant-numeric: lining-nums tabular-nums; font-weight: 600; margin: 0; }
 
 /* ── Panel ────────────────────────────────────────────────── */
 
