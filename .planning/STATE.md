@@ -170,9 +170,10 @@ None yet.
 | # | Description | Date | Commit | Status | Directory |
 |---|-------------|------|--------|--------|-----------|
 | 260414-gxx | ignorar artefactos locales del workspace | 2026-04-14 | 089881b | closed (Phase 11) | [260414-gxx-ignorar-artefactos-locales-del-workspace](./quick/260414-gxx-ignorar-artefactos-locales-del-workspace/) |
+| 260419-68b | fix atributos board misalignment (grid + glyph + numerals) | 2026-04-19 | 762aa57 | complete ✓ | [260419-68b-fix-atributos-layout](./quick/260419-68b-fix-atributos-layout/) |
 
 ## Session Continuity
 
-Last session: 2026-04-19T00:20:00Z
-Stopped at: Shipped Phase 12.3-02 (UAT B2 CRITICAL + B8 + B9 — multiclass L2+ picker). Wired `setActiveLevel` alongside `setExpandedLevel` in `LevelRail.onClick` (+5/-1 in `apps/planner/src/components/shell/level-rail.tsx`); selectors + header title already read `progressionState.activeLevel`, so the one-line dispatch fix closes three user-visible blockers at once. 8-assertion regression spec (`tests/phase-12.3/multiclass-active-level.spec.tsx`) locks rail dispatch (Suite A, was RED), per-level class persistence (Suite B), title binding to live activeLevel (Suite C), and selector follow-through (Suite D). 2 atomic commits (541b4ef RED + cfc52a9 GREEN). Full vitest 490/490 green (up from 482 with +8 new assertions). Remaining: Wave 3 (12.3-03 Dotes gate).
+Last session: 2026-04-19T00:50:00Z
+Stopped at: Quick task 260419-68b shipped — Atributos board CSS grid columns + button glyph strengthening + lining/tabular numerals. 3 atomic commits (118a6f6, a05e74a, 762aa57) on apps/planner/src/styles/app.css. In-browser UAT at http://localhost:5173/ (Humano + Neutral puro → Atributos) confirms columns align, `-/+` glyphs bold + readable, `8/30` render lining digits. Milestone v1.0 still UNBLOCKED — ready for `/gsd-audit-milestone v1.0` + `/gsd-complete-milestone`.
 Resume file: None
