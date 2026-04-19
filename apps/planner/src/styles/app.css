@@ -120,6 +120,14 @@ a {
 .attributes-editor__column-headers-cell { text-align: center; }
 .attributes-editor__column-headers-mod { text-align: right; }
 .attributes-editor__cell { align-items: center; display: inline-flex; gap: var(--space-xs); justify-content: center; justify-self: center; text-align: center; }
+.attributes-editor__cell--base .nwn-button {
+  color: var(--color-text);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+  min-height: 36px;
+  padding: var(--space-xs) var(--space-sm);
+}
 .attributes-editor__cell--racial { color: var(--color-text-muted); font-family: var(--font-display); font-size: 16px; }
 .attributes-editor__cell--final { color: var(--color-text); font-family: var(--font-display); font-size: 20px; font-weight: 600; }
 .attributes-editor__actions { margin-top: var(--space-md); }
