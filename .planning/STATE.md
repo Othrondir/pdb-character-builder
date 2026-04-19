@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: "Paused 2026-04-19 ('seguimos la prox sesion'). Phase 12.4 SPEC.md committed (9 requirements, ambiguity 0.17). F9 shell overflow routed to quick task 260419-47a-stepper-bottom-pin — PLAN written, NOT executed. Resume by executing that quick task, then /gsd-discuss-phase 12.4 or /gsd-audit-milestone v1.0."
-last_updated: "2026-04-19T01:30:00Z"
+stopped_at: "Quick task 260419-47a-stepper-bottom-pin SHIPPED (6a5fda8) — .creation-stepper grid refactor pins Resumen/Utilidades bottom row. Pre-existing test fail in phase-05.2/theme-contract (font-weight:700 from commit a05e74a / quick 260419-68b-02) — not introduced by 47a. Next: /gsd-discuss-phase 12.4 or /gsd-audit-milestone v1.0."
+last_updated: "2026-04-19T16:50:00Z"
 last_activity: 2026-04-19
 progress:
   total_phases: 13
@@ -172,16 +172,17 @@ None yet.
 |---|-------------|------|--------|--------|-----------|
 | 260414-gxx | ignorar artefactos locales del workspace | 2026-04-14 | 089881b | closed (Phase 11) | [260414-gxx-ignorar-artefactos-locales-del-workspace](./quick/260414-gxx-ignorar-artefactos-locales-del-workspace/) |
 | 260419-68b | fix atributos board misalignment (grid + glyph + numerals) | 2026-04-19 | 762aa57 | complete ✓ | [260419-68b-fix-atributos-layout](./quick/260419-68b-fix-atributos-layout/) |
+| 260419-47a | pin creation-stepper bottom (Resumen/Utilidades) via grid | 2026-04-19 | 6a5fda8 | complete ✓ | [260419-47a-stepper-bottom-pin](./quick/260419-47a-stepper-bottom-pin/) |
 
 ## Session Continuity
 
-Last session: 2026-04-19T01:30:00Z (paused — user: "seguimos la prox sesion")
-Stopped at: Phase 12.4 SPEC.md written + committed (3b90ac9) — 9 requirements locked, ambiguity 0.17. Findings doc now covers F1..F9 + X1. New F9 (shell Utilidades button clips under progression overflow) routed to quick task `260419-47a-stepper-bottom-pin` — PLAN written, NOT executed yet. User paused before execution.
+Last session: 2026-04-19T16:50:00Z
+Stopped at: Quick task 260419-47a shipped (6a5fda8) — `.creation-stepper` grid refactor pins Resumen/Utilidades bottom row; `.creation-stepper__progression` scrolls internally. In-browser verified at 1280×900 (tab 761726062). Test suite 498/499 pass; single failure in `tests/phase-05.2/theme-contract.spec.ts:78` is pre-existing — `font-weight: 700` at `app.css:113` landed in commit `a05e74a` (quick 260419-68b-02), not introduced by 47a.
 
 Resume options next session:
-1. Execute quick task 260419-47a — spawn gsd-executor against `.planning/quick/260419-47a-stepper-bottom-pin/260419-47a-PLAN.md` (CSS-only grid refactor of `.creation-stepper`).
-2. `/gsd-discuss-phase 12.4` — surface implementation gray areas for Construcción Correctness & Clarity (class picker grouping UX, collapse-on-complete interaction, secondary picker modal vs inline expander, advance button placement).
-3. `/gsd-audit-milestone v1.0` — close v1.0 before opening 12.4 execution wave.
+1. `/gsd-discuss-phase 12.4` — surface implementation gray areas for Construcción Correctness & Clarity (class picker grouping UX, collapse-on-complete interaction, secondary picker modal vs inline expander, advance button placement).
+2. `/gsd-audit-milestone v1.0` — close v1.0 before opening 12.4 execution wave.
+3. Small fix-up: fold `font-weight: 700` at `app.css:113` into `var(--font-weight-bold)` token (or delete) to restore theme-contract green.
 
-Dev server still running background task `bdugirolg` on port 5173 (Vite HMR active). Browser tab 761725930 open at http://localhost:5173/.
-Resume file: `.planning/quick/260419-47a-stepper-bottom-pin/260419-47a-PLAN.md` (unexecuted)
+Dev server running background task `b3q1v2d52` on port 5173 (Vite HMR active). Browser tab 761726062 open at http://localhost:5173/.
+Resume file: none outstanding
