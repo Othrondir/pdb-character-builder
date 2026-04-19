@@ -1598,6 +1598,40 @@ a {
   margin-bottom: var(--space-xl);
 }
 
+/* Phase 12.4-02 — Dotes scroll relocation (SPEC R9 / D-10).
+ * List column owns its own scroll so the description panel stays pinned
+ * while the user scrolls the feat list. Mirrors the `.option-list` idiom
+ * at L1167-1173 (flex column + overflow-y:auto on the list itself).
+ *
+ * This rule is additive: the feat list <div> wears `feat-picker__list`
+ * ALONGSIDE `option-list` (see feat-sheet.tsx —
+ *   <OptionList className="feat-picker__list" />).
+ *
+ * Deliberate minimal surface: `.option-list` already provides
+ * `flex-direction: column`, `gap`, and `padding` (L1167-1173); redeclaring
+ * `list-style`, `margin`, `padding` here would clobber that composition
+ * (cascade last-wins on equal specificity). Only the R9-contract property
+ * (`overflow-y: auto`) is emitted to keep the scroll-on-list behavior
+ * unambiguous even if a future feat list stops composing with .option-list.
+ *
+ * Wrapper-scroll removal: the `.feat-board .selection-screen__content`
+ * override below pulls overflow-y OFF the two-column wrapper so scroll
+ * lives on the list column, not on the outer grid. Scoped to `.feat-board`
+ * only — class / race / skills screens keep the existing wrapper behavior.
+ */
+.feat-picker__list {
+  overflow-y: auto;
+}
+
+.feat-board .selection-screen__content {
+  /* Relocate scroll from the two-column wrapper to the list column
+   * (`.feat-picker__list` above). Description panel (`.detail-panel`,
+   * L1211-1218) retains its own internal overflow-y:auto for long
+   * prereq / description bodies.
+   */
+  overflow-y: visible;
+}
+
 .feat-board__prereq-list {
   list-style: none;
   margin: var(--space-sm) 0 0;

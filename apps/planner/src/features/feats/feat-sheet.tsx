@@ -128,6 +128,7 @@ export function FeatSheet({ boardView, focusedFeatId, onFocusFeat }: FeatSheetPr
                 {shellCopyEs.feats.sectionClassFeats}
               </h3>
               <OptionList
+                className="feat-picker__list"
                 items={classItems}
                 onSelect={handleSelectClassFeat}
                 renderItem={renderFeatItem}
@@ -140,6 +141,7 @@ export function FeatSheet({ boardView, focusedFeatId, onFocusFeat }: FeatSheetPr
                 {shellCopyEs.feats.sectionGeneralFeats}
               </h3>
               <OptionList
+                className="feat-picker__list"
                 items={generalItems}
                 onSelect={handleSelectGeneralFeat}
                 renderItem={renderFeatItem}
