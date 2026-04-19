@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: "Phase 12.4 CONTEXT.md + DISCUSSION-LOG.md written (user 'tú decides' → Claude applied defaults D-01..D-10 following Phase 1 canon + Phase 12.3 TDD cadence). 9 requirements → 9 plans across 3 waves. Next: /gsd-plan-phase 12.4."
-last_updated: "2026-04-19T17:10:00Z"
-last_activity: 2026-04-19
+stopped_at: "Phase 12.4 CONTEXT.md + DISCUSSION-LOG.md written under `/gsd-discuss-phase 12.4`. User answered "tú decides" on gray area selection → Claude applied recommended defaults across D-01..D-10. Decisions: (D-01) single picker + two `<section>` for base/prestige, (D-02) inline italic prereq copy threshold-only, (D-03) opacity+cursor+inline+pill-badge for blocked feat states, (D-04) summary card + `Modificar selección` re-expand, (D-05) inline expander for feat-family targets, (D-06) sticky footer `LevelEditorActionBar`, (D-07) single `per-level-budget.ts` module, (D-08) L1 neutral + predicate owners named, (D-09) Habilidades sections with ≥12px cost copy, (D-10) 9 plans across 3 waves (Wave 1: R8/R9/R3; Wave 2: R6+X1/R4/R1; Wave 3: R5/R7/R2)."
+last_updated: "2026-04-19T16:36:54.954Z"
+last_activity: 2026-04-19 -- Phase 12.4 planning complete
 progress:
-  total_phases: 13
-  completed_phases: 12
-  total_plans: 40
-  completed_plans: 40
-  percent: 92
+  total_phases: 20
+  completed_phases: 19
+  total_plans: 72
+  completed_plans: 63
+  percent: 88
 ---
 
 # Project State
@@ -27,15 +27,17 @@ See: .planning/PROJECT.md (updated 2026-03-30)
 
 Phase: 12.3 (uat-correctness-closure) — COMPLETE
 Plan: 6 of 6 complete
-Status: All 6 plans shipped across 3 waves; 12.3-VERIFICATION.md (2e8ce42) records 6/6 SC PASS. All 9 UAT blockers resolved end-to-end:
+Status: Ready to execute
+
 - B1 attributes overspend gate (nextIncrementCost + canIncrementAttribute, 12.3-01)
 - B2+B8+B9 multiclass active-level wiring (LevelRail dispatch, 12.3-02)
 - B3+B4 per-level Dotes gate + slotPrompt (12.3-03)
 - B6 HP pipeline (computeHitPoints selector + StatsPanel wiring, 12.3-04)
 - B7 origin-stepper decoupling (narrow zustand subscriptions, 12.3-05)
 - B5 description paragraph CSS (white-space: pre-wrap, 12.3-06)
+
 499/499 tests green. In-browser UAT confirmed (Enano+Guerrero L1+Pícaro L2): rail 1Guerrero/2Pícaro, header NIVEL 2, PG 20, slot prompts rendered, description paragraph breaks visible. Milestone v1.0 UNBLOCKED.
-Last activity: 2026-04-18
+Last activity: 2026-04-19 -- Phase 12.4 planning complete
 
 Progress: [██████████] 100%
 
@@ -180,6 +182,7 @@ Last session: 2026-04-19T17:10:00Z
 Stopped at: Phase 12.4 CONTEXT.md + DISCUSSION-LOG.md written under `/gsd-discuss-phase 12.4`. User answered "tú decides" on gray area selection → Claude applied recommended defaults across D-01..D-10. Decisions: (D-01) single picker + two `<section>` for base/prestige, (D-02) inline italic prereq copy threshold-only, (D-03) opacity+cursor+inline+pill-badge for blocked feat states, (D-04) summary card + `Modificar selección` re-expand, (D-05) inline expander for feat-family targets, (D-06) sticky footer `LevelEditorActionBar`, (D-07) single `per-level-budget.ts` module, (D-08) L1 neutral + predicate owners named, (D-09) Habilidades sections with ≥12px cost copy, (D-10) 9 plans across 3 waves (Wave 1: R8/R9/R3; Wave 2: R6+X1/R4/R1; Wave 3: R5/R7/R2).
 
 Resume options next session:
+
 1. `/gsd-plan-phase 12.4` — planner consumes SPEC.md + CONTEXT.md to produce 9 plans.
 2. `/gsd-audit-milestone v1.0` — close v1.0 before opening 12.4 execution wave.
 3. Small fix-up: fold `font-weight: 700` at `app.css:113` into `var(--font-weight-bold)` token (or delete) to restore theme-contract green.

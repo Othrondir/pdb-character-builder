@@ -380,7 +380,18 @@ Plans:
   7. Parameterized feat families (`Soltura con una habilidad`, `Soltura con una escuela de magia`, and any other 2DA-expanded variant family) collapse to one canonical row in the main Dotes list. Selecting the family row opens a secondary picker (modal / inline expander) scoped to valid targets, inheriting the same selectability + prereq treatment from SC5. Stored feat id still carries the specific target so rules-engine logic is unchanged.
   8. Extractor feat catalog emits zero rows whose label / description matches `DELETED`, `***DELETED***`, `UNUSED`, or equivalent 2DA sentinel. Belt-and-braces UI filter suppresses any sentinel rows that leak through. Regression test asserts zero sentinel rows post-extraction and zero rendered sentinel rows in the picker. Skill + class + race catalogs audited for the same pattern in the same plan.
   9. Dotes route scroll container lives on the feat-list column (`overflow-y: auto` on the list, not the shared two-column wrapper). Description panel remains pinned while the list scrolls; description panel scrolls internally only when its own content exceeds its height. Same pattern verified on class + race pickers to prevent regression.
-**Plans**: TBD (planned in `/gsd-plan-phase 12.4` after spec + discuss)
+**Plans**: 9 plans
+
+Plans:
+- [ ] 12.4-01-PLAN.md — R8 extractor + UI sentinel (DELETED/UNUSED/PADDING) filter
+- [ ] 12.4-02-PLAN.md — R9 Dotes scroll relocation onto .feat-picker__list
+- [ ] 12.4-03-PLAN.md — R3 per-level-budget pure selector + Monje/Pícaro schedule fixtures + bench
+- [ ] 12.4-04-PLAN.md — R6+X1 L1 neutral sub-steps + predicates + vitest jsdom glob (Wave 0 infra)
+- [ ] 12.4-05-PLAN.md — R4 Habilidades class/transclase section split + cost hint
+- [ ] 12.4-06-PLAN.md — R1 ClassPicker extracted + reachableAtLevelN prestige gate
+- [ ] 12.4-07-PLAN.md — R5 Dotes four selectability states + slot counter + collapse-on-complete
+- [ ] 12.4-08-PLAN.md — R7 parameterizedFeatFamily schema + inline <fieldset> expander
+- [ ] 12.4-09-PLAN.md — R2 LevelEditorActionBar sticky footer + atomic dispatch + E2E
 **UI hint**: yes
 
 ## Progress
