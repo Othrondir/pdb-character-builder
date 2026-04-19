@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: "Quick task 260419-47a-stepper-bottom-pin SHIPPED (6a5fda8) — .creation-stepper grid refactor pins Resumen/Utilidades bottom row. Pre-existing test fail in phase-05.2/theme-contract (font-weight:700 from commit a05e74a / quick 260419-68b-02) — not introduced by 47a. Next: /gsd-discuss-phase 12.4 or /gsd-audit-milestone v1.0."
-last_updated: "2026-04-19T16:50:00Z"
+stopped_at: "Phase 12.4 CONTEXT.md + DISCUSSION-LOG.md written (user 'tú decides' → Claude applied defaults D-01..D-10 following Phase 1 canon + Phase 12.3 TDD cadence). 9 requirements → 9 plans across 3 waves. Next: /gsd-plan-phase 12.4."
+last_updated: "2026-04-19T17:10:00Z"
 last_activity: 2026-04-19
 progress:
   total_phases: 13
@@ -176,13 +176,13 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-19T16:50:00Z
-Stopped at: Quick task 260419-47a shipped (6a5fda8) — `.creation-stepper` grid refactor pins Resumen/Utilidades bottom row; `.creation-stepper__progression` scrolls internally. In-browser verified at 1280×900 (tab 761726062). Test suite 498/499 pass; single failure in `tests/phase-05.2/theme-contract.spec.ts:78` is pre-existing — `font-weight: 700` at `app.css:113` landed in commit `a05e74a` (quick 260419-68b-02), not introduced by 47a.
+Last session: 2026-04-19T17:10:00Z
+Stopped at: Phase 12.4 CONTEXT.md + DISCUSSION-LOG.md written under `/gsd-discuss-phase 12.4`. User answered "tú decides" on gray area selection → Claude applied recommended defaults across D-01..D-10. Decisions: (D-01) single picker + two `<section>` for base/prestige, (D-02) inline italic prereq copy threshold-only, (D-03) opacity+cursor+inline+pill-badge for blocked feat states, (D-04) summary card + `Modificar selección` re-expand, (D-05) inline expander for feat-family targets, (D-06) sticky footer `LevelEditorActionBar`, (D-07) single `per-level-budget.ts` module, (D-08) L1 neutral + predicate owners named, (D-09) Habilidades sections with ≥12px cost copy, (D-10) 9 plans across 3 waves (Wave 1: R8/R9/R3; Wave 2: R6+X1/R4/R1; Wave 3: R5/R7/R2).
 
 Resume options next session:
-1. `/gsd-discuss-phase 12.4` — surface implementation gray areas for Construcción Correctness & Clarity (class picker grouping UX, collapse-on-complete interaction, secondary picker modal vs inline expander, advance button placement).
+1. `/gsd-plan-phase 12.4` — planner consumes SPEC.md + CONTEXT.md to produce 9 plans.
 2. `/gsd-audit-milestone v1.0` — close v1.0 before opening 12.4 execution wave.
 3. Small fix-up: fold `font-weight: 700` at `app.css:113` into `var(--font-weight-bold)` token (or delete) to restore theme-contract green.
 
 Dev server running background task `b3q1v2d52` on port 5173 (Vite HMR active). Browser tab 761726062 open at http://localhost:5173/.
-Resume file: none outstanding
+Resume file: `.planning/phases/12.4-construccion-correctness-clarity/12.4-CONTEXT.md`
