@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: "Phase 12.4 CONTEXT.md + DISCUSSION-LOG.md written under `/gsd-discuss-phase 12.4`. User answered "tú decides" on gray area selection → Claude applied recommended defaults across D-01..D-10. Decisions: (D-01) single picker + two `<section>` for base/prestige, (D-02) inline italic prereq copy threshold-only, (D-03) opacity+cursor+inline+pill-badge for blocked feat states, (D-04) summary card + `Modificar selección` re-expand, (D-05) inline expander for feat-family targets, (D-06) sticky footer `LevelEditorActionBar`, (D-07) single `per-level-budget.ts` module, (D-08) L1 neutral + predicate owners named, (D-09) Habilidades sections with ≥12px cost copy, (D-10) 9 plans across 3 waves (Wave 1: R8/R9/R3; Wave 2: R6+X1/R4/R1; Wave 3: R5/R7/R2)."
-last_updated: "2026-04-19T16:54:29Z"
-last_activity: 2026-04-19 -- Phase 12.4-02 complete (Wave 1 parallel / R9 scroll relocation)
+stopped_at: "Phase 12.4-06 complete (Wave 2 parallel / R1 class picker grouping + prestige gate). Pure reachableAtLevelN helper lands in @rules-engine/progression/prestige-gate.ts with inline ClassPrereqInput structural type (zero @data-extractor imports — framework purity grep = 0). <ClassPicker> extracted from level-sheet.tsx renders two <section> blocks (Clases básicas / Clases de prestigio) with aria-labelledby wiring, all BASE_CLASS_ALLOWLIST ids in base section, all prestige rows at L1 disabled with inline italic 'Disponible a partir del nivel 2'. CLAS-03 regression lock: ClassPickerRow aria-disabled driven by OR of option.status==='blocked' (evaluateMulticlassLegality bridge) AND !reachableAtLevelN.reachable. 17 new tests (12 fixture + 5 RTL); full suite 568/569 (1 pre-existing DEF-12.4-02 unrelated). Scoped .class-picker__* CSS namespace (this plan owns .class-picker__list)."
+last_updated: "2026-04-19T18:14:41Z"
+last_activity: 2026-04-19 -- Phase 12.4-06 complete (Wave 2 parallel / R1 class picker grouping + prestige gate)
 progress:
   total_phases: 20
   completed_phases: 19
@@ -81,6 +81,7 @@ Progress: [██████████] 100%
 | Phase 07 P05 | 17m | 4 tasks | 12 files |
 | Phase 08 P02 | 32m | 4 tasks | 18 files |
 | Phase 12.4-01 | 8m | 3 tasks | 9 files |
+| Phase 12.4-06 | 10m | 3 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -147,6 +148,7 @@ Recent decisions affecting current work:
 - [Phase 12.3-01]: UAT B1 overspend gate lands at the UI layer — `canIncrementAttribute` is consumed by the `+` button `disabled` prop; the store's `setBaseAttribute` is not hardened. Mirrors existing `-` button gate semantics and keeps the store framework-agnostic. `calculateAbilityBudgetSnapshot` stays shape-stable (post-hoc validation copy); the new helpers are forward-looking per-click guards exported alongside it from `@rules-engine/foundation/ability-budget`.
 - [Phase 12.3-02]: Multiclass active-level repair lives entirely in the UI dispatch site — `LevelRail.onClick` fires `setActiveLevel` + `setExpandedLevel` atomically. No store/selector/selector-chain changes: `selectActiveLevelSheet` already reads `progressionState.activeLevel`; the board title already concatenates `${copy} ${activeSheet.level}`; the Clase sub-step already evaluates per-level. The single missing wire was the rail's onClick dispatch. Copy string `'Selecciona la clase del nivel'` (no hardcoded number) was already correct. Minimal-surface repair that closes B2 CRITICAL + B8 + B9 in one edit.
 - [Phase 12.4-01]: Shared sentinel regex lives in packages/data-extractor/src/lib/sentinel-regex.ts — SENTINEL_REGEX covers DELETED / ***DELETED*** / UNUSED / PADDING / DELETED_* / **** in one case-insensitive pattern; isSentinelLabel helper trims + null-guards + delegates. Fail-closed at producer across all 4 assemblers (feat x2, skill x1, class x1, race x1) AND belt-and-braces at consumer in apps/planner/src/features/feats/selectors.ts::selectFeatBoardView. compiled-feats.ts manually scrubbed of sourceRow 385 + 403 DELETED objects (no cross-references elsewhere in catalog, so excision is schema-safe). Future `pnpm extract` runs will reproduce the scrubbed artifact automatically via the new guards.
+- [Phase 12.4-06]: ClassPicker extracted from level-sheet.tsx into features/level-progression/class-picker.tsx; renders two <section> (Clases básicas + Clases de prestigio) with aria-labelledby wiring. reachableAtLevelN pure helper in @rules-engine/progression/prestige-gate.ts returns {reachable, blockers:[{kind, threshold, label}]}; fail-closed to 'Requisitos en revisión' for unenriched prestige; all prestige rows blocked at L1 with 'Disponible a partir del nivel 2'. Framework purity: inline ClassPrereqInput type (no @data-extractor imports; grep gate = 0). CLAS-03 regression locked via RTL spec (option.status==='blocked' from evaluateMulticlassLegality → aria-disabled='true'). Scoped CSS .class-picker__* namespace (this plan owns .class-picker__list). Cross-wave Rule-3 fix: tests/phase-12.4/feat-picker-scroll.spec.tsx A2 assertion updated from `not.toMatch` to `matches.length===1 + co-location proof` so the guard still detects 12.4-02 re-injection without false-firing on 12.4-06's legitimate rule.
 
 ### Pending Todos
 
@@ -180,8 +182,8 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-19T17:10:00Z
-Stopped at: Phase 12.4 CONTEXT.md + DISCUSSION-LOG.md written under `/gsd-discuss-phase 12.4`. User answered "tú decides" on gray area selection → Claude applied recommended defaults across D-01..D-10. Decisions: (D-01) single picker + two `<section>` for base/prestige, (D-02) inline italic prereq copy threshold-only, (D-03) opacity+cursor+inline+pill-badge for blocked feat states, (D-04) summary card + `Modificar selección` re-expand, (D-05) inline expander for feat-family targets, (D-06) sticky footer `LevelEditorActionBar`, (D-07) single `per-level-budget.ts` module, (D-08) L1 neutral + predicate owners named, (D-09) Habilidades sections with ≥12px cost copy, (D-10) 9 plans across 3 waves (Wave 1: R8/R9/R3; Wave 2: R6+X1/R4/R1; Wave 3: R5/R7/R2).
+Last session: 2026-04-19T18:14:41Z
+Stopped at: Phase 12.4-06 complete (Wave 2 parallel / R1 class picker grouping + prestige gate). Commits 7805025 (RED test) + 23b4338 (GREEN fix). 17 new tests green; full suite 568/569 (1 pre-existing DEF-12.4-02 unrelated). Framework-purity gate enforced: `grep -c '@data-extractor' prestige-gate.ts` = 0. Cross-wave 12.4-02 spec A2 assertion updated via Rule-3 auto-fix. Wave 3 plans (12.4-07/08/09) now unblocked.
 
 Resume options next session:
 
