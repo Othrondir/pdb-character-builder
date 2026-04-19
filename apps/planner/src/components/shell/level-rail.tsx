@@ -8,6 +8,7 @@ export function LevelRail() {
   const progressionState = useLevelProgressionStore();
   const foundationState = useCharacterFoundationStore();
   const entries = selectLevelRail(progressionState, foundationState);
+  const setActiveLevel = useLevelProgressionStore((state) => state.setActiveLevel);
   const expandedLevel = usePlannerShellStore((state) => state.expandedLevel);
   const setExpandedLevel = usePlannerShellStore((state) => state.setExpandedLevel);
 
@@ -25,7 +26,10 @@ export function LevelRail() {
             aria-checked={isExpanded}
             className={`level-rail__button is-${entry.status}${isExpanded ? ' is-expanded' : ''}`}
             key={entry.level}
-            onClick={() => setExpandedLevel(entry.level as ProgressionLevel)}
+            onClick={() => {
+              setActiveLevel(entry.level as ProgressionLevel);
+              setExpandedLevel(entry.level as ProgressionLevel);
+            }}
             role="radio"
             type="button"
           >
