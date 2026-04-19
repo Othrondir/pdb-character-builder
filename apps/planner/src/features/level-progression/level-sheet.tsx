@@ -7,18 +7,11 @@ import {
 import type { ProgressionLevel } from './progression-fixture';
 import { useLevelProgressionStore } from './store';
 import { AbilityIncreaseControl } from './ability-increase-control';
-
-const STATUS_LABELS = {
-  blocked: shellCopyEs.progression.statuses.blocked,
-  illegal: shellCopyEs.progression.statuses.illegal,
-  legal: shellCopyEs.progression.statuses.legal,
-  pending: shellCopyEs.progression.statuses.pending,
-} as const;
+import { ClassPicker } from './class-picker';
 
 export function LevelSheet() {
   const foundationState = useCharacterFoundationStore();
   const progressionState = useLevelProgressionStore();
-  const setLevelClassId = useLevelProgressionStore((state) => state.setLevelClassId);
   const activeSheet = selectActiveLevelSheetView(progressionState, foundationState);
   const selectedAbility = activeSheet.abilityIncrease;
 
@@ -31,27 +24,7 @@ export function LevelSheet() {
         </p>
       </div>
 
-      <section className="level-sheet__requirements">
-        <h3>{shellCopyEs.progression.classSectionHeading}</h3>
-        <div className="level-sheet__class-options">
-          {activeSheet.classOptions.map((option) => (
-            <button
-              aria-label={`${option.label} ${STATUS_LABELS[option.status]}`}
-              aria-pressed={option.selected}
-              className={`class-option is-${option.status}${
-                option.selected ? ' is-selected' : ''
-              }`}
-              key={option.id}
-              onClick={() =>
-                setLevelClassId(activeSheet.level as ProgressionLevel, option.id)
-              }
-              type="button"
-            >
-              {option.label}
-            </button>
-          ))}
-        </div>
-      </section>
+      <ClassPicker />
 
       {activeSheet.repairMessage ? (
         <p className="level-sheet__repair-callout">{activeSheet.repairMessage}</p>

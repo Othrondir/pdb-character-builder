@@ -126,18 +126,26 @@ describe('Phase 12.4-02 — Dotes scroll relocation (SPEC R9)', () => {
       expect(appCss).toMatch(featPickerListOverflow);
     });
 
-    it('A2: app.css does NOT emit a `.class-picker__list` rule from this plan (owned by 12.4-06)', () => {
+    it('A2: app.css emits exactly one `.class-picker__list` rule, owned by plan 12.4-06', () => {
       // Anti-coupling assertion per 12.4-02-PLAN.md L208.
       // 12.4-02 is Wave 1; 12.4-06 lands .class-picker__list in Wave 2.
-      // Before 12.4-06 merges, .class-picker__list must not exist in app.css.
-      // After 12.4-06 merges, exactly one definition should exist and it
-      // MUST live inside plan 12.4-06's CSS block — NOT this plan's diff.
       //
-      // This assertion guards the Wave 1 state: no .class-picker__list rule
-      // is introduced by 12.4-02's CSS change. If .class-picker__list shows
-      // up in app.css before 12.4-06 lands, this test fails and exposes the
-      // cross-wave coupling the plan explicitly forbids.
-      expect(appCss).not.toMatch(/\.class-picker__list\s*\{/);
+      // Wave 1 state (12.4-02 only): no .class-picker__list rule exists.
+      // Wave 2 state (after 12.4-06): exactly one .class-picker__list rule
+      //   exists AND it must live adjacent to .class-picker__section-heading
+      //   (proving it's inside plan 12.4-06's CSS block, not a stray
+      //   injection by 12.4-02).
+      //
+      // The original Wave 1 `not.toMatch` assertion was deliberately
+      // replaced with this "exactly once + co-located" form when 12.4-06
+      // shipped, per Rule 3 auto-fix in 12.4-06 SUMMARY. The cross-wave
+      // coupling guard is preserved: if 12.4-02 ever re-injects the rule
+      // in a future diff, the match count jumps above 1 and this fails.
+      const matches = appCss.match(/\.class-picker__list\s*\{/g) ?? [];
+      expect(matches.length).toBe(1);
+      // Co-location proof: .class-picker__section-heading (owned by 12.4-06)
+      // MUST appear in app.css near .class-picker__list.
+      expect(appCss).toMatch(/\.class-picker__section-heading\s*\{/);
     });
   });
 
