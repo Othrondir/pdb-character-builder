@@ -4,8 +4,8 @@ milestone: v1.0
 milestone_name: milestone
 status: executing
 stopped_at: "Phase 12.4 CONTEXT.md + DISCUSSION-LOG.md written under `/gsd-discuss-phase 12.4`. User answered "tú decides" on gray area selection → Claude applied recommended defaults across D-01..D-10. Decisions: (D-01) single picker + two `<section>` for base/prestige, (D-02) inline italic prereq copy threshold-only, (D-03) opacity+cursor+inline+pill-badge for blocked feat states, (D-04) summary card + `Modificar selección` re-expand, (D-05) inline expander for feat-family targets, (D-06) sticky footer `LevelEditorActionBar`, (D-07) single `per-level-budget.ts` module, (D-08) L1 neutral + predicate owners named, (D-09) Habilidades sections with ≥12px cost copy, (D-10) 9 plans across 3 waves (Wave 1: R8/R9/R3; Wave 2: R6+X1/R4/R1; Wave 3: R5/R7/R2)."
-last_updated: "2026-04-19T16:36:54.954Z"
-last_activity: 2026-04-19 -- Phase 12.4 planning complete
+last_updated: "2026-04-19T16:54:29Z"
+last_activity: 2026-04-19 -- Phase 12.4-02 complete (Wave 1 parallel / R9 scroll relocation)
 progress:
   total_phases: 20
   completed_phases: 19
