@@ -93,10 +93,10 @@ a {
   align-items: center;
   display: grid;
   gap: var(--space-sm);
-  grid-template-columns: minmax(0, 1fr) 140px 64px 56px 48px;
+  grid-template-columns: minmax(160px, 1fr) 140px 64px 56px 48px;
   padding: var(--space-xs) 0;
 }
-.attributes-editor__label { color: var(--color-text); font-size: 14px; }
+.attributes-editor__label { color: var(--color-text); font-size: 14px; padding-right: var(--space-md); }
 .attributes-editor__value {
   color: var(--color-text);
   font-family: var(--font-display);
@@ -112,7 +112,7 @@ a {
   display: grid;
   font-size: 12px;
   gap: var(--space-sm);
-  grid-template-columns: minmax(0, 1fr) 140px 64px 56px 48px;
+  grid-template-columns: minmax(160px, 1fr) 140px 64px 56px 48px;
   letter-spacing: 0.06em;
   padding: var(--space-xs) 0;
   text-transform: uppercase;
