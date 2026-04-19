@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: "Phase 12.3-02 shipped — multiclass L2+ picker repaired. LevelRail.onClick now dispatches BOTH setActiveLevel (progression store) AND setExpandedLevel (shell store) atomically, so clicking level N activates level N's picker (header reads NIVEL N, class pick persists to levels[N-1], sub-step ✓ per-level). Closes UAT B2 (CRITICAL) + B8 + B9 via one 5-line edit to apps/planner/src/components/shell/level-rail.tsx (selectors + title already read progressionState.activeLevel). 2 atomic commits (541b4ef RED + cfc52a9 GREEN). Full vitest 490/490 green."
-last_updated: "2026-04-19T00:20:00Z"
+stopped_at: "Phase 12.3-03 shipped — Dotes sub-step per-level gate + slot prompt. selectFeatBoardView's empty-state gate now reads the ACTIVE level's classId (was a global `any-level-has-a-class` check). ActiveFeatSheetView.slotPrompt field + pure computeSlotPrompt helper compose Spanish copy (`Dote de clase disponible.` / `Dote general disponible.`) rendered above the FeatSheet when slots exist + are unfilled. Closes UAT B3 (CRITICAL false-block) + B4 (HIGH missing slot count). 3 files modified + 1 test file (9 assertions across 4 suites). 2 atomic commits (01a0208 RED + 99cff07 GREEN). Full vitest 499/499 green."
+last_updated: "2026-04-18T02:40:00Z"
 last_activity: 2026-04-18
 progress:
   total_phases: 12
@@ -26,9 +26,9 @@ See: .planning/PROJECT.md (updated 2026-03-30)
 ## Current Position
 
 Phase: 12.3 (uat-correctness-closure) — IN PROGRESS
-Plan: 2 of 6 complete (Wave 1: 12.3-01/-04/-05/-06 shipped; Wave 2: 12.3-02 shipped; Wave 3: 12.3-03 pending)
-Status: 12.3-02 shipped — multiclass L2+ picker repaired. `LevelRail.onClick` now dispatches BOTH `setActiveLevel` (progression store) AND `setExpandedLevel` (shell store) atomically; selectors and header title already read `progressionState.activeLevel`, so the one-edit fix closes UAT B2 (CRITICAL) + B8 + B9 in lockstep. Board header now reads `Selecciona la clase del nivel N` for the clicked level, class picks persist to `levels[N-1].classId` (no L1 overwrite), and the Clase sub-step ✓ reflects per-level status via the existing selector chain. 8-assertion regression spec (`tests/phase-12.3/multiclass-active-level.spec.tsx`) locks rail dispatch, per-level persistence, title binding, and selector follow-through. 2 atomic commits (541b4ef RED + cfc52a9 GREEN). Full vitest 490/490 green.
-Last activity: 2026-04-19
+Plan: 3 of 6 complete (Wave 1: 12.3-01/-04/-05/-06 shipped; Wave 2: 12.3-02 shipped; Wave 3: 12.3-03 shipped)
+Status: 12.3-03 shipped — Dotes sub-step per-level gate + slot prompt (B3 + B4). `selectFeatBoardView` empty-state gate scoped to the ACTIVE level's classId (was a global `some(l => l.classId !== null)` check); when the active level has no class the selector emits the new per-level copy `shellCopyEs.feats.emptyStateBodyPerLevel` instead of the confusing global "Completa una progresion valida" message. Added `ActiveFeatSheetView.slotPrompt: string | null` + pure `computeSlotPrompt()` helper that joins Spanish copy parts (`Dote de clase disponible.` / `Dote general disponible.`) for each unfilled slot at the active level; null when both slots are filled or no slots exist. `FeatBoard` renders `<p className="feat-board__slot-prompt">` above the sheet/detail-panel pair when the prompt is truthy. 9-assertion regression spec (`tests/phase-12.3/dotes-per-level-gate.spec.tsx`) locks empty-state scope (A1-A3), slotPrompt shape (B1-B3), multiclass no-regression (C1), and FeatBoard render (D1-D2). 2 atomic commits (01a0208 RED + 99cff07 GREEN). Full vitest 499/499 green.
+Last activity: 2026-04-18
 
 Progress: [██████████] 100%
 
