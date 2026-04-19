@@ -383,21 +383,21 @@ Plans:
 **Plans**: 9 plans
 
 Plans:
-- [ ] 12.4-01-PLAN.md — R8 extractor + UI sentinel (DELETED/UNUSED/PADDING) filter
-- [ ] 12.4-02-PLAN.md — R9 Dotes scroll relocation onto .feat-picker__list
-- [ ] 12.4-03-PLAN.md — R3 per-level-budget pure selector + Monje/Pícaro schedule fixtures + bench
-- [ ] 12.4-04-PLAN.md — R6+X1 L1 neutral sub-steps + predicates + vitest jsdom glob (Wave 0 infra)
-- [ ] 12.4-05-PLAN.md — R4 Habilidades class/transclase section split + cost hint
+- [x] 12.4-01-PLAN.md — R8 extractor + UI sentinel (DELETED/UNUSED/PADDING) filter
+- [x] 12.4-02-PLAN.md — R9 Dotes scroll relocation onto .feat-picker__list
+- [x] 12.4-03-PLAN.md — R3 per-level-budget pure selector + Monje/Pícaro schedule fixtures + bench
+- [x] 12.4-04-PLAN.md — R6+X1 L1 neutral sub-steps + predicates + vitest jsdom glob (Wave 0 infra)
+- [x] 12.4-05-PLAN.md — R4 Habilidades class/transclase section split + cost hint
 - [x] 12.4-06-PLAN.md — R1 ClassPicker extracted + reachableAtLevelN prestige gate
 - [x] 12.4-07-PLAN.md — R5 Dotes four selectability states + slot counter + collapse-on-complete
 - [x] 12.4-08-PLAN.md — R7 parameterizedFeatFamily schema + inline <fieldset> expander
-- [ ] 12.4-09-PLAN.md — R2 LevelEditorActionBar sticky footer + atomic dispatch + E2E
+- [x] 12.4-09-PLAN.md — R2 LevelEditorActionBar sticky footer + atomic dispatch + E2E
 **UI hint**: yes
 
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 12.1 -> 12.2 -> 12.3
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 12.1 -> 12.2 -> 12.3 -> 12.4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -419,3 +419,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -
 | 12. Tech Debt Sweep (GAP) | 2/2 | Complete | 2026-04-18 |
 | 12.1 Roster Wiring & Overflow Fixes (INSERTED) | 3/3 | Complete | 2026-04-18 |
 | 12.2 Roster Detail & Race Ability Modifiers (INSERTED) | 3/4 | In progress | - |
+| 12.3 UAT Correctness Closure (INSERTED) | 6/6 | Complete | 2026-04-19 |
+| 12.4 Construcción Correctness & Clarity (INSERTED) | 9/9 | Complete | 2026-04-20 |
