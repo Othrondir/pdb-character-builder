@@ -87,16 +87,16 @@ a {
 }
 
 /* ── Attributes editor ── */
-.attributes-editor { display: flex; flex-direction: column; gap: var(--space-sm); overflow-y: auto; padding: var(--space-md); }
+.attributes-editor { display: flex; flex-direction: column; gap: var(--space-sm); padding: var(--space-md); }
 .attributes-editor__header { color: var(--color-text-muted); font-size: 14px; font-variant-numeric: lining-nums tabular-nums; padding-bottom: var(--space-sm); border-bottom: 1px solid var(--color-panel-edge); }
 .attributes-editor__row {
   align-items: center;
   display: grid;
-  gap: var(--space-sm);
-  grid-template-columns: minmax(160px, 1fr) 140px 64px 56px 48px;
+  gap: var(--space-md);
+  grid-template-columns: 1fr auto;
   padding: var(--space-xs) 0;
 }
-.attributes-editor__label { color: var(--color-text); font-size: 14px; padding-right: var(--space-md); }
+.attributes-editor__label { color: var(--color-text); font-size: 14px; }
 .attributes-editor__value {
   color: var(--color-text);
   font-family: var(--font-display);
@@ -106,21 +106,7 @@ a {
   min-width: 32px;
   text-align: center;
 }
-.attributes-editor__mod { color: var(--color-text-muted); font-size: 14px; font-variant-numeric: lining-nums tabular-nums; justify-self: end; text-align: right; }
-.attributes-editor__column-headers {
-  color: var(--color-text-muted);
-  display: grid;
-  font-size: 12px;
-  gap: var(--space-sm);
-  grid-template-columns: minmax(160px, 1fr) 140px 64px 56px 48px;
-  letter-spacing: 0.06em;
-  padding: var(--space-xs) 0;
-  text-transform: uppercase;
-}
-.attributes-editor__column-headers-label { }
-.attributes-editor__column-headers-cell { text-align: center; }
-.attributes-editor__column-headers-mod { text-align: right; }
-.attributes-editor__cell { align-items: center; display: inline-flex; gap: var(--space-xs); justify-content: center; justify-self: center; text-align: center; }
+.attributes-editor__cell { align-items: center; display: inline-flex; gap: var(--space-xs); justify-content: center; justify-self: end; text-align: center; }
 .attributes-editor__cell--base .nwn-button {
   color: var(--color-text);
   font-size: 18px;
@@ -129,8 +115,6 @@ a {
   min-height: 36px;
   padding: var(--space-xs) var(--space-sm);
 }
-.attributes-editor__cell--racial { color: var(--color-text-muted); font-family: var(--font-display); font-size: 16px; font-variant-numeric: lining-nums tabular-nums; }
-.attributes-editor__cell--final { color: var(--color-text); font-family: var(--font-display); font-size: 20px; font-variant-numeric: lining-nums tabular-nums; font-weight: 600; }
 .attributes-editor__actions { margin-top: var(--space-md); }
 .attributes-editor__summary { display: flex; flex-direction: column; gap: var(--space-xs); margin-top: var(--space-md); }
 .attributes-editor__summary > div { display: flex; justify-content: space-between; }

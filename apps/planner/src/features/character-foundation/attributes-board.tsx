@@ -4,7 +4,6 @@ import { DetailPanel } from '@planner/components/ui/detail-panel';
 import { NwnButton } from '@planner/components/ui/nwn-button';
 import { ActionBar } from '@planner/components/ui/action-bar';
 import { usePlannerShellStore } from '@planner/state/planner-shell';
-import { applyRaceModifiers } from '@rules-engine/foundation/apply-race-modifiers';
 import { canIncrementAttribute } from '@rules-engine/foundation/ability-budget';
 import {
   ATTRIBUTE_KEYS,
@@ -26,32 +25,10 @@ const ATTRIBUTE_LABELS: Record<AttributeKey, string> = {
   wis: 'Sabiduria',
 };
 
-const ATTRIBUTE_ABBREVS: Record<AttributeKey, string> = {
-  cha: 'CAR',
-  con: 'CON',
-  dex: 'DES',
-  int: 'INT',
-  str: 'FUE',
-  wis: 'SAB',
-};
-
-/**
- * Phase 12.2-02 — format a racial adjustment as a signed string (`+2`, `-1`, `0`).
- * Returns `—` for the null case (no race selected).
- */
-function formatSignedMod(value: number | null): string {
-  if (value === null) return '—';
-  if (value > 0) return `+${value}`;
-  return `${value}`;
-}
-
 export function AttributesBoard() {
   const foundationState = useCharacterFoundationStore();
   const attributeBudget = selectAttributeBudgetSnapshot(foundationState);
   const foundationValidation = selectFoundationValidation(foundationState);
-  const racialModifiers = useCharacterFoundationStore(
-    (state) => state.racialModifiers,
-  );
   const resetFoundation = useCharacterFoundationStore(
     (state) => state.resetFoundation,
   );
@@ -66,10 +43,6 @@ export function AttributesBoard() {
     attributeRules: { costByScore, maximum, minimum },
   } = phase03FoundationFixture;
   const canAdvance = attributeBudget.status === 'legal';
-  const finalAttributes = applyRaceModifiers(
-    foundationState.baseAttributes,
-    racialModifiers,
-  );
 
   return (
     <SelectionScreen
@@ -89,22 +62,12 @@ export function AttributesBoard() {
         <div className="attributes-editor__header">
           <span>{shellCopyEs.foundation.remainingPoints}: {attributeBudget.remainingPoints}</span>
         </div>
-        <div className="attributes-editor__column-headers" aria-hidden="true">
-          <span className="attributes-editor__column-headers-label" />
-          <span className="attributes-editor__column-headers-cell">Base</span>
-          <span className="attributes-editor__column-headers-cell">Racial</span>
-          <span className="attributes-editor__column-headers-cell">Final</span>
-          <span className="attributes-editor__column-headers-mod" />
-        </div>
         {ATTRIBUTE_KEYS.map((key) => {
           const baseValue = foundationState.baseAttributes[key];
-          const racialValue = racialModifiers ? racialModifiers[key] : null;
-          const finalValue = finalAttributes[key];
-          const finalMod = Math.floor((finalValue - 10) / 2);
           return (
             <div className="attributes-editor__row" key={key}>
               <span className="attributes-editor__label">
-                {ATTRIBUTE_ABBREVS[key]} — {ATTRIBUTE_LABELS[key]}
+                {ATTRIBUTE_LABELS[key]}
               </span>
               <div className="attributes-editor__cell attributes-editor__cell--base">
                 <NwnButton
@@ -132,21 +95,6 @@ export function AttributesBoard() {
                   +
                 </NwnButton>
               </div>
-              <span
-                aria-label={`Ajuste racial de ${ATTRIBUTE_LABELS[key]}`}
-                className="attributes-editor__cell attributes-editor__cell--racial"
-              >
-                {formatSignedMod(racialValue)}
-              </span>
-              <span
-                aria-label={`Caracteristica final de ${ATTRIBUTE_LABELS[key]}`}
-                className="attributes-editor__cell attributes-editor__cell--final"
-              >
-                {finalValue}
-              </span>
-              <span className="attributes-editor__mod">
-                ({finalMod >= 0 ? '+' : ''}{finalMod})
-              </span>
             </div>
           );
         })}
