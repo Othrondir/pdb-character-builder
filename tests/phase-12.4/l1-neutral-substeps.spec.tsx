@@ -62,6 +62,10 @@ import { usePlannerShellStore } from '@planner/state/planner-shell';
  * Drive the planner shell into the state the user lands on right after
  * completing Atributos: race + alignment picked, L1 expanded, no class
  * chosen yet, no skills or feats allocated.
+ *
+ * `activeLevelSubStep` is left null so each sub-step's visual state is
+ * driven purely by its completion predicate — no chip is "active", so
+ * the `is-complete`/`is-ready` contract is asserted in isolation.
  */
 function setupL1ExpandedHumano(): void {
   useCharacterFoundationStore
@@ -72,7 +76,7 @@ function setupL1ExpandedHumano(): void {
     .setAlignment('alignment:lawful-good' as CanonicalId);
   usePlannerShellStore.setState({
     activeOriginStep: null,
-    activeLevelSubStep: 'class',
+    activeLevelSubStep: null,
     activeView: 'creation',
     characterSheetTab: 'stats',
     datasetId: 'dataset:pendiente',

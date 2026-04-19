@@ -6,6 +6,13 @@ import {
 } from '@rules-engine/progression/class-entry-rules';
 import { getLevelGainsForSelection } from '@rules-engine/progression/level-gains';
 import { evaluateMulticlassLegality } from '@rules-engine/progression/multiclass-rules';
+import {
+  computePerLevelBudget,
+  type BuildSnapshot,
+  type ClassCatalogInput,
+  type FeatCatalogInput,
+  type RaceCatalogInput,
+} from '@rules-engine/progression/per-level-budget';
 import { revalidateProgressionAfterLevelChange } from '@rules-engine/progression/progression-revalidation';
 
 import { shellCopyEs } from '@planner/lib/copy/es';
@@ -18,6 +25,11 @@ import {
   selectOriginReadyForAbilities,
 } from '@planner/features/character-foundation/selectors';
 import type { CharacterFoundationStoreState } from '@planner/features/character-foundation/store';
+import { compiledClassCatalog } from '@planner/data/compiled-classes';
+import { compiledFeatCatalog } from '@planner/data/compiled-feats';
+import { compiledRaceCatalog } from '@planner/data/compiled-races';
+import type { FeatStoreState } from '@planner/features/feats/store';
+import type { SkillStoreState } from '@planner/features/skills/store';
 
 import {
   getPhase04ClassRecord,
@@ -309,4 +321,151 @@ export function selectProgressionSummary(
     planState,
     summaryStatus,
   };
+}
+
+// ---------------------------------------------------------------------------
+// Phase 12.4-04 — L1 sub-step completion predicates (SPEC R6 + X1 lock).
+//
+// Three pure predicates that answer "has the user earned the ✓ on this
+// sub-step at this level?" Each composes the Wave 1 per-level-budget
+// selector (12.4-03) with the planner's compiled catalogs adapted to the
+// minimal structural inputs the rules-engine expects (boundary adapter
+// pattern per CONTEXT.md D-07 + 12.4-03 framework-purity decision).
+//
+// "Earned, not defaulted": `isDotesLevelComplete` returns `false` when
+// `featSlots.total === 0` (no class picked yet) — an empty budget is not
+// a completed budget. Same short-circuit on `isHabilidadesLevelComplete`
+// for `skillPoints.budget === 0`.
+// ---------------------------------------------------------------------------
+
+/**
+ * Planner-side adapter: turn the full `compiledClassCatalog` into the
+ * minimal `ClassCatalogInput` shape `computePerLevelBudget` consumes. Kept
+ * as a module-scope constant so every predicate call on the same render
+ * pass reuses the same projected array (structural equality friendly).
+ */
+const CLASS_CATALOG_INPUT: ClassCatalogInput = {
+  classes: compiledClassCatalog.classes.map((c) => ({
+    id: c.id,
+    skillPointsPerLevel: c.skillPointsPerLevel,
+  })),
+};
+
+const FEAT_CATALOG_INPUT: FeatCatalogInput = {
+  classFeatLists: compiledFeatCatalog.classFeatLists,
+};
+
+const RACE_CATALOG_INPUT: RaceCatalogInput = {
+  races: compiledRaceCatalog.races.map((r) => ({ id: r.id })),
+};
+
+/**
+ * Build a `BuildSnapshot` from the four planner zustand stores at a given
+ * level. Pure — reads state arguments only, no store subscriptions.
+ */
+function buildSnapshotFromStores(
+  progressionState: LevelProgressionStoreState,
+  foundationState: CharacterFoundationStoreState,
+  featState: FeatStoreState,
+  skillState: SkillStoreState,
+): BuildSnapshot {
+  const classByLevel: Record<number, string | null> = {};
+  for (const record of progressionState.levels) {
+    classByLevel[record.level] = record.classId;
+  }
+
+  return {
+    raceId: foundationState.raceId,
+    classByLevel,
+    abilityScores: { int: foundationState.baseAttributes.int },
+    intAbilityIncreasesBeforeLevel: (lvl) =>
+      progressionState.levels.filter(
+        (r) => r.level < lvl && r.abilityIncrease === 'int',
+      ).length,
+    chosenFeatIdsAtLevel: (lvl) => {
+      const featRecord = featState.levels.find((r) => r.level === lvl);
+      if (!featRecord) return [];
+      const ids: string[] = [];
+      if (featRecord.classFeatId !== null) ids.push(featRecord.classFeatId);
+      if (featRecord.generalFeatId !== null) ids.push(featRecord.generalFeatId);
+      return ids;
+    },
+    spentSkillPointsAtLevel: (lvl) => {
+      const skillRecord = skillState.levels.find((r) => r.level === lvl);
+      if (!skillRecord) return 0;
+      return skillRecord.allocations.reduce((sum, a) => sum + a.rank, 0);
+    },
+  };
+}
+
+/**
+ * Clase sub-step ✓ predicate (SPEC R6).
+ * True iff the user has picked a class at this level.
+ */
+export function isClaseLevelComplete(
+  progressionState: LevelProgressionStoreState,
+  level: ProgressionLevel,
+): boolean {
+  const record = progressionState.levels.find((r) => r.level === level);
+  return (record?.classId ?? null) !== null;
+}
+
+/**
+ * Habilidades sub-step ✓ predicate (SPEC R6).
+ * True iff skillPoints.budget > 0 AND the user has spent every point.
+ * If budget === 0 (e.g. no class picked yet), returns false — an empty
+ * budget is neutral, not complete.
+ */
+export function isHabilidadesLevelComplete(
+  progressionState: LevelProgressionStoreState,
+  foundationState: CharacterFoundationStoreState,
+  featState: FeatStoreState,
+  skillState: SkillStoreState,
+  level: ProgressionLevel,
+): boolean {
+  const snapshot = buildSnapshotFromStores(
+    progressionState,
+    foundationState,
+    featState,
+    skillState,
+  );
+  const budget = computePerLevelBudget(
+    snapshot,
+    level,
+    CLASS_CATALOG_INPUT,
+    FEAT_CATALOG_INPUT,
+    RACE_CATALOG_INPUT,
+  );
+  if (budget.skillPoints.budget === 0) return false;
+  return budget.skillPoints.remaining === 0;
+}
+
+/**
+ * Dotes sub-step ✓ predicate (SPEC R6).
+ * True iff featSlots.total > 0 AND every slot is filled. If total === 0
+ * (no class picked yet, or class has no feat slot at this level), returns
+ * false — an empty slot count is neutral, not complete.
+ */
+export function isDotesLevelComplete(
+  progressionState: LevelProgressionStoreState,
+  foundationState: CharacterFoundationStoreState,
+  featState: FeatStoreState,
+  skillState: SkillStoreState,
+  level: ProgressionLevel,
+): boolean {
+  const snapshot = buildSnapshotFromStores(
+    progressionState,
+    foundationState,
+    featState,
+    skillState,
+  );
+  const budget = computePerLevelBudget(
+    snapshot,
+    level,
+    CLASS_CATALOG_INPUT,
+    FEAT_CATALOG_INPUT,
+    RACE_CATALOG_INPUT,
+  );
+  if (budget.featSlots.total === 0) return false;
+  return budget.featSlots.chosen === budget.featSlots.total;
 }
