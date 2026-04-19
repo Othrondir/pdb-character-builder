@@ -46,6 +46,11 @@ export function FeatBoard() {
 
   return (
     <SelectionScreen title={title} className="feat-board">
+      {boardView.activeSheet.slotPrompt ? (
+        <p className="feat-board__slot-prompt">
+          {boardView.activeSheet.slotPrompt}
+        </p>
+      ) : null}
       <FeatSheet
         boardView={boardView}
         focusedFeatId={focusedFeatId}

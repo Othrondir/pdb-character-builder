@@ -63,6 +63,12 @@ export interface ActiveFeatSheetView {
   level: ProgressionLevel;
   selectedClassFeatId: CanonicalId | null;
   selectedGeneralFeatId: CanonicalId | null;
+  /**
+   * 12.3-03 (UAT B4): human-readable prompt listing the unfilled feat slots at
+   * the active level. `null` when no slots exist for this class+level OR when
+   * both slots are already filled.
+   */
+  slotPrompt: string | null;
   status: FeatEvaluationStatus;
   title: string;
 }
@@ -265,43 +271,68 @@ function getClassLevelInClass(
 // Selector: selectFeatBoardView
 // ---------------------------------------------------------------------------
 
+/**
+ * 12.3-03 (UAT B4): compose a Spanish prompt listing unfilled feat slots at
+ * the active level. Returns null when both booleans are false OR both slots
+ * are already filled — nothing to prompt about.
+ */
+function computeSlotPrompt(
+  featSlots: { classBonusFeatSlot: boolean; generalFeatSlot: boolean },
+  selectedClassFeatId: CanonicalId | null,
+  selectedGeneralFeatId: CanonicalId | null,
+): string | null {
+  const parts: string[] = [];
+
+  if (featSlots.classBonusFeatSlot && selectedClassFeatId === null) {
+    parts.push(shellCopyEs.feats.slotPromptClassAvailable);
+  }
+
+  if (featSlots.generalFeatSlot && selectedGeneralFeatId === null) {
+    parts.push(shellCopyEs.feats.slotPromptGeneralAvailable);
+  }
+
+  return parts.length > 0 ? parts.join(' ') : null;
+}
+
 export function selectFeatBoardView(
   featState: FeatStoreState,
   progressionState: LevelProgressionStoreState,
   foundationState: CharacterFoundationStoreState,
   skillState: SkillStoreState,
 ): FeatBoardView {
-  const progressionHasClass = progressionState.levels.some(
-    (level) => level.classId !== null,
-  );
+  const activeLevel = featState.activeLevel;
+  const activeProgression =
+    progressionState.levels.find((r) => r.level === activeLevel) ?? null;
+  const classId = activeProgression?.classId ?? null;
 
-  if (!progressionHasClass) {
+  // 12.3-03 (UAT B3): gate the empty-state on the ACTIVE level's classId
+  // rather than the global `some(l => l.classId !== null)` check. The global
+  // check surfaced "Completa una progresion valida" even when the user was
+  // sitting on a level with a valid class, and hid the per-level empty-state
+  // when only some levels had classes set.
+  if (classId === null) {
     const emptySheet: ActiveFeatSheetView = {
       classId: null,
       classLabel: null,
       eligibleClassFeats: [],
       eligibleGeneralFeats: [],
-      emptyMessage: shellCopyEs.feats.emptyStateBody,
+      emptyMessage: shellCopyEs.feats.emptyStateBodyPerLevel,
       hasClassBonusSlot: false,
       hasGeneralSlot: false,
-      level: featState.activeLevel,
+      level: activeLevel,
       selectedClassFeatId: null,
       selectedGeneralFeatId: null,
+      slotPrompt: null,
       status: 'pending',
       title: shellCopyEs.stepper.stepTitles.feats,
     };
 
     return {
       activeSheet: emptySheet,
-      emptyStateBody: shellCopyEs.feats.emptyStateBody,
+      emptyStateBody: shellCopyEs.feats.emptyStateBodyPerLevel,
       sequentialStep: null,
     };
   }
-
-  const activeLevel = featState.activeLevel;
-  const activeProgression =
-    progressionState.levels.find((r) => r.level === activeLevel) ?? null;
-  const classId = activeProgression?.classId ?? null;
   const classLevelInClass = getClassLevelInClass(
     progressionState,
     activeLevel,
@@ -392,6 +423,11 @@ export function selectFeatBoardView(
     level: activeLevel,
     selectedClassFeatId,
     selectedGeneralFeatId,
+    slotPrompt: computeSlotPrompt(
+      featSlots,
+      selectedClassFeatId,
+      selectedGeneralFeatId,
+    ),
     status: activeRevalidated?.status ?? 'pending',
     title: shellCopyEs.stepper.stepTitles.feats,
   };

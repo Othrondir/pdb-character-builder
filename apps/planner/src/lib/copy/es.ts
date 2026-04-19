@@ -216,6 +216,7 @@ export const shellCopyEs = {
     classFeatStepTitle: 'Dote de clase',
     classFeatConfirm: 'Confirmar dote de clase',
     emptyStateBody: 'Completa una progresion valida en Construccion para seleccionar dotes por nivel.',
+    emptyStateBodyPerLevel: 'Selecciona una clase para este nivel antes de asignar dotes.',
     emptyStateHeading: 'Las dotes siguen bloqueadas',
     errorState: 'Seleccion no permitida: revisa los requisitos marcados y corrige el paso anterior.',
     generalFeatStepTitle: 'Dote general',
@@ -242,6 +243,8 @@ export const shellCopyEs = {
     sheetTabTotal: '{count} dotes',
     sheetTabInvalid: '{count} invalidas',
     autoGrantedLabel: 'Automatica',
+    slotPromptClassAvailable: 'Dote de clase disponible.',
+    slotPromptGeneralAvailable: 'Dote general disponible.',
   },
   stepper: {
     heading: 'Creacion de personajes',
