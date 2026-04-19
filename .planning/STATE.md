@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: "Phase 12.4 inserted — 8 UAT findings + 1 sub-step regression captured 2026-04-19. 9 Success Criteria locked in ROADMAP.md. No plans yet. Milestone v1.0 can close before or in parallel with 12.4. Next: /gsd-spec-phase 12.4 or /gsd-audit-milestone v1.0."
-last_updated: "2026-04-19T01:15:00Z"
+stopped_at: "Paused 2026-04-19 ('seguimos la prox sesion'). Phase 12.4 SPEC.md committed (9 requirements, ambiguity 0.17). F9 shell overflow routed to quick task 260419-47a-stepper-bottom-pin — PLAN written, NOT executed. Resume by executing that quick task, then /gsd-discuss-phase 12.4 or /gsd-audit-milestone v1.0."
+last_updated: "2026-04-19T01:30:00Z"
 last_activity: 2026-04-19
 progress:
   total_phases: 13
@@ -175,6 +175,13 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-19T01:15:00Z
-Stopped at: Phase 12.4 inserted (Construcción Correctness & Clarity) — 8 findings + 1 sub-step regression captured in `.planning/UAT-FINDINGS-2026-04-19.md`, 9 Success Criteria locked in ROADMAP.md. No plans yet. Milestone v1.0 close still pending — can close before or after 12.4 depending on scope call. Resume options: `/gsd-spec-phase 12.4` (lock WHAT), `/gsd-discuss-phase 12.4` (surface gray areas), or `/gsd-audit-milestone v1.0` first.
-Resume file: None
+Last session: 2026-04-19T01:30:00Z (paused — user: "seguimos la prox sesion")
+Stopped at: Phase 12.4 SPEC.md written + committed (3b90ac9) — 9 requirements locked, ambiguity 0.17. Findings doc now covers F1..F9 + X1. New F9 (shell Utilidades button clips under progression overflow) routed to quick task `260419-47a-stepper-bottom-pin` — PLAN written, NOT executed yet. User paused before execution.
+
+Resume options next session:
+1. Execute quick task 260419-47a — spawn gsd-executor against `.planning/quick/260419-47a-stepper-bottom-pin/260419-47a-PLAN.md` (CSS-only grid refactor of `.creation-stepper`).
+2. `/gsd-discuss-phase 12.4` — surface implementation gray areas for Construcción Correctness & Clarity (class picker grouping UX, collapse-on-complete interaction, secondary picker modal vs inline expander, advance button placement).
+3. `/gsd-audit-milestone v1.0` — close v1.0 before opening 12.4 execution wave.
+
+Dev server still running background task `bdugirolg` on port 5173 (Vite HMR active). Browser tab 761725930 open at http://localhost:5173/.
+Resume file: `.planning/quick/260419-47a-stepper-bottom-pin/260419-47a-PLAN.md` (unexecuted)

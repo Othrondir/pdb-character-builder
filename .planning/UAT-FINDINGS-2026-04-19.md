@@ -195,6 +195,20 @@ This is inverted: the list is the primary navigation surface and must scroll ind
 
 ---
 
+## F9 — Shell aside clips `Utilidades` button when progression content overflows
+
+**User quote:** *"si te das cuenta el botón de utilidades se sale del div"*
+
+**Evidence (screenshot ss_9705emedn):**
+
+With the progression rail expanded (L1..L16 visible + L1 sub-steps expanded at Dotes), the left aside `.creation-stepper` scrolls its entire content via `overflow-y: auto` on the outer flex column. `.creation-stepper__bottom` (containing `Resumen` + `Utilidades`) uses `margin-top: auto` to push to the end — but once the content exceeds viewport height, the bottom element scrolls out of view below the fold. At viewport 1389×868 the user sees `Resumen` half-clipped at y~820 and `Utilidades` entirely off-screen.
+
+**Scope:** Shell concern, NOT part of Phase 12.4 (SPEC.md explicitly excludes Shell). Routed to quick task `260419-47a-stepper-bottom-pin`.
+
+**Candidate remediation:** CSS-only — switch `.creation-stepper` to `display: grid; grid-template-rows: auto auto 1fr auto` + move scroll onto `.creation-stepper__progression`. Bottom row stays pinned regardless of progression length.
+
+---
+
 ## Cross-cutting observations
 
 ### X1 — Sub-steps pre-check ✓ on entry
