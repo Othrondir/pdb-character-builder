@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: "Phase 12.3 complete — 6/6 plans + 6/6 SC verified. All 9 UAT blockers (B1..B9) resolved: attributes overspend gate, multiclass L2+ wiring, per-level Dotes gate + slot prompt, HP pipeline, origin-stepper decoupling, description paragraph CSS. 499/499 tests green. In-browser UAT confirms Enano+Guerrero L1+Pícaro L2 multiclass flow produces correct rail, header NIVEL 2, PG 20, slot prompts, paragraph descriptions. Milestone v1.0 UNBLOCKED — ready for audit + close."
-last_updated: "2026-04-19T00:30:00Z"
-last_activity: 2026-04-18
+stopped_at: "Phase 12.4 inserted — 8 UAT findings + 1 sub-step regression captured 2026-04-19. 9 Success Criteria locked in ROADMAP.md. No plans yet. Milestone v1.0 can close before or in parallel with 12.4. Next: /gsd-spec-phase 12.4 or /gsd-audit-milestone v1.0."
+last_updated: "2026-04-19T01:15:00Z"
+last_activity: 2026-04-19
 progress:
-  total_phases: 12
+  total_phases: 13
   completed_phases: 12
   total_plans: 40
   completed_plans: 40
-  percent: 100
+  percent: 92
 ---
 
 # Project State
@@ -157,6 +157,7 @@ None yet.
 - Phase 12.1 inserted after Phase 12: Roster Wiring & Overflow Fixes (INSERTED) — Phase 11 UAT (2026-04-18) surfaced that L1 class picker shows only 7 classes, race picker only 3 parent races (vs full PDB TLK extractor roster), and several panels lack `overflow-y: auto` and clip content. User-visible blocker for character creation; separated from Phase 12 (cosmetic tech debt) to keep Phase 12's audit scope tight.
 - Phase 12.2 inserted after Phase 12.1: Roster Detail & Race Ability Modifiers (INSERTED) — Phase 12.1 UAT (2026-04-18) surfaced four remaining gaps after roster wiring: (1) picker detail panes show only labels, not TLK descriptions; (2) race ability modifiers never fold into attributes (CHAR-02 structural gap from Phase 3 — e.g. Elfo DEX +2 / CON −2 not applied); (3) prestige-filter mis-gates at L1 (Clérigo wrongly blocked; 5 prestige classes wrongly enabled); (4) compiled class catalog ships duplicate canonical IDs (`class:harper`, `class:shadowadept`) causing React key warnings. Splits cleanly into 4 plans.
 - Phase 12.3 inserted after Phase 12.2: UAT Correctness Closure (INSERTED) — Deep UAT (2026-04-18, after Phase 12.2 shipped) surfaced 9 blockers. Critical: B1 attributes `+` allows overspend (`Puntos restantes: -2`), B2 multiclass L2+ click doesn't activate picker (overrides L1), B3 Dotes falsely blocked on levels lacking a class. High: B4 feat slot count invisible, B6 PG shows `--` forever, B7 origin rail loses ✓ when atributos invalid. Medium: B5 descriptions render wall-of-text, B8/B9 header + sub-step ripples from B2. Milestone v1.0 close blocked on B1/B2/B3/B6; 6-plan closure scheduled across 3 waves.
+- Phase 12.4 inserted after Phase 12.3: Construcción Correctness & Clarity (INSERTED) — Post-v1.0 UAT (2026-04-19, after quick task 260419-68b landed atributos layout) surfaced 8 cross-cutting defects + 1 regression in the Construcción flow: F1 class picker intermingles base + prestige with no L1 gating, F2 no dynamic "Continuar al nivel N" advance button, F3 per-level feat-slot + skill-point math not surfaced in UI (blocks legitimate prestige entry), F4 Habilidades does not visually separate class vs transclase costs, F5 Dotes route lacks selectability states + no collapse-on-complete (with locked visibility policy: unavailable feats stay visible + show unmet requirements), F6 Soltura-family feats explode row-per-variant instead of folding behind a secondary picker, F7 DELETED / sentinel rows from extractor pollute the Dotes catalog, F8 Dotes scroll attaches to description column instead of the list column, X1 L1 sub-steps render ✓ before user interaction (auto-seed Explorador). All findings captured in `.planning/UAT-FINDINGS-2026-04-19.md`; scope locked as 9 Success Criteria in ROADMAP.md Phase 12.4. Next: `/gsd-spec-phase 12.4` to lock falsifiable requirements.
 
 ### Blockers/Concerns
 
@@ -174,6 +175,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-19T00:50:00Z
-Stopped at: Quick task 260419-68b shipped — Atributos board CSS grid columns + button glyph strengthening + lining/tabular numerals. 3 atomic commits (118a6f6, a05e74a, 762aa57) on apps/planner/src/styles/app.css. In-browser UAT at http://localhost:5173/ (Humano + Neutral puro → Atributos) confirms columns align, `-/+` glyphs bold + readable, `8/30` render lining digits. Milestone v1.0 still UNBLOCKED — ready for `/gsd-audit-milestone v1.0` + `/gsd-complete-milestone`.
+Last session: 2026-04-19T01:15:00Z
+Stopped at: Phase 12.4 inserted (Construcción Correctness & Clarity) — 8 findings + 1 sub-step regression captured in `.planning/UAT-FINDINGS-2026-04-19.md`, 9 Success Criteria locked in ROADMAP.md. No plans yet. Milestone v1.0 close still pending — can close before or after 12.4 depending on scope call. Resume options: `/gsd-spec-phase 12.4` (lock WHAT), `/gsd-discuss-phase 12.4` (surface gray areas), or `/gsd-audit-milestone v1.0` first.
 Resume file: None

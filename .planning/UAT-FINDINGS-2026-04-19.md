@@ -125,11 +125,12 @@ Dotes panel at L1:
 - After the user selects a feat, the list does NOT collapse or hide — stays at full length, no done-state indicator.
 
 **Candidate remediation:**
+- **Visibility policy (locked):** unavailable feats MUST remain visible with explicit unmet-requirement copy. Rationale — user needs forward-planning visibility (*"I want Disparo Preciso at L4, which BAB do I need?"*). Hiding unreachable feats destroys that affordance. User quote (2026-04-19): *"también deben aparecer dotes no disponibles, pero que dejen claro sus requisitos"*.
 - Per-row selectability state:
   - `selectable` — normal clickable state
-  - `blocked-prereq` — muted, inline reason (`Requiere BAB ≥ 1`)
-  - `blocked-already-taken` — muted, badge `Ya seleccionada`
-  - `blocked-budget` — muted once all L-level slots filled
+  - `blocked-prereq` — muted, inline reason (`Requiere BAB ≥ 1`, `Requiere 8 rangos de Sigilo`, `Requiere dote: Esquiva`). Row stays visible + non-clickable.
+  - `blocked-already-taken` — muted, badge `Ya seleccionada`. Row stays visible.
+  - `blocked-budget` — muted once all L-level slots filled. Row stays visible.
 - Slot counter in panel header: `Dotes del nivel {N}: {chosen}/{slots}`.
 - When `chosen === slots`, collapse list body and replace with a summary card:
   - `Has elegido todas las dotes de este nivel — {feat1}, {feat2}`.
@@ -137,6 +138,60 @@ Dotes panel at L1:
   - Small "Modificar selección" link expands list again.
 - Carry the search input inside the collapsed summary too so advanced users can hotswap without re-opening the full list.
 - Category buckets inside the list (`Generales`, `Metamágicas`, `Creación de objetos`, `Combate`, `De clase`, `De raza`) — the current list clearly mixes metamágicas (Potenciar/Prolongar/Maximizar conjuro, Conjurar en silencio/sin moverse) with generals (Alerta, Esquiva).
+
+---
+
+## F6 — "Soltura" feat family expanded row-per-variant instead of grouped
+
+**User quote:** *"las solturas deberen estas agrupadas en un modal o algo así por tipo, desplegarlas todas es muy poco inteligente"*
+
+**Evidence (screenshots ss_306303aoj, ss_14862mn9i):**
+
+Within `DOTES GENERALES`, "Soltura" variants render as one row per target:
+- `Soltura con una habilidad (Trato con los animales)`
+- `Soltura con una escuela de magia (Abjuración)`
+- …and by NWN rules, the same pattern multiplies across every skill (39 rows), every spell school (8 rows), plus likely weapon variants — inflating the list enormously with near-identical labels.
+
+Each row looks distinct in the flat list but they all share the same base feat with a target parameter. The user cannot scan the list efficiently; the interesting choice ("I want Soltura") is buried under the target disambiguation.
+
+**Candidate remediation:**
+- Collapse each Soltura family into one canonical row: `Soltura con una habilidad`, `Soltura con una escuela de magia`, etc.
+- Clicking a family row opens a secondary picker (modal, inline expander, or sub-list) scoped to the valid targets, with the same prereq + selectability treatment from `F5`.
+- Internally, the selected feat stored still includes the specific target (`feat:skill-focus:animal-empathy`) so rules-engine logic is unaffected — this is purely a UI folding pattern.
+- Pattern generalises to any feat with a parameter slot (weapon focus / greater weapon focus / weapon specialization, damage reduction tiers, etc.) — define a general "parameterized feat family" UI contract rather than one-off per family.
+
+---
+
+## F7 — DELETED / deprecated feat rows should not render
+
+**User quote:** *"las dotes DELETED se deben borrar"*
+
+**Evidence (user-observed in Dotes list):**
+
+The extractor-emitted feats catalog ships rows whose label or status indicates they are marked `DELETED` (or equivalent deprecated / unused flag) upstream in the NWN 2DA source. These rows currently render in the picker as selectable/listed entries, polluting the catalog and confusing the picker.
+
+**Candidate remediation:**
+- Extractor filter: during `assembleFeatCatalog`, drop 2DA rows whose `Label` or `Description` string equals `DELETED`, `***DELETED***`, `UNUSED`, or equivalent convention. Verify which sentinel the source actually uses (likely `****` padding rows + explicit `DELETED` strings).
+- Belt-and-braces UI filter: the feat selector predicate additionally skips any canonical id whose display name hits those sentinels even if they leak through the extractor.
+- Regression test asserts the feats catalog contains zero rows with sentinel labels after a fresh extraction, and the picker renders none.
+- Check skill + class + race catalogs for the same sentinel pattern while we are there (same root cause — blind 2DA emission).
+
+---
+
+## F8 — Dotes scroll container attached to description panel instead of list column
+
+**User quote:** *"el scroll de las dotes, debería estar en la columna de las dotes, no en la descripción de las dotes"*
+
+**Evidence (screenshots ss_306303aoj, ss_14862mn9i):**
+
+In the Dotes route, overflow-y scrolling attaches to the right-hand detail / description panel (the area that shows "Tipo de dote / Prerrequisito / Detalles / Uso" when a feat is hovered). The left-hand feat list, which is the longer scrollable surface, does not own its own scrollbar — instead the whole two-column area scrolls together, and the description column is what visually moves.
+
+This is inverted: the list is the primary navigation surface and must scroll independently; the description panel should stay pinned (or scroll internally if its own content exceeds viewport).
+
+**Candidate remediation:**
+- Move `overflow-y: auto` off the shared container (or the DetailPanel) and onto the `.feat-picker__list` (left column) so the user scrolls feats while the description stays in view.
+- Independent internal scroll on description panel ONLY when its own content exceeds panel height (secondary, rare case).
+- Same pattern likely worth auditing on class picker + race picker + skills route if any share the same SelectionScreen container (regression surface check).
 
 ---
 

@@ -365,6 +365,24 @@ Plans:
 - [x] 12.3-06: Description paragraph rendering in DetailPanel (B5)
 **UI hint**: yes
 
+### Phase 12.4: Construcción Correctness & Clarity (INSERTED)
+**Goal**: Close the 8 cross-cutting UX + correctness defects UAT 2026-04-19 surfaced across the Construcción flow (class picker, skills route, feats route, per-level gating). Separate base vs prestige classes with evidence-based gating; surface per-level feat-slot + skill-point budgets as authoritative UI truth; add a dynamic "Continuar al nivel N" affordance; split Habilidades into class vs transclase sections with coste hint; restructure Dotes with selectability states, slot counter, and collapse-on-complete behavior; fold parameterized feat families (Soltura, Weapon Focus, etc.) behind secondary pickers; strip DELETED / sentinel rows from extractor + UI; move Dotes scroll onto list column. Also fix the sub-step ✓ pre-check regression (X1) that auto-greens Clase/Habilidades/Dotes at L1 before user interaction.
+**Depends on**: Phase 12.3 (UAT correctness closure) — F3 math surfacing builds on existing per-level selectors.
+**Requirements**: CLAS-01..04 (multiclass + prestige legality), PROG-01..03 (per-level progression), FEAT-01 (feat selection + slot clarity), SKIL-01..02 (skill allocation + class/cross-class cost), PICK-01 (class picker gating).
+**Gap Closure**: Closes the 8 findings + X1 documented in `.planning/UAT-FINDINGS-2026-04-19.md` (F1..F8 + X1).
+**Success Criteria** (what must be TRUE):
+  1. Class picker renders base classes in an explicit `Clases básicas` group above prestige classes in a `Clases de prestigio` group. Prestige rows whose prerequisites fail at the currently-edited level are disabled and display the unmet prereq inline. At L1, every prestige row is disabled.
+  2. Level editor footer shows a contextual advance button whose label reflects completion state: `Continuar al nivel N+1` when current level fully allocated; `Faltan {N} dotes que asignar en este nivel` or `Faltan {N} puntos de habilidad por gastar` (disabled) otherwise. Button dispatches `setActiveLevel(N+1)` + `setExpandedLevel(N+1)` + appropriate sub-step.
+  3. Feat-slot + skill-point math per level (L1..L16) is exposed as header counters (`Dotes: {chosen}/{slots}`, `Puntos de habilidad: {spent}/{budget}`). Math accounts for Humano L1 bonus feat, class-bonus feats (Guerrero L1/L2, Mago L1+L5+L10+L15), L1 skill-point quadruple, Pícaro/Explorador INT-based bonus, and prestige-class boundary transitions. Regression fixture tests assert canonical builds.
+  4. Habilidades route splits into two headered sections (`Habilidades de clase` + `Habilidades transclase`) with visible cost-per-rank hint on each section; `Solo entrenada` shown as a per-row badge orthogonal to the grouping.
+  5. Dotes route renders per-row selectability states (selectable / blocked-prereq / blocked-already-taken / blocked-budget) with muted styling + inline reason for blocked rows. **Visibility policy: unavailable feats remain in the list — never hidden — with explicit unmet-requirement copy so the user can plan forward.** Panel header shows `Dotes del nivel N: {chosen}/{slots}`. When `chosen === slots`, the list body collapses to a summary card with chosen feats + `Modificar selección` expand link.
+  6. L1 sub-steps (Clase / Habilidades / Dotes) render neutral / pending state on first entry — ✓ is granted only after the user affirms a class, allocates skill points up to budget, and selects all feat slots at that level.
+  7. Parameterized feat families (`Soltura con una habilidad`, `Soltura con una escuela de magia`, and any other 2DA-expanded variant family) collapse to one canonical row in the main Dotes list. Selecting the family row opens a secondary picker (modal / inline expander) scoped to valid targets, inheriting the same selectability + prereq treatment from SC5. Stored feat id still carries the specific target so rules-engine logic is unchanged.
+  8. Extractor feat catalog emits zero rows whose label / description matches `DELETED`, `***DELETED***`, `UNUSED`, or equivalent 2DA sentinel. Belt-and-braces UI filter suppresses any sentinel rows that leak through. Regression test asserts zero sentinel rows post-extraction and zero rendered sentinel rows in the picker. Skill + class + race catalogs audited for the same pattern in the same plan.
+  9. Dotes route scroll container lives on the feat-list column (`overflow-y: auto` on the list, not the shared two-column wrapper). Description panel remains pinned while the list scrolls; description panel scrolls internally only when its own content exceeds its height. Same pattern verified on class + race pickers to prevent regression.
+**Plans**: TBD (planned in `/gsd-plan-phase 12.4` after spec + discuss)
+**UI hint**: yes
+
 ## Progress
 
 **Execution Order:**
