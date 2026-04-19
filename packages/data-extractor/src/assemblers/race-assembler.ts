@@ -23,6 +23,7 @@ import type { NwsyncReader } from '../readers/nwsync-reader';
 import type { BaseGameReader } from '../readers/base-game-reader';
 import type { TlkResolver } from '../readers/tlk-resolver';
 import type { AssembleResult } from './class-assembler';
+import { isSentinelLabel } from '../lib/sentinel-regex';
 import { canonicalId } from './slug-utils';
 
 const ABILITY_KEYS = ['str', 'dex', 'con', 'int', 'wis', 'cha'] as const;
@@ -104,6 +105,13 @@ export function assembleRaceCatalog(
     const label = row.Label;
     if (!label) {
       warnings.push(`Race row ${rowIndex}: missing Label, skipped`);
+      continue;
+    }
+
+    // 12.4-01 (SPEC R8): fail-closed sentinel filter — DELETED / UNUSED /
+    // PADDING / ***DELETED*** / DELETED_* rows never enter the catalog.
+    if (isSentinelLabel(label)) {
+      warnings.push(`Race row ${rowIndex}: sentinel label '${label}' — skipped`);
       continue;
     }
 

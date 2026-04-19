@@ -21,7 +21,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-30)
 
 **Core value:** A player can build a Puerta de Baldur character from level 1 to 16 with strict server-valid validation and share that exact build reliably.
-**Current focus:** Phase 12.3 complete — milestone v1.0 ready to close. Next: `/gsd-audit-milestone v1.0` + `/gsd-complete-milestone` to ship v1.0.
+**Current focus:** Phase 12.4 (construccion-correctness-clarity) in flight — Wave 1 parallel execution. 12.4-01 complete (R8 sentinel filter); 12.4-02 + 12.4-03 running on sibling worktrees.
 
 ## Current Position
 
@@ -80,6 +80,7 @@ Progress: [██████████] 100%
 | Phase 07 P04 | 9min | 4 tasks | 12 files |
 | Phase 07 P05 | 17m | 4 tasks | 12 files |
 | Phase 08 P02 | 32m | 4 tasks | 18 files |
+| Phase 12.4-01 | 8m | 3 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -145,6 +146,7 @@ Recent decisions affecting current work:
 - [Phase 12.2-03]: 0x00 AlignRestrict (with or without InvertRestrict) decodes to undefined (no gate), not "all 9 alignments" — matches NWN 2DA empty-mask convention and lets evaluateClassEntry skip the alignment row entirely when no restriction applies.
 - [Phase 12.3-01]: UAT B1 overspend gate lands at the UI layer — `canIncrementAttribute` is consumed by the `+` button `disabled` prop; the store's `setBaseAttribute` is not hardened. Mirrors existing `-` button gate semantics and keeps the store framework-agnostic. `calculateAbilityBudgetSnapshot` stays shape-stable (post-hoc validation copy); the new helpers are forward-looking per-click guards exported alongside it from `@rules-engine/foundation/ability-budget`.
 - [Phase 12.3-02]: Multiclass active-level repair lives entirely in the UI dispatch site — `LevelRail.onClick` fires `setActiveLevel` + `setExpandedLevel` atomically. No store/selector/selector-chain changes: `selectActiveLevelSheet` already reads `progressionState.activeLevel`; the board title already concatenates `${copy} ${activeSheet.level}`; the Clase sub-step already evaluates per-level. The single missing wire was the rail's onClick dispatch. Copy string `'Selecciona la clase del nivel'` (no hardcoded number) was already correct. Minimal-surface repair that closes B2 CRITICAL + B8 + B9 in one edit.
+- [Phase 12.4-01]: Shared sentinel regex lives in packages/data-extractor/src/lib/sentinel-regex.ts — SENTINEL_REGEX covers DELETED / ***DELETED*** / UNUSED / PADDING / DELETED_* / **** in one case-insensitive pattern; isSentinelLabel helper trims + null-guards + delegates. Fail-closed at producer across all 4 assemblers (feat x2, skill x1, class x1, race x1) AND belt-and-braces at consumer in apps/planner/src/features/feats/selectors.ts::selectFeatBoardView. compiled-feats.ts manually scrubbed of sourceRow 385 + 403 DELETED objects (no cross-references elsewhere in catalog, so excision is schema-safe). Future `pnpm extract` runs will reproduce the scrubbed artifact automatically via the new guards.
 
 ### Pending Todos
 
