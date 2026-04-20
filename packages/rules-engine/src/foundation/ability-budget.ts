@@ -1,8 +1,14 @@
 import type { ValidationOutcome, ValidationStatus } from '../contracts/validation-outcome';
 import { resolveValidationOutcome } from '../contracts/validation-outcome';
 
+// Phase 12.6 (Rule 2 auto-fix) — `baseScore` was declared here but never
+// consumed by any function in this module. It lived on the planner-side
+// fixture's `AttributeRules` type (foundation-fixture.ts:45) and was read
+// by `createBaseAttributes` in the store. Removing it from the rules-engine
+// interface lets `PointBuyCurve` (which has no baseScore) satisfy this
+// contract structurally, preserving the plan's "per-race selector threads
+// the snapshot output into the existing helpers" boundary.
 interface AbilityBudgetRules {
-  baseScore: number;
   budget: number;
   costByScore: Record<string, number>;
   maximum: number;

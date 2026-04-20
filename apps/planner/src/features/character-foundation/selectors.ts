@@ -2,6 +2,10 @@ import type { ValidationOutcome } from '@rules-engine/contracts/validation-outco
 import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
 import { calculateAbilityBudgetSnapshot } from '@rules-engine/foundation/ability-budget';
 import {
+  PUERTA_POINT_BUY_SNAPSHOT,
+  type PointBuyCurve,
+} from '@rules-engine/foundation/point-buy-snapshot';
+import {
   evaluateOriginSelection,
   getAllowedSubraces,
 } from '@rules-engine/foundation/origin-rules';
@@ -43,6 +47,21 @@ export interface FoundationSummaryView {
   selectedRaceLabel: string | null;
   selectedSubraceLabel: string | null;
   summaryStatus: FoundationStatus;
+}
+
+/**
+ * Phase 12.6 (D-06) — per-race point-buy curve resolution.
+ *
+ * Returns null when raceId is null OR when the snapshot lacks an entry for
+ * this race. Null routes through calculateAbilityBudgetSnapshot's null branch
+ * (ATTR-01 R3), which emits rule:point-buy-missing. AttributesBoard reads
+ * this selector directly to drive the fail-closed callout.
+ */
+export function selectAbilityBudgetRulesForRace(
+  raceId: CanonicalId | null,
+): PointBuyCurve | null {
+  if (!raceId) return null;
+  return PUERTA_POINT_BUY_SNAPSHOT[raceId] ?? null;
 }
 
 function findAlignment(alignmentId: CanonicalId | null) {
@@ -233,7 +252,10 @@ export function selectAttributeBudgetSnapshot(
   state: CharacterFoundationStoreState,
 ) {
   return calculateAbilityBudgetSnapshot({
-    attributeRules: phase03FoundationFixture.attributeRules,
+    // Phase 12.6 (D-06, D-09) — runtime path resolves point-buy rules per
+    // race via the snapshot selector. Null routes through the fail-closed
+    // null branch in calculateAbilityBudgetSnapshot (ATTR-01 R3).
+    attributeRules: selectAbilityBudgetRulesForRace(state.raceId),
     baseAttributes: state.baseAttributes,
     originReady: selectOriginReadyForAbilities(state),
   });
