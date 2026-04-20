@@ -147,6 +147,7 @@ a {
 }
 .attributes-editor__racial--positive { color: var(--color-gold); }
 .attributes-editor__racial--negative { color: var(--color-destructive); }
+.attributes-editor__racial--zero { color: var(--color-text-muted); opacity: 0.6; }
 .attributes-editor__cell {
   align-items: center;
   display: inline-flex;

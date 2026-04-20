@@ -70,12 +70,11 @@ export function AttributesBoard() {
           // 12.2-02) and stays null until the user picks a race.
           const racialDelta = foundationState.racialModifiers?.[key] ?? 0;
           const totalValue = baseValue + racialDelta;
+          // UAT-2026-04-20 A2.1 — always show the racial bonus, even when
+          // it is zero (`+0`). Keeps column alignment uniform and makes the
+          // "no modifier" state explicit instead of ambiguous blank space.
           const racialLabel =
-            racialDelta === 0
-              ? null
-              : racialDelta > 0
-                ? `+${racialDelta}`
-                : `${racialDelta}`;
+            racialDelta >= 0 ? `+${racialDelta}` : `${racialDelta}`;
           return (
             <div className="attributes-editor__row" key={key}>
               <span className="attributes-editor__label">
@@ -95,18 +94,18 @@ export function AttributesBoard() {
                   className="attributes-editor__value"
                 >
                   {totalValue}
-                  {racialLabel ? (
-                    <span
-                      aria-label={`Bonificador racial de ${ATTRIBUTE_LABELS[key]}`}
-                      className={`attributes-editor__racial${
-                        racialDelta > 0
-                          ? ' attributes-editor__racial--positive'
-                          : ' attributes-editor__racial--negative'
-                      }`}
-                    >
-                      {racialLabel}
-                    </span>
-                  ) : null}
+                  <span
+                    aria-label={`Bonificador racial de ${ATTRIBUTE_LABELS[key]}`}
+                    className={`attributes-editor__racial${
+                      racialDelta > 0
+                        ? ' attributes-editor__racial--positive'
+                        : racialDelta < 0
+                          ? ' attributes-editor__racial--negative'
+                          : ' attributes-editor__racial--zero'
+                    }`}
+                  >
+                    {racialLabel}
+                  </span>
                 </span>
                 <NwnButton
                   aria-label={`Aumentar ${ATTRIBUTE_LABELS[key]}`}
