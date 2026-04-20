@@ -1,12 +1,14 @@
 /**
- * Phase 12.6 (Plan 03, PROG-04 R5) — compact level progression row.
+ * Phase 12.6 (Plan 04, PROG-04 R6) — compact level progression row with
+ * migrated expanded slot.
  *
- * Renders a single `<li>` in the 20-row scan surface. Header-only in this
- * plan — pills for class / feats / skills / legality plus a level number.
- * The expanded slot is an empty placeholder here; Plan 04 migrates the
- * level-sheet.tsx contents into that div.
+ * Renders a single `<li>` in the 20-row scan surface. Header-only rows
+ * show pills for class / feats / skills / legality plus a level number.
+ * The active row's expanded slot hosts the full level editor — migrated
+ * verbatim from level-sheet.tsx (Plan 04): ClassPicker + requirement rows
+ * + gains + AbilityIncreaseControl + LevelEditorActionBar.
  *
- * Performance contract (threat T-12.6-03-03): non-active rows render
+ * Performance contract (threat T-12.6-04-01..-04): non-active rows render
  * header-only — they never mount ClassPicker or LevelEditorActionBar.
  * That is why the expanded `<div>` is conditional on `isActive`.
  *
@@ -16,6 +18,11 @@
  *
  * Legality source of truth: `selectLevelLegality` (see selectors.ts).
  * Precedence is locked > invalid > incomplete > legal (CONTEXT D-17).
+ *
+ * Pitfall 2 guard (RESEARCH.md): we do NOT add an `activeLevelSubStep ===
+ * 'class'` guard inside this row — `center-content.tsx` already gates
+ * mounting of BuildProgressionBoard to the `class` sub-step; a redundant
+ * guard here would break Habilidades/Dotes chip navigation.
  */
 
 import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
@@ -24,7 +31,11 @@ import { useSkillStore } from '@planner/features/skills/store';
 import { usePlannerShellStore } from '@planner/state/planner-shell';
 import { shellCopyEs } from '@planner/lib/copy/es';
 
+import { AbilityIncreaseControl } from './ability-increase-control';
+import { ClassPicker } from './class-picker';
+import { LevelEditorActionBar } from './level-editor-action-bar';
 import {
+  selectActiveLevelSheetView,
   selectLevelCompletionState,
   selectLevelLegality,
   type LevelLegality,
@@ -71,6 +82,14 @@ export function LevelProgressionRow({ level }: Props) {
   const isActive = progressionState.activeLevel === level;
   const isLocked = legality === 'locked';
   const classLabel = completion.classLabel;
+
+  // Plan 04: active-sheet view powers the expanded slot. `selectActiveLevelSheetView`
+  // reads `progressionState.activeLevel` internally, so the view always corresponds
+  // to the currently-active level (i.e. THIS row, when `isActive`). The value is
+  // computed on every render but rendered only inside the `{isActive && ...}`
+  // branch below — non-active rows pay zero UI cost from it.
+  const activeSheet = selectActiveLevelSheetView(progressionState, foundationState);
+  const selectedAbility = activeSheet.abilityIncrease;
 
   const feats = shellCopyEs.progression.pillTemplate.feats
     .replace('{chosen}', String(completion.featSlots.chosen))
@@ -150,7 +169,78 @@ export function LevelProgressionRow({ level }: Props) {
           className="level-progression-row__expanded"
           data-testid={`level-row-${level}-expanded`}
         >
-          {/* Plan 04 migrates level-sheet.tsx contents here. */}
+          <div>
+            <h2>{activeSheet.title}</h2>
+            <p className="detail-panel__body">
+              {shellCopyEs.progression.levelLabel} {activeSheet.level}
+            </p>
+          </div>
+
+          <ClassPicker />
+
+          {activeSheet.repairMessage ? (
+            <p className="level-sheet__repair-callout">{activeSheet.repairMessage}</p>
+          ) : null}
+
+          {activeSheet.classId ? (
+            <>
+              <section className="level-sheet__requirements">
+                <h3>{shellCopyEs.progression.requirementsHeading}</h3>
+                <div className="level-sheet__rows">
+                  {activeSheet.requirementRows.length > 0 ? (
+                    activeSheet.requirementRows.map((row) => (
+                      <p
+                        className={`foundation-step__issue is-${row.status}`}
+                        key={row.label}
+                      >
+                        {row.label}
+                      </p>
+                    ))
+                  ) : (
+                    <p className="detail-panel__body">
+                      {shellCopyEs.progression.statuses.legal}
+                    </p>
+                  )}
+                </div>
+              </section>
+
+              <section className="level-sheet__gains">
+                <h3>{shellCopyEs.progression.gainsHeading}</h3>
+                <div className="level-sheet__rows">
+                  {[...activeSheet.gains, ...activeSheet.choicePrompts].length > 0 ? (
+                    [...activeSheet.gains, ...activeSheet.choicePrompts].map((item) => (
+                      <p className="detail-panel__body" key={item}>
+                        {item}
+                      </p>
+                    ))
+                  ) : (
+                    <p className="detail-panel__body">
+                      {activeSheet.placeholderBody}
+                    </p>
+                  )}
+                </div>
+              </section>
+            </>
+          ) : (
+            <div className="level-sheet__placeholder">
+              <p>{activeSheet.placeholderBody}</p>
+            </div>
+          )}
+
+          {activeSheet.abilityIncreaseAvailable ? (
+            <section className="level-sheet__ability">
+              <h3>{shellCopyEs.progression.abilityHeading}</h3>
+              <p className="detail-panel__body">
+                {shellCopyEs.progression.abilityHelper}
+              </p>
+              <AbilityIncreaseControl
+                level={activeSheet.level as ProgressionLevel}
+                value={selectedAbility}
+              />
+            </section>
+          ) : null}
+
+          <LevelEditorActionBar />
         </div>
       )}
     </li>
