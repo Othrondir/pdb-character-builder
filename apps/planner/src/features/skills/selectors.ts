@@ -16,6 +16,7 @@ import {
   type SkillStatsView,
 } from '@rules-engine/skills/skill-derived-stats';
 import { revalidateSkillSnapshotAfterChange } from '@rules-engine/skills/skill-revalidation';
+import type { SkillBudgetSnapshot } from '@rules-engine/skills/skill-budget';
 
 import { shellCopyEs } from '@planner/lib/copy/es';
 import { selectOriginReadyForAbilities } from '@planner/features/character-foundation/selectors';
@@ -614,6 +615,44 @@ export function selectActiveSkillSheetView(
     spentPoints: activeLevel?.spentPoints ?? 0,
     status: activeRepair?.status ?? activeLevel?.status ?? 'pending',
     title: shellCopyEs.skills.sheetHeading,
+  };
+}
+
+/**
+ * Phase 12.7-02 (D-07, UAT F4 R2) — boundary adapter: composes a pure
+ * `SkillBudgetSnapshot` from the planner-side `ActiveSkillSheetView`.
+ *
+ * Keeps the rules-engine `skill-budget.ts` helper framework-agnostic
+ * (12.4-03 invariant) by doing the planner→snapshot composition here at
+ * the feature boundary. `skill-sheet.tsx` calls this once per render,
+ * then threads the snapshot into every `SkillRankRow` so
+ * `canIncrementSkill(row.skillId, level, snapshot)` powers the `+` button
+ * `disabled` prop.
+ *
+ * Field mapping (confirmed against `ActiveSkillSheetView` + `SkillSheetRowView`):
+ *   availablePoints  → pointsAvailable
+ *   spentPoints      → pointsSpent
+ *   row.costType     → costPerRank (1 for 'class', 2 for 'cross-class')
+ *   row.currentRank  → currentRank
+ *   row.maxAssignableRank → maxAssignableRank
+ */
+export function buildSkillBudgetSnapshotFromSheet(
+  activeSheet: ActiveSkillSheetView,
+): SkillBudgetSnapshot {
+  const skills: SkillBudgetSnapshot['skills'] = {};
+  for (const group of activeSheet.groups) {
+    for (const row of group.rows) {
+      skills[row.skillId] = {
+        costPerRank: row.costType === 'class' ? 1 : 2,
+        currentRank: row.currentRank,
+        maxAssignableRank: row.maxAssignableRank,
+      };
+    }
+  }
+  return {
+    pointsAvailable: activeSheet.availablePoints,
+    pointsSpent: activeSheet.spentPoints,
+    skills,
   };
 }
 
