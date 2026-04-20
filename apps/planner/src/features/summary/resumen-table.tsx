@@ -9,7 +9,7 @@ interface ResumenTableProps {
  * Flat 3-block Resumen table mirroring `excel simulador de fichas/Plantilla Base.xlsx`
  * sheet 1 "Resumen Ficha" layout:
  *   1. Identity + Attributes block (top-left in xlsx)
- *   2. Progression block (top-right in xlsx — 16-level class + BAB + saves + feats)
+ *   2. Progression block (top-right in xlsx — 20-level class + BAB + saves + feats, UAT-2026-04-20 P6)
  *   3. Habilidades block (bottom in xlsx — 39 skills with ranks + ability mod + total)
  *
  * All derived-stat cells render `copy.notAvailable` ('—') when the rules-engine helper

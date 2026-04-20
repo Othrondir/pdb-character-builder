@@ -11,8 +11,9 @@
  * Subtract hash prefix (`#/share?b=` = 10 chars) + safe host/protocol overhead (~138 chars).
  *   => MAX_ENCODED_PAYLOAD_LENGTH = 1900.
  *
- * Worst-case 16-level build encodes to ~2700-3500 chars (RESEARCH.md A2) — expected to
- * trigger fallback. Smaller builds (tier-1 through tier-3) fit comfortably.
+ * Worst-case 20-level build encodes to ~3200-4200 chars (extrapolated from
+ * RESEARCH.md A2 16-level baseline × 20/16 — UAT-2026-04-20 P6). Fallback to
+ * JSON export is likely for full-progression shares; tier-1..tier-3 still fit.
  *
  * This constant is the ONE knob to tune if real-world telemetry shows fallback is too
  * aggressive or too lax. Do not inline this number anywhere else.
