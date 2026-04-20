@@ -1,50 +1,34 @@
-import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
+/**
+ * Phase 12.6 (Plan 03, PROG-04 R5) — 20-row scan surface host.
+ *
+ * Swapped from the prior single-level ClassPicker + DetailPanel render
+ * to an `<ol>` of 20 `LevelProgressionRow` children. Plan 04 will
+ * populate the expanded-slot host inside each row (ClassPicker +
+ * LevelEditorActionBar migrated verbatim from level-sheet.tsx). Plan 05
+ * deletes the legacy level-rail.tsx + creation-stepper imports.
+ *
+ * The `<h2>` reads `shellCopyEs.progression.railHeading` which Plan 01
+ * patched to `'Progresión 1-20'` (locked decision — no branching).
+ */
+
+import { LevelProgressionRow } from './level-progression-row';
+import { PROGRESSION_LEVELS } from './progression-fixture';
 import { shellCopyEs } from '@planner/lib/copy/es';
-import { SelectionScreen } from '@planner/components/ui/selection-screen';
-import { DetailPanel } from '@planner/components/ui/detail-panel';
-import { selectActiveLevelSheet } from './selectors';
-import { getPhase04ClassRecord } from './class-fixture';
-import { ClassPicker } from './class-picker';
-import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
-import { useLevelProgressionStore } from './store';
 
 export function BuildProgressionBoard() {
-  const progressionState = useLevelProgressionStore();
-  const foundationState = useCharacterFoundationStore();
-  const activeSheet = selectActiveLevelSheet(progressionState, foundationState);
-
-  const selectedClass = activeSheet.classOptions.find(
-    (c: { selected: boolean }) => c.selected,
-  );
-
-  const selectedClassRecord = selectedClass
-    ? getPhase04ClassRecord(selectedClass.id as CanonicalId)
-    : null;
-
-  const title = `${shellCopyEs.stepper.stepTitles.class} ${activeSheet.level}`;
-
   return (
-    <SelectionScreen title={title}>
-      <ClassPicker />
-      <DetailPanel
-        title={selectedClass?.label}
-        body={
-          selectedClassRecord
-            ? selectedClassRecord.description
-            : activeSheet.placeholderBody
-        }
+    <section className="build-progression-board">
+      <header className="build-progression-board__title-bar">
+        <h2>{shellCopyEs.progression.railHeading}</h2>
+      </header>
+      <ol
+        className="level-progression__list"
+        data-testid="level-progression-list"
       >
-        {activeSheet.gains.length > 0 && (
-          <div className="level-gains">
-            <h4>Ganancias del nivel</h4>
-            <ul>
-              {activeSheet.gains.map((gain: string, i: number) => (
-                <li key={i}>{gain}</li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </DetailPanel>
-    </SelectionScreen>
+        {PROGRESSION_LEVELS.map((level) => (
+          <LevelProgressionRow key={level} level={level} />
+        ))}
+      </ol>
+    </section>
   );
 }
