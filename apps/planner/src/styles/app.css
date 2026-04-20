@@ -385,14 +385,12 @@ a {
 }
 
 .progression-summary-strip,
-.level-rail,
 .level-sheet {
   background: var(--color-panel);
   color: var(--color-text);
 }
 
 .progression-summary-strip::before,
-.level-rail::before,
 .level-sheet::before {
   border-color: var(--color-selection-border);
 }
@@ -822,58 +820,12 @@ a {
   width: 1px;
 }
 
-/* ── Level Rail & Sheet ───────────────────────────────────── */
+/* ── Level Sheet Container ───────────────────────── */
 
-.level-rail,
 .level-sheet {
   display: flex;
   flex-direction: column;
   gap: var(--space-md);
-}
-
-.level-rail__entries {
-  display: grid;
-  gap: var(--space-sm);
-}
-
-.level-rail__entry {
-  align-items: flex-start;
-  background: var(--color-selection);
-  border: 1px solid var(--color-selection-border);
-  border-radius: 0;
-  color: var(--color-text);
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-xs);
-  padding: 14px 16px;
-  text-align: left;
-}
-
-.level-rail__entry strong {
-  font-family: var(--font-display);
-  font-size: 16px;
-  font-weight: 600;
-}
-
-.level-rail__entry span {
-  color: var(--color-text-muted);
-  font-size: 14px;
-}
-
-.level-rail__entry.is-active {
-  background: var(--color-selection);
-  border-color: var(--color-selection-border);
-}
-
-.level-rail__entry.is-blocked {
-  background: var(--color-selection);
-  border-color: var(--color-blocked);
-}
-
-.level-rail__entry.is-illegal {
-  background: rgba(122, 31, 31, 0.22);
-  border-color: var(--color-destructive);
 }
 
 /* ── Level Sheet ──────────────────────────────────────────── */
@@ -1065,47 +1017,6 @@ a {
   gap: var(--space-sm);
   padding: var(--space-md);
 }
-
-/* ── Stepper Level Rail ──────────────────────────────────────── */
-
-.creation-stepper .level-rail { display: grid; gap: var(--space-xs); grid-template-columns: repeat(4, 1fr); }
-.level-rail__button {
-  align-items: center;
-  background: transparent;
-  border: 1px solid var(--color-gold);
-  border-radius: 0;
-  color: var(--color-text);
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  font-family: var(--font-body);
-  font-size: 14px;
-  font-weight: 600;
-  gap: 2px;
-  justify-content: center;
-  min-height: 36px;
-  min-width: 36px;
-  padding: var(--space-xs);
-  transition: background-color 150ms ease;
-}
-.level-rail__button:hover { background: var(--color-selection); }
-.level-rail__button.is-expanded {
-  background: var(--color-selection);
-  border-color: var(--color-selection-border);
-}
-.level-rail__button.is-pending {
-  border-color: var(--color-text-muted);
-  color: var(--color-text-muted);
-}
-.level-rail__button.is-blocked { border-color: var(--color-blocked); }
-.level-rail__button.is-illegal { border-color: var(--color-destructive); }
-/* UAT-2026-04-20 G1 — sequential gating. A locked level is dimmed + not
- * interactive until the upstream (foundation or prior level) is complete. */
-.level-rail__button.is-locked {
-  cursor: not-allowed;
-  opacity: 0.45;
-}
-.level-rail__abbrev { font-size: 10px; font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
 
 /* ── Level Sub Steps ─────────────────────────────────────────── */
 
