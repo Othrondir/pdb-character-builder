@@ -116,6 +116,7 @@ a {
   padding: var(--space-xs) 0;
 }
 .attributes-editor__label {
+  align-self: center;
   color: var(--color-text);
   font-family: var(--font-display);
   font-size: 15px;
