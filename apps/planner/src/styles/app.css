@@ -92,54 +92,83 @@ a {
  * INLINE inside the value span between the − and + buttons. */
 .attributes-editor {
   display: grid;
-  gap: var(--space-xs) var(--space-md);
+  gap: var(--space-sm) var(--space-lg);
   grid-template-columns: 1fr auto;
-  padding: var(--space-md);
+  padding: var(--space-lg) var(--space-md);
 }
 .attributes-editor__header {
   color: var(--color-text-muted);
-  font-size: 14px;
+  font-family: var(--font-display);
+  font-size: 13px;
   font-variant-numeric: lining-nums tabular-nums;
   grid-column: 1 / -1;
+  letter-spacing: 0.10em;
   padding-bottom: var(--space-sm);
+  text-transform: uppercase;
   border-bottom: 1px solid var(--color-panel-edge);
 }
 .attributes-editor__row {
   align-items: center;
   display: contents;
 }
-/* UAT-2026-04-20 A2 — racial ability adjustment rendered as a tiny
- * superscript next to the totalized attribute value between − and +. */
+.attributes-editor__row > .attributes-editor__label,
+.attributes-editor__row > .attributes-editor__cell {
+  border-bottom: 1px dashed var(--color-panel-edge);
+  padding: var(--space-xs) 0;
+}
+.attributes-editor__row:last-of-type > .attributes-editor__label,
+.attributes-editor__row:last-of-type > .attributes-editor__cell {
+  border-bottom: 0;
+}
+.attributes-editor__label {
+  color: var(--color-text);
+  font-family: var(--font-display);
+  font-size: 15px;
+  letter-spacing: 0.04em;
+}
+.attributes-editor__value {
+  align-items: baseline;
+  color: var(--color-text);
+  display: inline-flex;
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-variant-numeric: lining-nums tabular-nums;
+  gap: 6px;
+  justify-content: center;
+  line-height: 1;
+  min-width: 46px;
+  text-align: center;
+}
+/* UAT-2026-04-20 A2 — racial ability adjustment rendered as a small
+ * accent next to the totalized attribute value, between − and +. */
 .attributes-editor__racial {
   font-family: var(--font-display);
   font-size: 12px;
   font-variant-numeric: lining-nums tabular-nums;
-  font-weight: 500;
-  margin-left: 4px;
-  vertical-align: super;
+  letter-spacing: 0;
+  line-height: 1;
+  opacity: 0.85;
 }
 .attributes-editor__racial--positive { color: var(--color-gold); }
 .attributes-editor__racial--negative { color: var(--color-destructive); }
-.attributes-editor__label { color: var(--color-text); font-size: 14px; }
-.attributes-editor__value {
-  color: var(--color-text);
-  font-family: var(--font-display);
-  font-size: 20px;
-  font-variant-numeric: lining-nums tabular-nums;
-  font-weight: 600;
-  min-width: 32px;
+.attributes-editor__cell {
+  align-items: center;
+  display: inline-flex;
+  gap: var(--space-sm);
+  justify-content: flex-end;
+  justify-self: end;
   text-align: center;
 }
-.attributes-editor__cell { align-items: center; display: inline-flex; gap: var(--space-xs); justify-content: center; justify-self: end; text-align: center; }
 .attributes-editor__cell--base .nwn-button {
   color: var(--color-text);
-  font-size: 18px;
-  font-weight: 700;
+  font-family: var(--font-display);
+  font-size: 16px;
   line-height: 1;
-  min-height: 36px;
-  padding: var(--space-xs) var(--space-sm);
+  min-height: 32px;
+  min-width: 32px;
+  padding: 0;
 }
-.attributes-editor__actions { grid-column: 1 / -1; margin-top: var(--space-md); }
+.attributes-editor__actions { grid-column: 1 / -1; margin-top: var(--space-lg); }
 .attributes-editor .foundation-step__issue { grid-column: 1 / -1; }
 .attributes-editor__summary { display: flex; flex-direction: column; gap: var(--space-xs); margin-top: var(--space-md); }
 .attributes-editor__summary > div { display: flex; justify-content: space-between; }
