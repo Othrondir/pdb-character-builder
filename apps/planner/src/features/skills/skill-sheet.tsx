@@ -1,18 +1,28 @@
 import type { ChangeEvent } from 'react';
+import {
+  canIncrementSkill,
+  type SkillBudgetSnapshot,
+} from '@rules-engine/skills/skill-budget';
 import { shellCopyEs } from '@planner/lib/copy/es';
 import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
 import { useLevelProgressionStore } from '@planner/features/level-progression/store';
 import type { ProgressionLevel } from '@planner/features/level-progression/progression-fixture';
 
-import { selectActiveSkillSheetView, type SkillSheetRowView } from './selectors';
+import {
+  buildSkillBudgetSnapshotFromSheet,
+  selectActiveSkillSheetView,
+  type SkillSheetRowView,
+} from './selectors';
 import { useSkillStore } from './store';
 
 function SkillRankRow({
   row,
   level,
+  snapshot,
 }: {
   level: ProgressionLevel;
   row: SkillSheetRowView;
+  snapshot: SkillBudgetSnapshot;
 }) {
   const decrementSkillRank = useSkillStore((state) => state.decrementSkillRank);
   const incrementSkillRank = useSkillStore((state) => state.incrementSkillRank);
@@ -74,7 +84,11 @@ function SkillRankRow({
         <button
           aria-label={`${shellCopyEs.skills.increaseRankLabel} ${row.label}`}
           className="skill-sheet__stepper"
-          disabled={row.disabled || row.currentRank + row.step > row.maxAssignableRank}
+          disabled={
+            row.disabled
+            || row.currentRank + row.step > row.maxAssignableRank
+            || !canIncrementSkill(row.skillId, level, snapshot)
+          }
           onClick={() => incrementSkillRank(level, row.skillId, row.step)}
           type="button"
         >
@@ -111,6 +125,11 @@ export function SkillSheet() {
     progressionState,
     foundationState,
   );
+  // Phase 12.7-02 (D-07, UAT F4 R2) — compose the overspend-gate snapshot
+  // once per render and thread it into every <SkillRankRow />. Pure data,
+  // no store reads; the rules-engine helper (`canIncrementSkill`) stays
+  // framework-agnostic (12.4-03 invariant).
+  const snapshot = buildSkillBudgetSnapshotFromSheet(activeSheet);
 
   return (
     <aside className="planner-panel planner-panel--inner level-sheet skill-sheet">
@@ -179,7 +198,12 @@ export function SkillSheet() {
                 </h3>
                 <div className="skill-sheet__rows skill-board__rows">
                   {group.rows.map((row) => (
-                    <SkillRankRow key={row.skillId} level={activeSheet.level} row={row} />
+                    <SkillRankRow
+                      key={row.skillId}
+                      level={activeSheet.level}
+                      row={row}
+                      snapshot={snapshot}
+                    />
                   ))}
                 </div>
               </section>
