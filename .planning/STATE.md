@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: "**Phase 12.7-03 COMPLETE — R3 scroll reset + R4 per-row label drop + R5 Nivel-N prefix shipped.** Wave 3 polish plan (depends_on: 12.7-01 + 12.7-02 — both merged to master). Three UAT-2026-04-20 findings closed in one coherent plan. R3 (F2): `<SkillSheet />` gains `useLayoutEffect + useRef<HTMLElement>` pair that zeros `.skill-sheet` scrollTop on mount AND on `[activeSheet.level]` dep change (pre-paint so mid-list flash is never user-visible). R4 (F3): deleted `<span>{row.costTypeLabel}</span>` from `.skill-sheet__meta-inline` (category already surfaced by section headings `Habilidades de clase` / `Habilidades transclase`); `Solo entrenada` badge preserved per 12.4-05 invariant; `SkillSheetRowView.costTypeLabel` FIELD preserved (out of scope). R5 (F1): new template fn `shellCopyEs.progression.rowLevelPrefix(level: number) => 'Nivel ${level}'` (mirrors pointBuyMissing single-param precedent); consumer `level-progression-row.tsx:153` swapped `<strong>{level}</strong>` → `<strong>{rowLevelPrefix(level)}</strong>`. **ZERO new CSS** — `.level-progression-row__header` already has `gap: var(--space-sm)` at app.css:2191 which renders visual spacing; `git diff apps/planner/src/styles/` is empty. Invariant greps all 0 (no new font-weight:700, no new hex, no new tokens). Commits 61fb9f5 (RED — 3 specs, 7 failing / 3 passing on scroll + label + prefix) + c856da7 (GREEN — impl + 3 Rule-3 auto-fixes: C1 unmount-then-remount pattern, regex relaxed for jsdom CSS-gap reality, comment re-phrased to satisfy grep gate). Phase 12.7 suite 1286/1286 passing across 7 test files. Typecheck clean on all touched files. Plan duration ~12 min."
-last_updated: "2026-04-20T22:00:00Z"
-last_activity: 2026-04-20 -- Phase 12.7-03 complete (R3 scroll reset + R4 per-row label drop + R5 Nivel-N prefix closed)
+stopped_at: "**Phase 12.7 EXECUTION COMPLETE — 4/4 plans merged to master.** 12.7-01 (F7 BLOCKER) hoisted LevelEditorActionBar to creation-stepper.tsx with stable key={expandedLevel}, deleted old row mount. 12.7-02 (R2 F4) shipped canIncrementSkill pure module + skill-sheet.tsx + button gate. 12.7-03 (R3+R4+R5) shipped useLayoutEffect scroll reset + per-row Clase/Transclase label drop + 'Nivel N' prefix template (zero new CSS — gap exists at app.css:2191). 12.7-04 (R6) verify-only spike GREEN at 1254/1254 assertions. Verifier flagged 1 cross-file regression (phase-05 spec asserted text deleted by R4) — fixed via section-heading scoped assertion. Full Vitest 103 files / 2077 passing / 0 failures. F5 SKILL-CARRYOVER deferred Phase 12.8 (Puerta source-blocked)."
+last_updated: "2026-04-20T22:25:00Z"
+last_activity: 2026-04-20 -- Phase 12.7 execution complete (4/4 plans + cross-fix); ready for human UAT re-sweep + close-out
 progress:
   total_phases: 22
   completed_phases: 21
@@ -25,9 +25,9 @@ See: .planning/PROJECT.md (updated 2026-03-30)
 
 ## Current Position
 
-Phase: 12.7 (uat-04-20-post-12.6-residuals) — EXECUTING (4/4 plans complete)
-Plan: 4 of 4 (12.7-01 + 12.7-02 + 12.7-03 + 12.7-04 all complete; Phase 12.7 ready for close-out verification + human UAT re-sweep)
-Status: Executing Phase 12.7
+Phase: 12.7 (uat-04-20-post-12.6-residuals) — EXECUTION COMPLETE (4/4 plans merged + cross-fix)
+Plan: 4 of 4 (12.7-01 + 12.7-02 + 12.7-03 + 12.7-04 all merged to master; phase-05 cross-fix landed)
+Status: Ready for close-out verification + human UAT re-sweep
 
 - B1 attributes overspend gate (nextIncrementCost + canIncrementAttribute, 12.3-01)
 - B2+B8+B9 multiclass active-level wiring (LevelRail dispatch, 12.3-02)
@@ -37,7 +37,7 @@ Status: Executing Phase 12.7
 - B5 description paragraph CSS (white-space: pre-wrap, 12.3-06)
 
 499/499 tests green. In-browser UAT confirmed (Enano+Guerrero L1+Pícaro L2): rail 1Guerrero/2Pícaro, header NIVEL 2, PG 20, slot prompts rendered, description paragraph breaks visible. Milestone v1.0 UNBLOCKED.
-Last activity: 2026-04-20 -- Phase 12.7 execution started
+Last activity: 2026-04-20 -- Phase 12.7 execution complete (4/4 plans + cross-fix)
 
 Progress: [██████████] 100%
 

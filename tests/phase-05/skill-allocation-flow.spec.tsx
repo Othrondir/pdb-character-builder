@@ -68,9 +68,15 @@ describe('phase 05 skill allocation flow', () => {
     // After Phase 05.1 extraction, skill labels come from the Puerta 2DA:
     //   "Acrobacias" is now "Piruetas" (Tumble)
     //   "Persuadir" is now "Diplomacia" (Persuade)
-    const piruetasRow = screen.getByRole('heading', { name: 'Piruetas' }).closest('article');
-    expect(piruetasRow).not.toBeNull();
-    expect(within(piruetasRow as HTMLElement).getByText('Clase')).toBeInTheDocument();
+    // After Phase 12.7-03 R4: per-row "Clase"/"Transclase" labels removed;
+    // category is encoded by the parent section heading instead.
+    const classSection = screen.getByRole('heading', {
+      name: /Habilidades de clase/i,
+    }).closest('section');
+    expect(classSection).not.toBeNull();
+    expect(
+      within(classSection as HTMLElement).getByRole('heading', { name: 'Piruetas' }),
+    ).toBeInTheDocument();
 
     // Switch to level 2 via the skill store and re-render
     act(() => {
@@ -78,9 +84,13 @@ describe('phase 05 skill allocation flow', () => {
       usePlannerShellStore.setState({ expandedLevel: 2 });
     });
 
-    const diplomaciaRow = screen.getByRole('heading', { name: 'Diplomacia' }).closest('article');
-    expect(diplomaciaRow).not.toBeNull();
-    expect(within(diplomaciaRow as HTMLElement).getByText('Transclase')).toBeInTheDocument();
+    const transclassSection = screen.getByRole('heading', {
+      name: /Habilidades transclase/i,
+    }).closest('section');
+    expect(transclassSection).not.toBeNull();
+    expect(
+      within(transclassSection as HTMLElement).getByRole('heading', { name: 'Diplomacia' }),
+    ).toBeInTheDocument();
   });
 
   it('preserves downstream allocations when an upstream class change breaks legality', () => {
