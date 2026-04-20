@@ -433,7 +433,7 @@ Plans:
 Plans:
 - [x] 12.7-01-PLAN.md — Hoist LevelEditorActionBar to creation-stepper + delete row mount (F7 R1 BLOCKER) — COMPLETE 2026-04-20 (commits d5d7246 RED + d38ee18 GREEN)
 - [x] 12.7-02-PLAN.md — canIncrementSkill gate + boundary adapter + skill-sheet wire (F4 R2) — COMPLETE 2026-04-20 (commits 90e8caf RED + 79b5e77 GREEN + 7e7afd9 integration)
-- [ ] 12.7-03-PLAN.md — Skill scroll reset + drop per-row labels + Nivel N prefix (F2 R3 / F3 R4 / F1 R5)
+- [x] 12.7-03-PLAN.md — Skill scroll reset + drop per-row labels + Nivel N prefix (F2 R3 / F3 R4 / F1 R5) — COMPLETE 2026-04-20 (commits 61fb9f5 RED + c856da7 GREEN)
 - [x] 12.7-04-PLAN.md — Verify L2..L20 skill-budget formula (F6 R6 verify-only; no-op if green, SUMMARY-only if red) — COMPLETE 2026-04-20 (commits ef8133a + 15d81b9)
 **UI hint**: yes
 
@@ -465,4 +465,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -
 | 12.3 UAT Correctness Closure (INSERTED) | 6/6 | Complete | 2026-04-19 |
 | 12.4 Construcción Correctness & Clarity (INSERTED) | 9/9 | Complete | 2026-04-20 |
 | 12.6 UAT-2026-04-20 Residuals (INSERTED) | 6/6 | Complete | 2026-04-20 |
-| 12.7 UAT-2026-04-20 Post-12.6 Residuals (INSERTED) | 3/4 | In progress (F7 BLOCKER + F4 gate + F6 verify closed; 12.7-03 polish wave remaining) | - |
+| 12.7 UAT-2026-04-20 Post-12.6 Residuals (INSERTED) | 4/4 | Complete (F7 BLOCKER + F4 gate + F6 verify + F1/F2/F3 polish closed) | 2026-04-20 |

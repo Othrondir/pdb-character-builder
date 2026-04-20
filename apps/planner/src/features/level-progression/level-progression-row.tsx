@@ -150,7 +150,9 @@ export function LevelProgressionRow({ level }: Props) {
         onClick={handleClick}
         type="button"
       >
-        <strong className="level-progression-row__level">{level}</strong>
+        <strong className="level-progression-row__level">
+          {shellCopyEs.progression.rowLevelPrefix(level)}
+        </strong>
         <span className="level-row__pill level-row__pill--class" data-pill="class">
           {classLabel ?? shellCopyEs.progression.pillEmpty.class}
         </span>

@@ -1,4 +1,4 @@
-import type { ChangeEvent } from 'react';
+import { useLayoutEffect, useRef, type ChangeEvent } from 'react';
 import {
   canIncrementSkill,
   type SkillBudgetSnapshot,
@@ -43,7 +43,16 @@ function SkillRankRow({
       <div className="skill-sheet__row-label">
         <h4>{row.label}</h4>
         <span className="skill-sheet__meta-inline">
-          <span>{row.costTypeLabel}</span>
+          {/*
+            Phase 12.7-03 (F3 R4) — removed the per-row cost-type-label
+            span that duplicated category text (Clase / Transclase)
+            already surfaced by the section headings (`Habilidades de
+            clase` / `Habilidades transclase`) at
+            .skill-board__section-heading. `Solo entrenada` badge below
+            is orthogonal (per 12.4-05) and stays. The costTypeLabel
+            field on SkillSheetRowView is NOT deleted — out of 12.7-03
+            scope; dead-field cleanup tracked separately.
+          */}
           {row.trainedOnly ? (
             // Phase 12.4-05 — R4: `Solo entrenada` badge stays per-row (orthogonal
             // to class/transclase section grouping). `data-trained-only` exposes
@@ -131,8 +140,26 @@ export function SkillSheet() {
   // framework-agnostic (12.4-03 invariant).
   const snapshot = buildSkillBudgetSnapshotFromSheet(activeSheet);
 
+  // Phase 12.7-03 (F2 R3, D-08/D-09) — Habilidades sub-step scroll reset.
+  // UAT-2026-04-20 showed the sub-step opens mid-list (scrollHeight 2069 /
+  // clientHeight 748) because a browser-native focus side-effect scrolls
+  // the first interactive button into view. useLayoutEffect fires
+  // synchronously after DOM mutation but BEFORE the browser paints, so
+  // the user never sees the mid-list flash even on slow hardware. The
+  // effect also runs on `[activeSheet.level]` dependency change so the
+  // scroller resets when the user navigates L1 → L2 via the level rail.
+  const scrollerRef = useRef<HTMLElement | null>(null);
+  useLayoutEffect(() => {
+    if (scrollerRef.current !== null) {
+      scrollerRef.current.scrollTop = 0;
+    }
+  }, [activeSheet.level]);
+
   return (
-    <aside className="planner-panel planner-panel--inner level-sheet skill-sheet">
+    <aside
+      ref={scrollerRef}
+      className="planner-panel planner-panel--inner level-sheet skill-sheet"
+    >
       <div>
         <h2>{activeSheet.title}</h2>
         <p className="detail-panel__body">
