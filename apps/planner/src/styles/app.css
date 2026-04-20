@@ -94,7 +94,7 @@ a {
   display: grid;
   gap: var(--space-sm) var(--space-lg);
   grid-template-columns: 1fr auto;
-  padding: var(--space-lg) var(--space-md);
+  padding: var(--space-lg) 0;
 }
 .attributes-editor__header {
   color: var(--color-text-muted);
