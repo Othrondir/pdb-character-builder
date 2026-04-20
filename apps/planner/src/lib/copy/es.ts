@@ -143,6 +143,13 @@ export const shellCopyEs = {
       subrace: 'Subraza',
     },
   },
+  attributes: {
+    // Phase 12.6 (D-07, UI-SPEC § Copywriting Contract) — ATTR-01 R3 fail-closed
+    pointBuyMissing: (raceLabel: string) =>
+      `Curva punto-compra no disponible para ${raceLabel}`,
+    pointBuyMissingBody:
+      'El servidor aún no tiene una curva de coste publicada para esta raza. Cambia de raza para seguir o contacta con el DM.',
+  },
   progression: {
     abilityHeading: 'Aumento de característica',
     abilityHelper:
@@ -178,7 +185,7 @@ export const shellCopyEs = {
       repair: 'Progresión en reparación',
     },
     placeholderBody: 'Selecciona una clase para empezar la progresión.',
-    railHeading: 'Progresión 1-16',
+    railHeading: 'Progresión 1-20',
     repairCallout:
       'Este nivel se conserva, pero depende de corregir decisiones anteriores.',
     requirementsHeading: 'Requisitos de entrada',
@@ -198,6 +205,22 @@ export const shellCopyEs = {
       deficitSkillsSingular: 'Falta 1 punto de habilidad por gastar',
       deficitSkillsPluralTemplate: 'Faltan {N} puntos de habilidad por gastar',
     },
+    // Phase 12.6 (UI-SPEC § Copywriting Contract) — PROG-04 R5+R6 scan-surface copy
+    legalityLabels: {
+      legal: 'Nivel válido',
+      incomplete: 'Nivel incompleto',
+      invalid: 'Nivel inválido',
+      locked: 'Nivel bloqueado',
+    },
+    pillEmpty: {
+      class: 'Sin clase',
+    },
+    pillTemplate: {
+      feats: '{chosen}/{slots} dotes',
+      skills: '{spent}/{budget} pts',
+    },
+    lockedRowAriaTemplate: 'Nivel {N} bloqueado — completa el nivel anterior',
+    rowAriaTemplate: 'Nivel {N}, {classLabel}, {legalityLabel}',
   },
   skills: {
     availablePointsLabel: 'Puntos disponibles',
