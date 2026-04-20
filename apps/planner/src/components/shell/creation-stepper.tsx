@@ -11,7 +11,6 @@ import { NwnFrame } from '@planner/components/ui/nwn-frame';
 import { NwnButton } from '@planner/components/ui/nwn-button';
 import { StepperStep } from './stepper-step';
 import type { StepperStepStatus } from './stepper-step';
-import { LevelRail } from './level-rail';
 import { LevelSubSteps } from './level-sub-steps';
 import type { OriginStep } from '@planner/lib/sections';
 
@@ -131,7 +130,6 @@ export function CreationStepper() {
         <h3 className="creation-stepper__section-heading">
           {shellCopyEs.stepper.progressionHeading}
         </h3>
-        <LevelRail />
         {expandedLevel && <LevelSubSteps level={expandedLevel} />}
       </section>
 

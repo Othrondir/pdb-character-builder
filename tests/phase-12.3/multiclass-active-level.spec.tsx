@@ -3,33 +3,31 @@
 /**
  * Phase 12.3-02 — UAT B2 (CRITICAL) + B8 + B9 regression lock.
  *
- * Root cause captured in CONTEXT.md D-02: `LevelRail` fires `setExpandedLevel`
- * on click (shell store) but never calls `setActiveLevel` on the progression
- * store. Consequences:
+ * Root cause captured in CONTEXT.md D-02: the per-level click dispatch must
+ * fire BOTH `setActiveLevel` (progression store) AND `setExpandedLevel`
+ * (shell store) atomically. Phase 12.3-02 fixed it on `LevelRail`; Phase
+ * 12.6-05 deleted `LevelRail` in favour of `LevelProgressionRow` mounted
+ * inside `BuildProgressionBoard`, which preserves the same contract.
+ *
+ * Consequences if broken:
  *   - `progressionState.activeLevel` stays at 1 forever.
  *   - `selectActiveLevelSheet` always returns level 1's view.
- *   - Every class pick writes to `levels[0].classId` regardless of which rail
+ *   - Every class pick writes to `levels[0].classId` regardless of which row
  *     button the user clicked.
- *   - `BuildProgressionBoard` header reads `NIVEL 1` forever.
  *   - `Clase` sub-step ✓ appears globally after the first pick.
  *
  * Suites:
- *   A — LevelRail click dispatch contract: BOTH stores must update.
+ *   A — Row click dispatch contract: BOTH stores must update.
  *   B — Per-level class persistence without L1 overwrite (B2 lock).
- *   C — Board title binds to live activeLevel (B8 ripple).
+ *   C — Board title binds to live activeLevel (B8 ripple — superseded
+ *       by Plan 03 static heading; `describe.skip`).
  *   D — selectActiveLevelSheet follows activeLevel (B9 contract).
- *
- * Suite A is the RED signal for Task 2 (the fix). Suites B and D pass on the
- * store layer already; they ship as forward-looking locks against future drift.
- * Suite C flips RED → GREEN in lockstep with Suite A because the title binds
- * through `activeSheet.level` (which reads `progressionState.activeLevel`).
  */
 
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { createElement } from 'react';
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import { LevelRail } from '@planner/components/shell/level-rail';
 import { BuildProgressionBoard } from '@planner/features/level-progression/build-progression-board';
 import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
 import { useLevelProgressionStore } from '@planner/features/level-progression/store';
@@ -55,13 +53,14 @@ describe('Phase 12.3-02 — multiclass active-level switching (UAT B2 + B8 + B9)
     });
   });
 
-  // UAT-2026-04-20 G1 — rail buttons require prior-level classId to unlock
+  // UAT-2026-04-20 G1 — row buttons require prior-level classId to unlock
   // the next. Suite A tests the dispatch contract on unlocked levels only,
-  // so seed all 16 just for Suite A. Suites B/C/D retain the reset baseline
-  // (Suite B explicitly asserts L3+ classId === null after an L1/L2 pick).
+  // so seed all 20 just for Suite A (UAT P6 extended 1..16 → 1..20). Suites
+  // B/C/D retain the reset baseline (Suite B explicitly asserts L3+ classId
+  // === null after an L1/L2 pick).
   function seedAllRailLevelsUnlocked() {
     const setClass = useLevelProgressionStore.getState().setLevelClassId;
-    for (let l = 1; l <= 16; l++) {
+    for (let l = 1; l <= 20; l++) {
       setClass(l as ProgressionLevel, 'class:fighter' as CanonicalId);
     }
   }
@@ -69,51 +68,65 @@ describe('Phase 12.3-02 — multiclass active-level switching (UAT B2 + B8 + B9)
   // ------------------------------------------------------------------
   // Suite A — rail click dispatch contract
   // ------------------------------------------------------------------
-  describe('Suite A — rail click dispatches BOTH setActiveLevel and setExpandedLevel', () => {
+  // Phase 12.6-05 migration: LevelRail deleted. Dispatch contract now lives
+  // on LevelProgressionRow (12.4-09 + Plan 04 atomic pattern). Suite A
+  // drives clicks via BuildProgressionBoard's 20-row scan list; both stores
+  // must still update atomically on row-button click.
+  describe('Suite A — row click dispatches BOTH setActiveLevel and setExpandedLevel', () => {
     beforeEach(() => {
       seedAllRailLevelsUnlocked();
     });
 
-    it('clicking level 2 button updates progression.activeLevel AND shell.expandedLevel', () => {
-      render(createElement(LevelRail));
-      const level2Button = screen.getByRole('radio', { name: /^2Guerrero/ });
+    it('clicking level 2 row updates progression.activeLevel AND shell.expandedLevel', () => {
+      render(createElement(BuildProgressionBoard));
+      const level2Button = document.querySelector(
+        '[data-level-row][data-level="2"] button',
+      ) as HTMLButtonElement | null;
+      expect(level2Button).not.toBeNull();
 
       act(() => {
-        fireEvent.click(level2Button);
+        fireEvent.click(level2Button as HTMLButtonElement);
       });
 
       expect(useLevelProgressionStore.getState().activeLevel).toBe(2);
       expect(usePlannerShellStore.getState().expandedLevel).toBe(2);
     });
 
-    it('clicking level 5 updates both stores to 5', () => {
-      render(createElement(LevelRail));
-      const level5Button = screen.getByRole('radio', { name: /^5Guerrero/ });
+    it('clicking level 5 row updates both stores to 5', () => {
+      render(createElement(BuildProgressionBoard));
+      const level5Button = document.querySelector(
+        '[data-level-row][data-level="5"] button',
+      ) as HTMLButtonElement | null;
+      expect(level5Button).not.toBeNull();
 
       act(() => {
-        fireEvent.click(level5Button);
+        fireEvent.click(level5Button as HTMLButtonElement);
       });
 
       expect(useLevelProgressionStore.getState().activeLevel).toBe(5);
       expect(usePlannerShellStore.getState().expandedLevel).toBe(5);
     });
 
-    it('successive clicks flip activeLevel independently (2 -> 7 -> 1)', () => {
-      render(createElement(LevelRail));
+    it('successive row clicks flip activeLevel independently (2 -> 7 -> 1)', () => {
+      render(createElement(BuildProgressionBoard));
 
-      act(() => {
-        fireEvent.click(screen.getByRole('radio', { name: /^2Guerrero/ }));
-      });
+      const clickRow = (level: number) => {
+        const btn = document.querySelector(
+          `[data-level-row][data-level="${level}"] button`,
+        ) as HTMLButtonElement | null;
+        expect(btn).not.toBeNull();
+        act(() => {
+          fireEvent.click(btn as HTMLButtonElement);
+        });
+      };
+
+      clickRow(2);
       expect(useLevelProgressionStore.getState().activeLevel).toBe(2);
 
-      act(() => {
-        fireEvent.click(screen.getByRole('radio', { name: /^7Guerrero/ }));
-      });
+      clickRow(7);
       expect(useLevelProgressionStore.getState().activeLevel).toBe(7);
 
-      act(() => {
-        fireEvent.click(screen.getByRole('radio', { name: /^1Guerrero/ }));
-      });
+      clickRow(1);
       expect(useLevelProgressionStore.getState().activeLevel).toBe(1);
     });
   });

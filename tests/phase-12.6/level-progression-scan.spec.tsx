@@ -389,7 +389,27 @@ describe('Phase 12.6 P5 — 20-row scan surface (Plan 03 Suites A+B)', () => {
   // Suite D — level-rail deletion invariant (Plan 05 owns — it.todo).
   // ----------------------------------------------------------------
 
-  it.todo(
-    'D1: [data-testid="advance-to-level-{N+1}"] selector preserved on expanded-row advance button (12.4-09 invariant, Plan 05)',
-  );
+  it('D1: [data-testid="advance-to-level-{N+1}"] selector preserved on expanded-row advance button (12.4-09 invariant, Plan 05)', () => {
+    setupL1ElfoGuerreroFullyLegal();
+    render(createElement(BuildProgressionBoard));
+
+    const l1Expanded = document.querySelector(
+      '[data-testid="level-row-1-expanded"]',
+    );
+    expect(l1Expanded).not.toBeNull();
+
+    // 12.4-09 invariant: the advance button's test id is
+    // `advance-to-level-{activeLevel + 1}`. With L1 fully legal, the advance
+    // button points to L2 and is enabled (Plan 05 deleted LevelRail but the
+    // advance button lives inside the expanded slot, not on the deleted rail).
+    const advanceButton = l1Expanded?.querySelector(
+      '[data-testid="advance-to-level-2"]',
+    ) as HTMLButtonElement | null;
+    expect(advanceButton).not.toBeNull();
+
+    // Action bar root is also mounted inside the expanded slot.
+    expect(
+      l1Expanded?.querySelector('[data-testid="level-editor-action-bar"]'),
+    ).not.toBeNull();
+  });
 });
