@@ -24,7 +24,9 @@ export function LevelRail() {
         return (
           <button
             aria-checked={isExpanded}
-            className={`level-rail__button is-${entry.status}${isExpanded ? ' is-expanded' : ''}`}
+            aria-disabled={entry.locked ? 'true' : undefined}
+            className={`level-rail__button is-${entry.status}${isExpanded ? ' is-expanded' : ''}${entry.locked ? ' is-locked' : ''}`}
+            disabled={entry.locked}
             key={entry.level}
             onClick={() => {
               setActiveLevel(entry.level as ProgressionLevel);

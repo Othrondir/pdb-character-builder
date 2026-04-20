@@ -23,10 +23,19 @@ import type { CharacterFoundationStoreState } from '@planner/features/character-
 import { getPhase04ClassRecord } from '@planner/features/level-progression/class-fixture';
 import type { ProgressionLevel } from '@planner/features/level-progression/progression-fixture';
 import type { LevelProgressionStoreState } from '@planner/features/level-progression/store';
+import { compiledClassCatalog } from '@planner/data/compiled-classes';
 
 import { compiledSkillCatalog } from './compiled-skill-catalog';
 import type { SkillLevelRecord, SkillStoreState } from './store';
 
+// UAT-2026-04-20 P3 — skill-points-per-level per class now come straight
+// from the compiled catalog (`compiledClassCatalog.classes[*].skillPointsPerLevel`)
+// so Puerta custom bases like Brujo / Espadachin / Artífice / Alma Predilecta
+// stay correct without a hand-maintained map.
+const HUMAN_RACE_ID = 'race:human';
+const HUMAN_SKILL_POINT_PER_LEVEL = 1;
+
+// Legacy hand-maintained fallback — superseded by the compiled catalog.
 const CLASS_SKILL_POINTS: Partial<Record<CanonicalId, number>> = {
   'class:bard': 6,
   'class:cleric': 2,
@@ -189,7 +198,13 @@ function getSkillPointsBase(classId: CanonicalId | null) {
   if (!classId) {
     return 0;
   }
-
+  // UAT-2026-04-20 P3 — prefer the compiled catalog (covers every class the
+  // extractor emits). Fall back to the legacy hand-authored map for
+  // fixture-only tests that bypass compiledClassCatalog.
+  const compiled = compiledClassCatalog.classes.find((c) => c.id === classId);
+  if (compiled?.skillPointsPerLevel !== undefined) {
+    return compiled.skillPointsPerLevel;
+  }
   return CLASS_SKILL_POINTS[classId] ?? 2;
 }
 
@@ -206,11 +221,18 @@ function getIntelligenceModifier(
   level: ProgressionLevel,
 ) {
   const baseIntelligence = foundationState.baseAttributes.int;
+  // UAT-2026-04-20 P3 — fold racial INT adjustment into the modifier so
+  // skill points track the same total attribute AttributesBoard shows
+  // (A2). Elfo does not touch INT; Puerta custom races may (extractor
+  // catalog is the source of truth).
+  const racialInt = foundationState.racialModifiers?.int ?? 0;
   const intelligenceIncreases = progressionState.levels.filter(
     (record) => record.level <= level && record.abilityIncrease === 'int',
   ).length;
 
-  return Math.floor((baseIntelligence + intelligenceIncreases - 10) / 2);
+  return Math.floor(
+    (baseIntelligence + racialInt + intelligenceIncreases - 10) / 2,
+  );
 }
 
 function createSkillLevelInput(
@@ -220,6 +242,12 @@ function createSkillLevelInput(
 ): SkillLevelInput {
   const progressionRecord =
     progressionState.levels.find((record) => record.level === skillRecord.level) ?? null;
+
+  // UAT-2026-04-20 P3 — Humano +1 skill-point/level (×4 at L1) folds in via
+  // skillPointsBase so the rules-engine getAvailablePoints formula
+  // (base × (L1 ? 4 : 1)) produces the canonical total.
+  const humanBonus =
+    foundationState.raceId === HUMAN_RACE_ID ? HUMAN_SKILL_POINT_PER_LEVEL : 0;
 
   return {
     allocations: skillRecord.allocations,
@@ -231,7 +259,8 @@ function createSkillLevelInput(
       skillRecord.level,
     ),
     level: skillRecord.level,
-    skillPointsBase: getSkillPointsBase(progressionRecord?.classId ?? null),
+    skillPointsBase:
+      getSkillPointsBase(progressionRecord?.classId ?? null) + humanBonus,
   };
 }
 

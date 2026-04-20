@@ -26,6 +26,7 @@ import {
 
 import { shellCopyEs } from '@planner/lib/copy/es';
 import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
+import { usePlannerShellStore } from '@planner/state/planner-shell';
 
 import { selectClassOptionsForLevel, type ClassOptionView } from './selectors';
 import { getPhase04ClassRecord } from './class-fixture';
@@ -58,6 +59,12 @@ export function ClassPicker() {
   const setLevelClassId = useLevelProgressionStore(
     (state) => state.setLevelClassId,
   );
+  // UAT-2026-04-20 P2 — after the user commits a class for the active
+  // level, auto-advance the sub-step pointer to 'skills' so the planner
+  // mirrors the NWN2DB flow. No-op for re-clicks on the same class.
+  const setActiveLevelSubStep = usePlannerShellStore(
+    (state) => state.setActiveLevelSubStep,
+  );
 
   const activeLevel = progressionState.activeLevel as ProgressionLevel;
   const options = selectClassOptionsForLevel(
@@ -82,7 +89,10 @@ export function ClassPicker() {
             <ClassPickerRow
               key={option.id}
               level={activeLevel}
-              onSelect={(classId) => setLevelClassId(activeLevel, classId)}
+              onSelect={(classId) => {
+                setLevelClassId(activeLevel, classId);
+                setActiveLevelSubStep('skills');
+              }}
               option={option}
             />
           ))}
@@ -97,7 +107,10 @@ export function ClassPicker() {
             <ClassPickerRow
               key={option.id}
               level={activeLevel}
-              onSelect={(classId) => setLevelClassId(activeLevel, classId)}
+              onSelect={(classId) => {
+                setLevelClassId(activeLevel, classId);
+                setActiveLevelSubStep('skills');
+              }}
               option={option}
             />
           ))}

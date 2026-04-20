@@ -78,10 +78,10 @@ describe('phase 05.2 stepper navigation', () => {
     expect(usePlannerShellStore.getState().activeOriginStep).toBe('race');
   });
 
-  it('renders Resumen and Utilidades bottom buttons', () => {
+  it('renders Resumen bottom button (Utilidades removed per UAT-2026-04-20 G2)', () => {
     render(createElement(CreationStepper));
 
     expect(screen.getByRole('button', { name: 'Resumen' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Utilidades' })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Utilidades' })).toBeNull();
   });
 });

@@ -60,7 +60,10 @@ function useOriginStepStatus(
         const race = phase03FoundationFixture.races.find((r) => r.id === raceId);
         return { status: 'complete', summary: race?.label ?? undefined };
       }
-      return { status: 'pending', summary: undefined };
+      // UAT-2026-04-20 G1 — Raza is the entry point; always clickable even
+      // before the user commits a choice. `ready` keeps StepperStep enabled
+      // and neutral (no ✓).
+      return { status: 'ready', summary: undefined };
     }
     case 'alignment': {
       if (raceId === null) {
@@ -72,7 +75,8 @@ function useOriginStepStatus(
         );
         return { status: 'complete', summary: alignment?.label ?? undefined };
       }
-      return { status: 'pending', summary: undefined };
+      // UAT-2026-04-20 G1 — raceId committed, user can move into alignment.
+      return { status: 'ready', summary: undefined };
     }
     case 'attributes': {
       if (alignmentId === null) {
@@ -87,7 +91,8 @@ function useOriginStepStatus(
       if (originReady && budgetSnapshot.status === 'legal') {
         return { status: 'complete', summary: shellCopyEs.stepper.originSteps.attributes };
       }
-      return { status: 'pending', summary: undefined };
+      // UAT-2026-04-20 G1 — alignment committed, user can tune attributes.
+      return { status: 'ready', summary: undefined };
     }
   }
 }
@@ -136,12 +141,6 @@ export function CreationStepper() {
           onClick={() => setActiveView('resumen')}
         >
           {shellCopyEs.stepper.resumenLabel}
-        </NwnButton>
-        <NwnButton
-          variant={activeView === 'utilities' ? 'primary' : 'auxiliary'}
-          onClick={() => setActiveView('utilities')}
-        >
-          {shellCopyEs.stepper.utilidadesLabel}
         </NwnButton>
       </div>
     </NwnFrame>

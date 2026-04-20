@@ -235,6 +235,9 @@ export function FeatSheet({ boardView, focusedFeatId, onFocusFeat }: FeatSheetPr
 
   const setClassFeat = useFeatStore((s) => s.setClassFeat);
   const setGeneralFeat = useFeatStore((s) => s.setGeneralFeat);
+  const clearClassFeat = useFeatStore((s) => s.clearClassFeat);
+  const clearGeneralFeat = useFeatStore((s) => s.clearGeneralFeat);
+  const featLevels = useFeatStore((s) => s.levels);
 
   const handleToggleFamily = (groupKey: string) => {
     setExpandedFamilyId((curr) => (curr === groupKey ? null : groupKey));
@@ -256,13 +259,26 @@ export function FeatSheet({ boardView, focusedFeatId, onFocusFeat }: FeatSheetPr
 
   const activeLevel = boardView.activeSheet.level;
 
+  // UAT-2026-04-20 P4 — toggle semantics. Clicking a feat that is already
+  // the active-level's class-bonus (or general) pick RELEASES the slot
+  // instead of re-setting the same id. Second click = un-select.
+  const currentRecord = featLevels.find((r) => r.level === activeLevel);
+
   const handleSelectClassFeat = (featId: string) => {
     onFocusFeat(featId);
+    if (currentRecord?.classFeatId === featId) {
+      clearClassFeat(activeLevel);
+      return;
+    }
     setClassFeat(activeLevel, featId as CanonicalId);
   };
 
   const handleSelectGeneralFeat = (featId: string) => {
     onFocusFeat(featId);
+    if (currentRecord?.generalFeatId === featId) {
+      clearGeneralFeat(activeLevel);
+      return;
+    }
     setGeneralFeat(activeLevel, featId as CanonicalId);
   };
 

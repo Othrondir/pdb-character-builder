@@ -42,6 +42,7 @@ export type ProgressionLevel = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 
 /**
  * Top-level view selection for the shell's center column.
  * 'creation' is the default (origin + progression editing).
- * 'resumen' and 'utilities' are dedicated stepper-bottom screens (Phase 08 D-03).
+ * 'resumen' is a dedicated stepper-bottom screen (Phase 08 D-03).
+ * ('utilities' view removed per UAT-2026-04-20 G2.)
  */
-export type PlannerView = 'creation' | 'resumen' | 'utilities';
+export type PlannerView = 'creation' | 'resumen';

@@ -341,7 +341,6 @@ export const shellCopyEs = {
     resetAllLabel: 'Reiniciar todo',
     resetAllConfirm: 'Se perdera toda la construccion del personaje. Continuar?',
     resumenLabel: 'Resumen',
-    utilidadesLabel: 'Utilidades',
     openNav: 'Menú',
     closeNav: 'Cerrar menú',
     jugarLabel: 'Jugar',

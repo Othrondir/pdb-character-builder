@@ -21,6 +21,7 @@ import {
   type AttributeKey,
 } from '@planner/features/character-foundation/foundation-fixture';
 import {
+  selectAttributeBudgetSnapshot,
   selectFoundationSummary,
   selectOriginReadyForAbilities,
 } from '@planner/features/character-foundation/selectors';
@@ -69,6 +70,12 @@ export interface LevelRailEntryView {
   inheritedFromLevel: number | null;
   issueCount: number;
   level: ProgressionLevel;
+  /**
+   * UAT-2026-04-20 G1 — sequential progression gating. `locked: true` when
+   * upstream origin is incomplete OR any strict predecessor level is not
+   * `legal`. Level-rail consumers MUST render locked entries as disabled.
+   */
+  locked: boolean;
   status: ProgressionStatus;
 }
 
@@ -166,9 +173,19 @@ export function selectLevelRail(
     foundationState,
   );
 
+  // UAT-2026-04-20 G1 — sequential gating. A level is unlocked only when
+  // the previous level has a class assigned (L1 always unlocked). Keeps
+  // the rule simple + state-driven so tests stay mockable without needing
+  // to simulate a full legal-progression chain.
+  let prevHasClass = true;
+
   return progressionState.levels.map((record) => {
     const revalidatedRecord =
       revalidatedLevels.find((entry) => entry.level === record.level) ?? null;
+    const status = (revalidatedRecord?.status ?? 'pending') as ProgressionStatus;
+
+    const locked = !prevHasClass;
+    prevHasClass = record.classId !== null;
 
     return {
       active: progressionState.activeLevel === record.level,
@@ -177,7 +194,8 @@ export function selectLevelRail(
       inheritedFromLevel: revalidatedRecord?.inheritedFromLevel ?? null,
       issueCount: revalidatedRecord?.issues.length ?? 0,
       level: record.level,
-      status: (revalidatedRecord?.status ?? 'pending') as ProgressionStatus,
+      locked,
+      status,
     };
   });
 }

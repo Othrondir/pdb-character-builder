@@ -151,7 +151,25 @@ export const BASE_CLASS_ALLOWLIST: ReadonlyArray<CanonicalId> = [
   'class:rogue' as CanonicalId,
   'class:sorcerer' as CanonicalId,
   'class:wizard' as CanonicalId,
+  // Puerta de Baldur custom base classes. UAT-2026-04-20 P1-c.
+  'class:warlock' as CanonicalId,
+  'class:swashbuckler' as CanonicalId,
+  'class:almapredilecta' as CanonicalId,
+  'class:paladin-antiguos' as CanonicalId,
+  'class:paladin-oscuro' as CanonicalId,
+  'class:paladin-vengador' as CanonicalId,
+  'class:artifice' as CanonicalId,
 ];
+
+// UAT-2026-04-20 P1-a. Extractor emits isBase=false for Puerta-custom base
+// rows (Brujo / Espadachin) despite their descriptions opening with
+// "CLASE BASICA". Until the extractor parses that marker (or a dedicated
+// puerta.base-classes.json snapshot lands), override kind here so the
+// ClassPicker groups them under "Clases básicas".
+const ISBASE_FORCED: ReadonlySet<string> = new Set([
+  'class:warlock',
+  'class:swashbuckler',
+]);
 
 const DEFERRED_LABEL_PRESTIGE =
   'Pendiente de dotes o habilidades de fases posteriores.';
@@ -166,7 +184,10 @@ const CLASS_SERVER_RULE_OVERLAY: Record<string, ClassServerRuleOverlay> = {
     tags: ['arcane'],
   },
   'class:cleric': {
-    implementedRequirements: { requiresDeity: true },
+    // UAT-2026-04-20 P1-b. Puerta maneja deidades via scripts (Phase 05.1
+    // decision: "Deity catalog emitted as null"). foundation.deityId stays
+    // null permanentemente, so `requiresDeity: true` blocked cleric at L1
+    // forever. Overlay retained solo por tags.
     tags: ['divine'],
   },
   'class:paladin': {
@@ -204,7 +225,7 @@ const CLASS_SERVER_RULE_OVERLAY: Record<string, ClassServerRuleOverlay> = {
  * weapon-master pattern. Base classes receive an empty deferred list.
  */
 function projectCompiledClass(compiled: CompiledClass): PlannerClassRecord {
-  const isBase = compiled.isBase;
+  const isBase = compiled.isBase || ISBASE_FORCED.has(compiled.id);
   const overlay = CLASS_SERVER_RULE_OVERLAY[compiled.id] ?? {};
 
   // Decode alignment gate from prerequisiteColumns.

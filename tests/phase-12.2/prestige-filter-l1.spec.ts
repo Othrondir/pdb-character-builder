@@ -15,23 +15,28 @@ import { compiledClassCatalog } from '@planner/data/compiled-classes';
 /**
  * Phase 12.2-03 — prestige filter + AlignRestrict decoder at L1.
  *
- * Locks Phase 12.1 UAT Bug 3 contract:
- *  (1) Clérigo (`class:cleric`) is NOT illegal at L1 with Legal Bueno Humano —
- *      the overlay's `requiresDeity: true` still blocks until the deity phase
- *      ships, but the alignment gate must not spuriously flag it.
- *  (2) Five `isBase: true` compiled classes whose real prereqs are
- *      unreachable at L1 — Alma Predilecta, Caballero de Luz, Paladin Oscuro,
- *      Paladin Vengador, Artífice — are `blocked` via a deferred requirement
- *      label (fail-closed: we block what we cannot validate).
+ * UAT-2026-04-20 amendment (P1-b + P1-c):
+ *   - cleric overlay no longer carries `requiresDeity` (Puerta maneja deidades
+ *     via scripts, not 2DA — Phase 05.1 decision). Foundation.deityId stays
+ *     null and the overlay gate was blocking cleric forever. Cleric at L1 with
+ *     Legal Bueno Humano is now fully legal (no deity row, no blocked status).
+ *   - BASE_CLASS_ALLOWLIST extended 11 → 18 to cover Puerta custom base
+ *     classes: Alma Predilecta, Caballero de Luz, Paladin Oscuro, Paladin
+ *     Vengador, Artífice, Brujo, Espadachin. These rows no longer emit
+ *     DEFERRED_LABEL_UNVETTED_BASE and are legal at L1 (absent other gates).
+ *
+ * Locks contract:
+ *  (1) Clérigo (`class:cleric`) legal at L1 with Legal Bueno Humano.
+ *  (2) Puerta custom base classes legal at L1 via allowlist.
  *  (3) Guerrero stays legal (guards against over-gating).
  *  (4) Shadowdancer stays blocked with the 12.1-01 deferred label
- *      (preserves prior contract exactly).
+ *      (preserves prior contract — prestige path unchanged).
  *  (5) `decodeAlignRestrict` handles NWN Aurora hex-bit convention:
  *      0x01=LG, 0x02=LN, 0x04=LE, 0x08=NG, 0x10=TN, 0x20=NE, 0x40=CG,
  *      0x80=CN, 0x100=CE. `InvertRestrict="1"` inverts the mask; `0x00`
  *      (with or without inversion) emits no gate.
  *  (6) `CLASS_SERVER_RULE_OVERLAY` wins over decoded values per-field
- *      (paladin stays LG-only, cleric keeps `requiresDeity`).
+ *      (paladin stays LG-only).
  *
  * Long-term fix (tracked in 12.2-CONTEXT.md <deferred>): extractor emits
  * real `PreReqTable` decoding or a `reachableAtLevelOne: boolean` field so
@@ -56,10 +61,10 @@ describe('Phase 12.2-03 — prestige filter + AlignRestrict decoder at L1', () =
     });
     const byId = new Map(options.map((o) => [o.id, o]));
 
-    it('cleric is NOT illegal for lawful-good alignment (overlay requiresDeity still blocks without deity, but alignment is fine)', () => {
+    it('cleric is legal at L1 with lawful-good alignment (P1-b: requiresDeity removed)', () => {
       const cleric = byId.get('class:cleric' as CanonicalId);
       expect(cleric).toBeDefined();
-      expect(cleric!.status).not.toBe('illegal');
+      expect(cleric!.status).toBe('legal');
 
       const clericRecord = getPhase04ClassRecord('class:cleric' as CanonicalId);
       expect(clericRecord).not.toBeNull();
@@ -74,11 +79,11 @@ describe('Phase 12.2-03 — prestige filter + AlignRestrict decoder at L1', () =
       if (alignmentRow) expect(alignmentRow.status).not.toBe('illegal');
 
       const deityRow = evaluation.requirementRows.find((r) => /deidad/i.test(r.label));
-      expect(deityRow?.status).toBe('blocked');
+      expect(deityRow).toBeUndefined();
 
       // Falsifiability guard (plan-checker W1): prove BASE_CLASS_ALLOWLIST
       // membership so a regression where the allowlist silently drops Cleric
-      // cannot pass vacuously via the optional alignmentRow branch.
+      // cannot pass vacuously.
       expect(clericRecord!.deferredRequirementLabels).not.toContain(
         DEFERRED_LABEL_UNVETTED_BASE,
       );
@@ -98,7 +103,12 @@ describe('Phase 12.2-03 — prestige filter + AlignRestrict decoder at L1', () =
       'class:paladin-oscuro',
       'class:paladin-vengador',
       'class:artifice',
-    ])('%s is blocked (not legal) via a deferred requirement label', (id) => {
+      // UAT-2026-04-20 P1-a: Brujo + Espadachin forced to isBase via
+      // ISBASE_FORCED set in class-fixture.ts (extractor emits isBase=false
+      // pese a "CLASE BASICA" en la descripción).
+      'class:warlock',
+      'class:swashbuckler',
+    ])('%s is a Puerta custom base class legal at L1 (P1-a/c: allowlist + isBase force)', (id) => {
       const compiledExists = compiledClassCatalog.classes.some(
         (c) => c.id === id,
       );
@@ -112,10 +122,14 @@ describe('Phase 12.2-03 — prestige filter + AlignRestrict decoder at L1', () =
       }
       const option = byId.get(id as CanonicalId);
       expect(option).toBeDefined();
-      expect(option!.status).toBe('blocked');
+      expect(option!.status).toBe('legal');
 
       const record = getPhase04ClassRecord(id as CanonicalId);
-      expect(record?.deferredRequirementLabels.length ?? 0).toBeGreaterThanOrEqual(1);
+      expect(record).not.toBeNull();
+      expect(record!.kind).toBe('base');
+      expect(record!.deferredRequirementLabels).not.toContain(
+        DEFERRED_LABEL_UNVETTED_BASE,
+      );
     });
 
     it('fighter stays legal (guard against over-gating)', () => {
@@ -165,9 +179,9 @@ describe('Phase 12.2-03 — prestige filter + AlignRestrict decoder at L1', () =
         'alignment:lawful-good',
       ]);
     });
-    it('cleric overlay preserved: requiresDeity = true', () => {
+    it('cleric overlay: requiresDeity removed (P1-b — Puerta handles deity via scripts)', () => {
       const cleric = getPhase04ClassRecord('class:cleric' as CanonicalId);
-      expect(cleric?.implementedRequirements.requiresDeity).toBe(true);
+      expect(cleric?.implementedRequirements.requiresDeity).toBeUndefined();
     });
   });
 });

@@ -64,6 +64,18 @@ export function AttributesBoard() {
         </div>
         {ATTRIBUTE_KEYS.map((key) => {
           const baseValue = foundationState.baseAttributes[key];
+          // UAT-2026-04-20 A2 — fold racial ability adjustments into the
+          // visible total. `racialModifiers` is populated by the store lookup
+          // against `compiledRaceCatalog.races[*].abilityAdjustments` (Phase
+          // 12.2-02) and stays null until the user picks a race.
+          const racialDelta = foundationState.racialModifiers?.[key] ?? 0;
+          const totalValue = baseValue + racialDelta;
+          const racialLabel =
+            racialDelta === 0
+              ? null
+              : racialDelta > 0
+                ? `+${racialDelta}`
+                : `${racialDelta}`;
           return (
             <div className="attributes-editor__row" key={key}>
               <span className="attributes-editor__label">
@@ -95,6 +107,26 @@ export function AttributesBoard() {
                   +
                 </NwnButton>
               </div>
+              {racialLabel ? (
+                <span
+                  aria-label={`Bonificador racial de ${ATTRIBUTE_LABELS[key]}`}
+                  className={`attributes-editor__racial${
+                    racialDelta > 0
+                      ? ' attributes-editor__racial--positive'
+                      : ' attributes-editor__racial--negative'
+                  }`}
+                >
+                  {racialLabel}
+                </span>
+              ) : (
+                <span className="attributes-editor__racial attributes-editor__racial--none">·</span>
+              )}
+              <span
+                aria-label={`Total de ${ATTRIBUTE_LABELS[key]}`}
+                className="attributes-editor__total"
+              >
+                {totalValue}
+              </span>
             </div>
           );
         })}

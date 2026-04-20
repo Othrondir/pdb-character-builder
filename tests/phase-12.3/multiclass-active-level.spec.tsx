@@ -55,13 +55,28 @@ describe('Phase 12.3-02 — multiclass active-level switching (UAT B2 + B8 + B9)
     });
   });
 
+  // UAT-2026-04-20 G1 — rail buttons require prior-level classId to unlock
+  // the next. Suite A tests the dispatch contract on unlocked levels only,
+  // so seed all 16 just for Suite A. Suites B/C/D retain the reset baseline
+  // (Suite B explicitly asserts L3+ classId === null after an L1/L2 pick).
+  function seedAllRailLevelsUnlocked() {
+    const setClass = useLevelProgressionStore.getState().setLevelClassId;
+    for (let l = 1; l <= 16; l++) {
+      setClass(l as ProgressionLevel, 'class:fighter' as CanonicalId);
+    }
+  }
+
   // ------------------------------------------------------------------
   // Suite A — rail click dispatch contract
   // ------------------------------------------------------------------
   describe('Suite A — rail click dispatches BOTH setActiveLevel and setExpandedLevel', () => {
+    beforeEach(() => {
+      seedAllRailLevelsUnlocked();
+    });
+
     it('clicking level 2 button updates progression.activeLevel AND shell.expandedLevel', () => {
       render(createElement(LevelRail));
-      const level2Button = screen.getByRole('radio', { name: /^\s*2\b/ });
+      const level2Button = screen.getByRole('radio', { name: /^2Guerrero/ });
 
       act(() => {
         fireEvent.click(level2Button);
@@ -73,7 +88,7 @@ describe('Phase 12.3-02 — multiclass active-level switching (UAT B2 + B8 + B9)
 
     it('clicking level 5 updates both stores to 5', () => {
       render(createElement(LevelRail));
-      const level5Button = screen.getByRole('radio', { name: /^\s*5\b/ });
+      const level5Button = screen.getByRole('radio', { name: /^5Guerrero/ });
 
       act(() => {
         fireEvent.click(level5Button);
@@ -87,17 +102,17 @@ describe('Phase 12.3-02 — multiclass active-level switching (UAT B2 + B8 + B9)
       render(createElement(LevelRail));
 
       act(() => {
-        fireEvent.click(screen.getByRole('radio', { name: /^\s*2\b/ }));
+        fireEvent.click(screen.getByRole('radio', { name: /^2Guerrero/ }));
       });
       expect(useLevelProgressionStore.getState().activeLevel).toBe(2);
 
       act(() => {
-        fireEvent.click(screen.getByRole('radio', { name: /^\s*7\b/ }));
+        fireEvent.click(screen.getByRole('radio', { name: /^7Guerrero/ }));
       });
       expect(useLevelProgressionStore.getState().activeLevel).toBe(7);
 
       act(() => {
-        fireEvent.click(screen.getByRole('radio', { name: /^\s*1\b/ }));
+        fireEvent.click(screen.getByRole('radio', { name: /^1Guerrero/ }));
       });
       expect(useLevelProgressionStore.getState().activeLevel).toBe(1);
     });

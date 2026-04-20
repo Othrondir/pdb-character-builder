@@ -35,7 +35,7 @@ describe('phase 04 class prerequisites', () => {
     expect(evaluation.summaryStatus).toBe('illegal');
   });
 
-  it('requires a non-none deity for cleric', () => {
+  it('cleric is legal without deity (P1-b: Puerta handles deity via scripts, overlay removed)', () => {
     const evaluation = evaluateClassEntry({
       classRecord: getClassRecord('class:cleric'),
       foundation: {
@@ -52,7 +52,7 @@ describe('phase 04 class prerequisites', () => {
       },
     });
 
-    expect(evaluation.summaryStatus).toBe('illegal');
+    expect(evaluation.summaryStatus).toBe('legal');
   });
 
   it('keeps wizard illegal below INT 11', () => {
