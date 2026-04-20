@@ -53,16 +53,16 @@ describe('projectBuildDocument', () => {
     expect(doc.build.deityId).toBeNull();
   });
 
-  it('projects 16-entry levels/skills/feats arrays', () => {
+  it('projects 20-entry levels/skills/feats arrays (UAT-2026-04-20 P6)', () => {
     const foundation = useCharacterFoundationStore.getState();
     foundation.setRace('race:human');
     foundation.setAlignment('alignment:lawful-good');
 
     const doc = projectBuildDocument();
 
-    expect(doc.build.levels).toHaveLength(16);
-    expect(doc.build.skillAllocations).toHaveLength(16);
-    expect(doc.build.featSelections).toHaveLength(16);
+    expect(doc.build.levels).toHaveLength(20);
+    expect(doc.build.skillAllocations).toHaveLength(20);
+    expect(doc.build.featSelections).toHaveLength(20);
   });
 
   it('stamps the supplied name into build.name', () => {

@@ -31,7 +31,10 @@ import { useFeatStore } from '@planner/features/feats/store';
 import { useSkillStore } from '@planner/features/skills/store';
 import { usePlannerShellStore } from '@planner/state/planner-shell';
 
-import type { ProgressionLevel } from './progression-fixture';
+import {
+  PROGRESSION_LEVEL_CAP,
+  type ProgressionLevel,
+} from './progression-fixture';
 import { computeAdvanceLabel, selectLevelCompletionState } from './selectors';
 import { useLevelProgressionStore } from './store';
 
@@ -47,7 +50,8 @@ export function LevelEditorActionBar() {
   );
 
   const level = progressionState.activeLevel as ProgressionLevel;
-  if (level >= 16) return null;
+  // UAT-2026-04-20 P6 — terminal level lifted 16 → 20.
+  if (level >= PROGRESSION_LEVEL_CAP) return null;
 
   const completion = selectLevelCompletionState(
     progressionState,

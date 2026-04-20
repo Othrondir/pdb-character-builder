@@ -57,12 +57,12 @@ describe('phase 05.2 stepper navigation', () => {
     expect(list.tagName).toBe('OL');
   });
 
-  it('renders 16 level buttons in the level rail', () => {
+  it('renders 20 level buttons in the level rail (UAT-2026-04-20 P6: L1..L20)', () => {
     render(createElement(CreationStepper));
 
     const radioGroup = screen.getByRole('radiogroup', { name: 'Nivel de progresion' });
     const radios = radioGroup.querySelectorAll('[role="radio"]');
-    expect(radios).toHaveLength(16);
+    expect(radios).toHaveLength(20);
   });
 
   it('updates shell store when clicking a completed Raza step button', () => {

@@ -52,7 +52,7 @@ describe('phase 04 progression revalidation', () => {
     // Phase 12.4-06 migrated the class-picker DOM from <OptionList role="option">
     // to <ClassPicker> scoped buttons with data-class-id. Target the row via
     // its ClassPicker DOM contract instead of the legacy option role.
-    const level2Radio = screen.getByRole('radio', { name: /^2/ });
+    const level2Radio = screen.getByRole('radio', { name: /^2(?!0)/ });
     fireEvent.click(level2Radio);
     const guerreroRow = document.querySelector(
       '[data-class-id="class:fighter"]',

@@ -11,10 +11,10 @@ describe('phase 06 feat store', () => {
     useFeatStore.setState(createInitialFeatState());
   });
 
-  it('createEmptyFeatLevels returns 16 records with null feat IDs', () => {
+  it('createEmptyFeatLevels returns 20 records with null feat IDs (UAT-2026-04-20 P6)', () => {
     const levels = createEmptyFeatLevels();
 
-    expect(levels).toHaveLength(16);
+    expect(levels).toHaveLength(20);
 
     for (const level of levels) {
       expect(level.classFeatId).toBeNull();
@@ -28,7 +28,7 @@ describe('phase 06 feat store', () => {
     expect(state.activeLevel).toBe(1);
     expect(state.datasetId).toBe(compiledFeatCatalog.datasetId);
     expect(state.lastEditedLevel).toBeNull();
-    expect(state.levels).toHaveLength(16);
+    expect(state.levels).toHaveLength(20);
   });
 
   it('setClassFeat sets classFeatId on the target level only', () => {

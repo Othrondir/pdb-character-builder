@@ -55,9 +55,9 @@ describe('useResumenViewModel', () => {
     expect(str.modifier).toBe(2);
   });
 
-  it('emits progression rows for all 16 levels; empty classes render null classLabel', () => {
+  it('emits progression rows for all 20 levels; empty classes render null classLabel (UAT-2026-04-20 P6)', () => {
     const { result } = renderHook(() => useResumenViewModel());
-    expect(result.current.progression).toHaveLength(16);
+    expect(result.current.progression).toHaveLength(20);
     for (const row of result.current.progression) {
       expect(row.classLabel).toBeNull();
       // Derived-stat cells MUST be null when no class chain exists — the table renders em-dash.

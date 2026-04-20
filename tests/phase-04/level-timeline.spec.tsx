@@ -48,7 +48,7 @@ describe('phase 04 level timeline', () => {
 
     const radioGroup = screen.getByRole('radiogroup', { name: 'Nivel de progresion' });
     const radios = radioGroup.querySelectorAll('[role="radio"]');
-    expect(radios).toHaveLength(16);
+    expect(radios).toHaveLength(20);
 
     const level1Radio = screen.getByRole('radio', { name: /^1Guerrero/ });
     expect(level1Radio).toHaveAttribute('aria-checked', 'true');

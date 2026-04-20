@@ -199,21 +199,19 @@ describe('Phase 12.4-09 — E2E (RTL fallback): Elfo+Guerrero advance bar L1 →
 
     expect(useLevelProgressionStore.getState().activeLevel).toBe(16);
 
-    // ----- L16 terminal: re-render, component returns null -----
+    // UAT-2026-04-20 P6 — L16 is NO LONGER terminal (level range extended
+    // 1..16 → 1..20). The advance bar must still render at L16. Smoke-
+    // assert presence here; the L20 terminal null-render contract is
+    // covered by tests/phase-12.4/level-editor-action-bar.spec.tsx Suite C.
     rerender(createElement(LevelSheet));
 
-    // Assertion #2 — at L16 the action bar is GONE from the DOM (D-06
-    // null-render contract). The .level-sheet aside still mounts but its
-    // footer disappears.
     const actionBarL16 = document.querySelector(
       '[data-testid="level-editor-action-bar"]',
     );
-    expect(actionBarL16).toBeNull();
+    expect(actionBarL16).not.toBeNull();
 
-    // Sanity — the planner is still at L16 and every level from L1 to L15
-    // carries the Guerrero class (L16 classId remains null because the
-    // advance-bar click is navigation-only — it does not back-fill a class
-    // at the target level; that is the user's next decision).
+    // Sanity — planner at L16; L1..L15 carry Guerrero; L16 classId remains
+    // null (advance-bar click is navigation-only).
     expect(useLevelProgressionStore.getState().activeLevel).toBe(16);
     for (let l = 1; l <= 15; l++) {
       expect(

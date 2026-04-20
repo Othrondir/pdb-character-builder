@@ -176,19 +176,19 @@ describe('Phase 12.4-09 — LevelEditorActionBar (SPEC R2)', () => {
   });
 
   // ------------------------------------------------------------------
-  // Suite C — L16 terminal render
+  // Suite C — L20 terminal render (UAT-2026-04-20 P6 — was L16 pre-extension)
   // ------------------------------------------------------------------
 
-  describe('Suite C — L16 terminal', () => {
-    it('C1: at L16 the component returns null — no footer, no button', () => {
-      // Fill all 16 levels with a class so navigation is clean.
+  describe('Suite C — L20 terminal', () => {
+    it('C1: at L20 the component returns null — no footer, no button', () => {
+      // Fill all 20 levels with a class so navigation is clean.
       setupL1HumanoGuerrero();
-      for (let l = 1 as ProgressionLevel; l <= 16; l++) {
+      for (let l = 1 as ProgressionLevel; l <= 20; l++) {
         useLevelProgressionStore
           .getState()
           .setLevelClassId(l as ProgressionLevel, 'class:fighter' as CanonicalId);
       }
-      useLevelProgressionStore.getState().setActiveLevel(16 as ProgressionLevel);
+      useLevelProgressionStore.getState().setActiveLevel(20 as ProgressionLevel);
 
       const { container } = render(createElement(LevelEditorActionBar));
       expect(container.querySelector('.level-editor__action-bar')).toBeNull();
@@ -196,14 +196,14 @@ describe('Phase 12.4-09 — LevelEditorActionBar (SPEC R2)', () => {
       expect(container.innerHTML).toBe('');
     });
 
-    it('C2: at L15 the component still renders (boundary: only L16 is terminal)', () => {
+    it('C2: at L19 the component still renders (boundary: only L20 is terminal)', () => {
       setupL1ElfoGuerrero();
-      for (let l = 1 as ProgressionLevel; l <= 15; l++) {
+      for (let l = 1 as ProgressionLevel; l <= 19; l++) {
         useLevelProgressionStore
           .getState()
           .setLevelClassId(l as ProgressionLevel, 'class:fighter' as CanonicalId);
       }
-      useLevelProgressionStore.getState().setActiveLevel(15 as ProgressionLevel);
+      useLevelProgressionStore.getState().setActiveLevel(19 as ProgressionLevel);
 
       render(createElement(LevelEditorActionBar));
       expect(screen.getByRole('button')).toBeInTheDocument();

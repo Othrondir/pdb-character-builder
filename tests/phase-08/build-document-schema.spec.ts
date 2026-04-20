@@ -72,8 +72,8 @@ describe('buildDocumentSchema', () => {
 
   it('enforces skill rank bounds 0..19', () => {
     const doc = sampleBuildDocument({
-      skillAllocations: Array.from({ length: 16 }, (_, i) => ({
-        level: (i + 1) as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16,
+      skillAllocations: Array.from({ length: 20 }, (_, i) => ({
+        level: (i + 1) as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20,
         allocations: i === 0 ? [{ skillId: 'skill:concentracion', rank: 20 }] : [],
       })),
     });

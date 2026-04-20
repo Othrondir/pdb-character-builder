@@ -37,7 +37,10 @@ export const sheetTabs: readonly SheetTabDefinition[] = [
   { id: 'feats', label: shellCopyEs.stepper.sheetTabs.feats },
 ] as const;
 
-export type ProgressionLevel = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16;
+// UAT-2026-04-20 P6 — level range extended to 1..20.
+export type ProgressionLevel =
+  | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10
+  | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20;
 
 /**
  * Top-level view selection for the shell's center column.

@@ -21,7 +21,8 @@ import { canonicalIdRegex } from '@rules-engine/contracts/canonical-id';
 
 const canonicalId = z.string().regex(canonicalIdRegex);
 const attributeKey = z.enum(['str', 'dex', 'con', 'int', 'wis', 'cha']);
-const level16 = z.number().int().min(1).max(16);
+// UAT-2026-04-20 P6 — level range extended 1..16 → 1..20.
+const level16 = z.number().int().min(1).max(20);
 
 export const buildDocumentSchema = z
   .object({
@@ -59,7 +60,7 @@ export const buildDocumentSchema = z
               })
               .strict(),
           )
-          .length(16),
+          .length(20),
         skillAllocations: z
           .array(
             z
@@ -76,7 +77,7 @@ export const buildDocumentSchema = z
               })
               .strict(),
           )
-          .length(16),
+          .length(20),
         featSelections: z
           .array(
             z
@@ -87,7 +88,7 @@ export const buildDocumentSchema = z
               })
               .strict(),
           )
-          .length(16),
+          .length(20),
       })
       .strict(),
   })
