@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: "**Phase 12.7-01 COMPLETE — F7 BLOCKER closed at the code level.** Wave 1 unblock plan (parallel with 12.7-04). Hoisted <LevelEditorActionBar /> out of <LevelProgressionRow />'s expanded slot into <CreationStepper />. D-01 mount site: between the progression </section> and <div className='creation-stepper__bottom'>; conditional on expandedLevel !== null. D-02 stable key: key={expandedLevel} (NOT activeLevelSubStep) — sub-step transitions Clase → Habilidades → Dotes preserve the exact DOM node (Suite A5 expect(after).toBe(before) locks the identity). D-03: old mount + import + 2 doc-block references all deleted from level-progression-row.tsx (grep returns 0 occurrences). D-04: [data-testid='advance-to-level-{N+1}'] preserved verbatim; 12.4-09 E2E spec re-run green after narrow harness update (sibling-mount LevelEditorActionBar + BuildProgressionBoard inside a local ShellHarness() — avoids full CreationStepper's origin-step subscriptions blowing the Vitest worker heap across the L1→L16 rerender loop). Auto-fixed Rule 3 cross-spec alignment: Phase 12.6 scan spec C1/D1 assertions flipped from .not.toBeNull() → .toBeNull() for action bar + advance button inside the expanded row (old row-mount contract now superseded; hoisted mount covered by phase-12.7 spec). Commits d5d7246 (RED 6 suites / A4 passes A1+A2+A3+A5+A6 fail reproducing F7) + d38ee18 (GREEN hoist + delete + harness updates). Full suite 797 passed / 2 skipped / 1 todo across 97 test files (zero failures vs Phase 12.6 close baseline of 632). Typecheck exit 0. Plan duration ~10 min."
-last_updated: "2026-04-20T21:12:26Z"
-last_activity: 2026-04-20 -- Phase 12.7-01 complete (F7 R1 BLOCKER closed)
+stopped_at: "**Phase 12.7-02 COMPLETE — F4 R2 skill over-allocation gate shipped.** Wave 2 plan. Pure `canIncrementSkill(skillId, level, snapshot)` + `nextIncrementCost` predicate pair in new `packages/rules-engine/src/skills/skill-budget.ts` (85 lines, zero imports — framework-purity 12.4-03 invariant preserved: grep -cE '^import.*(react|@planner|@data-extractor|zustand)' = 0). Boundary adapter `buildSkillBudgetSnapshotFromSheet(activeSheet)` in `apps/planner/src/features/skills/selectors.ts` composes a pure SkillBudgetSnapshot from the existing ActiveSkillSheetView (field mapping confirmed 1:1 against live types — no rename needed). `SkillSheet` threads snapshot as prop to `SkillRankRow`; `+` button disabled expression extended from 2 → 3 clauses with `|| !canIncrementSkill(row.skillId, level, snapshot)` at skill-sheet.tsx:87 (line shifted from plan's anchor of 77 due to import-block expansion by 8 lines; same `+` button, same Aumentar aria-label). Existing per-rank cap (maxAssignableRank) + `-` button gate both preserved unchanged (D-06 scope: `+` only). Commits 90e8caf (RED — skill-budget-gate.spec.ts, 13 tests, fails with module-not-found) + 79b5e77 (GREEN — impl + adapter + wire, all 13 flip green) + 7e7afd9 (integration — skill-sheet-disabled-gate.spec.tsx jsdom RTL, 3 suites, green on first run). Full Phase 12.x suite (23 test files, 1617 passed / 2 skipped / 1 todo / 0 failed) green. Typecheck clean on all touched files. Plan duration ~10 min."
+last_updated: "2026-04-20T19:36:08Z"
+last_activity: 2026-04-20 -- Phase 12.7-02 complete (F4 R2 skill over-allocation gate closed)
 progress:
   total_phases: 22
   completed_phases: 21
   total_plans: 82
-  completed_plans: 79
-  percent: 96
+  completed_plans: 80
+  percent: 98
 ---
 
 # Project State
@@ -26,7 +26,7 @@ See: .planning/PROJECT.md (updated 2026-03-30)
 ## Current Position
 
 Phase: 12.7 (uat-04-20-post-12.6-residuals) — EXECUTING
-Plan: 2 of 4 (12.7-01 complete; ready for Wave 2 / 12.7-02 or parallel 12.7-04)
+Plan: 3 of 4 (12.7-01 + 12.7-02 + 12.7-04 complete; only 12.7-03 polish wave remaining — R3 scroll + R4 per-row label drop + R5 Nivel-N prefix)
 Status: Executing Phase 12.7
 
 - B1 attributes overspend gate (nextIncrementCost + canIncrementAttribute, 12.3-01)
@@ -86,6 +86,7 @@ Progress: [██████████] 100%
 | Phase 12.4-08 | 35m | 3 tasks | 10 files |
 | Phase 12.4-09 | 35m | 3 tasks | 8 files |
 | Phase 12.7-01 | 10m | 2 tasks | 5 files |
+| Phase 12.7-02 | 10m | 3 tasks | 5 files |
 
 ## Accumulated Context
 
