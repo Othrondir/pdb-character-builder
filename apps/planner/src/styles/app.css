@@ -113,12 +113,7 @@ a {
 }
 .attributes-editor__row > .attributes-editor__label,
 .attributes-editor__row > .attributes-editor__cell {
-  border-bottom: 1px dashed var(--color-panel-edge);
   padding: var(--space-xs) 0;
-}
-.attributes-editor__row:last-of-type > .attributes-editor__label,
-.attributes-editor__row:last-of-type > .attributes-editor__cell {
-  border-bottom: 0;
 }
 .attributes-editor__label {
   color: var(--color-text);
