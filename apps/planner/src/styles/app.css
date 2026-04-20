@@ -2246,3 +2246,141 @@ a {
   position: sticky;
   z-index: 1;
 }
+
+/* ------------------------------------------------------------------ */
+/* Phase 12.6 (PROG-04 R5+R6) — level progression scan surface.       */
+/* Scoped namespace: .level-progression__list, .level-progression-row,*/
+/* .level-row__pill. 100% token reuse (tokens.css); zero new hex      */
+/* colors; zero new 700-weight declarations (DEF-12.4-02 invariant).  */
+/* ------------------------------------------------------------------ */
+.level-progression__list {
+  display: grid;
+  gap: var(--space-xs);
+  grid-template-rows: repeat(20, auto);
+  list-style: none;
+  margin: 0;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;  /* Pitfall 8 — isolate scroll from inner .class-picker__list */
+  padding: 0;
+}
+
+.level-progression-row {
+  display: block;
+}
+
+.level-progression-row__header {
+  align-items: center;
+  background: transparent;
+  border: 1px solid var(--color-panel-edge);
+  color: var(--color-text);
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr) auto auto auto;
+  gap: var(--space-sm);
+  min-height: 32px;
+  padding: 6px var(--space-md);
+  text-align: left;
+  transition: background-color 150ms ease, border-color 150ms ease;
+  width: 100%;
+}
+
+.level-progression-row__header:hover {
+  background: var(--color-selection);
+}
+
+.level-progression-row__header:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+.level-progression-row--expanded > .level-progression-row__header {
+  background: var(--color-selection);
+  border-color: var(--color-selection-border);
+}
+
+.level-progression-row[data-legality="incomplete"] > .level-progression-row__header {
+  border-color: var(--color-blocked);
+}
+
+.level-progression-row[data-legality="invalid"] > .level-progression-row__header {
+  border-color: var(--color-destructive);
+}
+
+.level-progression-row--locked > .level-progression-row__header {
+  border-color: var(--color-blocked);
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.level-progression-row__level {
+  color: var(--color-text);
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-variant-numeric: lining-nums tabular-nums;
+  font-weight: 600;
+  line-height: 1;
+  min-width: 1.5rem;
+  text-align: right;
+}
+
+.level-row__pill {
+  align-items: center;
+  border: 1px solid var(--color-panel-edge);
+  color: var(--color-text);
+  display: inline-flex;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-variant-numeric: lining-nums tabular-nums;
+  gap: var(--space-xs);
+  letter-spacing: 0.05em;
+  line-height: 1;
+  padding: 2px 8px;
+  white-space: nowrap;
+}
+
+.level-row__pill--class {
+  font-variant-numeric: normal;
+  max-width: 14rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.level-row__pill--feats {
+  min-width: 4rem;
+  justify-content: center;
+}
+
+.level-row__pill--skills {
+  min-width: 5rem;
+  justify-content: center;
+}
+
+.level-row__pill--legality {
+  border: none;
+  font-size: 14px;
+  min-width: 1.5rem;
+  justify-content: center;
+  padding: 2px 4px;
+}
+
+.level-row__pill--legality-legal      { color: var(--color-gold); }
+.level-row__pill--legality-incomplete { color: var(--color-blocked); }
+.level-row__pill--legality-invalid    { color: var(--color-destructive); }
+.level-row__pill--legality-locked     { color: var(--color-text-muted); }
+
+.level-progression-row[data-legality="incomplete"] .level-row__pill--class {
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+/* Expanded-row slot (Plan 04 mounts level-sheet.tsx contents inside). */
+.level-progression-row__expanded {
+  background: var(--color-panel);
+  border: 1px solid var(--color-selection-border);
+  border-top: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+}
