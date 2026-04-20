@@ -428,10 +428,13 @@ Plans:
   5. Level-progression-row header text renders explicit separators (e.g. ` · `) and includes the word "Nivel" for screen-reader + visual scan parity with legacy LevelRail.
   6. Dotes sub-step UI surfaces an explicit per-section budget hint ("Selecciona N dote(s) general(es)") + the same advance-bar copy as Clase + Habilidades.
   7. (Optional, data-blocked) Skill point carryover allows up to 4 unspent points at L_N to roll forward to L_{N+1}; vetted against Puerta server source before implementation.
-**Plans**: TBD (locked in `/gsd-spec-phase 12.7`).
+**Plans**: 4 plans across 4 waves (F7 unblock → F4 skill cap → R3/R4/R5 polish → R6 verify-only spike).
 
 Plans:
-- [ ] *(pending /gsd-spec-phase 12.7 → /gsd-discuss-phase 12.7 → /gsd-plan-phase 12.7)*
+- [ ] 12.7-01-PLAN.md — Hoist LevelEditorActionBar to creation-stepper + delete row mount (F7 R1 BLOCKER)
+- [ ] 12.7-02-PLAN.md — canIncrementSkill gate + boundary adapter + skill-sheet wire (F4 R2)
+- [ ] 12.7-03-PLAN.md — Skill scroll reset + drop per-row labels + Nivel N prefix (F2 R3 / F3 R4 / F1 R5)
+- [ ] 12.7-04-PLAN.md — Verify L2..L20 skill-budget formula (F6 R6 verify-only; no-op if green, SUMMARY-only if red)
 **UI hint**: yes
 
 ## Progress
