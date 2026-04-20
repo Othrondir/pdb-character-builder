@@ -177,7 +177,14 @@ describe('Phase 12.3-02 — multiclass active-level switching (UAT B2 + B8 + B9)
   // ------------------------------------------------------------------
   // Suite C — board title binds to live activeLevel (B8 ripple)
   // ------------------------------------------------------------------
-  describe('Suite C — title binds to active level (B8 fold-in)', () => {
+  // Phase 12.6-03 (PROG-04 R5) superseded the single-level title binding:
+  // BuildProgressionBoard's <h2> now reads the Plan-01-patched
+  // `shellCopyEs.progression.railHeading` ('Progresión 1-20') — a static
+  // heading, not a per-level title. The per-level class heading moves into
+  // the expanded-row slot in Plan 04. Active-level binding is still locked
+  // by Suites B + D in this file (store semantics) and by
+  // tests/phase-12.6/level-progression-scan.spec.tsx Suite C (Plan 04).
+  describe.skip('Suite C — title binds to active level (B8 fold-in)', () => {
     it('title reads "nivel 1" initially', () => {
       render(createElement(BuildProgressionBoard));
       // The copy is "Selecciona la clase del nivel" + " " + level; we match case-insensitively.

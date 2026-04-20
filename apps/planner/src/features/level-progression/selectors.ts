@@ -508,6 +508,13 @@ export interface LevelCompletionState {
   featDeficit: number;
   skillDeficit: number;
   isComplete: boolean;
+  // Phase 12.6 (Plan 03, PROG-04 R5) — scan-surface totals. Additive fields:
+  // all existing consumers read `isComplete`/`featDeficit`/`skillDeficit` and
+  // keep working unchanged. These totals power the compact-row pills without
+  // forcing a new wrapper selector.
+  featSlots: { chosen: number; total: number };
+  skillPoints: { spent: number; budget: number };
+  classLabel: string | null;
 }
 
 export function selectLevelCompletionState(
@@ -534,7 +541,74 @@ export function selectLevelCompletionState(
   const skillDeficit = Math.max(0, budget.skillPoints.budget - budget.skillPoints.spent);
   const isComplete =
     featDeficit === 0 && skillDeficit === 0 && budget.featSlots.total > 0;
-  return { level, featDeficit, skillDeficit, isComplete };
+
+  // Scan-surface totals (additive — see interface doc).
+  const featSlots = {
+    chosen: budget.featSlots.chosen,
+    total: budget.featSlots.total,
+  };
+  const skillPoints = {
+    spent: budget.skillPoints.spent,
+    budget: budget.skillPoints.budget,
+  };
+  const classId =
+    progressionState.levels.find((record) => record.level === level)?.classId ?? null;
+  const classLabel =
+    classId === null
+      ? null
+      : (compiledClassCatalog.classes.find((c) => c.id === classId)?.label ?? null);
+
+  return {
+    level,
+    featDeficit,
+    skillDeficit,
+    isComplete,
+    featSlots,
+    skillPoints,
+    classLabel,
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Phase 12.6 (Plan 03, PROG-04 R5+R6) — row-level legality classification.
+//
+// Reuses:
+//   - selectLevelRail (G1 sequential-gate predicate — emits locked/illegal per row)
+//   - selectLevelCompletionState (12.4-09 — emits isComplete + deficits)
+//
+// Precedence (highest wins, per CONTEXT D-17):
+//   locked     — prior level incomplete (G1 sequential gate)
+//   invalid    — row has illegal issues in the revalidated progression
+//   incomplete — missing feat or skill choices
+//   legal      — all gates pass
+//
+// Pure — no React, no store reads inside; caller threads store state in.
+// ---------------------------------------------------------------------------
+
+export type LevelLegality = 'legal' | 'incomplete' | 'invalid' | 'locked';
+
+export function selectLevelLegality(
+  progressionState: LevelProgressionStoreState,
+  foundationState: CharacterFoundationStoreState,
+  featState: FeatStoreState,
+  skillState: SkillStoreState,
+  level: ProgressionLevel,
+): LevelLegality {
+  const rail = selectLevelRail(progressionState, foundationState);
+  const entry = rail.find((r) => r.level === level);
+  if (entry?.locked) return 'locked';
+  if (entry?.status === 'illegal') return 'invalid';
+
+  const completion = selectLevelCompletionState(
+    progressionState,
+    foundationState,
+    featState,
+    skillState,
+    level,
+  );
+  if (!completion.isComplete) return 'incomplete';
+
+  return 'legal';
 }
 
 export function computeAdvanceLabel(

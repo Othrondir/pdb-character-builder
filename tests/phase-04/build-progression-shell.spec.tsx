@@ -15,7 +15,15 @@ function primeOrigin() {
   foundationStore.setAlignment('alignment:neutral-good');
 }
 
-describe('phase 04 build progression shell', () => {
+// Phase 12.6-03 (PROG-04 R5) superseded this surface: BuildProgressionBoard
+// no longer renders the legacy single-level SelectionScreen with the
+// "Selecciona la clase del nivel" heading + "Nivel de progresion" radiogroup.
+// It now renders a 20-row <ol.level-progression__list>. The ClassPicker will
+// remount inside the expanded-row slot in Plan 12.6-04. This spec is skipped
+// until Plan 04 lands that host swap; the new invariants are locked by
+// tests/phase-12.6/level-progression-scan.spec.tsx (Plan 03 Suites A+B +
+// Plan 04 Suite C).
+describe.skip('phase 04 build progression shell', () => {
   beforeEach(() => {
     document.body.innerHTML = '';
     useCharacterFoundationStore.getState().resetFoundation();
