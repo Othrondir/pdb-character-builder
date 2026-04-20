@@ -431,7 +431,7 @@ Plans:
 **Plans**: 4 plans across 4 waves (F7 unblock → F4 skill cap → R3/R4/R5 polish → R6 verify-only spike).
 
 Plans:
-- [ ] 12.7-01-PLAN.md — Hoist LevelEditorActionBar to creation-stepper + delete row mount (F7 R1 BLOCKER)
+- [x] 12.7-01-PLAN.md — Hoist LevelEditorActionBar to creation-stepper + delete row mount (F7 R1 BLOCKER) — COMPLETE 2026-04-20 (commits d5d7246 RED + d38ee18 GREEN)
 - [ ] 12.7-02-PLAN.md — canIncrementSkill gate + boundary adapter + skill-sheet wire (F4 R2)
 - [ ] 12.7-03-PLAN.md — Skill scroll reset + drop per-row labels + Nivel N prefix (F2 R3 / F3 R4 / F1 R5)
 - [ ] 12.7-04-PLAN.md — Verify L2..L20 skill-budget formula (F6 R6 verify-only; no-op if green, SUMMARY-only if red)
@@ -465,4 +465,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -
 | 12.3 UAT Correctness Closure (INSERTED) | 6/6 | Complete | 2026-04-19 |
 | 12.4 Construcción Correctness & Clarity (INSERTED) | 9/9 | Complete | 2026-04-20 |
 | 12.6 UAT-2026-04-20 Residuals (INSERTED) | 6/6 | Complete | 2026-04-20 |
-| 12.7 UAT-2026-04-20 Post-12.6 Residuals (INSERTED) | 0/TBD | Pending spec | - |
+| 12.7 UAT-2026-04-20 Post-12.6 Residuals (INSERTED) | 1/4 | In progress (F7 BLOCKER closed) | - |
