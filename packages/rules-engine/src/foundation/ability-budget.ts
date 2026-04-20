@@ -1,8 +1,14 @@
 import type { ValidationOutcome, ValidationStatus } from '../contracts/validation-outcome';
 import { resolveValidationOutcome } from '../contracts/validation-outcome';
 
+// Phase 12.6 (Rule 2 auto-fix) — `baseScore` was declared here but never
+// consumed by any function in this module. It lived on the planner-side
+// fixture's `AttributeRules` type (foundation-fixture.ts:45) and was read
+// by `createBaseAttributes` in the store. Removing it from the rules-engine
+// interface lets `PointBuyCurve` (which has no baseScore) satisfy this
+// contract structurally, preserving the plan's "per-race selector threads
+// the snapshot output into the existing helpers" boundary.
 interface AbilityBudgetRules {
-  baseScore: number;
   budget: number;
   costByScore: Record<string, number>;
   maximum: number;
@@ -10,7 +16,7 @@ interface AbilityBudgetRules {
 }
 
 export interface CalculateAbilityBudgetSnapshotInput {
-  attributeRules: AbilityBudgetRules;
+  attributeRules: AbilityBudgetRules | null;
   baseAttributes: Record<string, number>;
   originReady: boolean;
 }
@@ -65,13 +71,35 @@ export function canIncrementAttribute(
 export function calculateAbilityBudgetSnapshot(
   input: CalculateAbilityBudgetSnapshotInput,
 ): AbilityBudgetSnapshot {
+  // Phase 12.6 (D-05, ATTR-01 R3) — fail-closed: no point-buy curve → block.
+  if (input.attributeRules === null) {
+    return {
+      issues: [
+        resolveValidationOutcome({
+          affectedIds: ['rule:point-buy-missing'],
+          blockKind: 'missing-source',
+          hasConflict: false,
+          hasMissingEvidence: true,
+          passesRule: false,
+          ruleKnown: true,
+        }),
+      ],
+      remainingPoints: 0,
+      spentPoints: 0,
+      status: 'blocked',
+    };
+  }
+
+  // Local non-null binding so the closure below narrows correctly after the
+  // fail-closed early-return above.
+  const attributeRules = input.attributeRules;
   const issues: ValidationOutcome[] = [];
   const spentPoints = Object.entries(input.baseAttributes).reduce(
     (total, [key, value]) => {
       if (
-        value < input.attributeRules.minimum ||
-        value > input.attributeRules.maximum ||
-        input.attributeRules.costByScore[String(value)] === undefined
+        value < attributeRules.minimum ||
+        value > attributeRules.maximum ||
+        attributeRules.costByScore[String(value)] === undefined
       ) {
         issues.push(
           resolveValidationOutcome({
@@ -84,11 +112,11 @@ export function calculateAbilityBudgetSnapshot(
         );
       }
 
-      return total + (input.attributeRules.costByScore[String(value)] ?? 0);
+      return total + (attributeRules.costByScore[String(value)] ?? 0);
     },
     0,
   );
-  const remainingPoints = input.attributeRules.budget - spentPoints;
+  const remainingPoints = attributeRules.budget - spentPoints;
 
   if (!input.originReady) {
     issues.push(

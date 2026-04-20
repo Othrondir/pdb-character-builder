@@ -1,11 +1,34 @@
 // @vitest-environment jsdom
 
 import { createElement } from 'react';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { PlannerShellFrame } from '@planner/components/shell/planner-shell-frame';
 import { usePlannerShellStore } from '@planner/state/planner-shell';
 import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
+import { PUERTA_POINT_BUY_SNAPSHOT } from '@rules-engine/foundation/point-buy-snapshot';
+
+// Phase 12.6 (Rule 3 auto-fix) — runtime path uses the per-race snapshot
+// instead of the uniform fixture; seed race:human with the pre-12.6
+// uniform curve so this legal-path suite keeps its contract.
+const PRE_12_6_UNIFORM_CURVE = {
+  budget: 30,
+  minimum: 8,
+  maximum: 18,
+  costByScore: {
+    '8': 0,
+    '9': 1,
+    '10': 2,
+    '11': 3,
+    '12': 4,
+    '13': 5,
+    '14': 6,
+    '15': 8,
+    '16': 10,
+    '17': 13,
+    '18': 16,
+  },
+} as const;
 
 function primeOrigin() {
   const foundationStore = useCharacterFoundationStore.getState();
@@ -41,6 +64,12 @@ describe('phase 03 attribute budget board', () => {
       expandedLevel: null,
       mobileNavOpen: false,
     });
+    (PUERTA_POINT_BUY_SNAPSHOT as Record<string, unknown>)['race:human'] =
+      PRE_12_6_UNIFORM_CURVE;
+  });
+
+  afterEach(() => {
+    delete (PUERTA_POINT_BUY_SNAPSHOT as Record<string, unknown>)['race:human'];
   });
 
   it('updates spent and remaining totals when Fuerza changes', () => {

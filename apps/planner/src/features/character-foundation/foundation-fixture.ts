@@ -202,6 +202,14 @@ export const phase03FoundationFixture: Phase03FoundationFixture = {
       lawChaos: 'chaotic',
     },
   ],
+  // Phase 12.6 (D-09) — TEST-ONLY FIXTURE. The runtime path uses the
+  // per-race snapshot via `selectAbilityBudgetRulesForRace(raceId)`
+  // (apps/planner/src/features/character-foundation/selectors.ts). Do not
+  // thread this uniform curve back into the runtime selector — it is
+  // preserved here only so pre-12.6 unit suites (phase-03 foundation
+  // validation + phase-12.3 attributes-budget-gate) continue to exercise
+  // the non-null branch of calculateAbilityBudgetSnapshot without racing
+  // on Plan 06's per-race data delivery.
   attributeRules: {
     baseScore: 8,
     budget: 30,
