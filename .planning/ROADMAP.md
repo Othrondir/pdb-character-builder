@@ -415,10 +415,29 @@ Plans:
 - [ ] 12.6-06-PLAN.md — ATTR-01 A1b (DATA BLOCKER — autonomous:false): populate puerta-point-buy.json with user-delivered per-race curves + provenance rows + flip coverage + per-race delta spec assertions to green
 **UI hint**: yes
 
+### Phase 12.7: UAT-2026-04-20 Post-12.6 Residuals (INSERTED)
+**Goal**: Close 7 findings (F1..F7) surfaced by agent-driven UAT against master 2026-04-20 immediately after Phase 12.6 closure. F7 is a BLOCKER — user cannot reach L2 because `LevelEditorActionBar` mounts only inside the Progresión-Clase sub-step host, not as a stepper-global footer; advancing requires returning to Clase from Habilidades or Dotes with no signpost.
+**Depends on**: Phase 12.6 (Habilidades + Dotes flow lives inside the BuildProgressionBoard scan-row scaffolding shipped in 12.6-03 + 12.6-04; LevelEditorActionBar mount site is the 12.4-09 component preserved through 12.6-04 host swap).
+**Requirements**: PROG-05 (advance-bar host-mount + Dotes UX clarity), SKILL-01 (per-level skill cap + carryover + per-row label hygiene + scroll-on-mount).
+**Gap Closure**: Closes F1..F7 documented in `.planning/UAT-FINDINGS-2026-04-20-post-12.6.md` (commit `34b84db`).
+**Success Criteria** (what must be TRUE — refined in `/gsd-spec-phase 12.7`):
+  1. `LevelEditorActionBar` is visible to the user on every Progresión sub-step (Clase, Habilidades, Dotes) for the active level — not only when the user is on Clase.
+  2. Skill `+` buttons hard-block when `puntosGastados >= puntosDisponibles` (no `Puntos restantes: -1` reachable via UI).
+  3. Habilidades sub-step lands at `scrollTop === 0` on its inner scroll container the first time it mounts per session.
+  4. Per-row "Clase"/"Transclase" category labels are removed; "Solo entrenada" badge is preserved as per-row metadata.
+  5. Level-progression-row header text renders explicit separators (e.g. ` · `) and includes the word "Nivel" for screen-reader + visual scan parity with legacy LevelRail.
+  6. Dotes sub-step UI surfaces an explicit per-section budget hint ("Selecciona N dote(s) general(es)") + the same advance-bar copy as Clase + Habilidades.
+  7. (Optional, data-blocked) Skill point carryover allows up to 4 unspent points at L_N to roll forward to L_{N+1}; vetted against Puerta server source before implementation.
+**Plans**: TBD (locked in `/gsd-spec-phase 12.7`).
+
+Plans:
+- [ ] *(pending /gsd-spec-phase 12.7 → /gsd-discuss-phase 12.7 → /gsd-plan-phase 12.7)*
+**UI hint**: yes
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 12.1 -> 12.2 -> 12.3 -> 12.4 -> 12.6
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 12.1 -> 12.2 -> 12.3 -> 12.4 -> 12.6 -> 12.7
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -442,3 +461,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -
 | 12.2 Roster Detail & Race Ability Modifiers (INSERTED) | 3/4 | In progress | - |
 | 12.3 UAT Correctness Closure (INSERTED) | 6/6 | Complete | 2026-04-19 |
 | 12.4 Construcción Correctness & Clarity (INSERTED) | 9/9 | Complete | 2026-04-20 |
+| 12.6 UAT-2026-04-20 Residuals (INSERTED) | 6/6 | Complete | 2026-04-20 |
+| 12.7 UAT-2026-04-20 Post-12.6 Residuals (INSERTED) | 0/TBD | Pending spec | - |
