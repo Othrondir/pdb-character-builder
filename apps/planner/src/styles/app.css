@@ -87,14 +87,28 @@ a {
 }
 
 /* ── Attributes editor ── */
-.attributes-editor { display: flex; flex-direction: column; gap: var(--space-sm); padding: var(--space-md); }
-.attributes-editor__header { color: var(--color-text-muted); font-size: 14px; font-variant-numeric: lining-nums tabular-nums; padding-bottom: var(--space-sm); border-bottom: 1px solid var(--color-panel-edge); }
+/* UAT-2026-04-20 — lift the per-row grid to the container so all 6 rows
+ * share column tracks. Without this, each row was its own grid and label
+ * column auto-sized per row (e.g. Fuerza 42px vs Constitucion 81px),
+ * making rows visually misaligned. `display: contents` lets row children
+ * flow directly into the container grid. */
+.attributes-editor {
+  display: grid;
+  gap: var(--space-xs) var(--space-md);
+  grid-template-columns: 1fr auto auto auto;
+  padding: var(--space-md);
+}
+.attributes-editor__header {
+  color: var(--color-text-muted);
+  font-size: 14px;
+  font-variant-numeric: lining-nums tabular-nums;
+  grid-column: 1 / -1;
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--color-panel-edge);
+}
 .attributes-editor__row {
   align-items: center;
-  display: grid;
-  gap: var(--space-md);
-  grid-template-columns: 1fr auto auto auto;
-  padding: var(--space-xs) 0;
+  display: contents;
 }
 /* UAT-2026-04-20 A2 — racial ability adjustment + total. */
 .attributes-editor__racial {
@@ -136,7 +150,8 @@ a {
   min-height: 36px;
   padding: var(--space-xs) var(--space-sm);
 }
-.attributes-editor__actions { margin-top: var(--space-md); }
+.attributes-editor__actions { grid-column: 1 / -1; margin-top: var(--space-md); }
+.attributes-editor .foundation-step__issue { grid-column: 1 / -1; }
 .attributes-editor__summary { display: flex; flex-direction: column; gap: var(--space-xs); margin-top: var(--space-md); }
 .attributes-editor__summary > div { display: flex; justify-content: space-between; }
 .attributes-editor__summary dt { color: var(--color-text-muted); font-size: 14px; }
