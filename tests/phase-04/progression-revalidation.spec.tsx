@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 
 import { createElement } from 'react';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render } from '@testing-library/react';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { PlannerShellFrame } from '@planner/components/shell/planner-shell-frame';
 import { usePlannerShellStore } from '@planner/state/planner-shell';
@@ -20,15 +20,15 @@ function primeFoundation() {
   foundationStore.setBaseAttribute('int', 12);
 }
 
-// Phase 12.6-03 (PROG-04 R5) — this spec drives an L2 class change via the
-// legacy level-rail <radio name="^2(?!0)"> DOM AND the pre-swap ClassPicker
-// mount inside BuildProgressionBoard. Plan 12.6-03 replaces the root with a
-// 20-row <ol>; Plan 12.6-04 remounts ClassPicker inside the expanded slot;
-// Plan 12.6-05 deletes level-rail. Skipped until Plan 04 rebuilds the DOM
-// path. Revalidation + downstream-repair logic itself is locked by
+// Phase 12.6-05 restored: Plan 03 replaced the LevelRail with a 20-row
+// scan list; Plan 04 mounted ClassPicker inside the active-row expanded
+// slot; Plan 05 deleted LevelRail. Legacy queries targeting
+// `screen.getByRole('radio', { name: /^2(?!0)/ })` migrate to
+// `[data-level-row][data-level=\"2\"] button`. Revalidation + downstream-
+// repair logic itself is framework-agnostic and continues to be locked by
 // packages/rules-engine/src/progression/progression-revalidation.ts unit
-// tests, which still pass.
-describe.skip('phase 04 progression revalidation', () => {
+// tests.
+describe('phase 04 progression revalidation', () => {
   beforeEach(() => {
     document.body.innerHTML = '';
     useCharacterFoundationStore.getState().resetFoundation();
@@ -56,19 +56,25 @@ describe.skip('phase 04 progression revalidation', () => {
 
     render(createElement(PlannerShellFrame));
 
-    // Change level 2 from rogue to fighter via the rail and class selection.
-    // Phase 12.4-06 migrated the class-picker DOM from <OptionList role="option">
-    // to <ClassPicker> scoped buttons with data-class-id. Target the row via
-    // its ClassPicker DOM contract instead of the legacy option role.
-    const level2Radio = screen.getByRole('radio', { name: /^2(?!0)/ });
-    fireEvent.click(level2Radio);
+    // Click the L2 row to activate + expand it, then pick Guerrero
+    // (class:fighter) inside the newly mounted ClassPicker. The legacy
+    // single-click-on-radio path is now two atomic actions: row click
+    // (expands the slot) + class pick inside the expanded slot.
+    const level2Row = document.querySelector(
+      '[data-level-row][data-level=\"2\"] button',
+    ) as HTMLButtonElement | null;
+    expect(level2Row).not.toBeNull();
+    fireEvent.click(level2Row as HTMLButtonElement);
+
     const guerreroRow = document.querySelector(
-      '[data-class-id="class:fighter"]',
+      '[data-class-id=\"class:fighter\"]',
     ) as HTMLButtonElement | null;
     expect(guerreroRow).not.toBeNull();
     fireEvent.click(guerreroRow!);
 
-    // Verify downstream levels are marked as blocked in the rail
+    // Verify downstream levels are marked as non-legal in the rail selector
+    // (selectLevelRail is still the legality oracle; only its consumer
+    // component was deleted).
     const rail = selectLevelRail(
       useLevelProgressionStore.getState(),
       useCharacterFoundationStore.getState(),

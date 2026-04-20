@@ -17,11 +17,11 @@ function primeOrigin() {
   foundationStore.setAlignment('alignment:neutral-good');
 }
 
-// UAT-2026-04-20 G1 — rail buttons require prior-level classId to unlock.
-// Seed all 16 levels so any rail entry under test is interactive.
+// UAT-2026-04-20 G1 — row buttons require prior-level classId to unlock.
+// Seed all 20 levels so any row under test is interactive (UAT P6 extended 1..16 → 1..20).
 function primeAllRailLevels() {
   const setClass = useLevelProgressionStore.getState().setLevelClassId;
-  for (let l = 1; l <= 16; l++) {
+  for (let l = 1; l <= 20; l++) {
     setClass(l as ProgressionLevel, 'class:fighter' as CanonicalId);
   }
 }
@@ -40,21 +40,26 @@ describe('phase 04 level timeline', () => {
     });
   });
 
-  it('shows the full 1-16 rail and switches the expanded level when another entry is selected', () => {
+  // Phase 12.6-05 migration: LevelRail deleted. The 20-row scan list in
+  // BuildProgressionBoard (mounted by PlannerShellFrame when activeLevelSubStep
+  // === 'class') replaces the radiogroup; legality selection is driven by
+  // [data-level-row][data-level] buttons with aria-expanded on the active row.
+  it('shows the full 1-20 scan list and switches the expanded level when another row is selected', () => {
     primeOrigin();
     primeAllRailLevels();
 
     render(createElement(PlannerShellFrame));
 
-    const radioGroup = screen.getByRole('radiogroup', { name: 'Nivel de progresion' });
-    const radios = radioGroup.querySelectorAll('[role="radio"]');
-    expect(radios).toHaveLength(20);
+    const rows = document.querySelectorAll('[data-level-row]');
+    expect(rows).toHaveLength(20);
 
-    const level1Radio = screen.getByRole('radio', { name: /^1Guerrero/ });
-    expect(level1Radio).toHaveAttribute('aria-checked', 'true');
+    const level1Row = document.querySelector('[data-level-row][data-level="1"] button') as HTMLButtonElement | null;
+    expect(level1Row).not.toBeNull();
+    expect(level1Row?.getAttribute('aria-expanded')).toBe('true');
 
-    const level6Radio = screen.getByRole('radio', { name: /^6Guerrero/ });
-    fireEvent.click(level6Radio);
+    const level6Row = document.querySelector('[data-level-row][data-level="6"] button') as HTMLButtonElement | null;
+    expect(level6Row).not.toBeNull();
+    fireEvent.click(level6Row as HTMLButtonElement);
 
     expect(usePlannerShellStore.getState().expandedLevel).toBe(6);
   });

@@ -2,7 +2,7 @@
 
 import { createElement } from 'react';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { PlannerShellFrame } from '@planner/components/shell/planner-shell-frame';
 import { usePlannerShellStore } from '@planner/state/planner-shell';
 import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
@@ -15,15 +15,16 @@ function primeOrigin() {
   foundationStore.setAlignment('alignment:neutral-good');
 }
 
-// Phase 12.6-03 (PROG-04 R5) superseded this surface: BuildProgressionBoard
-// no longer renders the legacy single-level SelectionScreen with the
-// "Selecciona la clase del nivel" heading + "Nivel de progresion" radiogroup.
-// It now renders a 20-row <ol.level-progression__list>. The ClassPicker will
-// remount inside the expanded-row slot in Plan 12.6-04. This spec is skipped
-// until Plan 04 lands that host swap; the new invariants are locked by
-// tests/phase-12.6/level-progression-scan.spec.tsx (Plan 03 Suites A+B +
-// Plan 04 Suite C).
-describe.skip('phase 04 build progression shell', () => {
+// Phase 12.6-05 restored: Plan 03 replaced the legacy single-level
+// SelectionScreen with a 20-row <ol.level-progression__list>; Plan 04
+// remounted ClassPicker inside the expanded-row slot of the active level;
+// Plan 05 deleted LevelRail. This spec is restored to lock the shell
+// integration: when origin is ready + activeLevelSubStep === 'class' +
+// expandedLevel !== null, PlannerShellFrame mounts BuildProgressionBoard
+// which renders the 20-row scan list with the active row's expanded slot
+// hosting ClassPicker. The legacy heading + radiogroup assertions are
+// obsolete; post-12.6 equivalents are asserted below.
+describe('phase 04 build progression shell', () => {
   beforeEach(() => {
     document.body.innerHTML = '';
     useCharacterFoundationStore.getState().resetFoundation();
@@ -37,16 +38,21 @@ describe.skip('phase 04 build progression shell', () => {
     });
   });
 
-  it('renders the class selection screen and level rail once the origin is ready', () => {
+  it('renders the 20-row scan list and an expanded L1 slot once the origin is ready', () => {
     primeOrigin();
 
     render(createElement(PlannerShellFrame));
 
-    expect(
-      screen.getByRole('heading', { name: /Selecciona la clase del nivel/ }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('radiogroup', { name: 'Nivel de progresion' }),
-    ).toBeInTheDocument();
+    // 20-row scan surface (PROG-04 R5 — replaces the legacy radiogroup).
+    const rows = document.querySelectorAll('[data-level-row]');
+    expect(rows).toHaveLength(20);
+
+    // Active row (L1) expanded — hosts ClassPicker (PROG-04 R6 — Plan 04
+    // migrated the ClassPicker mount into the expanded-row slot).
+    const l1Expanded = document.querySelector(
+      '[data-testid="level-row-1-expanded"]',
+    );
+    expect(l1Expanded).not.toBeNull();
+    expect(l1Expanded?.querySelector('.class-picker__list')).not.toBeNull();
   });
 });

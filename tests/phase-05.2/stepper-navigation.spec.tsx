@@ -57,12 +57,19 @@ describe('phase 05.2 stepper navigation', () => {
     expect(list.tagName).toBe('OL');
   });
 
-  it('renders 20 level buttons in the level rail (UAT-2026-04-20 P6: L1..L20)', () => {
+  // Phase 12.6-05 migration: LevelRail deleted; CreationStepper no longer
+  // mounts a level rail. The 20-row scan list moved into
+  // BuildProgressionBoard (tests/phase-12.6/level-progression-scan.spec.tsx
+  // Suite B asserts the new 20-row contract). Here we lock the invariant
+  // that CreationStepper's progression section is rail-free.
+  it('does NOT render a level rail inside CreationStepper (12.6-05 scrub)', () => {
     render(createElement(CreationStepper));
 
-    const radioGroup = screen.getByRole('radiogroup', { name: 'Nivel de progresion' });
-    const radios = radioGroup.querySelectorAll('[role="radio"]');
-    expect(radios).toHaveLength(20);
+    expect(
+      screen.queryByRole('radiogroup', { name: 'Nivel de progresion' }),
+    ).toBeNull();
+    expect(document.querySelector('.level-rail')).toBeNull();
+    expect(document.querySelector('.level-rail__button')).toBeNull();
   });
 
   it('updates shell store when clicking a completed Raza step button', () => {

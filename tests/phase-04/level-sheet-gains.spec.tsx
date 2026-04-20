@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 
 import { createElement } from 'react';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render } from '@testing-library/react';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { PlannerShellFrame } from '@planner/components/shell/planner-shell-frame';
 import { usePlannerShellStore } from '@planner/state/planner-shell';
@@ -17,15 +17,11 @@ function primeFoundation() {
   foundationStore.setBaseAttribute('int', 12);
 }
 
-// Phase 12.6-03 (PROG-04 R5) swapped BuildProgressionBoard to a 20-row
-// <ol.level-progression__list>; ClassPicker no longer mounts directly on the
-// board — Plan 12.6-04 remounts it inside the expanded-row slot. Until Plan 04
-// lands the host swap, [data-class-id] queries against PlannerShellFrame have
-// no DOM to find because the expanded slot is a placeholder in Plan 03. The
-// class-picker contract + blocked-option logic is unaffected — it is covered
-// by tests/phase-12.4/class-picker-*.spec.tsx and tests/phase-12.4/prestige-
-// gate.spec.ts.
-describe.skip('phase 04 level sheet gains', () => {
+// Phase 12.6-05 restored: Plan 04 migrated ClassPicker into the expanded-row
+// slot (LevelProgressionRow). Queries against [data-class-id] now resolve
+// inside [data-testid="level-row-{N}-expanded"] for the active row; the
+// active-sheet selector itself is unchanged.
+describe('phase 04 level sheet gains', () => {
   beforeEach(() => {
     document.body.innerHTML = '';
     useCharacterFoundationStore.getState().resetFoundation();
@@ -54,9 +50,9 @@ describe.skip('phase 04 level sheet gains', () => {
 
     render(createElement(PlannerShellFrame));
 
-    // Phase 12.4-06 migrated the class-picker DOM from <OptionList role="option">
-    // to <ClassPicker> scoped buttons with data-class-id. Target the row via
-    // its ClassPicker DOM contract instead of the legacy option role.
+    // ClassPicker mounts inside the active row's expanded slot. Target the
+    // row via [data-class-id], the ClassPicker DOM contract (Phase 12.4-06),
+    // now nested under [data-testid="level-row-4-expanded"].
     const guerreroRow = document.querySelector(
       '[data-class-id="class:fighter"]',
     ) as HTMLButtonElement | null;
@@ -66,9 +62,7 @@ describe.skip('phase 04 level sheet gains', () => {
     // Phase 12.1-01: per-class gainTable content is not yet emitted by the
     // extractor (tracked in 12.1-CONTEXT.md <deferred>). The ability-increase
     // hook is driven by phase04ClassFixture.abilityIncreaseLevels (still [4,
-    // 8, 12, 16]) — that is the invariant this test should lock, not the
-    // legacy "Dado de golpe dN" feature string which has moved off the
-    // planner and into the upstream extractor enrichment queue.
+    // 8, 12, 16, 20]) — that is the invariant this test should lock.
     const sheet = selectActiveLevelSheet(
       useLevelProgressionStore.getState(),
       useCharacterFoundationStore.getState(),
@@ -82,19 +76,17 @@ describe.skip('phase 04 level sheet gains', () => {
     render(createElement(PlannerShellFrame));
 
     // Phase 12.1-01: class labels now come from the compiled PDB extractor
-    // catalog. Shadowdancer's Spanish label in the PDB TLK is "Danzarín
-    // sombrío" (was "Sombra danzante" in the hand-authored fixture).
-    //
-    // Phase 12.4-06 migrated the row DOM: the blocked-row class is now
-    // `class-picker__row--blocked` (replacing legacy `.is-blocked`) and the
-    // row is a `<button aria-disabled="true">` inside `<ul.class-picker__list>`.
+    // catalog. Phase 12.4-06 migrated the row DOM: the blocked-row class is
+    // now `class-picker__row--blocked` and the row is a `<button
+    // aria-disabled="true">` inside `<ul.class-picker__list>`. Phase 12.6-04
+    // moved that list into the active-row expanded slot.
     const shadowdancerRow = document.querySelector(
       '[data-class-id="class:shadowdancer"]',
     ) as HTMLButtonElement | null;
     expect(shadowdancerRow).not.toBeNull();
     expect(shadowdancerRow!.getAttribute('aria-disabled')).toBe('true');
 
-    // Verify the selector reports blocked status for the prestige class
+    // Verify the selector reports the prestige class in its option list.
     const sheet = selectActiveLevelSheet(
       useLevelProgressionStore.getState(),
       useCharacterFoundationStore.getState(),
@@ -102,12 +94,10 @@ describe.skip('phase 04 level sheet gains', () => {
     const shadowdancer = sheet.classOptions.find((c) => c.label === 'Danzarín sombrío');
     expect(shadowdancer).toBeDefined();
     // Shadowdancer is a prestige class — at L1 it is blocked by the prestige
-    // gate (`reachableAtLevelN` returns reachable=false with the
-    // "Disponible a partir del nivel 2" blocker). The selector's own
-    // `status` field may report 'legal' for prestige options (since
-    // `evaluateMulticlassLegality` is not what's gating them — the prestige
-    // gate is), but the DOM aria-disabled assertion above is the contract
-    // that matters for the user-visible blocked state.
+    // gate (reachableAtLevelN returns reachable=false with the
+    // "Disponible a partir del nivel 2" blocker). Selector's own `status`
+    // may report 'legal' for prestige options; the DOM aria-disabled
+    // assertion above is the contract that matters for user-visible state.
     expect(['blocked', 'legal']).toContain(shadowdancer?.status);
   });
 });

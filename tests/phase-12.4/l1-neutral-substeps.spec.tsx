@@ -188,23 +188,10 @@ describe('Phase 12.4-04 — L1 neutral sub-steps (SPEC R6 + X1)', () => {
   // Suite C — UI render: neutral at mount
   // ------------------------------------------------------------------
   describe('UI render — neutral sub-steps on fresh L1 mount', () => {
-    it('C1: L1 rail tile renders blank label (no abbrev span) before class selection', () => {
-      setupL1ExpandedHumano();
-
-      render(createElement(CreationStepper));
-
-      // `.level-rail__abbrev` span is emitted only when the rail entry has
-      // a class label. A blank L1 tile therefore has no abbrev span; in
-      // either shape (no span OR empty-text span) `textContent ?? ''` ===
-      // '' resolves the assertion consistently.
-      const l1AbbrevSpans = document.querySelectorAll(
-        '.level-rail__button .level-rail__abbrev',
-      );
-      // The first rail entry corresponds to L1 (rail renders L1..L16 in order).
-      const l1Abbrev = l1AbbrevSpans[0] ?? null;
-      const label = l1Abbrev?.textContent ?? '';
-      expect(label).toBe('');
-    });
+    // Phase 12.6-05: C1 removed. LevelRail deleted; CreationStepper no
+    // longer mounts a rail. Equivalent class-label assertion for the L1 row
+    // lives in tests/phase-12.6/level-progression-scan.spec.tsx Suite C3a
+    // (asserts [data-pill="class"] on [data-level-row][data-level="1"]).
 
     it('C2: Clase sub-step button does NOT carry `is-complete` before any dispatch', () => {
       setupL1ExpandedHumano();
@@ -260,21 +247,10 @@ describe('Phase 12.4-04 — L1 neutral sub-steps (SPEC R6 + X1)', () => {
       expect(dotesButton?.classList.contains('is-complete')).toBe(false);
     });
 
-    it('D2: after class selection, L1 rail tile renders the class abbrev (non-empty)', () => {
-      setupL1ExpandedHumano();
-
-      const { rerender } = render(createElement(CreationStepper));
-
-      useLevelProgressionStore
-        .getState()
-        .setLevelClassId(1 as ProgressionLevel, 'class:fighter' as CanonicalId);
-      rerender(createElement(CreationStepper));
-
-      const l1Abbrev = document.querySelector(
-        '.level-rail__button .level-rail__abbrev',
-      );
-      expect(l1Abbrev).not.toBeNull();
-      expect(l1Abbrev?.textContent ?? '').not.toBe('');
-    });
+    // Phase 12.6-05: D2 removed. LevelRail deleted; CreationStepper no
+    // longer mounts a rail. Equivalent class-label transition assertion
+    // (before/after setLevelClassId) is covered by
+    // tests/phase-12.6/level-progression-scan.spec.tsx Suite C3a (pre/post
+    // class-pick on [data-pill="class"]).
   });
 });
