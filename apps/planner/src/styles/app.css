@@ -87,15 +87,13 @@ a {
 }
 
 /* ── Attributes editor ── */
-/* UAT-2026-04-20 — lift the per-row grid to the container so all 6 rows
- * share column tracks. Without this, each row was its own grid and label
- * column auto-sized per row (e.g. Fuerza 42px vs Constitucion 81px),
- * making rows visually misaligned. `display: contents` lets row children
- * flow directly into the container grid. */
+/* UAT-2026-04-20 — container grid shares column tracks across rows so
+ * labels and −/+ cells line up uniformly. Racial delta + total render
+ * INLINE inside the value span between the − and + buttons. */
 .attributes-editor {
   display: grid;
   gap: var(--space-xs) var(--space-md);
-  grid-template-columns: 1fr auto auto auto;
+  grid-template-columns: 1fr auto;
   padding: var(--space-md);
 }
 .attributes-editor__header {
@@ -110,27 +108,18 @@ a {
   align-items: center;
   display: contents;
 }
-/* UAT-2026-04-20 A2 — racial ability adjustment + total. */
+/* UAT-2026-04-20 A2 — racial ability adjustment rendered as a tiny
+ * superscript next to the totalized attribute value between − and +. */
 .attributes-editor__racial {
-  color: var(--color-text-muted);
   font-family: var(--font-display);
-  font-size: 14px;
+  font-size: 12px;
   font-variant-numeric: lining-nums tabular-nums;
-  min-width: 28px;
-  text-align: center;
+  font-weight: 500;
+  margin-left: 4px;
+  vertical-align: super;
 }
 .attributes-editor__racial--positive { color: var(--color-gold); }
 .attributes-editor__racial--negative { color: var(--color-destructive); }
-.attributes-editor__racial--none { opacity: 0.3; }
-.attributes-editor__total {
-  color: var(--color-text);
-  font-family: var(--font-display);
-  font-size: 20px;
-  font-variant-numeric: lining-nums tabular-nums;
-  font-weight: 600;
-  min-width: 32px;
-  text-align: center;
-}
 .attributes-editor__label { color: var(--color-text); font-size: 14px; }
 .attributes-editor__value {
   color: var(--color-text);

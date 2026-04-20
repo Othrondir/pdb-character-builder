@@ -90,7 +90,24 @@ export function AttributesBoard() {
                 >
                   -
                 </NwnButton>
-                <span className="attributes-editor__value">{baseValue}</span>
+                <span
+                  aria-label={`Total de ${ATTRIBUTE_LABELS[key]}`}
+                  className="attributes-editor__value"
+                >
+                  {totalValue}
+                  {racialLabel ? (
+                    <span
+                      aria-label={`Bonificador racial de ${ATTRIBUTE_LABELS[key]}`}
+                      className={`attributes-editor__racial${
+                        racialDelta > 0
+                          ? ' attributes-editor__racial--positive'
+                          : ' attributes-editor__racial--negative'
+                      }`}
+                    >
+                      {racialLabel}
+                    </span>
+                  ) : null}
+                </span>
                 <NwnButton
                   aria-label={`Aumentar ${ATTRIBUTE_LABELS[key]}`}
                   disabled={
@@ -107,26 +124,6 @@ export function AttributesBoard() {
                   +
                 </NwnButton>
               </div>
-              {racialLabel ? (
-                <span
-                  aria-label={`Bonificador racial de ${ATTRIBUTE_LABELS[key]}`}
-                  className={`attributes-editor__racial${
-                    racialDelta > 0
-                      ? ' attributes-editor__racial--positive'
-                      : ' attributes-editor__racial--negative'
-                  }`}
-                >
-                  {racialLabel}
-                </span>
-              ) : (
-                <span className="attributes-editor__racial attributes-editor__racial--none">·</span>
-              )}
-              <span
-                aria-label={`Total de ${ATTRIBUTE_LABELS[key]}`}
-                className="attributes-editor__total"
-              >
-                {totalValue}
-              </span>
             </div>
           );
         })}
