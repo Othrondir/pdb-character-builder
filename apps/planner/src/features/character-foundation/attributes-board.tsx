@@ -106,9 +106,11 @@ export function AttributesBoard() {
             </p>
           </>
         ) : null}
-        <div className="attributes-editor__header">
-          <span>{shellCopyEs.foundation.remainingPoints}: {attributeBudget.remainingPoints}</span>
-        </div>
+        {!isBlockedForMissingCurve ? (
+          <div className="attributes-editor__header">
+            <span>{shellCopyEs.foundation.remainingPoints}: {attributeBudget.remainingPoints}</span>
+          </div>
+        ) : null}
         {ATTRIBUTE_KEYS.map((key) => {
           const baseValue = foundationState.baseAttributes[key];
           // UAT-2026-04-20 A2 — fold racial ability adjustments into the
