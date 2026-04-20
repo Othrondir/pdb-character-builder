@@ -119,11 +119,12 @@ export function AttributesBoard() {
           // 12.2-02) and stays null until the user picks a race.
           const racialDelta = foundationState.racialModifiers?.[key] ?? 0;
           const totalValue = baseValue + racialDelta;
-          // UAT-2026-04-20 A2.1 — always show the racial bonus, even when
-          // it is zero (`+0`). Keeps column alignment uniform and makes the
-          // "no modifier" state explicit instead of ambiguous blank space.
-          const racialLabel =
-            racialDelta >= 0 ? `+${racialDelta}` : `${racialDelta}`;
+          // UAT-2026-04-20 — show D&D ability modifier alongside the
+          // score (floor((score - 10) / 2)). Column stays aligned because
+          // the label is always present (e.g. `+0`, `-1`, `+2`).
+          const abilityModifier = Math.floor((totalValue - 10) / 2);
+          const modifierLabel =
+            abilityModifier >= 0 ? `+${abilityModifier}` : `${abilityModifier}`;
           return (
             <div className="attributes-editor__row" key={key}>
               <span className="attributes-editor__label">
@@ -144,16 +145,16 @@ export function AttributesBoard() {
                 >
                   {totalValue}
                   <span
-                    aria-label={`Bonificador racial de ${ATTRIBUTE_LABELS[key]}`}
+                    aria-label={`Modificador de ${ATTRIBUTE_LABELS[key]}`}
                     className={`attributes-editor__racial${
-                      racialDelta > 0
+                      abilityModifier > 0
                         ? ' attributes-editor__racial--positive'
-                        : racialDelta < 0
+                        : abilityModifier < 0
                           ? ' attributes-editor__racial--negative'
                           : ' attributes-editor__racial--zero'
                     }`}
                   >
-                    {racialLabel}
+                    {modifierLabel}
                   </span>
                 </span>
                 <NwnButton
