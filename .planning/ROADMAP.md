@@ -394,10 +394,31 @@ Plans:
 - [x] 12.4-09-PLAN.md — R2 LevelEditorActionBar sticky footer + atomic dispatch + E2E
 **UI hint**: yes
 
+### Phase 12.6: UAT-2026-04-20 Residuals (INSERTED)
+**Goal**: Close the two UAT-2026-04-20 findings that the hot-fix batch (commits `e8181a5..9513fe6`) could not resolve without formal scoping: **A1** — point-buy cost per race (source data blocked — needs extractor enrichment of compiled race catalog or a Puerta snapshot override file; current `packages/rules-engine/src/foundation/ability-budget.ts` uses a uniform curve); **P5** — level table / progression usability redesign (open-ended; compact per-level row with inline class + feats + skills; active-level edit-in-place vs modal; scan pattern for 20 levels on a single screen — L16→L20 landed in P6).
+**Depends on**: Phase 12.4 (Construcción correctness) — P5 redesign builds on the existing LevelRail + LevelSubSteps scaffolding + the 12.5 hot-fix batch (sequential gating, caja layout, race modifiers).
+**Requirements**: ATTR-01 (per-race point-buy cost surfacing), PROG-04 (level table usability redesign).
+**Gap Closure**: Closes A1 + P5 documented in `.planning/UAT-FINDINGS-2026-04-20.md`. P1 + G1 + G2 + A2 + P2 + P3 + P4 + P6 already closed via hot-fix commits on master.
+**Success Criteria** (what must be TRUE):
+  1. `packages/rules-engine/src/foundation/ability-budget.ts` sources the point-buy cost curve per race — no uniform fallback in the final render path. Every race in the compiled catalog ships with a verified curve (canonical Puerta data — either extractor-emitted `pointBuyCurve` field or a hand-authored `puerta.point-buy.json` override file vetted against server documentation).
+  2. AttributesBoard `Puntos restantes` budget recomputes when the user switches race; identical base attributes with different races produce different remaining-point totals.
+  3. Level progression route presents all 20 levels in a single scan-friendly surface (exact layout resolved in `/gsd-discuss-phase 12.6` — candidates: compact row-per-level with inline class + feats + skills pills; collapsible per-level cards with active expansion; hybrid). Downstream levels surface class + slot commitments without requiring click-navigation to each rail button.
+  4. Regression fixture tests assert canonical per-race point-buy deltas (Elfo DEX+2/CON−2 at score 14 costs differently than Humano; exact numbers pending Puerta source).
+**Plans**: 6 plans
+
+Plans:
+- [ ] 12.6-01-PLAN.md — Wave 0 infra (vitest glob + 4 test stubs + empty puerta-point-buy.json + provenance skeleton + es.ts copy keys + railHeading fossil scrub)
+- [ ] 12.6-02-PLAN.md — ATTR-01 A1a: canonicalRaceIdSchema + point-buy-snapshot.ts loader + ability-budget null branch + selectAbilityBudgetRulesForRace + AttributesBoard fail-closed callout + foundation-fixture excise from runtime
+- [ ] 12.6-03-PLAN.md — PROG-04 P5 scan surface: selectLevelLegality + level-progression-row.tsx compact row (4 pills) + build-progression-board.tsx 20-row <ol> + scoped CSS namespace + Scan spec Suites A+B
+- [ ] 12.6-04-PLAN.md — PROG-04 P5 expanded-slot host swap: migrate level-sheet.tsx contents verbatim into expanded row + scan spec Suite C (expansion + legality transitions + G1 locked)
+- [ ] 12.6-05-PLAN.md — PROG-04 P5 deletion + cleanup: delete level-rail.tsx + level-sheet.tsx + scrub creation-stepper.tsx consumer + strip dead .level-rail__* CSS + migrate 4 legacy test specs to [data-level-row] + Suite D (12.4-09 advance selector preserved)
+- [ ] 12.6-06-PLAN.md — ATTR-01 A1b (DATA BLOCKER — autonomous:false): populate puerta-point-buy.json with user-delivered per-race curves + provenance rows + flip coverage + per-race delta spec assertions to green
+**UI hint**: yes
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 12.1 -> 12.2 -> 12.3 -> 12.4
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 12.1 -> 12.2 -> 12.3 -> 12.4 -> 12.6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
