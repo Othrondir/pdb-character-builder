@@ -38,16 +38,28 @@
  * `level-editor-action-bar.spec.tsx` unit RTL. This E2E locks the structural
  * transition path: L1 visible → advance clicked → L16 null render.
  *
- * Root harness: <BuildProgressionBoard /> — renders the 20-row scan list;
- * the active (expanded) row hosts <ClassPicker /> + <LevelEditorActionBar />.
- * Phase 12.6-05 migrated this harness from the deleted <LevelSheet /> wrapper.
+ * Root harness: <BuildProgressionBoard /> (20-row scan list with the active
+ * row's ClassPicker in its expanded slot) AND <CreationStepper /> (hosts
+ * the hoisted <LevelEditorActionBar /> as of Phase 12.7-01). The two
+ * components subscribe to the same zustand stores, so rendering them as
+ * siblings reproduces the real shell layout where user interactions in
+ * either subtree mutate shared state and re-render both.
+ *
+ * Phase 12.6-05 migrated this harness from the deleted <LevelSheet />
+ * wrapper. Phase 12.7-01 hoisted <LevelEditorActionBar /> out of
+ * <LevelProgressionRow /> into <CreationStepper /> (F7 BLOCKER fix — the
+ * bar must stay visible across Habilidades / Dotes sub-steps, not just
+ * Clase). Because both components live under the same planner shell, this
+ * test renders both to exercise the end-to-end class-pick → advance-click
+ * path that the user drives in production.
  */
 
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { cleanup, fireEvent, render } from '@testing-library/react';
-import { createElement } from 'react';
+import { createElement, Fragment } from 'react';
 
 import { BuildProgressionBoard } from '@planner/features/level-progression/build-progression-board';
+import { LevelEditorActionBar } from '@planner/features/level-progression/level-editor-action-bar';
 import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
 import { useFeatStore } from '@planner/features/feats/store';
 import { useLevelProgressionStore } from '@planner/features/level-progression/store';
@@ -55,6 +67,32 @@ import { useSkillStore } from '@planner/features/skills/store';
 import { usePlannerShellStore } from '@planner/state/planner-shell';
 import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
 import type { ProgressionLevel } from '@planner/features/level-progression/progression-fixture';
+
+/**
+ * Narrow shell-sibling harness (Phase 12.7-01) — <BuildProgressionBoard />
+ * (20-row scan with the active row's ClassPicker) sibling-mounted with
+ * the hoisted <LevelEditorActionBar />. Production composes them under
+ * <PlannerShell> via <CreationStepper>; we render the bar directly here
+ * so the harness stays lean (rendering the full CreationStepper pulls in
+ * heavy origin-step subscriptions that the L1 → L16 advance flow does
+ * not exercise, and those extra subscriptions blow the Vitest worker
+ * heap over the many rerenders this spec performs).
+ *
+ * Gate + key mirror the production mount in creation-stepper.tsx:
+ * `expandedLevel !== null` + `key={expandedLevel}` (stable-key invariant
+ * D-02 — sub-step transitions within a single level do NOT remount).
+ */
+function ShellHarness() {
+  const expandedLevel = usePlannerShellStore((s) => s.expandedLevel);
+  return createElement(
+    Fragment,
+    null,
+    createElement(BuildProgressionBoard),
+    expandedLevel !== null
+      ? createElement(LevelEditorActionBar, { key: expandedLevel })
+      : null,
+  );
+}
 
 // --------------------------------------------------------------------------
 // Suite
@@ -87,7 +125,7 @@ describe('Phase 12.4-09 — E2E (RTL fallback): Elfo+Guerrero advance bar L1 →
       .setAlignment('alignment:true-neutral' as CanonicalId);
 
     // ----- L1 entry: render the active level sheet -----
-    const { container, rerender } = render(createElement(BuildProgressionBoard));
+    const { container, rerender } = render(createElement(ShellHarness));
 
     // Assertion #1 — action bar visible at L1 entry, per SPEC R2 / D-06.
     const actionBarL1 = container.querySelector(
@@ -124,7 +162,7 @@ describe('Phase 12.4-09 — E2E (RTL fallback): Elfo+Guerrero advance bar L1 →
 
     // Re-render so the selector picks up the new feat + skill state and the
     // advance button transitions to enabled.
-    rerender(createElement(BuildProgressionBoard));
+    rerender(createElement(ShellHarness));
 
     // Interaction #2 — REAL click on the now-enabled L1 advance button.
     // This exercises the atomic dispatch (setActiveLevelSubStep + setActiveLevel +
@@ -143,7 +181,7 @@ describe('Phase 12.4-09 — E2E (RTL fallback): Elfo+Guerrero advance bar L1 →
     expect(usePlannerShellStore.getState().activeLevelSubStep).toBe('class');
 
     // Interaction #3 — re-render then select Guerrero again at L2 via the picker.
-    rerender(createElement(BuildProgressionBoard));
+    rerender(createElement(ShellHarness));
     const fighterRowL2 = document.querySelector(
       '[data-class-id="class:fighter"]',
     );
@@ -190,7 +228,7 @@ describe('Phase 12.4-09 — E2E (RTL fallback): Elfo+Guerrero advance bar L1 →
         1,
       );
 
-    rerender(createElement(BuildProgressionBoard));
+    rerender(createElement(ShellHarness));
     const advanceToL16 = document.querySelector(
       '[data-testid="advance-to-level-16"]',
     );
@@ -204,7 +242,7 @@ describe('Phase 12.4-09 — E2E (RTL fallback): Elfo+Guerrero advance bar L1 →
     // 1..16 → 1..20). The advance bar must still render at L16. Smoke-
     // assert presence here; the L20 terminal null-render contract is
     // covered by tests/phase-12.4/level-editor-action-bar.spec.tsx Suite C.
-    rerender(createElement(BuildProgressionBoard));
+    rerender(createElement(ShellHarness));
 
     const actionBarL16 = document.querySelector(
       '[data-testid="level-editor-action-bar"]',

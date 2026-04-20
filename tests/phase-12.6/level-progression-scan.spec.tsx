@@ -215,7 +215,7 @@ describe('Phase 12.6 P5 — 20-row scan surface (Plan 03 Suites A+B)', () => {
   // (Plan 04 — PROG-04 R6).
   // ----------------------------------------------------------------
 
-  it('C1: clicking [data-level-row][data-level="2"] mounts ClassPicker + LevelEditorActionBar inside [data-testid="level-row-2-expanded"]', () => {
+  it('C1: clicking [data-level-row][data-level="2"] mounts ClassPicker inside [data-testid="level-row-2-expanded"]; action bar is hoisted out per Phase 12.7-01', () => {
     setupElfoGuerreroL1Complete();
     render(createElement(BuildProgressionBoard));
 
@@ -233,9 +233,14 @@ describe('Phase 12.6 P5 — 20-row scan surface (Plan 03 Suites A+B)', () => {
     );
     expect(expanded).not.toBeNull();
     expect(expanded?.querySelector('.class-picker__list')).not.toBeNull();
+    // Phase 12.7-01 (F7 R1) — LevelEditorActionBar is hoisted out of the
+    // expanded slot into creation-stepper.tsx. The bar MUST NOT appear
+    // inside the row anymore (preserves D-03 single-source-of-truth / no
+    // double-render invariant). The hoisted mount is covered by
+    // tests/phase-12.7/level-editor-action-bar-stepper-mount.spec.tsx.
     expect(
       expanded?.querySelector('[data-testid="level-editor-action-bar"]'),
-    ).not.toBeNull();
+    ).toBeNull();
   });
 
   it('C2: non-active rows do NOT contain .class-picker__list (only the expanded row mounts heavy children)', () => {
@@ -389,7 +394,7 @@ describe('Phase 12.6 P5 — 20-row scan surface (Plan 03 Suites A+B)', () => {
   // Suite D — level-rail deletion invariant (Plan 05 owns — it.todo).
   // ----------------------------------------------------------------
 
-  it('D1: [data-testid="advance-to-level-{N+1}"] selector preserved on expanded-row advance button (12.4-09 invariant, Plan 05)', () => {
+  it('D1: [data-testid="advance-to-level-{N+1}"] selector preserved (12.4-09 invariant); Phase 12.7-01 hoisted it out of the expanded row', () => {
     setupL1ElfoGuerreroFullyLegal();
     render(createElement(BuildProgressionBoard));
 
@@ -398,18 +403,20 @@ describe('Phase 12.6 P5 — 20-row scan surface (Plan 03 Suites A+B)', () => {
     );
     expect(l1Expanded).not.toBeNull();
 
-    // 12.4-09 invariant: the advance button's test id is
-    // `advance-to-level-{activeLevel + 1}`. With L1 fully legal, the advance
-    // button points to L2 and is enabled (Plan 05 deleted LevelRail but the
-    // advance button lives inside the expanded slot, not on the deleted rail).
-    const advanceButton = l1Expanded?.querySelector(
-      '[data-testid="advance-to-level-2"]',
-    ) as HTMLButtonElement | null;
-    expect(advanceButton).not.toBeNull();
-
-    // Action bar root is also mounted inside the expanded slot.
+    // 12.4-09 testid contract: the advance button's test id is
+    // `advance-to-level-{activeLevel + 1}`. That contract is preserved
+    // verbatim under Phase 12.7-01 (D-04 invariant).
+    //
+    // What CHANGED in 12.7-01: the button no longer lives inside the
+    // expanded row — it's hoisted to creation-stepper.tsx so it persists
+    // across Habilidades / Dotes sub-steps (F7 BLOCKER fix). The expanded
+    // row now contains ONLY the ClassPicker and its siblings (no action
+    // bar). The hoisted mount is covered by the Phase 12.7-01 spec.
+    expect(
+      l1Expanded?.querySelector('[data-testid="advance-to-level-2"]'),
+    ).toBeNull();
     expect(
       l1Expanded?.querySelector('[data-testid="level-editor-action-bar"]'),
-    ).not.toBeNull();
+    ).toBeNull();
   });
 });

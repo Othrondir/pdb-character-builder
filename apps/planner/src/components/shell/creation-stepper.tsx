@@ -12,6 +12,7 @@ import { NwnButton } from '@planner/components/ui/nwn-button';
 import { StepperStep } from './stepper-step';
 import type { StepperStepStatus } from './stepper-step';
 import { LevelSubSteps } from './level-sub-steps';
+import { LevelEditorActionBar } from '@planner/features/level-progression/level-editor-action-bar';
 import type { OriginStep } from '@planner/lib/sections';
 
 /**
@@ -132,6 +133,32 @@ export function CreationStepper() {
         </h3>
         {expandedLevel && <LevelSubSteps level={expandedLevel} />}
       </section>
+
+      {/*
+        Phase 12.7-01 (F7 BLOCKER R1 / D-01) — hoisted mount.
+        Previously rendered inside <LevelProgressionRow>'s expanded slot
+        (Plan 12.6-04). Because BuildProgressionBoard only mounts under the
+        'class' sub-step of center-content.tsx, the old mount disappeared
+        whenever the user navigated to Habilidades or Dotes — the user lost
+        the advance affordance and could not reach L2.
+
+        D-02 stable key `expandedLevel` (NOT `activeLevelSubStep`): React
+        preserves this subtree across Clase → Habilidades → Dotes
+        transitions within the same level. A key of activeLevelSubStep
+        would remount on every sub-step change and re-fire the initial-
+        render selector snapshot, flashing the disabled copy.
+
+        D-03 complement: the old mount at level-progression-row.tsx line 243
+        is DELETED in the same commit — a single source of truth for the
+        bar prevents double-render + colliding testids.
+
+        D-04 testid contract: the component itself is unchanged, so
+        [data-testid="advance-to-level-{N+1}"] survives verbatim for the
+        Phase 12.4-09 E2E spec.
+      */}
+      {expandedLevel !== null ? (
+        <LevelEditorActionBar key={expandedLevel} />
+      ) : null}
 
       <div className="creation-stepper__bottom">
         <NwnButton

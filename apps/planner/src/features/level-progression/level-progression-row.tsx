@@ -6,11 +6,11 @@
  * show pills for class / feats / skills / legality plus a level number.
  * The active row's expanded slot hosts the full level editor — migrated
  * verbatim from level-sheet.tsx (Plan 04): ClassPicker + requirement rows
- * + gains + AbilityIncreaseControl + LevelEditorActionBar.
+ * + gains + AbilityIncreaseControl.
  *
  * Performance contract (threat T-12.6-04-01..-04): non-active rows render
- * header-only — they never mount ClassPicker or LevelEditorActionBar.
- * That is why the expanded `<div>` is conditional on `isActive`.
+ * header-only — they never mount ClassPicker. That is why the expanded
+ * `<div>` is conditional on `isActive`.
  *
  * Dispatch contract (12.4-09 atomic): on click we set sub-step first so
  * `setExpandedLevel` does not stomp the explicit 'class' choice via its
@@ -23,6 +23,11 @@
  * 'class'` guard inside this row — `center-content.tsx` already gates
  * mounting of BuildProgressionBoard to the `class` sub-step; a redundant
  * guard here would break Habilidades/Dotes chip navigation.
+ *
+ * Phase 12.7-01 (F7 R1) note: the action bar used to render as the last
+ * child of the expanded slot here. It is now hoisted to
+ * creation-stepper.tsx (keyed on expandedLevel, stable across sub-steps)
+ * so the advance affordance stays visible on Habilidades / Dotes too.
  */
 
 import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
@@ -33,7 +38,6 @@ import { shellCopyEs } from '@planner/lib/copy/es';
 
 import { AbilityIncreaseControl } from './ability-increase-control';
 import { ClassPicker } from './class-picker';
-import { LevelEditorActionBar } from './level-editor-action-bar';
 import {
   selectActiveLevelSheetView,
   selectLevelCompletionState,
@@ -239,8 +243,6 @@ export function LevelProgressionRow({ level }: Props) {
               />
             </section>
           ) : null}
-
-          <LevelEditorActionBar />
         </div>
       )}
     </li>
