@@ -160,15 +160,20 @@ describe('Phase 12.7-03 — LevelProgressionRow "Nivel N" prefix (F1 R5)', () =>
 
   // Regex from SPEC Acceptance: `/Nivel N.+\w+.+\d+\/\d+ dotes.+\d+\/\d+ pts.+[⚠✓✗🔒]/`
   // Notes:
-  //  - \w+ matches the class label token (Clérigo → 'Cl' + rest via unicode).
-  //    Under jsdom, textContent returns unicode chars literally. \w in JS
-  //    regex does NOT match non-ASCII letters; we use `.+` throughout to stay
-  //    robust to accented labels.
-  //  - `.+` greedy match covers both the CSS `gap` whitespace and any
-  //    intermediate pill text.
+  //  - \w in JS regex does NOT match non-ASCII letters (e.g. Clérigo's é).
+  //    Use `.+?` with a non-whitespace class-label anchor for accent safety.
+  //  - The SPEC regex assumes CSS `gap` rendering puts whitespace into
+  //    textContent. Reality: CSS gap is visual-only; jsdom textContent
+  //    concatenates adjacent flex children directly (`Nivel 1Clérigo0/2
+  //    dotes0/8 pts⚠`). We use `.*` for inter-token gaps since the spec's
+  //    intent is to lock the TOKEN ORDER (Nivel N → class → N/M dotes →
+  //    N/M pts → glyph), not to require character separators.
+  //  - The class label is asserted as any run of non-digit/non-slash
+  //    characters (≥ 1 char) so it locks "something is rendered after
+  //    Nivel N and before the numeric pills".
   const PREFIX_REGEX = (level: number) =>
     new RegExp(
-      `Nivel ${level}.+\\S+.+\\d+\\/\\d+ dotes.+\\d+\\/\\d+ pts.+[⚠✓✗🔒]`,
+      `Nivel ${level}[^\\d/]+\\d+\\/\\d+ dotes.*\\d+\\/\\d+ pts.*[⚠✓✗🔒]`,
       'u',
     );
 

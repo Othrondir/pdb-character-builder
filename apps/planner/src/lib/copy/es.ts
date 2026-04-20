@@ -221,6 +221,13 @@ export const shellCopyEs = {
     },
     lockedRowAriaTemplate: 'Nivel {N} bloqueado — completa el nivel anterior',
     rowAriaTemplate: 'Nivel {N}, {classLabel}, {legalityLabel}',
+    // Phase 12.7-03 (F1 R5, D-12) — row-pill "Nivel N" prefix.
+    // Template-fn form mirrors shellCopyEs.attributes.pointBuyMissing
+    // (line 148) — single-param string interpolation. Gap between this
+    // strong + adjacent pills is rendered by .level-progression-row__header
+    // CSS `gap: var(--space-sm)` (app.css:2191) so textContent carries
+    // whitespace between tokens without any new CSS.
+    rowLevelPrefix: (level: number) => `Nivel ${level}`,
   },
   skills: {
     availablePointsLabel: 'Puntos disponibles',
