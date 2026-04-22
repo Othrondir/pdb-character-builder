@@ -12,9 +12,14 @@
  *     (R1 / D-02). Emits `aria-disabled="true"` + inline italic reason copy
  *     from `result.blockers[0]?.label`.
  *
- * Extractor prereq enrichment for prestige is deferred to Phase 13.x
- * (CONTEXT.md <deferred>). Until then the picker passes `enriched: false`
- * so the gate fails-closed to `Requisitos en revisión` at L2+.
+ * Prestige prereq enrichment is wired via planner-local overrides in
+ * `prestige-prereq-data.ts` (`getPrestigeDecodedPrereqs`) — keeps the
+ * rules-engine gate framework-agnostic per CLAUDE.md "Prescriptive Shape".
+ * Runtime build state (bab / featIds / classLevels / skillRanks /
+ * abilityScores / raceId / highestArcaneSpellLevel / highestSpellLevel) is
+ * derived once per render via `buildPrestigeGateBuildState` and forwarded
+ * to every row. Prestige classes without an override still fail-closed to
+ * `Requisitos en revisión` (branch 3 of `reachableAtLevelN`).
  */
 
 import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
@@ -26,10 +31,17 @@ import {
 
 import { shellCopyEs } from '@planner/lib/copy/es';
 import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
-import { usePlannerShellStore } from '@planner/state/planner-shell';
+import { useFeatStore } from '@planner/features/feats/store';
+import { useSkillStore } from '@planner/features/skills/store';
 
 import { selectClassOptionsForLevel, type ClassOptionView } from './selectors';
 import { getPhase04ClassRecord } from './class-fixture';
+import { openPlannerLevel } from './navigation';
+import {
+  buildPrestigeGateBuildState,
+  type PrestigeGateBuildState,
+} from './prestige-gate-build';
+import { getPrestigeDecodedPrereqs } from './prestige-prereq-data';
 import type { ProgressionLevel } from './progression-fixture';
 import { useLevelProgressionStore } from './store';
 
@@ -43,30 +55,43 @@ const STATUS_LABELS = {
 // Boundary adapter — translate the planner's class-fixture record into the
 // minimal `ClassPrereqInput` the rules-engine helper expects. Keeps the gate
 // framework-agnostic (no @data-extractor, no CompiledClass imports).
+// decodedPrereqs attached for prestige rows when planner-local overrides exist
+// (see prestige-prereq-data.ts).
 function toClassPrereqInput(option: ClassOptionView): ClassPrereqInput {
   const record = getPhase04ClassRecord(option.id);
+  const isBase = (record?.kind ?? option.kind) === 'base';
+  const decodedPrereqs = isBase
+    ? undefined
+    : getPrestigeDecodedPrereqs(option.id);
   return {
     id: option.id as string,
-    isBase: (record?.kind ?? option.kind) === 'base',
-    // decodedPrereqs: extractor enrichment deferred to Phase 13.x. While
-    // absent, callers pass `enriched: false` below so the gate fails-closed.
+    isBase,
+    ...(decodedPrereqs ? { decodedPrereqs } : {}),
   };
 }
 
-export function ClassPicker() {
+interface ClassPickerProps {
+  level?: ProgressionLevel;
+  onSelectComplete?: () => void;
+}
+
+export function ClassPicker({ level, onSelectComplete }: ClassPickerProps) {
   const progressionState = useLevelProgressionStore();
   const foundationState = useCharacterFoundationStore();
+  const featState = useFeatStore();
+  const skillState = useSkillStore();
   const setLevelClassId = useLevelProgressionStore(
     (state) => state.setLevelClassId,
   );
-  // UAT-2026-04-20 P2 — after the user commits a class for the active
-  // level, auto-advance the sub-step pointer to 'skills' so the planner
-  // mirrors the NWN2DB flow. No-op for re-clicks on the same class.
-  const setActiveLevelSubStep = usePlannerShellStore(
-    (state) => state.setActiveLevelSubStep,
-  );
 
-  const activeLevel = progressionState.activeLevel as ProgressionLevel;
+  const activeLevel = (level ?? progressionState.activeLevel) as ProgressionLevel;
+  const gateBuildState = buildPrestigeGateBuildState(
+    progressionState,
+    foundationState,
+    featState,
+    skillState,
+    activeLevel,
+  );
   const options = selectClassOptionsForLevel(
     progressionState,
     foundationState,
@@ -88,10 +113,12 @@ export function ClassPicker() {
           {baseOptions.map((option) => (
             <ClassPickerRow
               key={option.id}
+              gateBuildState={gateBuildState}
               level={activeLevel}
               onSelect={(classId) => {
+                onSelectComplete?.();
                 setLevelClassId(activeLevel, classId);
-                setActiveLevelSubStep('skills');
+                openPlannerLevel(activeLevel, 'skills');
               }}
               option={option}
             />
@@ -106,10 +133,12 @@ export function ClassPicker() {
           {prestigeOptions.map((option) => (
             <ClassPickerRow
               key={option.id}
+              gateBuildState={gateBuildState}
               level={activeLevel}
               onSelect={(classId) => {
+                onSelectComplete?.();
                 setLevelClassId(activeLevel, classId);
-                setActiveLevelSubStep('skills');
+                openPlannerLevel(activeLevel, 'skills');
               }}
               option={option}
             />
@@ -121,28 +150,36 @@ export function ClassPicker() {
 }
 
 interface ClassPickerRowProps {
+  gateBuildState: PrestigeGateBuildState;
   level: ProgressionLevel;
   onSelect: (classId: CanonicalId) => void;
   option: ClassOptionView;
 }
 
-function ClassPickerRow({ level, onSelect, option }: ClassPickerRowProps) {
+function ClassPickerRow({
+  gateBuildState,
+  level,
+  onSelect,
+  option,
+}: ClassPickerRowProps) {
   const isPrestige = option.kind === 'prestige';
 
   // Gate 1 — prestige reachability (R1 / D-02). Base classes short-circuit to
-  // { reachable: true }. Enrichment is deferred (Phase 13.x); we always pass
-  // `enriched: false` for prestige so the L2+ branch fails-closed to
-  // 'Requisitos en revisión'. The L1 branch overrides with
-  // 'Disponible a partir del nivel 2' regardless of enrichment.
+  // { reachable: true }. enriched reflects whether planner-local overrides
+  // supplied decodedPrereqs.
+  const classRow = toClassPrereqInput(option);
   const gateResult: PrestigeGateResult = reachableAtLevelN({
-    classRow: toClassPrereqInput(option),
+    classRow,
     level,
-    abilityScores: {},
-    bab: 0,
-    skillRanks: {},
-    featIds: new Set<string>(),
-    classLevels: {},
-    enriched: false,
+    abilityScores: gateBuildState.abilityScores,
+    bab: gateBuildState.bab,
+    raceId: gateBuildState.raceId,
+    skillRanks: gateBuildState.skillRanks,
+    featIds: gateBuildState.featIds,
+    classLevels: gateBuildState.classLevels,
+    highestArcaneSpellLevel: gateBuildState.highestArcaneSpellLevel,
+    highestSpellLevel: gateBuildState.highestSpellLevel,
+    enriched: classRow.decodedPrereqs !== undefined,
   });
 
   // Gate 2 — multiclass legality (CLAS-03 bridge). If the underlying selector
