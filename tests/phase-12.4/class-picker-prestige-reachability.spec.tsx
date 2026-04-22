@@ -163,4 +163,87 @@ describe('Quick-260422-g7s — ClassPicker prestige reachability cabled to build
 
     expect(unoverriddenRow.textContent ?? '').toMatch(/Requisitos en revisión/);
   });
+
+  // ----------------------------------------------------------------------
+  // Quick-260422-h9k — integration coverage for the 3 new overrides
+  // (class:harper / class:campeondivino / class:weaponmaster). These cases
+  // depend on PRESTIGE_PREREQ_OVERRIDES containing the new entries; they
+  // FAIL in RED (plan Task 1) and PASS in GREEN (plan Task 2).
+  //
+  // Warlock + Swashbuckler are deliberately OUT OF SCOPE (see 260422-h9k-
+  // PLAN.md <objective>). Both stay fail-closed to 'Requisitos en revisión'
+  // until a future cross-package plan introduces BlockerKind 'server-gate'.
+  // ----------------------------------------------------------------------
+
+  it('L9 con Guerrero 8 niveles: fila class:harper muestra blocker específico (no "Requisitos en revisión")', () => {
+    setupL9WithClassProgression('class:fighter' as CanonicalId);
+    render(createElement(ClassPicker));
+
+    const row = document.querySelector('[data-class-id="class:harper"]');
+    expect(row, 'Agente Custodio row must exist in prestige section').not.toBeNull();
+
+    const text = row?.textContent ?? '';
+    expect(text).not.toMatch(/Requisitos en revisión/);
+    // At least one of the expected templated blockers surfaces on the row
+    // (first blocker drives the visible reason, so we accept any of the
+    // 5 unmet requirements rendered by reachableAtLevelN branch 4).
+    expect(text).toMatch(
+      /Requiere 6 rangos de Engañar|Requiere 4 rangos de Buscar|Requiere 6 rangos de Saber \(otros\)|Requiere dote: Alerta|Requiere dote: Voluntad de hierro/,
+    );
+  });
+
+  it('L9 con Guerrero 8 niveles: fila class:campeondivino muestra blocker templateado (no "Requisitos en revisión")', () => {
+    setupL9WithClassProgression('class:fighter' as CanonicalId);
+    render(createElement(ClassPicker));
+
+    const row = document.querySelector('[data-class-id="class:campeondivino"]');
+    expect(row, 'Campeón divino row must exist in prestige section').not.toBeNull();
+
+    const text = row?.textContent ?? '';
+    expect(text).not.toMatch(/Requisitos en revisión/);
+    // Guerrero 8 has BAB 8 ≥ 7 (minBab satisfied). No Weapon Focus feat is
+    // auto-granted at L1-L8 for a vanilla fighter, so feat-or fires first
+    // in blockers[] and its label drives the visible reason. Accept either
+    // the BAB copy (if computation diverges) or the feat-or copy — both are
+    // valid branch-4 templated labels (distinct from branch-3 fail-closed).
+    expect(text).toMatch(
+      /Requiere BAB ≥ 7|Requiere una de estas dotes: /,
+    );
+  });
+
+  it('L9 con Guerrero 4 + Hechicero 4: fila class:weaponmaster muestra blocker específico (no "Requisitos en revisión")', () => {
+    // Custom multiclass setup: Guerrero L1-L4 + Hechicero L5-L8, active L9.
+    useCharacterFoundationStore.getState().setRace('race:human' as CanonicalId);
+    useCharacterFoundationStore
+      .getState()
+      .setAlignment('alignment:true-neutral' as CanonicalId);
+    for (let level = 1; level <= 4; level += 1) {
+      useLevelProgressionStore
+        .getState()
+        .setLevelClassId(level as ProgressionLevel, 'class:fighter' as CanonicalId);
+    }
+    for (let level = 5; level <= 8; level += 1) {
+      useLevelProgressionStore
+        .getState()
+        .setLevelClassId(level as ProgressionLevel, 'class:sorcerer' as CanonicalId);
+    }
+    useLevelProgressionStore.getState().setActiveLevel(9 as ProgressionLevel);
+
+    render(createElement(ClassPicker));
+
+    const row = document.querySelector('[data-class-id="class:weaponmaster"]');
+    expect(row, 'Maestro de armas row must exist in prestige section').not.toBeNull();
+
+    const text = row?.textContent ?? '';
+    expect(text).not.toMatch(/Requisitos en revisión/);
+    // First unmet requirement drives the visible reason. With Guerrero 4 +
+    // Hechicero 4: BAB = 4 + floor(4/2) = 6 ≥ 5 (satisfied), and neither
+    // class auto-grants Intimidar ranks / dodge / mobility / pericia en
+    // combate / whirlwind / weapon focus. Gate pushes blockers in order
+    // (bab skipped) skill-rank → feats → feat-or. Accept any templated
+    // label from that list.
+    expect(text).toMatch(
+      /Requiere 4 rangos de Intimidar|Requiere dote: Esquiva|Requiere dote: Movilidad|Requiere dote: Pericia en combate|Requiere dote: Ataque de torbellino|Requiere una de estas dotes: /,
+    );
+  });
 });
