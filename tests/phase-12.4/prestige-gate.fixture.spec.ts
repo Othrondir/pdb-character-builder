@@ -25,9 +25,12 @@ function baseInput(overrides: Partial<PrestigeGateInput> = {}): PrestigeGateInpu
     level: 5,
     abilityScores: { int: 10, str: 10, dex: 10, con: 10, wis: 10, cha: 10 },
     bab: 0,
+    raceId: null,
     skillRanks: {},
     featIds: new Set<string>(),
     classLevels: {},
+    highestArcaneSpellLevel: 0,
+    highestSpellLevel: 0,
     enriched: false,
     ...overrides,
   };
