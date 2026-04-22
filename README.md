@@ -1,4 +1,4 @@
-# Planificador de Personajes de NWN1 para Puerta de Baldur
+# Planificador de Fichas para Puerta de Baldur (NWN 1 EE) https://puertadebaldur.com/inicio/
 
 Pequeño proyecto hecho en ratos libres con ayuda de Claude, Codex y Caveman.
 
