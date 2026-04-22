@@ -4,8 +4,8 @@ milestone: v1.0
 milestone_name: milestone
 status: executing
 stopped_at: "**Phase 12.7 EXECUTION COMPLETE — 4/4 plans merged to master.** 12.7-01 (F7 BLOCKER) hoisted LevelEditorActionBar to creation-stepper.tsx with stable key={expandedLevel}, deleted old row mount. 12.7-02 (R2 F4) shipped canIncrementSkill pure module + skill-sheet.tsx + button gate. 12.7-03 (R3+R4+R5) shipped useLayoutEffect scroll reset + per-row Clase/Transclase label drop + 'Nivel N' prefix template (zero new CSS — gap exists at app.css:2191). 12.7-04 (R6) verify-only spike GREEN at 1254/1254 assertions. Verifier flagged 1 cross-file regression (phase-05 spec asserted text deleted by R4) — fixed via section-heading scoped assertion. Full Vitest 103 files / 2077 passing / 0 failures. F5 SKILL-CARRYOVER deferred Phase 12.8 (Puerta source-blocked)."
-last_updated: "2026-04-20T22:25:00Z"
-last_activity: 2026-04-20 -- Phase 12.7 execution complete (4/4 plans + cross-fix); ready for human UAT re-sweep + close-out
+last_updated: "2026-04-21T14:52:38.062Z"
+last_activity: 2026-04-21 -- completed quick task 260421-nfv (corregir check visual prematuro de atributos al elegir alineamiento)
 progress:
   total_phases: 22
   completed_phases: 21
@@ -37,7 +37,7 @@ Status: Ready for close-out verification + human UAT re-sweep
 - B5 description paragraph CSS (white-space: pre-wrap, 12.3-06)
 
 499/499 tests green. In-browser UAT confirmed (Enano+Guerrero L1+Pícaro L2): rail 1Guerrero/2Pícaro, header NIVEL 2, PG 20, slot prompts rendered, description paragraph breaks visible. Milestone v1.0 UNBLOCKED.
-Last activity: 2026-04-20 -- Phase 12.7 execution complete (4/4 plans + cross-fix)
+Last activity: 2026-04-22 -- completed quick task 260422-g7s (cablear prestige-gate reachability en class-picker)
 
 Progress: [██████████] 100%
 
@@ -191,6 +191,9 @@ None yet.
 | 260414-gxx | ignorar artefactos locales del workspace | 2026-04-14 | 089881b | closed (Phase 11) | [260414-gxx-ignorar-artefactos-locales-del-workspace](./quick/260414-gxx-ignorar-artefactos-locales-del-workspace/) |
 | 260419-68b | fix atributos board misalignment (grid + glyph + numerals) | 2026-04-19 | 762aa57 | complete ✓ | [260419-68b-fix-atributos-layout](./quick/260419-68b-fix-atributos-layout/) |
 | 260419-47a | pin creation-stepper bottom (Resumen/Utilidades) via grid | 2026-04-19 | 6a5fda8 | complete ✓ | [260419-47a-stepper-bottom-pin](./quick/260419-47a-stepper-bottom-pin/) |
+| 260420-vmy | alinear compatibilidad operativa con codex | 2026-04-20 | workspace | complete (uncommitted) | [260420-vmy-alinear-compatibilidad-operativa-con-cod](./quick/260420-vmy-alinear-compatibilidad-operativa-con-cod/) |
+| 260421-nfv | corregir check visual prematuro de atributos al elegir alineamiento | 2026-04-21 | workspace | complete ✓ | [260421-nfv-corregir-check-visual-prematuro-de-atrib](./quick/260421-nfv-corregir-check-visual-prematuro-de-atrib/) |
+| 260422-g7s | cablear prestige-gate reachability en class-picker | 2026-04-22 | a81d8a3 | complete ✓ | [260422-g7s-cablear-prestige-gate-reachability-en-cl](./quick/260422-g7s-cablear-prestige-gate-reachability-en-cl/) |
 
 ## Session Continuity
 
