@@ -29,7 +29,10 @@ import type { CharacterFoundationStoreState } from '@planner/features/character-
 import { compiledClassCatalog } from '@planner/data/compiled-classes';
 import { compiledFeatCatalog } from '@planner/data/compiled-feats';
 import { compiledRaceCatalog } from '@planner/data/compiled-races';
-import type { FeatStoreState } from '@planner/features/feats/store';
+import {
+  getChosenFeatIds,
+  type FeatStoreState,
+} from '@planner/features/feats/store';
 import type { SkillStoreState } from '@planner/features/skills/store';
 
 import {
@@ -402,11 +405,7 @@ function buildSnapshotFromStores(
       ).length,
     chosenFeatIdsAtLevel: (lvl) => {
       const featRecord = featState.levels.find((r) => r.level === lvl);
-      if (!featRecord) return [];
-      const ids: string[] = [];
-      if (featRecord.classFeatId !== null) ids.push(featRecord.classFeatId);
-      if (featRecord.generalFeatId !== null) ids.push(featRecord.generalFeatId);
-      return ids;
+      return getChosenFeatIds(featRecord);
     },
     spentSkillPointsAtLevel: (lvl) => {
       const skillRecord = skillState.levels.find((r) => r.level === lvl);

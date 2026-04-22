@@ -277,6 +277,7 @@ export const shellCopyEs = {
   feats: {
     classFeatStepTitle: 'Dote de clase',
     classFeatConfirm: 'Confirmar dote de clase',
+    detailPanelHint: 'Selecciona una dote para ver sus requisitos y detalles.',
     emptyStateBody: 'Completa una progresion valida en Construccion para seleccionar dotes por nivel.',
     emptyStateBodyPerLevel: 'Selecciona una clase para este nivel antes de asignar dotes.',
     emptyStateHeading: 'Las dotes siguen bloqueadas',
@@ -307,6 +308,13 @@ export const shellCopyEs = {
     autoGrantedLabel: 'Automatica',
     slotPromptClassAvailable: 'Dote de clase disponible.',
     slotPromptGeneralAvailable: 'Dote general disponible.',
+    slotPromptGeneralAvailablePluralTemplate: '{N} dotes generales disponibles.',
+    generalFeatBonusStepTitleTemplate: 'Dote general {N}',
+    generalSlotSummaryTemplate: '{chosen}/{slots} dotes generales elegidas',
+    slotStatusCurrent: 'Ahora',
+    slotStatusPending: 'Pendiente',
+    slotStatusChosen: 'Elegida',
+    slotStatusEmpty: 'Sin elegir',
     // Phase 12.4-07 — Dotes selectability states + slot counter + collapse
     // (SPEC R5 / CONTEXT D-03 + D-04). Template copy is rendered directly by
     // the feat-board selector; pill / reason labels emitted per row state.
@@ -364,6 +372,11 @@ export const shellCopyEs = {
     blockedStepHint: 'Completa el paso anterior para desbloquear esta opcion.',
     levelEmptyHint: 'Selecciona una clase para empezar este nivel.',
     errorState: 'Seleccion no permitida: revisa los requisitos marcados y corrige el paso anterior.',
+    progressionUnlock: {
+      heading: 'La progresion sigue bloqueada',
+      intro: 'Completa raza, alineamiento y atributos antes de abrir la progresion.',
+      goToStep: 'Ir a {step}',
+    },
     resetOriginLabel: 'Reiniciar origen',
     resetOriginConfirm: 'Se perderan el origen y los atributos iniciales. Continuar?',
     resetLevelLabel: 'Reiniciar nivel',

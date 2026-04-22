@@ -5,7 +5,10 @@ import { determineFeatSlots } from '@rules-engine/feats/feat-eligibility';
 import { compiledClassCatalog } from '@planner/data/compiled-classes';
 import { compiledFeatCatalog } from '@planner/data/compiled-feats';
 import type { CharacterFoundationStoreState } from '@planner/features/character-foundation/store';
-import type { FeatStoreState } from '@planner/features/feats/store';
+import {
+  getGeneralFeatIds,
+  type FeatStoreState,
+} from '@planner/features/feats/store';
 import type { SkillStoreState } from '@planner/features/skills/store';
 
 import type { LevelProgressionStoreState } from './store';
@@ -182,12 +185,6 @@ const ARCANE_SPELLCASTER_IDS = new Set<CanonicalId>([
   'class:sorcerer',
   'class:wizard',
 ]);
-
-function getGeneralFeatIds(
-  record: FeatStoreState['levels'][number] | null | undefined,
-): CanonicalId[] {
-  return record?.generalFeatId ? [record.generalFeatId] : [];
-}
 
 function getSpellLevelAtClassLevel(
   classId: string,

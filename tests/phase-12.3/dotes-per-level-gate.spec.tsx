@@ -134,7 +134,7 @@ describe('Phase 12.3-03 — per-level Dotes gate + slot prompt (UAT B3 + B4)', (
   // Suite B — slotPrompt shape (B4 lock)
   // ------------------------------------------------------------------
   describe('Suite B — slotPrompt shape (B4 lock)', () => {
-    it('L1 Guerrero empty → slotPrompt mentions class and general slots', () => {
+    it('L1 Guerrero empty → slotPrompt mentions class and the pending general slots', () => {
       setupL1Guerrero();
       activateLevel(1 as ProgressionLevel);
 
@@ -142,10 +142,10 @@ describe('Phase 12.3-03 — per-level Dotes gate + slot prompt (UAT B3 + B4)', (
 
       expect(view.activeSheet.slotPrompt).not.toBeNull();
       expect(view.activeSheet.slotPrompt).toMatch(/dote de clase/i);
-      expect(view.activeSheet.slotPrompt).toMatch(/dote general/i);
+      expect(view.activeSheet.slotPrompt).toMatch(/dotes generales disponibles/i);
     });
 
-    it('L1 Guerrero with class-bonus feat picked → slotPrompt drops class portion but keeps general', () => {
+    it('L1 Guerrero with class-bonus feat picked → slotPrompt drops class portion but keeps the pending general slots', () => {
       setupL1Guerrero();
       activateLevel(1 as ProgressionLevel);
 
@@ -161,10 +161,10 @@ describe('Phase 12.3-03 — per-level Dotes gate + slot prompt (UAT B3 + B4)', (
 
       expect(view.activeSheet.slotPrompt).not.toBeNull();
       expect(view.activeSheet.slotPrompt).not.toMatch(/dote de clase disponible/i);
-      expect(view.activeSheet.slotPrompt).toMatch(/dote general disponible/i);
+      expect(view.activeSheet.slotPrompt).toMatch(/dotes generales disponibles/i);
     });
 
-    it('L1 Guerrero with BOTH slots filled → slotPrompt === null', () => {
+    it('L1 Guerrero with class slot + first general slot filled → slotPrompt still shows the remaining bonus general slot', () => {
       setupL1Guerrero();
       activateLevel(1 as ProgressionLevel);
 
@@ -183,7 +183,7 @@ describe('Phase 12.3-03 — per-level Dotes gate + slot prompt (UAT B3 + B4)', (
 
       const view = snapshotBoardView();
 
-      expect(view.activeSheet.slotPrompt).toBeNull();
+      expect(view.activeSheet.slotPrompt).toMatch(/dote general disponible/i);
     });
   });
 
@@ -229,7 +229,7 @@ describe('Phase 12.3-03 — per-level Dotes gate + slot prompt (UAT B3 + B4)', (
       render(createElement(FeatBoard));
 
       expect(screen.getByText(/dote de clase disponible/i)).toBeTruthy();
-      expect(screen.getByText(/dote general disponible/i)).toBeTruthy();
+      expect(screen.getByText(/dotes generales disponibles/i)).toBeTruthy();
     });
 
     it('renders per-level empty message at activeLevel=2 with no class', () => {

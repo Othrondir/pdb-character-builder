@@ -1,7 +1,7 @@
 import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
 import { useLevelProgressionStore } from '@planner/features/level-progression/store';
 import { useSkillStore } from '@planner/features/skills/store';
-import { useFeatStore } from '@planner/features/feats/store';
+import { getGeneralFeatIds, useFeatStore } from '@planner/features/feats/store';
 import { compiledClassCatalog } from '@planner/data/compiled-classes';
 import { compiledRaceCatalog } from '@planner/data/compiled-races';
 import { compiledSkillCatalog } from '@planner/data/compiled-skills';
@@ -175,7 +175,10 @@ export function useResumenViewModel(): ResumenViewModel {
       cumulativeFort: fort,
       cumulativeRef: ref,
       cumulativeWill: will,
-      generalFeatLabel: findFeatLabel(featRow?.generalFeatId ?? null),
+      generalFeatLabel:
+        getGeneralFeatIds(featRow)
+          .map((featId) => findFeatLabel(featId) ?? featId)
+          .join(', ') || null,
       classFeatLabel: findFeatLabel(featRow?.classFeatId ?? null),
     };
   });

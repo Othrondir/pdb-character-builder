@@ -6,6 +6,7 @@ import {
   selectAttributeBudgetSnapshot,
 } from '@planner/features/character-foundation/selectors';
 import { phase03FoundationFixture } from '@planner/features/character-foundation/foundation-fixture';
+import { useLevelProgressionStore } from '@planner/features/level-progression/store';
 import { usePlannerShellStore } from '@planner/state/planner-shell';
 import { NwnFrame } from '@planner/components/ui/nwn-frame';
 import { NwnButton } from '@planner/components/ui/nwn-button';
@@ -97,12 +98,55 @@ function useOriginStepStatus(
   }
 }
 
+function ProgressionUnlockCard() {
+  const raceId = useCharacterFoundationStore((state) => state.raceId);
+  const alignmentId = useCharacterFoundationStore((state) => state.alignmentId);
+  const baseAttributes = useCharacterFoundationStore(
+    (state) => state.baseAttributes,
+  );
+  const setActiveOriginStep = usePlannerShellStore((state) => state.setActiveOriginStep);
+  // Keep the card reactive to point-buy edits without widening the selector
+  // surface beyond the fields the helper text depends on.
+  void baseAttributes;
+
+  const foundationState = useCharacterFoundationStore.getState();
+  const attributeBudget = selectAttributeBudgetSnapshot(foundationState);
+  const progressionUnlockCopy = shellCopyEs.stepper.progressionUnlock;
+
+  let targetStep: OriginStep = 'race';
+  if (raceId !== null && alignmentId === null) {
+    targetStep = 'alignment';
+  } else if (raceId !== null && alignmentId !== null) {
+    targetStep = 'attributes';
+  }
+  void attributeBudget;
+
+  const targetLabel = shellCopyEs.stepper.originSteps[targetStep];
+
+  return (
+    <div className="creation-stepper__unlock-card" data-testid="progression-unlock-card">
+      <p className="creation-stepper__unlock-kicker">{progressionUnlockCopy.heading}</p>
+      <p className="creation-stepper__unlock-body">{progressionUnlockCopy.intro}</p>
+      <NwnButton
+        onClick={() => setActiveOriginStep(targetStep)}
+        variant="secondary"
+      >
+        {progressionUnlockCopy.goToStep.replace('{step}', targetLabel)}
+      </NwnButton>
+    </div>
+  );
+}
+
 export function CreationStepper() {
   const activeOriginStep = usePlannerShellStore((state) => state.activeOriginStep);
   const setActiveOriginStep = usePlannerShellStore((state) => state.setActiveOriginStep);
   const expandedLevel = usePlannerShellStore((state) => state.expandedLevel);
   const activeView = usePlannerShellStore((state) => state.activeView);
   const setActiveView = usePlannerShellStore((state) => state.setActiveView);
+  const progressionStarted = useLevelProgressionStore((state) =>
+    state.levels.some((level) => level.classId !== null),
+  );
+  const showProgression = expandedLevel !== null || progressionStarted;
 
   return (
     <NwnFrame as="nav" className="creation-stepper" aria-label={shellCopyEs.stepper.heading}>
@@ -131,7 +175,11 @@ export function CreationStepper() {
         <h3 className="creation-stepper__section-heading">
           {shellCopyEs.stepper.progressionHeading}
         </h3>
-        {expandedLevel && <LevelSubSteps level={expandedLevel} />}
+        {showProgression ? (
+          expandedLevel ? <LevelSubSteps level={expandedLevel} /> : null
+        ) : (
+          <ProgressionUnlockCard />
+        )}
       </section>
 
       {/*

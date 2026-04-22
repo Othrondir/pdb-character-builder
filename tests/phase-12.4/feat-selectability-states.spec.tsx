@@ -125,6 +125,13 @@ describe('Phase 12.4-07 — Dotes selectability states (SPEC R5)', () => {
       expect(screen.getByText(/Dotes del nivel 1:\s*0\/2/)).toBeInTheDocument();
     });
 
+    it('A2b: L1 Humano+Guerrero renders two general-slot cards so the third feat is selectable in the UI', () => {
+      setupL1HumanoGuerrero();
+      render(createElement(FeatBoard));
+      const generalCards = document.querySelectorAll('[data-slot-card^="general-"]');
+      expect(generalCards.length).toBe(2);
+    });
+
     it('A3: after selecting 1 feat at L1 non-Humano Guerrero, counter shows 1/2', () => {
       setupL1Guerrero();
       useFeatStore
@@ -132,6 +139,52 @@ describe('Phase 12.4-07 — Dotes selectability states (SPEC R5)', () => {
         .setClassFeat(1 as ProgressionLevel, 'feat:derribo' as CanonicalId);
       render(createElement(FeatBoard));
       expect(screen.getByText(/Dotes del nivel 1:\s*1\/2/)).toBeInTheDocument();
+    });
+
+    it('A4: L1 Guerrero empty keeps both slot sections visible and exposes a slot-status strip', () => {
+      setupL1Guerrero();
+      render(createElement(FeatBoard));
+
+      expect(document.querySelector('.feat-board__main')).not.toBeNull();
+      expect(
+        document.querySelector('[data-slot-section="class-bonus"]'),
+      ).not.toBeNull();
+      expect(
+        document.querySelector('[data-slot-section="general"]'),
+      ).not.toBeNull();
+
+      const classCard = document.querySelector<HTMLElement>(
+        '[data-slot-card="class-bonus-0"]',
+      );
+      const generalCard = document.querySelector<HTMLElement>(
+        '[data-slot-card="general-0"]',
+      );
+      expect(classCard).not.toBeNull();
+      expect(generalCard).not.toBeNull();
+      expect(classCard!.textContent).toMatch(/Ahora/);
+      expect(generalCard!.textContent).toMatch(/Pendiente/);
+      expect(classCard!.textContent).toMatch(/Sin elegir/);
+      expect(generalCard!.textContent).toMatch(/Sin elegir/);
+    });
+
+    it('A5: after choosing the class feat, the slot-status strip marks class as chosen and general as current', () => {
+      setupL1Guerrero();
+      useFeatStore
+        .getState()
+        .setClassFeat(1 as ProgressionLevel, 'feat:carrera' as CanonicalId);
+      render(createElement(FeatBoard));
+
+      const classCard = document.querySelector<HTMLElement>(
+        '[data-slot-card="class-bonus-0"]',
+      );
+      const generalCard = document.querySelector<HTMLElement>(
+        '[data-slot-card="general-0"]',
+      );
+      expect(classCard).not.toBeNull();
+      expect(generalCard).not.toBeNull();
+      expect(classCard!.textContent).toMatch(/Elegida/);
+      expect(classCard!.textContent).toMatch(/Carrera/);
+      expect(generalCard!.textContent).toMatch(/Ahora/);
     });
   });
 

@@ -23,7 +23,7 @@ export function FeatDetailPanel({ boardView, focusedFeatId }: FeatDetailPanelPro
     return (
       <DetailPanel
         title={shellCopyEs.stepper.stepTitles.feats}
-        body={shellCopyEs.feats.emptyStateBody}
+        body={shellCopyEs.feats.detailPanelHint}
       />
     );
   }
@@ -34,7 +34,7 @@ export function FeatDetailPanel({ boardView, focusedFeatId }: FeatDetailPanelPro
     return (
       <DetailPanel
         title={focusedFeatId}
-        body={shellCopyEs.feats.emptyStateBody}
+        body={shellCopyEs.feats.detailPanelHint}
       />
     );
   }

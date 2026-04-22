@@ -45,9 +45,11 @@ describe('phase 05.2 stepper navigation', () => {
   it('renders 3 origin step buttons with correct labels', () => {
     render(createElement(CreationStepper));
 
-    expect(screen.getByRole('button', { name: /Raza/ })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Alineamiento/ })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Atributos/ })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /^Raza$/ })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /^Alineamiento$/ }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /^Atributos$/ })).toBeInTheDocument();
   });
 
   it('renders an ordered list wrapping origin steps', () => {
@@ -72,6 +74,31 @@ describe('phase 05.2 stepper navigation', () => {
     expect(document.querySelector('.level-rail__button')).toBeNull();
   });
 
+  it('renders the progression helper warning until origin and attributes are ready', () => {
+    render(createElement(CreationStepper));
+
+    const card = screen.getByTestId('progression-unlock-card');
+    expect(card).toHaveTextContent('La progresion sigue bloqueada');
+    expect(card).toHaveTextContent(
+      'Completa raza, alineamiento y atributos antes de abrir la progresion.',
+    );
+    expect(card).not.toHaveTextContent('Elige una raza en Origen para empezar.');
+    expect(
+      screen.getByRole('button', { name: 'Ir a Raza' }),
+    ).toBeInTheDocument();
+  });
+
+  it('routes the helper CTA to the next blocked origin step', () => {
+    useCharacterFoundationStore.getState().setRace('race:human');
+
+    render(createElement(CreationStepper));
+
+    const cta = screen.getByRole('button', { name: 'Ir a Alineamiento' });
+    fireEvent.click(cta);
+
+    expect(usePlannerShellStore.getState().activeOriginStep).toBe('alignment');
+  });
+
   it('updates shell store when clicking a completed Raza step button', () => {
     // Set race so Raza step is 'complete' and clickable, then switch to alignment
     useCharacterFoundationStore.getState().setRace('race:human');
@@ -79,7 +106,7 @@ describe('phase 05.2 stepper navigation', () => {
 
     render(createElement(CreationStepper));
 
-    const razaButton = screen.getByRole('button', { name: /Raza/ });
+    const razaButton = screen.getByRole('button', { name: /Raza.*Humano/ });
     fireEvent.click(razaButton);
 
     expect(usePlannerShellStore.getState().activeOriginStep).toBe('race');

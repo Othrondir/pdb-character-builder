@@ -1010,6 +1010,32 @@ a {
 .creation-stepper__origin { padding: var(--space-md); }
 .creation-stepper__progression { min-height: 0; overflow-y: auto; padding: var(--space-md); }
 .creation-stepper__steps { display: flex; flex-direction: column; gap: var(--space-sm); list-style: none; margin: 0; padding: 0; }
+.creation-stepper__unlock-card {
+  background: var(--color-selection);
+  border: 1px solid var(--color-panel-edge);
+  display: grid;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+}
+.creation-stepper__unlock-kicker {
+  color: var(--color-gold);
+  font-family: var(--font-display);
+  font-size: 12px;
+  letter-spacing: 0.10em;
+  line-height: 1.2;
+  margin: 0;
+  text-transform: uppercase;
+}
+.creation-stepper__unlock-body {
+  color: var(--color-text);
+  font-size: 13px;
+  line-height: 1.45;
+  margin: 0;
+}
+.creation-stepper__unlock-card .nwn-button {
+  justify-content: center;
+  width: 100%;
+}
 .creation-stepper__bottom {
   border-top: 1px solid var(--color-panel-edge);
   display: flex;
@@ -1505,6 +1531,92 @@ a {
   /* No additional layout -- inherits from selection-screen */
 }
 
+.feat-board__main {
+  border-right: 1px solid var(--color-panel-edge);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  min-height: 0;
+  padding: var(--space-sm);
+}
+
+.feat-board__slot-strip {
+  display: grid;
+  gap: var(--space-sm);
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+}
+
+.feat-board__slot-card {
+  background: rgba(232, 213, 160, 0.06);
+  border: 1px solid var(--color-panel-edge);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  min-width: 0;
+  padding: var(--space-sm) var(--space-md);
+}
+
+.feat-board__slot-card--current {
+  background: var(--color-selection);
+  border-color: var(--color-selection-border);
+}
+
+.feat-board__slot-card--chosen {
+  border-color: var(--color-gold);
+}
+
+.feat-board__slot-card-header {
+  align-items: center;
+  display: flex;
+  gap: var(--space-sm);
+  justify-content: space-between;
+}
+
+.feat-board__slot-card-title {
+  color: var(--color-text-muted);
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.feat-board__slot-card-pill {
+  border: 1px solid var(--color-panel-edge);
+  color: var(--color-text-muted);
+  font-size: 11px;
+  letter-spacing: 0.10em;
+  padding: 2px 8px;
+  text-transform: uppercase;
+}
+
+.feat-board__slot-card--current .feat-board__slot-card-pill {
+  border-color: var(--color-selection-border);
+  color: var(--color-text);
+}
+
+.feat-board__slot-card--chosen .feat-board__slot-card-pill {
+  border-color: var(--color-gold);
+  color: var(--color-gold);
+}
+
+.feat-board__slot-card-value {
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  margin: 0;
+  min-height: 1.5em;
+}
+
+.feat-board__slot-prompt {
+  color: var(--color-text-muted);
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0;
+  padding: 0 var(--space-xs);
+}
+
 .feat-board__search {
   padding: var(--space-sm);
   position: relative;
@@ -1562,8 +1674,46 @@ a {
   text-transform: uppercase;
 }
 
+.feat-board__section-header {
+  align-items: baseline;
+  display: flex;
+  gap: var(--space-sm);
+  justify-content: space-between;
+}
+
+.feat-board__section-pill {
+  border: 1px solid var(--color-panel-edge);
+  color: var(--color-text-muted);
+  font-size: 11px;
+  letter-spacing: 0.10em;
+  padding: 2px 8px;
+  text-transform: uppercase;
+}
+
+.feat-board__section-note {
+  color: var(--color-text-muted);
+  font-size: 13px;
+  line-height: 1.4;
+  margin: calc(var(--space-sm) * -1) 0 var(--space-sm);
+}
+
+.feat-sheet {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  overflow-y: auto;
+}
+
 .feat-sheet__group {
+  border: 1px solid transparent;
   margin-bottom: var(--space-xl);
+  padding: var(--space-xs);
+}
+
+.feat-sheet__group--current {
+  background: rgba(232, 213, 160, 0.04);
+  border-color: var(--color-selection-border);
 }
 
 /* Phase 12.4-02 — Dotes scroll relocation (SPEC R9 / D-10).
@@ -1713,9 +1863,12 @@ a {
 
 /* ===== Phase 8: Resumen board shell ===== */
 .resumen-board {
-  padding: 1.5rem;
   display: grid;
   gap: 1rem;
+  height: 100%;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 1.5rem;
 }
 
 /* ===== Phase 8: Toast ===== */

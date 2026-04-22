@@ -5,7 +5,7 @@ milestone_name: milestone
 status: executing
 stopped_at: "**Phase 12.7 EXECUTION COMPLETE — 4/4 plans merged to master.** 12.7-01 (F7 BLOCKER) hoisted LevelEditorActionBar to creation-stepper.tsx with stable key={expandedLevel}, deleted old row mount. 12.7-02 (R2 F4) shipped canIncrementSkill pure module + skill-sheet.tsx + button gate. 12.7-03 (R3+R4+R5) shipped useLayoutEffect scroll reset + per-row Clase/Transclase label drop + 'Nivel N' prefix template (zero new CSS — gap exists at app.css:2191). 12.7-04 (R6) verify-only spike GREEN at 1254/1254 assertions. Verifier flagged 1 cross-file regression (phase-05 spec asserted text deleted by R4) — fixed via section-heading scoped assertion. Full Vitest 103 files / 2077 passing / 0 failures. F5 SKILL-CARRYOVER deferred Phase 12.8 (Puerta source-blocked)."
 last_updated: "2026-04-21T14:52:38.062Z"
-last_activity: 2026-04-21 -- completed quick task 260421-nfv (corregir check visual prematuro de atributos al elegir alineamiento)
+last_activity: 2026-04-22 -- completed quick task 260422-pgr (restaurar aviso de progresion bloqueada en el stepper)
 progress:
   total_phases: 22
   completed_phases: 21
@@ -195,6 +195,7 @@ None yet.
 | 260421-nfv | corregir check visual prematuro de atributos al elegir alineamiento | 2026-04-21 | workspace | complete ✓ | [260421-nfv-corregir-check-visual-prematuro-de-atrib](./quick/260421-nfv-corregir-check-visual-prematuro-de-atrib/) |
 | 260422-g7s | cablear prestige-gate reachability en class-picker | 2026-04-22 | a81d8a3 | complete ✓ | [260422-g7s-cablear-prestige-gate-reachability-en-cl](./quick/260422-g7s-cablear-prestige-gate-reachability-en-cl/) |
 | 260422-h9k | ampliar cobertura prestige-prereq-data (harper/campeondivino/weaponmaster; warlock+swashbuckler fuera scope) | 2026-04-22 | 7747e87 | complete ✓ | [260422-h9k-ampliar-cobertura-prestige-prereq-data-c](./quick/260422-h9k-ampliar-cobertura-prestige-prereq-data-c/) |
+| 260422-pgr | restaurar aviso de progresion bloqueada en el stepper | 2026-04-22 | workspace | complete ✓ | workspace |
 
 ## Session Continuity
 

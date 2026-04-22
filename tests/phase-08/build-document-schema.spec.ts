@@ -87,8 +87,8 @@ describe('buildDocumentSchema', () => {
     expect(buildDocumentSchema.safeParse(bad).success).toBe(false);
   });
 
-  it('requires schemaVersion literal 1', () => {
-    const doc = { ...sampleBuildDocument(), schemaVersion: 2 };
+  it('requires schemaVersion literal 2', () => {
+    const doc = { ...sampleBuildDocument(), schemaVersion: 1 };
     expect(buildDocumentSchema.safeParse(doc).success).toBe(false);
   });
 });

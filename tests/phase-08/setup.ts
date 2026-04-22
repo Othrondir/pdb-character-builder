@@ -30,11 +30,12 @@ export function sampleBuildDocument(
   }));
   const featSelections = Array.from({ length: 20 }, (_, i) => ({
     level: (i + 1) as LevelTuple,
+    bonusGeneralFeatIds: [] as `feat:${string}`[],
     classFeatId: null as `feat:${string}` | null,
     generalFeatId: null as `feat:${string}` | null,
   }));
   return {
-    schemaVersion: BUILD_ENCODING_VERSION as 1,
+    schemaVersion: BUILD_ENCODING_VERSION as 2,
     plannerVersion: PLANNER_VERSION,
     rulesetVersion: RULESET_VERSION,
     datasetId: CURRENT_DATASET_ID,

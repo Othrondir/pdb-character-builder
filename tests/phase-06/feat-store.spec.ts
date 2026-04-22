@@ -17,6 +17,7 @@ describe('phase 06 feat store', () => {
     expect(levels).toHaveLength(20);
 
     for (const level of levels) {
+      expect(level.bonusGeneralFeatIds).toEqual([]);
       expect(level.classFeatId).toBeNull();
       expect(level.generalFeatId).toBeNull();
     }
@@ -55,6 +56,16 @@ describe('phase 06 feat store', () => {
     expect(state.lastEditedLevel).toBe(1);
   });
 
+  it('setGeneralFeat with slotIndex=1 stores an extra general feat without overwriting the first one', () => {
+    useFeatStore.getState().setGeneralFeat(1, 'feat:alertness');
+    useFeatStore.getState().setGeneralFeat(1, 'feat:ironwill', 1);
+
+    const level1 = useFeatStore.getState().levels.find((r) => r.level === 1);
+
+    expect(level1?.generalFeatId).toBe('feat:alertness');
+    expect(level1?.bonusGeneralFeatIds).toEqual(['feat:ironwill']);
+  });
+
   it('clearClassFeat resets classFeatId to null', () => {
     useFeatStore.getState().setClassFeat(3, 'feat:ataquepoderoso');
     useFeatStore.getState().clearClassFeat(3);
@@ -73,6 +84,17 @@ describe('phase 06 feat store', () => {
     expect(level1?.generalFeatId).toBeNull();
   });
 
+  it('clearGeneralFeat with slotIndex=1 removes only the extra general feat', () => {
+    useFeatStore.getState().setGeneralFeat(1, 'feat:alertness');
+    useFeatStore.getState().setGeneralFeat(1, 'feat:ironwill', 1);
+    useFeatStore.getState().clearGeneralFeat(1, 1);
+
+    const level1 = useFeatStore.getState().levels.find((r) => r.level === 1);
+
+    expect(level1?.generalFeatId).toBe('feat:alertness');
+    expect(level1?.bonusGeneralFeatIds).toEqual([]);
+  });
+
   it('resetLevel clears both classFeatId and generalFeatId for that level', () => {
     useFeatStore.getState().setClassFeat(3, 'feat:ataquepoderoso');
     useFeatStore.getState().setGeneralFeat(3, 'feat:alertness');
@@ -82,6 +104,7 @@ describe('phase 06 feat store', () => {
 
     expect(level3?.classFeatId).toBeNull();
     expect(level3?.generalFeatId).toBeNull();
+    expect(level3?.bonusGeneralFeatIds).toEqual([]);
   });
 
   it('resetFeatSelections restores all levels to initial state', () => {
@@ -96,6 +119,7 @@ describe('phase 06 feat store', () => {
     expect(state.lastEditedLevel).toBeNull();
 
     for (const level of state.levels) {
+      expect(level.bonusGeneralFeatIds).toEqual([]);
       expect(level.classFeatId).toBeNull();
       expect(level.generalFeatId).toBeNull();
     }

@@ -36,7 +36,7 @@ describe('phase 03 origin flow', () => {
   it('keeps Atributos step pending and disabled until the origin is ready', () => {
     render(createElement(PlannerShellFrame));
 
-    const atributosButton = screen.getByRole('button', { name: /Atributos/ });
+    const atributosButton = screen.getByRole('button', { name: /^Atributos$/ });
     expect(atributosButton).toHaveClass('is-pending');
     expect(atributosButton).toBeDisabled();
   });

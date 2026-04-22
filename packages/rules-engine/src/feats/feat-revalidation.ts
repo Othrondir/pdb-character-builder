@@ -21,8 +21,8 @@ export interface RevalidatedFeatLevel {
 
 export interface FeatLevelInput {
   buildState: BuildStateAtLevel;
-  classFeatId: string | null;
-  generalFeatId: string | null;
+  classFeatIds: string[];
+  generalFeatIds: string[];
   level: number;
 }
 
@@ -82,18 +82,13 @@ export function revalidateFeatSnapshotAfterChange(input: {
   return input.levels.map((levelInput) => {
     const affectedIds: string[] = [];
 
-    if (levelInput.classFeatId) {
-      affectedIds.push(levelInput.classFeatId);
-    }
-
-    if (levelInput.generalFeatId) {
-      affectedIds.push(levelInput.generalFeatId);
-    }
+    affectedIds.push(...levelInput.classFeatIds, ...levelInput.generalFeatIds);
 
     // Pending: no class selected and no feats chosen
     const hasNoClass = Object.keys(levelInput.buildState.classLevels).length === 0;
     const hasNoSelections =
-      levelInput.classFeatId === null && levelInput.generalFeatId === null;
+      levelInput.classFeatIds.length === 0 &&
+      levelInput.generalFeatIds.length === 0;
 
     if (hasNoClass && hasNoSelections) {
       return {
@@ -108,9 +103,9 @@ export function revalidateFeatSnapshotAfterChange(input: {
     const issues: ValidationOutcome[] = [];
     let hasIllegal = false;
 
-    if (levelInput.classFeatId) {
+    for (const classFeatId of levelInput.classFeatIds) {
       const feat = input.featCatalog.feats.find(
-        (f) => f.id === levelInput.classFeatId,
+        (f) => f.id === classFeatId,
       );
 
       if (feat) {
@@ -123,14 +118,14 @@ export function revalidateFeatSnapshotAfterChange(input: {
 
         if (!result.met) {
           hasIllegal = true;
-          issues.push(createIllegalIssue([levelInput.classFeatId]));
+          issues.push(createIllegalIssue([classFeatId]));
         }
       }
     }
 
-    if (levelInput.generalFeatId) {
+    for (const generalFeatId of levelInput.generalFeatIds) {
       const feat = input.featCatalog.feats.find(
-        (f) => f.id === levelInput.generalFeatId,
+        (f) => f.id === generalFeatId,
       );
 
       if (feat) {
@@ -143,7 +138,7 @@ export function revalidateFeatSnapshotAfterChange(input: {
 
         if (!result.met) {
           hasIllegal = true;
-          issues.push(createIllegalIssue([levelInput.generalFeatId]));
+          issues.push(createIllegalIssue([generalFeatId]));
         }
       }
     }

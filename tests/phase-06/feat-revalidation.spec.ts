@@ -28,8 +28,8 @@ function createLevel(
 ): FeatLevelInput {
   return {
     buildState: createBuildState({ characterLevel: level }),
-    classFeatId: null,
-    generalFeatId: null,
+    classFeatIds: [],
+    generalFeatIds: [],
     level,
     ...overrides,
   };
@@ -46,7 +46,7 @@ describe('phase 06 feat revalidation', () => {
             characterLevel: 1,
             classLevels: { 'class:fighter': 1 },
           }),
-          generalFeatId: 'feat:ataquepoderoso',
+          generalFeatIds: ['feat:ataquepoderoso'],
         }),
       ],
       featCatalog: compiledFeatCatalog,
@@ -70,7 +70,7 @@ describe('phase 06 feat revalidation', () => {
             characterLevel: 1,
             classLevels: { 'class:fighter': 1 },
           }),
-          generalFeatId: 'feat:ataquepoderoso',
+          generalFeatIds: ['feat:ataquepoderoso'],
         }),
       ],
       featCatalog: compiledFeatCatalog,
@@ -93,7 +93,7 @@ describe('phase 06 feat revalidation', () => {
             characterLevel: 1,
             classLevels: { 'class:fighter': 1 },
           }),
-          generalFeatId: 'feat:alertness',
+          generalFeatIds: ['feat:alertness'],
         }),
         // Level 3: illegal feat (ability score too low for ataquepoderoso)
         createLevel(3, {
@@ -102,7 +102,7 @@ describe('phase 06 feat revalidation', () => {
             characterLevel: 3,
             classLevels: { 'class:fighter': 3 },
           }),
-          generalFeatId: 'feat:ataquepoderoso',
+          generalFeatIds: ['feat:ataquepoderoso'],
         }),
         // Level 5: a feat with no real prerequisites that should become blocked
         // by the inherited break from level 3
@@ -113,7 +113,7 @@ describe('phase 06 feat revalidation', () => {
             classLevels: { 'class:fighter': 5 },
             selectedFeatIds: new Set(['feat:alertness', 'feat:ataquepoderoso']),
           }),
-          generalFeatId: 'feat:ironwill',
+          generalFeatIds: ['feat:ironwill'],
         }),
       ],
       featCatalog: compiledFeatCatalog,

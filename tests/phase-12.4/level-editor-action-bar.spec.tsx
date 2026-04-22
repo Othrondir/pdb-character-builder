@@ -92,6 +92,12 @@ function fillL1ElfoGuerreroFeats(): void {
   useFeatStore.getState().setGeneralFeat(1 as ProgressionLevel, 'feat:alertness' as CanonicalId);
 }
 
+function fillL1HumanoGuerreroFeats(): void {
+  useFeatStore.getState().setClassFeat(1 as ProgressionLevel, 'feat:carrera' as CanonicalId);
+  useFeatStore.getState().setGeneralFeat(1 as ProgressionLevel, 'feat:alertness' as CanonicalId);
+  useFeatStore.getState().setGeneralFeat(1 as ProgressionLevel, 'feat:ironwill' as CanonicalId, 1);
+}
+
 /**
  * Fill all 4 skill points at L1 Elfo+Guerrero (INT base=8 → mod=-1 → max(1, 2-1)=1 base;
  * L1 ×4 = 4 total). Default fixture baseScore=8 drives the floor-1 branch.
@@ -143,6 +149,18 @@ describe('Phase 12.4-09 — LevelEditorActionBar (SPEC R2)', () => {
       setupL1ElfoGuerrero();
       fillL1ElfoGuerreroFeats();
       fillL1ElfoGuerreroSkills();
+      render(createElement(LevelEditorActionBar));
+      const button = screen.getByRole('button');
+      expect(button.textContent).toMatch(/Continuar al nivel 2/);
+      expect(button).not.toBeDisabled();
+    });
+
+    it('A4: L1 Humano+Guerrero with 3/3 feats + 8/8 skills — label `Continuar al nivel 2`, enabled', () => {
+      setupL1HumanoGuerrero();
+      fillL1HumanoGuerreroFeats();
+      useSkillStore
+        .getState()
+        .setSkillRank(1 as ProgressionLevel, 'skill:trepar' as CanonicalId, 8);
       render(createElement(LevelEditorActionBar));
       const button = screen.getByRole('button');
       expect(button.textContent).toMatch(/Continuar al nivel 2/);

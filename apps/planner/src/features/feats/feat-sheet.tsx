@@ -9,6 +9,7 @@ import type {
   FeatOptionView,
   FeatListEntry,
   FeatFamilyView,
+  FeatSlotKind,
 } from './selectors';
 
 interface FeatSheetProps {
@@ -275,25 +276,42 @@ export function FeatSheet({ boardView, focusedFeatId, onFocusFeat }: FeatSheetPr
 
   const handleSelectGeneralFeat = (featId: string) => {
     onFocusFeat(featId);
-    if (currentRecord?.generalFeatId === featId) {
-      clearGeneralFeat(activeLevel);
+    const selectedGeneralIndex =
+      boardView.activeSheet.selectedGeneralFeatIds.indexOf(featId as CanonicalId);
+
+    if (selectedGeneralIndex >= 0) {
+      clearGeneralFeat(activeLevel, selectedGeneralIndex);
       return;
     }
-    setGeneralFeat(activeLevel, featId as CanonicalId);
+
+    const targetSlotIndex = boardView.activeSheet.selectedGeneralFeatIds.length;
+    setGeneralFeat(activeLevel, featId as CanonicalId, targetSlotIndex);
   };
 
   const handleFocusFeat = (featId: string) => {
     onFocusFeat(featId);
   };
 
+  const resolveSlotStatus = (slot: FeatSlotKind) =>
+    boardView.slotStatuses.find((status) => status.slot === slot) ?? null;
+
   const showClassSection =
-    boardView.sequentialStep === 'class-bonus' ||
-    (boardView.activeSheet.hasClassBonusSlot &&
-      boardView.activeSheet.eligibleClassFeats.length > 0);
+    boardView.activeSheet.hasClassBonusSlot &&
+    boardView.classBonusEntries.length > 0;
 
   const showGeneralSection =
-    boardView.sequentialStep === 'general' ||
-    (!boardView.sequentialStep && boardView.activeSheet.hasGeneralSlot);
+    boardView.activeSheet.hasGeneralSlot &&
+    boardView.generalEntries.length > 0;
+
+  const classSlotStatus = resolveSlotStatus('class-bonus');
+  const generalSlotStatus = resolveSlotStatus('general');
+  const generalSelectionCount = boardView.activeSheet.selectedGeneralFeatIds.length;
+  const generalSectionNote =
+    boardView.activeSheet.generalSlotCount > 1
+      ? shellCopyEs.feats.generalSlotSummaryTemplate
+          .replace('{chosen}', String(generalSelectionCount))
+          .replace('{slots}', String(boardView.activeSheet.generalSlotCount))
+      : generalSlotStatus?.valueLabel ?? null;
 
   return (
     <aside className="planner-panel planner-panel--inner feat-sheet">
@@ -327,10 +345,29 @@ export function FeatSheet({ boardView, focusedFeatId, onFocusFeat }: FeatSheetPr
       ) : (
         <>
           {showClassSection ? (
-            <section className="feat-sheet__group">
-              <h3 className="feat-board__section-heading">
-                {shellCopyEs.feats.sectionClassFeats}
-              </h3>
+            <section
+              className={`feat-sheet__group${
+                classSlotStatus?.state === 'current'
+                  ? ' feat-sheet__group--current'
+                  : ''
+              }`}
+              data-slot-section="class-bonus"
+            >
+              <div className="feat-board__section-header">
+                <h3 className="feat-board__section-heading">
+                  {shellCopyEs.feats.sectionClassFeats}
+                </h3>
+                {classSlotStatus ? (
+                  <span className="feat-board__section-pill">
+                    {classSlotStatus.stateLabel}
+                  </span>
+                ) : null}
+              </div>
+              {classSlotStatus ? (
+                <p className="feat-board__section-note">
+                  {classSlotStatus.valueLabel}
+                </p>
+              ) : null}
               <FeatEntryList
                 entries={boardView.classBonusEntries}
                 expandedFamilyId={expandedFamilyId}
@@ -343,10 +380,29 @@ export function FeatSheet({ boardView, focusedFeatId, onFocusFeat }: FeatSheetPr
             </section>
           ) : null}
           {showGeneralSection ? (
-            <section className="feat-sheet__group">
-              <h3 className="feat-board__section-heading">
-                {shellCopyEs.feats.sectionGeneralFeats}
-              </h3>
+            <section
+              className={`feat-sheet__group${
+                generalSlotStatus?.state === 'current'
+                  ? ' feat-sheet__group--current'
+                  : ''
+              }`}
+              data-slot-section="general"
+            >
+              <div className="feat-board__section-header">
+                <h3 className="feat-board__section-heading">
+                  {shellCopyEs.feats.sectionGeneralFeats}
+                </h3>
+                {generalSlotStatus ? (
+                  <span className="feat-board__section-pill">
+                    {generalSlotStatus.stateLabel}
+                  </span>
+                ) : null}
+              </div>
+              {generalSlotStatus ? (
+                <p className="feat-board__section-note">
+                  {generalSectionNote}
+                </p>
+              ) : null}
               <FeatEntryList
                 entries={boardView.generalEntries}
                 expandedFamilyId={expandedFamilyId}

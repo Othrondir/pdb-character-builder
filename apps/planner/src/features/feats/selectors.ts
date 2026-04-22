@@ -30,7 +30,11 @@ import type { LevelProgressionStoreState } from '@planner/features/level-progres
 import type { SkillStoreState } from '@planner/features/skills/store';
 
 import { compiledFeatCatalog, compiledClassCatalog } from './compiled-feat-catalog';
-import type { FeatStoreState } from './store';
+import {
+  getChosenFeatIds,
+  getGeneralFeatIds,
+  type FeatStoreState,
+} from './store';
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -57,6 +61,8 @@ export type FeatRowState =
   | 'blocked-prereq'
   | 'blocked-already-taken'
   | 'blocked-budget';
+
+export type FeatSlotKind = 'class-bonus' | 'general';
 
 export interface FeatBlockedReason {
   kind: 'prereq' | 'already-taken' | 'budget';
@@ -87,6 +93,16 @@ export interface FeatBoardCounters {
   chosen: number;
   /** Total feat slots available at the active level (per `computePerLevelBudget`). */
   slots: number;
+}
+
+export interface FeatSlotStatusView {
+  key: string;
+  label: string;
+  slot: FeatSlotKind;
+  slotIndex: number;
+  state: 'current' | 'pending' | 'chosen';
+  stateLabel: string;
+  valueLabel: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -144,8 +160,10 @@ export interface ActiveFeatSheetView {
   emptyMessage: string;
   hasClassBonusSlot: boolean;
   hasGeneralSlot: boolean;
+  generalSlotCount: number;
   level: ProgressionLevel;
   selectedClassFeatId: CanonicalId | null;
+  selectedGeneralFeatIds: CanonicalId[];
   selectedGeneralFeatId: CanonicalId | null;
   /**
    * 12.3-03 (UAT B4): human-readable prompt listing the unfilled feat slots at
@@ -161,13 +179,15 @@ export interface FeatBoardView {
   activeSheet: ActiveFeatSheetView;
   emptyStateBody: string | null;
   /** D-03: which step is active in the sequential flow */
-  sequentialStep: 'class-bonus' | 'general' | null;
+  sequentialStep: FeatSlotKind | null;
   /** Phase 12.4-07 (SPEC R5 / D-04) — per-level feat-slot counters. */
   counters: FeatBoardCounters;
   /** Phase 12.4-07 (D-04) — chosen feats at the active level, for the summary card. */
   chosenFeats: FeatSummaryChosenEntry[];
   /** Phase 12.4-07 — counter copy `Dotes del nivel N: {chosen}/{slots}`. */
   counterLabel: string;
+  /** UX aid: per-slot status strip shown above the picker. */
+  slotStatuses: FeatSlotStatusView[];
   /**
    * Phase 12.4-08 (SPEC R7 / D-05) — class-bonus pool entries grouped by
    * family. Each entry is either a single feat (FeatListEntry.kind === 'feat')
@@ -261,12 +281,8 @@ export function computeBuildStateAtLevel(
 
   for (const featLevel of featState.levels) {
     if (featLevel.level < level) {
-      if (featLevel.classFeatId) {
-        selectedFeatIds.add(featLevel.classFeatId);
-      }
-
-      if (featLevel.generalFeatId) {
-        selectedFeatIds.add(featLevel.generalFeatId);
+      for (const featId of getChosenFeatIds(featLevel)) {
+        selectedFeatIds.add(featId);
       }
     }
   }
@@ -439,7 +455,7 @@ function findAlreadyTakenAtLevel(
 ): number | null {
   for (const record of featState.levels) {
     if (record.level === activeLevel) continue;
-    if (record.classFeatId === featId || record.generalFeatId === featId) {
+    if (getChosenFeatIds(record).includes(featId as CanonicalId)) {
       return record.level;
     }
   }
@@ -472,11 +488,7 @@ function buildSnapshotForBudget(
 
   const chosenFeatIdsAtLevel = (level: number): string[] => {
     const rec = featState.levels.find((r) => r.level === level);
-    if (!rec) return [];
-    const out: string[] = [];
-    if (rec.classFeatId) out.push(rec.classFeatId);
-    if (rec.generalFeatId) out.push(rec.generalFeatId);
-    return out;
+    return getChosenFeatIds(rec);
   };
 
   const spentSkillPointsAtLevel = (level: number): number => {
@@ -761,7 +773,8 @@ function getClassLevelInClass(
 function computeSlotPrompt(
   featSlots: { classBonusFeatSlot: boolean; generalFeatSlot: boolean },
   selectedClassFeatId: CanonicalId | null,
-  selectedGeneralFeatId: CanonicalId | null,
+  selectedGeneralFeatIds: CanonicalId[],
+  generalSlotCount: number,
 ): string | null {
   const parts: string[] = [];
 
@@ -769,11 +782,110 @@ function computeSlotPrompt(
     parts.push(shellCopyEs.feats.slotPromptClassAvailable);
   }
 
-  if (featSlots.generalFeatSlot && selectedGeneralFeatId === null) {
+  const remainingGeneralSlots = Math.max(
+    0,
+    generalSlotCount - selectedGeneralFeatIds.length,
+  );
+
+  if (remainingGeneralSlots === 1) {
     parts.push(shellCopyEs.feats.slotPromptGeneralAvailable);
+  } else if (remainingGeneralSlots > 1) {
+    parts.push(
+      shellCopyEs.feats.slotPromptGeneralAvailablePluralTemplate.replace(
+        '{N}',
+        String(remainingGeneralSlots),
+      ),
+    );
   }
 
   return parts.length > 0 ? parts.join(' ') : null;
+}
+
+function resolveFeatLabel(featId: CanonicalId | null): string | null {
+  if (!featId) {
+    return null;
+  }
+
+  return compiledFeatCatalog.feats.find((feat) => feat.id === featId)?.label ?? featId;
+}
+
+function buildSlotStatuses(params: {
+  hasClassBonusSlot: boolean;
+  generalSlotCount: number;
+  selectedClassFeatId: CanonicalId | null;
+  selectedGeneralFeatIds: CanonicalId[];
+  sequentialStep: FeatSlotKind | null;
+}): FeatSlotStatusView[] {
+  const {
+    hasClassBonusSlot,
+    generalSlotCount,
+    selectedClassFeatId,
+    selectedGeneralFeatIds,
+    sequentialStep,
+  } = params;
+
+  const statuses: FeatSlotStatusView[] = [];
+
+  const pushStatus = (
+    slot: FeatSlotKind,
+    slotIndex: number,
+    label: string,
+    featId: CanonicalId | null,
+  ) => {
+    const selectedLabel = resolveFeatLabel(featId);
+    const isCurrentSlot =
+      slot === 'class-bonus'
+        ? sequentialStep === 'class-bonus'
+        : sequentialStep === 'general' &&
+          slotIndex === selectedGeneralFeatIds.length;
+    const state: FeatSlotStatusView['state'] = selectedLabel
+      ? 'chosen'
+      : isCurrentSlot
+        ? 'current'
+        : 'pending';
+
+    const stateLabel =
+      state === 'chosen'
+        ? shellCopyEs.feats.slotStatusChosen
+        : state === 'current'
+          ? shellCopyEs.feats.slotStatusCurrent
+          : shellCopyEs.feats.slotStatusPending;
+
+    statuses.push({
+      key: `${slot}-${slotIndex}`,
+      label,
+      slot,
+      slotIndex,
+      state,
+      stateLabel,
+      valueLabel: selectedLabel ?? shellCopyEs.feats.slotStatusEmpty,
+    });
+  };
+
+  if (hasClassBonusSlot) {
+    pushStatus(
+      'class-bonus',
+      0,
+      shellCopyEs.feats.classFeatStepTitle,
+      selectedClassFeatId,
+    );
+  }
+
+  for (let slotIndex = 0; slotIndex < generalSlotCount; slotIndex += 1) {
+    pushStatus(
+      'general',
+      slotIndex,
+      slotIndex === 0
+        ? shellCopyEs.feats.generalFeatStepTitle
+        : shellCopyEs.feats.generalFeatBonusStepTitleTemplate.replace(
+            '{N}',
+            String(slotIndex + 1),
+          ),
+      selectedGeneralFeatIds[slotIndex] ?? null,
+    );
+  }
+
+  return statuses;
 }
 
 export function selectFeatBoardView(
@@ -801,8 +913,10 @@ export function selectFeatBoardView(
       emptyMessage: shellCopyEs.feats.emptyStateBodyPerLevel,
       hasClassBonusSlot: false,
       hasGeneralSlot: false,
+      generalSlotCount: 0,
       level: activeLevel,
       selectedClassFeatId: null,
+      selectedGeneralFeatIds: [],
       selectedGeneralFeatId: null,
       slotPrompt: null,
       status: 'pending',
@@ -816,6 +930,7 @@ export function selectFeatBoardView(
       counters: { chosen: 0, slots: 0 },
       chosenFeats: [],
       counterLabel: formatCounterLabel(activeLevel, 0, 0),
+      slotStatuses: [],
       classBonusEntries: [],
       generalEntries: [],
     };
@@ -881,14 +996,16 @@ export function selectFeatBoardView(
   }
 
   const selectedClassFeatId = activeFeatRecord?.classFeatId ?? null;
-  const selectedGeneralFeatId = activeFeatRecord?.generalFeatId ?? null;
+  const selectedGeneralFeatIds = getGeneralFeatIds(activeFeatRecord);
+  const selectedGeneralFeatId = selectedGeneralFeatIds[0] ?? null;
+  const generalSlotCount = budget.featSlots.general + budget.featSlots.raceBonus;
 
   // D-03: sequential step determination
-  let sequentialStep: 'class-bonus' | 'general' | null = null;
+  let sequentialStep: FeatSlotKind | null = null;
 
   if (featSlots.classBonusFeatSlot && selectedClassFeatId === null) {
     sequentialStep = 'class-bonus';
-  } else if (featSlots.generalFeatSlot && selectedGeneralFeatId === null) {
+  } else if (generalSlotCount > selectedGeneralFeatIds.length) {
     sequentialStep = 'general';
   }
 
@@ -901,8 +1018,8 @@ export function selectFeatBoardView(
       skillState,
       featState,
     ),
-    classFeatId: lvl.classFeatId,
-    generalFeatId: lvl.generalFeatId,
+    classFeatIds: lvl.classFeatId ? [lvl.classFeatId] : [],
+    generalFeatIds: getGeneralFeatIds(lvl),
     level: lvl.level,
   }));
   const revalidated = revalidateFeatSnapshotAfterChange({
@@ -929,7 +1046,7 @@ export function selectFeatBoardView(
     if (!inClassBonusPool && !inGeneralPool) continue;
 
     const isChosenAtLevel =
-      selectedClassFeatId === feat.id || selectedGeneralFeatId === feat.id;
+      selectedClassFeatId === feat.id || selectedGeneralFeatIds.includes(feat.id);
     const { rowState, blockedReason } = resolveFeatRowState({
       feat,
       buildState,
@@ -945,7 +1062,7 @@ export function selectFeatBoardView(
       label: feat.label,
       prereqSummary: buildPrereqSummary(feat.id, buildState),
       selected:
-        feat.id === selectedClassFeatId || feat.id === selectedGeneralFeatId,
+        feat.id === selectedClassFeatId || selectedGeneralFeatIds.includes(feat.id),
       rowState,
       blockedReason,
       isChosenAtLevel,
@@ -964,14 +1081,17 @@ export function selectFeatBoardView(
       ? shellCopyEs.feats.emptyStateBody
       : shellCopyEs.stepper.levelEmptyHint,
     hasClassBonusSlot: featSlots.classBonusFeatSlot,
-    hasGeneralSlot: featSlots.generalFeatSlot,
+    hasGeneralSlot: generalSlotCount > 0,
+    generalSlotCount,
     level: activeLevel,
     selectedClassFeatId,
+    selectedGeneralFeatIds,
     selectedGeneralFeatId,
     slotPrompt: computeSlotPrompt(
       featSlots,
       selectedClassFeatId,
-      selectedGeneralFeatId,
+      selectedGeneralFeatIds,
+      generalSlotCount,
     ),
     status: activeRevalidated?.status ?? 'pending',
     title: shellCopyEs.stepper.stepTitles.feats,
@@ -980,11 +1100,7 @@ export function selectFeatBoardView(
   // Phase 12.4-07 (D-04) — chosen feats at the active level, for the
   // FeatSummaryCard collapse view. Dedupe in case the same feat id lands
   // in both store slots (defensive — store should prevent this).
-  const chosenIds: string[] = [];
-  if (selectedClassFeatId) chosenIds.push(selectedClassFeatId);
-  if (selectedGeneralFeatId && !chosenIds.includes(selectedGeneralFeatId)) {
-    chosenIds.push(selectedGeneralFeatId);
-  }
+  const chosenIds = Array.from(new Set(getChosenFeatIds(activeFeatRecord)));
   const chosenFeats: FeatSummaryChosenEntry[] = chosenIds.map((id) => {
     const feat = compiledFeatCatalog.feats.find((f) => f.id === id);
     return { featId: id, label: feat?.label ?? id };
@@ -1015,6 +1131,13 @@ export function selectFeatBoardView(
       counters.chosen,
       counters.slots,
     ),
+    slotStatuses: buildSlotStatuses({
+      hasClassBonusSlot: featSlots.classBonusFeatSlot,
+      generalSlotCount,
+      selectedClassFeatId,
+      selectedGeneralFeatIds,
+      sequentialStep,
+    }),
     classBonusEntries,
     generalEntries,
   };
@@ -1115,9 +1238,9 @@ export function selectFeatSheetTabView(
     }
 
     // Add selected general feat
-    if (levelRecord.generalFeatId) {
+    for (const [index, generalFeatId] of getGeneralFeatIds(levelRecord).entries()) {
       const feat = compiledFeatCatalog.feats.find(
-        (f) => f.id === levelRecord.generalFeatId,
+        (f) => f.id === generalFeatId,
       );
       let status: FeatEvaluationStatus = 'legal';
       let statusReason: string | null = null;
@@ -1142,8 +1265,8 @@ export function selectFeatSheetTabView(
 
       feats.push({
         auto: false,
-        featId: levelRecord.generalFeatId,
-        label: feat?.label ?? levelRecord.generalFeatId,
+        featId: generalFeatId,
+        label: feat?.label ?? generalFeatId,
         slot: 'general',
         status,
         statusReason,
@@ -1175,7 +1298,7 @@ export function selectFeatSummary(
 ): FeatSummaryView {
   const highestConfiguredLevel = featState.levels.reduce(
     (highest, record) =>
-      record.classFeatId || record.generalFeatId
+      getChosenFeatIds(record).length > 0
         ? Math.max(highest, record.level)
         : highest,
     0,
@@ -1199,8 +1322,8 @@ export function selectFeatSummary(
       skillState,
       featState,
     ),
-    classFeatId: lvl.classFeatId,
-    generalFeatId: lvl.generalFeatId,
+    classFeatIds: lvl.classFeatId ? [lvl.classFeatId] : [],
+    generalFeatIds: getGeneralFeatIds(lvl),
     level: lvl.level,
   }));
   const revalidated = revalidateFeatSnapshotAfterChange({

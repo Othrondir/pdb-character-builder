@@ -26,7 +26,7 @@ describe('phase 05.2 stepper states', () => {
   it('shows alignment step as pending and disabled when race is not selected', () => {
     render(createElement(CreationStepper));
 
-    const alignmentButton = screen.getByRole('button', { name: /Alineamiento/ });
+    const alignmentButton = screen.getByRole('button', { name: /^Alineamiento$/ });
     expect(alignmentButton).toHaveClass('is-pending');
     expect(alignmentButton).toBeDisabled();
   });
@@ -46,7 +46,7 @@ describe('phase 05.2 stepper states', () => {
 
     render(createElement(CreationStepper));
 
-    const raceButton = screen.getByRole('button', { name: /Raza/ });
+    const raceButton = screen.getByRole('button', { name: /^Raza$/ });
     expect(raceButton).toHaveAttribute('aria-current', 'step');
   });
 
@@ -55,7 +55,7 @@ describe('phase 05.2 stepper states', () => {
 
     render(createElement(CreationStepper));
 
-    const alignmentButton = screen.getByRole('button', { name: /Alineamiento/ });
+    const alignmentButton = screen.getByRole('button', { name: /^Alineamiento$/ });
     expect(alignmentButton).not.toHaveAttribute('aria-current');
   });
 

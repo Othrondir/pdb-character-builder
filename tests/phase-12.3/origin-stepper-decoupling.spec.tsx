@@ -93,7 +93,7 @@ describe('Phase 12.3-05 — origin stepper decoupled from atributos validity (UA
 
     render(createElement(CreationStepper));
 
-    const atributosButton = screen.getByRole('button', { name: /Atributos/ });
+    const atributosButton = screen.getByRole('button', { name: /^Atributos$/ });
     expect(atributosButton).not.toHaveClass('is-complete');
   });
 
@@ -103,8 +103,8 @@ describe('Phase 12.3-05 — origin stepper decoupled from atributos validity (UA
 
     render(createElement(CreationStepper));
 
-    const raceButton = screen.getByRole('button', { name: /Raza/ });
-    const alignmentButton = screen.getByRole('button', { name: /Alineamiento/ });
+    const raceButton = screen.getByRole('button', { name: /^Raza$/ });
+    const alignmentButton = screen.getByRole('button', { name: /^Alineamiento$/ });
     expect(raceButton).not.toHaveClass('is-complete');
     expect(alignmentButton).not.toHaveClass('is-complete');
   });

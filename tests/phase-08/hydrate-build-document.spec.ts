@@ -40,7 +40,12 @@ describe('hydrateBuildDocument', () => {
     const feats = useFeatStore.getState();
     expect(skills.levels.every((l) => l.allocations.length === 0)).toBe(true);
     expect(
-      feats.levels.every((l) => l.classFeatId === null && l.generalFeatId === null),
+      feats.levels.every(
+        (l) =>
+          l.classFeatId === null &&
+          l.generalFeatId === null &&
+          l.bonusGeneralFeatIds.length === 0,
+      ),
     ).toBe(true);
   });
 

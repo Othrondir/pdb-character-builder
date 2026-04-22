@@ -5,11 +5,38 @@ import { DetailPanel } from '@planner/components/ui/detail-panel';
 import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
 import { useLevelProgressionStore } from '@planner/features/level-progression/store';
 import { useSkillStore } from '@planner/features/skills/store';
-import { selectFeatBoardView } from './selectors';
+import { selectFeatBoardView, type FeatSlotStatusView } from './selectors';
 import { FeatSheet } from './feat-sheet';
 import { FeatDetailPanel } from './feat-detail-panel';
 import { FeatSummaryCard } from './feat-summary-card';
 import { useFeatStore } from './store';
+
+function FeatSlotStrip({ slotStatuses }: { slotStatuses: FeatSlotStatusView[] }) {
+  if (slotStatuses.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="feat-board__slot-strip" role="list">
+      {slotStatuses.map((slotStatus) => (
+        <article
+          className={`feat-board__slot-card feat-board__slot-card--${slotStatus.state}`}
+          data-slot-card={slotStatus.key}
+          key={slotStatus.key}
+          role="listitem"
+        >
+          <div className="feat-board__slot-card-header">
+            <h3 className="feat-board__slot-card-title">{slotStatus.label}</h3>
+            <span className="feat-board__slot-card-pill">
+              {slotStatus.stateLabel}
+            </span>
+          </div>
+          <p className="feat-board__slot-card-value">{slotStatus.valueLabel}</p>
+        </article>
+      ))}
+    </div>
+  );
+}
 
 export function FeatBoard() {
   const featState = useFeatStore();
@@ -47,14 +74,6 @@ export function FeatBoard() {
     );
   }
 
-  // D-03: title reflects current sequential step
-  const title =
-    boardView.sequentialStep === 'class-bonus'
-      ? shellCopyEs.feats.classFeatStepTitle
-      : boardView.sequentialStep === 'general'
-        ? shellCopyEs.feats.generalFeatStepTitle
-        : shellCopyEs.stepper.stepTitles.feats;
-
   // Phase 12.4-07 (D-04) — collapse when all slots filled AND user has not
   // explicitly asked to edit. counters.slots === 0 guard prevents the
   // summary-card misfire at levels with zero budget (would trivially match
@@ -65,27 +84,30 @@ export function FeatBoard() {
     !isEditingCompleted;
 
   return (
-    <SelectionScreen title={title} className="feat-board">
-      <header className="feat-picker__header">
-        <h3 className="feat-picker__counter">{boardView.counterLabel}</h3>
-      </header>
-      {boardView.activeSheet.slotPrompt && !shouldCollapse ? (
-        <p className="feat-board__slot-prompt">
-          {boardView.activeSheet.slotPrompt}
-        </p>
-      ) : null}
-      {shouldCollapse ? (
-        <FeatSummaryCard
-          chosenFeats={boardView.chosenFeats}
-          onModify={() => setIsEditingCompleted(true)}
-        />
-      ) : (
-        <FeatSheet
-          boardView={boardView}
-          focusedFeatId={focusedFeatId}
-          onFocusFeat={setFocusedFeatId}
-        />
-      )}
+    <SelectionScreen title={shellCopyEs.stepper.stepTitles.feats} className="feat-board">
+      <div className="feat-board__main">
+        <header className="feat-picker__header">
+          <h3 className="feat-picker__counter">{boardView.counterLabel}</h3>
+        </header>
+        <FeatSlotStrip slotStatuses={boardView.slotStatuses} />
+        {boardView.activeSheet.slotPrompt && !shouldCollapse ? (
+          <p className="feat-board__slot-prompt">
+            {boardView.activeSheet.slotPrompt}
+          </p>
+        ) : null}
+        {shouldCollapse ? (
+          <FeatSummaryCard
+            chosenFeats={boardView.chosenFeats}
+            onModify={() => setIsEditingCompleted(true)}
+          />
+        ) : (
+          <FeatSheet
+            boardView={boardView}
+            focusedFeatId={focusedFeatId}
+            onFocusFeat={setFocusedFeatId}
+          />
+        )}
+      </div>
       <FeatDetailPanel boardView={boardView} focusedFeatId={focusedFeatId} />
     </SelectionScreen>
   );

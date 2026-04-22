@@ -27,7 +27,7 @@ const level16 = z.number().int().min(1).max(20);
 export const buildDocumentSchema = z
   .object({
     // Version header — ALL four must be present.
-    schemaVersion: z.literal(1),
+    schemaVersion: z.literal(2),
     plannerVersion: z.string().min(1),
     rulesetVersion: z.string().min(1),
     datasetId: z.string().regex(/^puerta-ee-\d{4}-\d{2}-\d{2}\+[a-z0-9]+$/),
@@ -83,6 +83,7 @@ export const buildDocumentSchema = z
             z
               .object({
                 level: level16,
+                bonusGeneralFeatIds: z.array(canonicalId),
                 classFeatId: canonicalId.nullable(),
                 generalFeatId: canonicalId.nullable(),
               })

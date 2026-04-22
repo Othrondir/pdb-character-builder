@@ -104,6 +104,7 @@ export function projectBuildDocument(name?: string): BuildDocument {
       })),
       featSelections: feats.levels.map((lv) => ({
         level: lv.level,
+        bonusGeneralFeatIds: lv.bonusGeneralFeatIds,
         classFeatId: lv.classFeatId,
         generalFeatId: lv.generalFeatId,
       })),

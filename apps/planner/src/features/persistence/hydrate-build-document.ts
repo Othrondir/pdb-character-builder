@@ -72,5 +72,8 @@ export function hydrateBuildDocument(doc: BuildDocument): void {
     if (lvFeat.generalFeatId !== null) {
       feats.setGeneralFeat(level, lvFeat.generalFeatId as CanonicalId);
     }
+    for (const [index, featId] of lvFeat.bonusGeneralFeatIds.entries()) {
+      feats.setGeneralFeat(level, featId as CanonicalId, index + 1);
+    }
   }
 }

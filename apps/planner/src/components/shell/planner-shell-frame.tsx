@@ -4,7 +4,6 @@ import { shellCopyEs } from '@planner/lib/copy/es';
 import { usePlannerShellStore } from '@planner/state/planner-shell';
 import { CenterContent } from './center-content';
 import { MobileNavToggle } from './mobile-nav-toggle';
-import { PlannerFooter } from './planner-footer';
 import { Toast } from '@planner/components/ui/toast';
 
 export function PlannerShellFrame() {
@@ -27,7 +26,6 @@ export function PlannerShellFrame() {
         </main>
         <CharacterSheet />
       </div>
-      <PlannerFooter />
       <Toast />
     </div>
   );
