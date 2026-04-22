@@ -16,7 +16,7 @@
  * `prestige-prereq-data.ts` (`getPrestigeDecodedPrereqs`) — keeps the
  * rules-engine gate framework-agnostic per CLAUDE.md "Prescriptive Shape".
  * Runtime build state (bab / featIds / classLevels / skillRanks /
- * abilityScores / raceId / highestArcaneSpellLevel / highestSpellLevel) is
+ * abilityScores / raceId / highestArcaneClassLevel / highestSpellLevel) is
  * derived once per render via `buildPrestigeGateBuildState` and forwarded
  * to every row. Prestige classes without an override still fail-closed to
  * `Requisitos en revisión` (branch 3 of `reachableAtLevelN`).
@@ -177,7 +177,7 @@ function ClassPickerRow({
     skillRanks: gateBuildState.skillRanks,
     featIds: gateBuildState.featIds,
     classLevels: gateBuildState.classLevels,
-    highestArcaneSpellLevel: gateBuildState.highestArcaneSpellLevel,
+    highestArcaneClassLevel: gateBuildState.highestArcaneClassLevel,
     highestSpellLevel: gateBuildState.highestSpellLevel,
     enriched: classRow.decodedPrereqs !== undefined,
   });
