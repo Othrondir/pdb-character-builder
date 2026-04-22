@@ -37,7 +37,7 @@ Status: Ready for close-out verification + human UAT re-sweep
 - B5 description paragraph CSS (white-space: pre-wrap, 12.3-06)
 
 499/499 tests green. In-browser UAT confirmed (Enano+Guerrero L1+Pícaro L2): rail 1Guerrero/2Pícaro, header NIVEL 2, PG 20, slot prompts rendered, description paragraph breaks visible. Milestone v1.0 UNBLOCKED.
-Last activity: 2026-04-22 -- completed quick task 260422-g7s (cablear prestige-gate reachability en class-picker)
+Last activity: 2026-04-22 -- completed quick task 260422-h9k (overrides prestige harper/campeondivino/weaponmaster; 3 de 5 huecos cerrados)
 
 Progress: [██████████] 100%
 
@@ -194,6 +194,7 @@ None yet.
 | 260420-vmy | alinear compatibilidad operativa con codex | 2026-04-20 | workspace | complete (uncommitted) | [260420-vmy-alinear-compatibilidad-operativa-con-cod](./quick/260420-vmy-alinear-compatibilidad-operativa-con-cod/) |
 | 260421-nfv | corregir check visual prematuro de atributos al elegir alineamiento | 2026-04-21 | workspace | complete ✓ | [260421-nfv-corregir-check-visual-prematuro-de-atrib](./quick/260421-nfv-corregir-check-visual-prematuro-de-atrib/) |
 | 260422-g7s | cablear prestige-gate reachability en class-picker | 2026-04-22 | a81d8a3 | complete ✓ | [260422-g7s-cablear-prestige-gate-reachability-en-cl](./quick/260422-g7s-cablear-prestige-gate-reachability-en-cl/) |
+| 260422-h9k | ampliar cobertura prestige-prereq-data (harper/campeondivino/weaponmaster; warlock+swashbuckler fuera scope) | 2026-04-22 | 7747e87 | complete ✓ | [260422-h9k-ampliar-cobertura-prestige-prereq-data-c](./quick/260422-h9k-ampliar-cobertura-prestige-prereq-data-c/) |
 
 ## Session Continuity
 
