@@ -1,4 +1,5 @@
-# Planificador de Fichas para Puerta de Baldur (NWN 1 EE) https://puertadebaldur.com
+# Planificador de Fichas para Puerta de Baldur (NWN 1 EE) 
+https://puertadebaldur.com
 
 Pequeño proyecto hecho en ratos libres con ayuda de Claude, Codex y Caveman.
 
@@ -8,7 +9,7 @@ La aplicación está planteada como una **web estática**, sin backend, pensada 
 
 ## Qué es este proyecto
 
-Este repositorio contiene una SPA en React para planificar personajes de nivel 1 a 16 con validación estricta. La idea no es solo "hacer una build bonita", sino comprobar que la build sea legal según las reglas del servidor y que pueda compartirse de forma fiable.
+Este repositorio contiene una SPA en React para planificar personajes de nivel 1 a 20 con validación estricta. La idea no es solo "hacer una build bonita", sino comprobar que la build sea legal según las reglas del servidor y que pueda compartirse de forma fiable.
 
 La referencia de flujo es NWN2DB, pero la identidad visual y el enfoque están adaptados a NWN1.
 
