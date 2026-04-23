@@ -440,7 +440,7 @@ Plans:
 ### Phase 12.8: UAT-2026-04-23 Residuals (INSERTED)
 **Goal**: Close 6 findings (F1..F6) surfaced by agent-driven UAT against master 2026-04-23 post-12.7: F1/F2 Habilidades `scroll-snap` regression (carries 12.7 T3 deferral), F3 Dotes multi-slot viewport nudge (user cannot reach general slot after class slot fills), F4 Dotes deselect from FeatSummaryCard, F5 prestige fail-closed tightening + 3-class enrichment (pale-master + caballero-arcano FAIL-OPEN; shadowdancer too permissive), F6 Semielfo roster duplicate.
 **Depends on**: Phase 12.7 (skill-sheet scroll wiring at `apps/planner/src/features/skills/skill-sheet.tsx` + `app.css:473-477`; FeatSummaryCard mount site from 12.4-07; prestige fail-closed policy from 12.4-06; `dedupeByCanonicalId` from 12.1-02).
-**Requirements**: SKILL-01 (scroll reset on Habilidades entry/level change), FEAT-02 (Dotes multi-slot UX clarity), FEAT-03 (prestige gate fail-closed), ROSTER-01 (race roster dedupe).
+**Requirements**: SKIL-01 (Habilidades scroll reset + rank assignment UX — regression), FEAT-02 (Dotes multi-slot UX + prereq clarity — regression), CLAS-02 (prestige gate prereq visibility — regression), CHAR-01 (race picker correctness — regression).
 **Gap Closure**: Closes F1..F6 documented in `.planning/UAT-FINDINGS-2026-04-23.md` + 12.7 T3 gap deferral in `.planning/phases/12.7-uat-04-20-post-12.6-residuals/12.7-UAT.md`.
 **Success Criteria** (what must be TRUE — refined in `/gsd-spec-phase 12.8`):
   1. `.selection-screen__content.scrollTop === 0` on first Habilidades entry per level; no visual shift on `+`/`-` click.
@@ -449,10 +449,13 @@ Plans:
   4. At L2 Elfo Guerrero, `pale-master` and `caballero-arcano` render a real prereq gate (not OPEN); `shadowdancer` surfaces feat + skill-rank prereqs (not BAB-only).
   5. Race roster renders Semielfo exactly once (45 → 44 rows, or dedupe-key fix preserves canonical row).
   6. Regression tests run in Playwright (real layout engine) for F1/F2 since jsdom missed the scroll-snap regression.
-**Plans**: TBD — scoped in `/gsd-spec-phase 12.8` + `/gsd-plan-phase 12.8`.
+**Plans**: 4 plans across 2 waves.
 
 Plans:
-- [ ] TBD — refined in `/gsd-plan-phase 12.8`
+- [ ] 12.8-01-PLAN.md — Remove .skill-board scroll-snap CSS + retarget scrollerRef to .selection-screen__content + Playwright regression harness (F1 + F2, SKIL-01) [Wave 1]
+- [ ] 12.8-02-PLAN.md — Extend ClassPrereqInput schema with 6 new prereq field kinds + evaluator branches + shadowdancer override enrichment + Spanish copy templates (F5, CLAS-02) [Wave 1]
+- [ ] 12.8-03-PLAN.md — Dotes auto-scroll to general section on class-slot completion + FeatSummaryCard per-chip × deselect + 12.7 T3 closure marker (F3 + F4, FEAT-02) [Wave 2, depends on 12.8-01]
+- [ ] 12.8-04-PLAN.md — Delete race:halfelf2 duplicate row + Vitest regression lock on Semielfo singleton (F6, CHAR-01) [Wave 1]
 **UI hint**: yes
 
 ## Progress
