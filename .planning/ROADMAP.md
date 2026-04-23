@@ -437,10 +437,28 @@ Plans:
 - [x] 12.7-04-PLAN.md — Verify L2..L20 skill-budget formula (F6 R6 verify-only; no-op if green, SUMMARY-only if red) — COMPLETE 2026-04-20 (commits ef8133a + 15d81b9)
 **UI hint**: yes
 
+### Phase 12.8: UAT-2026-04-23 Residuals (INSERTED)
+**Goal**: Close 6 findings (F1..F6) surfaced by agent-driven UAT against master 2026-04-23 post-12.7: F1/F2 Habilidades `scroll-snap` regression (carries 12.7 T3 deferral), F3 Dotes multi-slot viewport nudge (user cannot reach general slot after class slot fills), F4 Dotes deselect from FeatSummaryCard, F5 prestige fail-closed tightening + 3-class enrichment (pale-master + caballero-arcano FAIL-OPEN; shadowdancer too permissive), F6 Semielfo roster duplicate.
+**Depends on**: Phase 12.7 (skill-sheet scroll wiring at `apps/planner/src/features/skills/skill-sheet.tsx` + `app.css:473-477`; FeatSummaryCard mount site from 12.4-07; prestige fail-closed policy from 12.4-06; `dedupeByCanonicalId` from 12.1-02).
+**Requirements**: SKILL-01 (scroll reset on Habilidades entry/level change), FEAT-02 (Dotes multi-slot UX clarity), FEAT-03 (prestige gate fail-closed), ROSTER-01 (race roster dedupe).
+**Gap Closure**: Closes F1..F6 documented in `.planning/UAT-FINDINGS-2026-04-23.md` + 12.7 T3 gap deferral in `.planning/phases/12.7-uat-04-20-post-12.6-residuals/12.7-UAT.md`.
+**Success Criteria** (what must be TRUE — refined in `/gsd-spec-phase 12.8`):
+  1. `.selection-screen__content.scrollTop === 0` on first Habilidades entry per level; no visual shift on `+`/`-` click.
+  2. After filling the class-bonus dote slot, the user's viewport surfaces the general-slot section (auto-scroll / collapse / viewport-nudge — decided in discuss-phase).
+  3. `<FeatSummaryCard>` allows per-chip deselect without requiring "Modificar selección" round-trip.
+  4. At L2 Elfo Guerrero, `pale-master` and `caballero-arcano` render a real prereq gate (not OPEN); `shadowdancer` surfaces feat + skill-rank prereqs (not BAB-only).
+  5. Race roster renders Semielfo exactly once (45 → 44 rows, or dedupe-key fix preserves canonical row).
+  6. Regression tests run in Playwright (real layout engine) for F1/F2 since jsdom missed the scroll-snap regression.
+**Plans**: TBD — scoped in `/gsd-spec-phase 12.8` + `/gsd-plan-phase 12.8`.
+
+Plans:
+- [ ] TBD — refined in `/gsd-plan-phase 12.8`
+**UI hint**: yes
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 12.1 -> 12.2 -> 12.3 -> 12.4 -> 12.6 -> 12.7
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 12.1 -> 12.2 -> 12.3 -> 12.4 -> 12.6 -> 12.7 -> 12.8
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -466,3 +484,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -
 | 12.4 Construcción Correctness & Clarity (INSERTED) | 9/9 | Complete | 2026-04-20 |
 | 12.6 UAT-2026-04-20 Residuals (INSERTED) | 6/6 | Complete | 2026-04-20 |
 | 12.7 UAT-2026-04-20 Post-12.6 Residuals (INSERTED) | 4/4 | Complete (F7 BLOCKER + F4 gate + F6 verify + F1/F2/F3 polish closed) | 2026-04-20 |
+| 12.8 UAT-2026-04-23 Residuals (INSERTED) | 0/TBD | Pending (F1+F2 scroll-snap, F3+F4 Dotes UX, F5 prestige, F6 Semielfo) | - |
