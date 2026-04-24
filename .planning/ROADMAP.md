@@ -488,3 +488,14 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -
 | 12.6 UAT-2026-04-20 Residuals (INSERTED) | 6/6 | Complete | 2026-04-20 |
 | 12.7 UAT-2026-04-20 Post-12.6 Residuals (INSERTED) | 4/4 | Complete (F7 BLOCKER + F4 gate + F6 verify + F1/F2/F3 polish closed) | 2026-04-20 |
 | 12.8 UAT-2026-04-23 Residuals (INSERTED) | 4/4 | Complete (12.8-01 F1+F2 scroll-snap, 12.8-02 prestige schema, 12.8-04 Semielfo dedupe, 12.8-03 Dotes F3+F4 UX + 12.7 T3 closure marker) | 2026-04-24 |
+
+## Backlog
+
+### Phase 999.1: Resumen (Hoja de personaje) UX pass (BACKLOG)
+
+**Goal:** Full UX/usability pass over the Resumen (Hoja de personaje) screen — user feedback during UAT-2026-04-24 flagged it as "horrible" with overlapping content in the Progresión block, duplication between the character-sheet section and creation-stepper summary items, and general visual debt. Needs a scoped phase: audit the full screen, reorganize sections, deduplicate cross-sectional content, verify empty/filled states.
+**Requirements:** TBD
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (promote with /gsd-review-backlog when ready)
