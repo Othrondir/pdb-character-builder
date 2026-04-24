@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: idle
-stopped_at: "Phase 12.8 FULLY CLOSED (4/4 plans + live UAT 6/6 pass). Agent-driven MCP Chrome UAT against Elfo + Neutral puro + Guerrero L1 fixture at localhost:5173 exposed F3 auto-scroll gap — feat-sheet.tsx:283-300 RAF wrapper around scrollIntoView(smooth) silently no-ops on aside.feat-sheet nested scrollable ancestor in real Chrome (2s polling, scrollTop=0; direct call without RAF scrolls 0→19860). Fixed via commit 14ee309 — dropped RAF wrapper; useEffect already runs post-commit so DOM swap for feat-sheet__group--current is live when effect runs, frame defer was redundant. Re-UAT: scrollBefore=0 → samples[0..14]=19860 @ 100ms, genFirstAfter_top=724 ∈ viewport. Playwright feat-auto-scroll.e2e.spec.ts 4/4 still green. Vitest phase-12.8 46/46 + full suite 2133 pass / 6 pre-existing fail / 0 new regressions. Phase 12.8 commits: 9c33d36..0f567ad (12.8-01 F1+F2, 12.8-02 F5, 12.8-04 F6, 12.8-03 F3+F4 + D-15 closure, REVIEW+VERIFICATION+HUMAN-UAT persisted, 14ee309 F3 RAF fix, 0f567ad UAT gap closure)."
-last_updated: "2026-04-24T19:00:00.000Z"
-last_activity: 2026-04-24 -- Phase 12.8 closed + UAT-2026-04-24 Dotes UX sweep 16 fixes (E1..E16) inline on master + Phase 12.9 Resumen UX Pass promoted from backlog. Next: /gsd-spec-phase 12.9
+status: executing
+stopped_at: "Phase 12.9-01 COMPLETE — selector trim + copy keys + CSS deltas + vitest phase-12.9 jsdom glob shipped in 2 atomic commits (5a803be + 2bfc097). Task 1: ResumenViewModel.attributes[] + AttributeRow + ATTRIBUTE_ORDER deleted; skill-section reconstructs abilityTotalByKey inline from foundation.baseAttributes + racialAdj + levelUpAdj (D-08). shellCopyEs.resumen.emptyState.heading + .body keys added with Spanish ficha voice (D-04). Task 2: .resumen-board__actions → var(--space-sm, 8px) symmetric padding; .resumen-table__block → var(--space-md, 16px); .resumen-table__heading gains padding: 0 var(--space-sm, 8px) (R3/D-05). New BEM modifiers .resumen-table__block--progresion + --habilidades with grid-column: 1 / -1 (R1/R2 groundwork); .resumen-table__identity-header + __dataset selectors (R2/D-03 groundwork); .resumen-board__empty-state + scoped h3/p selectors (R4/D-04 groundwork). Old .resumen-table__identity dt/dd rules deleted preemptively. ZERO new hex triplets, ZERO new font-weight:700, ZERO new tokens. vitest.config.ts gains tests/phase-12.9/**/*.spec.tsx jsdom entry (D-09). Deviations: (1) Rule 3 runtime guard (model.attributes ?? []) wrapped the doomed block alongside the @ts-expect-error breadcrumb — plan-text assumed typecheck-only impact but ResumenTable renders at runtime and crashes on undefined.map; 7 phase-08 specs regressed before the guard, all green after. (2) Rule 1 obsolete coverage: 2 test cases in tests/phase-08/resumen-selectors.spec.ts that asserted against the deleted attributes[] field dropped; remaining 4 cases preserved. Phase-08 back to baseline (97 pass / 1 pre-existing ruleset-version BUILD_ENCODING_VERSION fail). Phase 12.8 env-glob unaffected (46/46 green). Typecheck: 2 pre-existing feats/selectors.ts errors only, 0 new errors. Boundary gates all zero-diff (rules-engine, compiled-*, persistence, save-slot-dialog, tokens.css). Breadcrumb count: 1 at resumen-table.tsx:55. Next: 12.9-02 (JSX rewrite: compact identity header + isProjectable empty-state gate + full-width Progresión/Habilidades + 3 Vitest RTL specs)."
+last_updated: "2026-04-24T20:45:00.000Z"
+last_activity: 2026-04-24 -- Phase 12.9-01 shipped (groundwork wave for Resumen UX Pass). Next: 12.9-02
 progress:
   total_phases: 24
   completed_phases: 22
-  total_plans: 86
-  completed_plans: 86
-  percent: 92
+  total_plans: 88
+  completed_plans: 87
+  percent: 93
 ---
 
 # Project State
@@ -21,13 +21,13 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-30)
 
 **Core value:** A player can build a Puerta de Baldur character from level 1 to 16 with strict server-valid validation and share that exact build reliably.
-**Current focus:** Phase 12.7 — uat-04-20-post-12.6-residuals
+**Current focus:** Phase 12.9 — resumen-hoja-de-personaje-ux-pass
 
 ## Current Position
 
-Phase: 12.7 (uat-04-20-post-12.6-residuals) — EXECUTION COMPLETE (4/4 plans merged + cross-fix)
-Plan: 4 of 4 (12.7-01 + 12.7-02 + 12.7-03 + 12.7-04 all merged to master; phase-05 cross-fix landed)
-Status: Phase complete — ready for verification
+Phase: 12.9 (resumen-hoja-de-personaje-ux-pass) — EXECUTING (1/2 plans merged)
+Plan: 1 of 2 (12.9-01 groundwork merged 2026-04-24 via 5a803be + 2bfc097; 12.9-02 JSX rewrite pending)
+Status: 12.9-01 complete — ready for 12.9-02
 
 - B1 attributes overspend gate (nextIncrementCost + canIncrementAttribute, 12.3-01)
 - B2+B8+B9 multiclass active-level wiring (LevelRail dispatch, 12.3-02)
@@ -92,6 +92,7 @@ Progress: [██████████] 100%
 | Phase 12.8 P02 | 11m | 2 tasks | 9 files (6 modified + 2 created + 1 config) |
 | Phase 12.8 P04 | 7m  | 1 task (TDD RED+GREEN) | 4 files (3 modified + 1 created) |
 | Phase 12.8 P03 | 12m | 3 tasks (TDD + auto-scroll + e2e)  | 8 files (5 source + 2 tests + 1 doc) |
+| Phase 12.9 P01 | 25m | 2 tasks (selector trim + CSS deltas) | 6 files (4 source + 1 spec + 1 config) |
 
 ## Accumulated Context
 

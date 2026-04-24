@@ -471,7 +471,7 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 12.9-01-PLAN.md — R3+R6 groundwork: trim ResumenViewModel.attributes[], add emptyState copy keys, land CSS BEM modifiers + 8px padding deltas + empty-state selectors, add phase-12.9 vitest jsdom glob
+- [x] 12.9-01-PLAN.md — R3+R6 groundwork: trim ResumenViewModel.attributes[], add emptyState copy keys, land CSS BEM modifiers + 8px padding deltas + empty-state selectors, add phase-12.9 vitest jsdom glob — complete 2026-04-24
 - [ ] 12.9-02-PLAN.md — R1+R2+R4+R5 wave: rewrite <ResumenTable> (compact header + full-width Progresión + Habilidades), gate <ResumenTable> mount behind isProjectable with empty-state NwnFrame, author 3 Vitest RTL specs (progresion full-width + identity dedup + empty-state)
 **UI hint**: yes
 
@@ -505,4 +505,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -
 | 12.6 UAT-2026-04-20 Residuals (INSERTED) | 6/6 | Complete | 2026-04-20 |
 | 12.7 UAT-2026-04-20 Post-12.6 Residuals (INSERTED) | 4/4 | Complete (F7 BLOCKER + F4 gate + F6 verify + F1/F2/F3 polish closed) | 2026-04-20 |
 | 12.8 UAT-2026-04-23 Residuals (INSERTED) | 4/4 | Complete (12.8-01 F1+F2 scroll-snap, 12.8-02 prestige schema, 12.8-04 Semielfo dedupe, 12.8-03 Dotes F3+F4 UX + 12.7 T3 closure marker) | 2026-04-24 |
-| 12.9 Resumen (Hoja de personaje) UX Pass (INSERTED) | 0/TBD | Pending — awaiting /gsd-spec-phase 12.9 | - |
+| 12.9 Resumen (Hoja de personaje) UX Pass (INSERTED) | 1/2 | In progress (12.9-01 groundwork merged 2026-04-24; 12.9-02 JSX rewrite pending) | - |
