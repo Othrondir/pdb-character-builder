@@ -171,6 +171,18 @@ export const shellCopyEs = {
       classLevelSingular: 'Requiere 1 nivel de {className}',
       classLevelPlural: 'Requiere {N} niveles de {className}',
       unvetted: 'Requisitos en revisión',
+      // Phase 12.8-02 (D-08) — UI-layer contract for the six new evaluator
+      // branches. Helper functions in prestige-gate.ts emit these strings
+      // inline; these keys stay as the Spanish-first grep anchor (LANG-01).
+      arcaneSpellLevelSingular: 'Requiere lanzar 1 nivel de conjuro arcano',
+      arcaneSpellLevelPlural: 'Requiere lanzar conjuros arcanos de nivel {N}',
+      spellLevelSingular: 'Requiere lanzar 1 nivel de conjuro',
+      spellLevelPlural: 'Requiere lanzar conjuros de nivel {N}',
+      excludedClass: 'Incompatible con {className}',
+      anyFeatGroupSingle: 'Requiere dote: {featName}',
+      anyFeatGroupMulti: 'Requiere una de estas dotes: {featNames}',
+      anyRace: 'Requiere raza: {raceNames}',
+      anyClassLevel: 'Requiere {classLevelList}',
     },
     editOrigin: 'Editar origen',
     foundationStripHeading: 'Base del personaje',

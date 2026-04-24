@@ -19,7 +19,14 @@ export interface PrestigeGateBuildState {
   bab: number;
   classLevels: Record<string, number>;
   featIds: Set<string>;
-  highestArcaneClassLevel: number;
+  /**
+   * Phase 12.8-02 — renamed from `highestArcaneClassLevel` to match the
+   * rules-engine evaluator input (`PrestigeGateInput.highestArcaneSpellLevel`).
+   * Computed via `computeHighestSpellLevel(classLevels, 'arcane')` so the
+   * field semantically matches `minArcaneSpellLevel` (1-9 spell-slot level)
+   * instead of raw class level.
+   */
+  highestArcaneSpellLevel: number;
   highestSpellLevel: number;
   raceId: string | null;
   skillRanks: Record<string, number>;
@@ -374,10 +381,12 @@ export function buildPrestigeGateBuildState(
     bab: computeTotalBab(classLevels, compiledClassCatalog),
     classLevels,
     featIds,
-    highestArcaneClassLevel: computeHighestClassLevel(
-      classLevels,
-      ARCANE_SPELLCASTER_IDS,
-    ),
+    // Phase 12.8-02 — use the arcane SPELL-level progression (1-9) not the
+    // raw CLASS level. `minArcaneSpellLevel: 3` on pale-master means "can
+    // cast L3 arcane spells", which for Wizard lands at wizard L5, not
+    // wizard L3. `computeHighestSpellLevel(classLevels, 'arcane')` returns
+    // the correct quantity via the per-class progression tables above.
+    highestArcaneSpellLevel: computeHighestSpellLevel(classLevels, 'arcane'),
     highestSpellLevel: computeHighestSpellLevel(classLevels, 'any'),
     raceId: foundationState.raceId,
     skillRanks,
