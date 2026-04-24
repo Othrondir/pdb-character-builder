@@ -307,9 +307,10 @@ export async function main(): Promise<void> {
   console.log(`[3/4] Dataset: ${datasetId}`);
   console.log('');
 
-  // Load auxiliary data for cross-assembler linking
-  const classLabelsByRow = loadClassLabels(nwsyncReader, baseGameReader);
-  const spellsColumnNames = loadSpellsColumnNames(nwsyncReader, baseGameReader);
+  // Phase 13-02 (IN-06): loadClassLabels + loadSpellsColumnNames moved into
+  // the spells branch below — they are consumed only by buildSpellClassRows
+  // (inside `if (EMIT_MAGIC_CATALOGS)`). Default extractor runs now skip
+  // both 2DA-parse round-trips.
 
   // -------------------------------------------------------------------------
   // d. Run assemblers in dependency order
@@ -388,6 +389,11 @@ export async function main(): Promise<void> {
   if (EMIT_MAGIC_CATALOGS) {
     try {
       console.log(`  ${step('spells')} Assembling spells...`);
+      // Phase 13-02 (IN-06): auxiliary 2DA parse calls relocated here from
+      // their previous unconditional position in main() — both consts feed
+      // only buildSpellClassRows below. Default runs skip the parse.
+      const classLabelsByRow = loadClassLabels(nwsyncReader, baseGameReader);
+      const spellsColumnNames = loadSpellsColumnNames(nwsyncReader, baseGameReader);
       const classCatalog = catalogs.classes as {
         classes: Array<{
           id: string;
