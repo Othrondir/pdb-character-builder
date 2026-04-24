@@ -1715,8 +1715,11 @@ a {
    * heading's border-bottom. Add a positive margin-top so the counter sits
    * clearly below the heading's gold underline instead of touching it. */
   margin: var(--space-sm, 8px) 0;
-  padding-left: var(--space-xs, 4px);
-  padding-right: var(--space-xs, 4px);
+  /* UAT-2026-04-24 E15 — match the 8px inner padding used by heading,
+   * counter, partition, and partition-heading so the note text never
+   * sits flush against the group border. */
+  padding-left: var(--space-sm, 8px);
+  padding-right: var(--space-sm, 8px);
 }
 
 .feat-sheet {
