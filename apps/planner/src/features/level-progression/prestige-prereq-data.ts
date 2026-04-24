@@ -227,6 +227,14 @@ export const PRESTIGE_PREREQ_OVERRIDES: Partial<
 > = {
   'class:shadowdancer': {
     minBab: 2,
+    minSkillRanks: [
+      skill('skill:moversesigilosamente', 8, 'Moverse sigilosamente'),
+      skill('skill:equilibrio', 5, 'Equilibrio'),
+    ],
+    requiredFeats: [
+      feat('feat:dodge', 'Esquiva'),
+      feat('feat:mobility', 'Movilidad'),
+    ],
   },
   'class:arcane-archer': {
     minBab: 4,
