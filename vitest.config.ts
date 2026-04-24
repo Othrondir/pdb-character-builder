@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { defineConfig } from 'vitest/config';
+import { configDefaults, defineConfig } from 'vitest/config';
 
 export default defineConfig({
   resolve: {
@@ -19,6 +19,11 @@ export default defineConfig({
     ],
     environment: 'node',
     include: ['tests/**/*.spec.ts', 'tests/**/*.spec.tsx'],
+    // Phase 12.8-01 (revision BLOCKER 1) — Vitest default excludes cover
+    // dependency trees + build output + VCS metadata. Raw `exclude: [...]`
+    // would override rather than append; spreading the defaults preserves
+    // them while adding the Playwright-only glob.
+    exclude: [...configDefaults.exclude, 'tests/**/*.e2e.spec.ts'],
     setupFiles: ['tests/setup.ts'],
   },
 });

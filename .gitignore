@@ -5,3 +5,7 @@ dist/
 .tmp/
 *.sln
 NWN UI Mock/
+# Phase 12.8-01 — Playwright runtime output
+test-results/
+playwright-report/
+

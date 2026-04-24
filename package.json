@@ -10,7 +10,9 @@
     "test": "vitest run",
     "test:phase-01": "vitest run tests/phase-01 --reporter=dot",
     "test:phase-02": "vitest run tests/phase-02 --reporter=dot",
-    "test:phase-08": "vitest run tests/phase-08 --reporter=dot"
+    "test:phase-08": "vitest run tests/phase-08 --reporter=dot",
+    "test:e2e": "playwright test",
+    "test:e2e:phase-12.8": "playwright test tests/phase-12.8"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
@@ -20,6 +22,7 @@
   "devDependencies": {
     "@fontsource/cormorant-garamond": "latest",
     "@fontsource/spectral": "latest",
+    "@playwright/test": "^1.58.0",
     "@tanstack/react-router": "latest",
     "@testing-library/jest-dom": "latest",
     "@testing-library/react": "latest",
