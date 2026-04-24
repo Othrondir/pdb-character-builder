@@ -494,15 +494,15 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -
 | 07.2 Magic UI descope (INSERTED) | 2/2 | Complete | 2026-04-17 |
 | 07.1 Shell narrow viewport nav fix (INSERTED) | 1/1 | Complete   | 2026-04-17 |
 | 8. Summary, Persistence & Shared Builds | 2/2 | Complete | 2026-04-18 |
-| 9. Verification + Traceability Closure (GAP) | 0/2 | Pending | - |
-| 10. Integration Fixes (GAP) | 0/3 | Pending | - |
-| 11. UAT + Open-Work Closure (GAP) | 0/3 | Pending | - |
+| 9. Verification + Traceability Closure (GAP) | 2/2 | Complete | 2026-04-18 |
+| 10. Integration Fixes (GAP) | 3/3 | Complete | 2026-04-18 |
+| 11. UAT + Open-Work Closure (GAP) | 3/3 | Complete | 2026-04-18 |
 | 12. Tech Debt Sweep (GAP) | 2/2 | Complete | 2026-04-18 |
 | 12.1 Roster Wiring & Overflow Fixes (INSERTED) | 3/3 | Complete | 2026-04-18 |
-| 12.2 Roster Detail & Race Ability Modifiers (INSERTED) | 3/4 | In progress | - |
+| 12.2 Roster Detail & Race Ability Modifiers (INSERTED) | 4/4 | Complete | 2026-04-18 |
 | 12.3 UAT Correctness Closure (INSERTED) | 6/6 | Complete | 2026-04-19 |
 | 12.4 Construcción Correctness & Clarity (INSERTED) | 9/9 | Complete | 2026-04-20 |
 | 12.6 UAT-2026-04-20 Residuals (INSERTED) | 6/6 | Complete | 2026-04-20 |
 | 12.7 UAT-2026-04-20 Post-12.6 Residuals (INSERTED) | 4/4 | Complete (F7 BLOCKER + F4 gate + F6 verify + F1/F2/F3 polish closed) | 2026-04-20 |
 | 12.8 UAT-2026-04-23 Residuals (INSERTED) | 4/4 | Complete (12.8-01 F1+F2 scroll-snap, 12.8-02 prestige schema, 12.8-04 Semielfo dedupe, 12.8-03 Dotes F3+F4 UX + 12.7 T3 closure marker) | 2026-04-24 |
-| 12.9 Resumen (Hoja de personaje) UX Pass (INSERTED) | 2/2 | Code-complete (12.9-01 groundwork + 12.9-02 JSX rewrite + empty-state + Vitest RTL wave, 5 atomic commits); live MCP Chrome UAT per D-10 pending | 2026-04-24 |
+| 12.9 Resumen (Hoja de personaje) UX Pass (INSERTED) | 2/2 | Complete (UAT 9/9 pass, SECURITY 0 threats open, VERIFICATION 13/13 gates green) | 2026-04-24 |
