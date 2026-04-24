@@ -490,8 +490,8 @@ Plans:
 **Plans**: 2 plans across 2 waves.
 
 Plans:
-- [ ] 13-01-PLAN.md — Retro-author 12.6-VERIFICATION.md + 12.7-VERIFICATION.md from on-disk UAT + SUMMARY evidence (docs-only; zero source drift) [Wave 1]
-- [ ] 13-02-PLAN.md — Dead-code + orphan sweep: pre-flight ConfirmDialog callsite audit (delete or re-classify) + delete computeHighestClassLevel/ARCANE_SPELLCASTER_IDS + level-sub-steps aria-label level interpolation + cli.ts 2DA parse gated behind EMIT_MAGIC_CATALOGS [Wave 2, depends on 13-01]
+- [x] 13-01-PLAN.md — Retro-author 12.6-VERIFICATION.md + 12.7-VERIFICATION.md from on-disk UAT + SUMMARY evidence (docs-only; zero source drift) [Wave 1] — complete 2026-04-24
+- [x] 13-02-PLAN.md — Dead-code + orphan sweep: ConfirmDialog audit reclassified as false-positive Branch B (1 live caller in save-slot-dialog.tsx) + computeHighestClassLevel removed (ARCANE_SPELLCASTER_IDS preserved per Rule-1 plan correction — consumed by live computeHighestSpellLevel) + level-sub-steps aria-label interpolates active level + cli.ts 2DA parse gated behind EMIT_MAGIC_CATALOGS [Wave 2, depends on 13-01] — complete 2026-04-24
 
 ### Phase 14: Persistence Robustness (GAP)
 **Goal**: Close Phase 08 polish batch surfaced by 2026-04-24 re-audit: eliminate toast clobber race, LoadSlot-null ZodError bubble, hydrate silently dropping `build.name`, url-budget double-slash risk, skill ability-modifier magic-10 fallback, and `plannerVersion`-excluded docstring drift.
@@ -561,7 +561,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -
 | 12.7 UAT-2026-04-20 Post-12.6 Residuals (INSERTED) | 4/4 | Complete (F7 BLOCKER + F4 gate + F6 verify + F1/F2/F3 polish closed) | 2026-04-20 |
 | 12.8 UAT-2026-04-23 Residuals (INSERTED) | 4/4 | Complete (12.8-01 F1+F2 scroll-snap, 12.8-02 prestige schema, 12.8-04 Semielfo dedupe, 12.8-03 Dotes F3+F4 UX + 12.7 T3 closure marker) | 2026-04-24 |
 | 12.9 Resumen (Hoja de personaje) UX Pass (INSERTED) | 2/2 | Complete (UAT 9/9 pass, SECURITY 0 threats open, VERIFICATION 13/13 gates green) | 2026-04-24 |
-| 13. Verification + Orphan Sweep (GAP) | 0/TBD | Not started | - |
+| 13. Verification + Orphan Sweep (GAP) | 2/2 | Complete (12.6 + 12.7 VERIFICATION.md retro-authored, 3 source files cleaned, REVIEW clean 0/0/0, VERIFICATION 7/7 passed) | 2026-04-24 |
 | 14. Persistence Robustness (GAP) | 0/TBD | Not started | - |
 | 15. A11y + Modal Polish (GAP) | 0/TBD | Not started | - |
 | 16. Feat Engine Completion (GAP) | 0/TBD | Not started | - |

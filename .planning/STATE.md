@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: "Phase 12.9-02 COMPLETE — ResumenTable rewrite + isProjectable gate + empty-state frame + 3 Vitest RTL specs + R6 orphan-copy cleanup shipped in 3 atomic commits (cdaeba8 + bc64dad + 0230a23). Task 1 (cdaeba8): resumen-table.tsx rewritten end-to-end — deleted identity <dl> + attrs <table> + Plan 01 @ts-expect-error breadcrumb + (model.attributes ?? []) runtime guard in one shot; added <header>.resumen-table__identity-header rendering compact U+00B7-separated identity line with .__dataset span around datasetLabel (D-03); added .resumen-table__block--progresion + --habilidades BEM modifier classNames (R1/R2); aria-labelledby on remaining 2 <section>s preserved; 136→113 lines. Task 2 (bc64dad): resumen-board.tsx single 7-line ternary hunk wraps <ResumenTable model={model} /> in isProjectable ? ... : <NwnFrame.resumen-board__empty-state> with copy.emptyState.heading/.body (D-04). Handler bodies + 5 action button contracts + SaveSlotDialog/LoadSlotDialog/VersionMismatchDialog mounts BYTE-IDENTICAL (R5/D-07 — git diff origin/master on persistence/, save-slot-dialog.tsx, version-mismatch-dialog.tsx all empty). Rule 1 obsolete-coverage fix batched into same commit: tests/phase-08/resumen-board.spec.tsx `renders 3 blocks labelled via aria-labelledby` case rewritten to match new 2-framed + 1-plain-header shape (identity aria-labelledby now absent, compact-header landmark present); DEFAULT_MODEL fixture literal dropped obsolete attributes[] field. Phase 8 back to baseline 97 pass / 1 pre-existing BUILD_ENCODING_VERSION fail. Task 3 (0230a23): 3 new Vitest RTL specs under tests/phase-12.9/ — resumen-progresion-full-width.spec.tsx (3 it blocks, R1 structural: BEM modifier + 8 <th> + 20 <tr>; NO scrollWidth/clientWidth stubs; MCP Chrome UAT D-10 deferral documented inline), resumen-identity-dedup.spec.tsx (3 it blocks, R2: 0 .resumen-table__attrs + 1 .resumen-table__identity-header + >=3 middots), resumen-empty-state.spec.tsx (4 it blocks, R4: pre-race empty-state mount + post-race ResumenTable mount + copy-key distinctness vs stepper voice + Cargar/Importar clickable in empty state). All 10 it blocks green; all 3 specs follow D-09 convention (createElement not JSX + afterEach(cleanup) + @vitest-environment jsdom). R6 orphan cleanup also landed in Task 3: identityBlockHeading + columnLabels.{attribute,total,modifier} + attributeLabels.* keys deleted from es.ts after global grep confirmed zero external consumers. Full-suite delta: 2141 passed (+8 vs baseline of 2133) / 6 pre-existing failed (0 new regressions). Typecheck: 4 pre-existing errors only (2 feats/selectors.ts + 2 phase-12.4 prestige-gate.fixture.spec.ts), 0 new. All zero-diff gates pass (persistence, save-slot-dialog, version-mismatch-dialog, rules-engine, compiled-*, tokens.css). Live MCP Chrome UAT for R1 scroll-free rendering + R4 empty-state copy visuals DEFERRED to phase-close verify-work step per D-10 (jsdom cannot measure layout). Phase 12.9 = 2/2 plans merged — ready for /gsd-verify-work 12.9."
-last_updated: "2026-04-24T21:00:00.000Z"
-last_activity: 2026-04-24 -- Phase 12.9-02 shipped (JSX rewrite + empty-state gate + Vitest RTL wave). Phase 12.9 2/2 plans merged.
+stopped_at: "Phase 13 EXECUTION COMPLETE — Verification + Orphan Sweep (2/2 plans merged across 2 waves). Wave 1 (13-01, docs-only): retro-authored 12.6-VERIFICATION.md (133 lines, status=passed, 10/10 truths, cites commit b6952ba 4×) + 12.7-VERIFICATION.md (120 lines, status=passed, T3 Habilidades-scroll recorded as RESOLVED-CROSS-PHASE via Phase 12.8-03 D-15 marker at 12.7-UAT.md:87-102). Closes v1.0 re-audit unverified_phases gap items — milestone rolls 22/24 → 24/24 verified. Zero source-code drift verified. Commits 3f9fd19 + d429900 + b508c31 merged via ead56267. Wave 2 (13-02): surgical dead-code + orphan sweep. 5 commits: e0a79d0 (ConfirmDialog audit Branch B false-positive — 1 live caller in save-slot-dialog.tsx + 3 phase-08 tests, primitive + CSS byte-identical), 184d3da (computeHighestClassLevel deleted from prestige-gate-build.ts — ARCANE_SPELLCASTER_IDS PRESERVED per Rule-1 plan correction: grep-verified as consumed by live computeHighestSpellLevel at line 336), 1146e47 (level-sub-steps.tsx aria-label interpolates level prop; level prop preserved — consumed by 3 completeness predicates), a5fcfb9 (packages/data-extractor/src/cli.ts loadClassLabels + loadSpellsColumnNames moved inside if (EMIT_MAGIC_CATALOGS) block — default extractor runs skip wasted 2DA parse), 78b5940 (SUMMARY). Post-merge gates: typecheck 4/4 baseline errors / 0 new, vitest 2141 pass / 6 pre-existing failed / 0 new regressions. Code review (13-REVIEW.md, commit 0faebc7) returned CLEAN 0/0/0. Verification (13-VERIFICATION.md) status=passed 7/7 truths (5 directly + 2 via documented Rule-1 overrides: ARCANE_SPELLCASTER_IDS preservation + ConfirmDialog Branch B). Zero-diff gates hold: packages/rules-engine/, apps/planner/src/features/persistence/, apps/planner/src/data/, apps/planner/src/styles/tokens.css all empty diffs. v1.0 milestone ready for close."
+last_updated: "2026-04-24T22:30:00.000Z"
+last_activity: 2026-04-24 -- Phase 13 complete (2/2 plans merged, REVIEW clean, VERIFICATION 7/7 passed)
 progress:
-  total_phases: 24
-  completed_phases: 22
-  total_plans: 88
-  completed_plans: 88
-  percent: 94
+  total_phases: 28
+  completed_phases: 25
+  total_plans: 90
+  completed_plans: 90
+  percent: 100
 ---
 
 # Project State
@@ -21,13 +21,13 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-30)
 
 **Core value:** A player can build a Puerta de Baldur character from level 1 to 16 with strict server-valid validation and share that exact build reliably.
-**Current focus:** Phase 12.9 — resumen-hoja-de-personaje-ux-pass
+**Current focus:** Phase 14 — persistence-robustness (GAP) — Phase 13 complete
 
 ## Current Position
 
-Phase: 12.9 (resumen-hoja-de-personaje-ux-pass) — CODE-COMPLETE (2/2 plans merged)
-Plan: 2 of 2 (12.9-01 groundwork 5a803be + 2bfc097 + 62428f1; 12.9-02 JSX rewrite + empty-state + Vitest RTL wave cdaeba8 + bc64dad + 0230a23)
-Status: 12.9-02 complete — ready for /gsd-verify-work 12.9 + live MCP Chrome UAT per D-10
+Phase: 13 (verification-orphan-sweep) — COMPLETE (2/2 plans merged)
+Plan: 2 of 2
+Status: Phase 13 complete — next up Phase 14 (Persistence Robustness GAP)
 
 - B1 attributes overspend gate (nextIncrementCost + canIncrementAttribute, 12.3-01)
 - B2+B8+B9 multiclass active-level wiring (LevelRail dispatch, 12.3-02)
@@ -37,7 +37,7 @@ Status: 12.9-02 complete — ready for /gsd-verify-work 12.9 + live MCP Chrome U
 - B5 description paragraph CSS (white-space: pre-wrap, 12.3-06)
 
 499/499 tests green. In-browser UAT confirmed (Enano+Guerrero L1+Pícaro L2): rail 1Guerrero/2Pícaro, header NIVEL 2, PG 20, slot prompts rendered, description paragraph breaks visible. Milestone v1.0 UNBLOCKED.
-Last activity: 2026-04-24
+Last activity: 2026-04-24 -- Phase 13 execution started
 
 Progress: [██████████] 100%
 
