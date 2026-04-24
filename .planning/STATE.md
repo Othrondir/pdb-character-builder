@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: executing
-stopped_at: "**Phase 12.7 EXECUTION COMPLETE — 4/4 plans merged to master.** 12.7-01 (F7 BLOCKER) hoisted LevelEditorActionBar to creation-stepper.tsx with stable key={expandedLevel}, deleted old row mount. 12.7-02 (R2 F4) shipped canIncrementSkill pure module + skill-sheet.tsx + button gate. 12.7-03 (R3+R4+R5) shipped useLayoutEffect scroll reset + per-row Clase/Transclase label drop + 'Nivel N' prefix template (zero new CSS — gap exists at app.css:2191). 12.7-04 (R6) verify-only spike GREEN at 1254/1254 assertions. Verifier flagged 1 cross-file regression (phase-05 spec asserted text deleted by R4) — fixed via section-heading scoped assertion. Full Vitest 103 files / 2077 passing / 0 failures. F5 SKILL-CARRYOVER deferred Phase 12.8 (Puerta source-blocked)."
-last_updated: "2026-04-21T14:52:38.062Z"
-last_activity: 2026-04-22 -- completed quick task 260422-pgr (restaurar aviso de progresion bloqueada en el stepper)
+status: verifying
+stopped_at: "Phase 12.8-01 EXECUTION COMPLETE — F1 + F2 closed. Playwright 5/5 green; Vitest baseline preserved (3 pre-existing fail files / 7 tests — all in prestige-gate schema surface that 12.8-02 D-08 fixes). 12.7 T3 closed at code level. Next: Wave 1 parallel — 12.8-02 (F5 prestige gate extension) + 12.8-04 (F6 Semielfo dedupe), then Wave 2 — 12.8-03 (F3+F4 Dotes UX with D-15 cross-phase marker)."
+last_updated: "2026-04-24T11:01:43.990Z"
+last_activity: 2026-04-24
 progress:
-  total_phases: 22
-  completed_phases: 21
-  total_plans: 82
-  completed_plans: 81
-  percent: 99
+  total_phases: 23
+  completed_phases: 22
+  total_plans: 86
+  completed_plans: 83
+  percent: 97
 ---
 
 # Project State
@@ -27,7 +27,7 @@ See: .planning/PROJECT.md (updated 2026-03-30)
 
 Phase: 12.7 (uat-04-20-post-12.6-residuals) — EXECUTION COMPLETE (4/4 plans merged + cross-fix)
 Plan: 4 of 4 (12.7-01 + 12.7-02 + 12.7-03 + 12.7-04 all merged to master; phase-05 cross-fix landed)
-Status: Ready for close-out verification + human UAT re-sweep
+Status: Phase complete — ready for verification
 
 - B1 attributes overspend gate (nextIncrementCost + canIncrementAttribute, 12.3-01)
 - B2+B8+B9 multiclass active-level wiring (LevelRail dispatch, 12.3-02)
@@ -37,7 +37,7 @@ Status: Ready for close-out verification + human UAT re-sweep
 - B5 description paragraph CSS (white-space: pre-wrap, 12.3-06)
 
 499/499 tests green. In-browser UAT confirmed (Enano+Guerrero L1+Pícaro L2): rail 1Guerrero/2Pícaro, header NIVEL 2, PG 20, slot prompts rendered, description paragraph breaks visible. Milestone v1.0 UNBLOCKED.
-Last activity: 2026-04-22 -- completed quick task 260422-h9k (overrides prestige harper/campeondivino/weaponmaster; 3 de 5 huecos cerrados)
+Last activity: 2026-04-24
 
 Progress: [██████████] 100%
 
@@ -88,6 +88,7 @@ Progress: [██████████] 100%
 | Phase 12.7-01 | 10m | 2 tasks | 5 files |
 | Phase 12.7-02 | 10m | 3 tasks | 5 files |
 | Phase 12.7-03 | 12m | 2 tasks | 6 files |
+| Phase 12.8 P01 | 21m | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -160,6 +161,9 @@ Recent decisions affecting current work:
 - [Phase 12.4-09]: <LevelEditorActionBar> sticky footer rendered as the last child of .level-sheet. Single NwnButton with 3 dynamic labels (Continuar al nivel N+1 / Faltan N dotes que asignar en este nivel / Faltan N puntos de habilidad por gastar — plural-aware, singular falta/punto variants) driven by selectLevelCompletionState + computeAdvanceLabel — both pure selectors in level-progression/selectors.ts, reuse 12.4-04's buildSnapshotFromStores + CLASS/FEAT/RACE_CATALOG_INPUT boundary adapters; packages/rules-engine stays framework-agnostic per 12.4-03 decision (zero new @data-extractor imports). Deficit priority: feat > skill (UI-SPEC R2 "both unfilled" rule, locked by Suite A2). Component returns null at L16 via `if (level >= 16) return null` short-circuit BEFORE any selector call or hook dispatch — spec C1 locks no button + no footer + empty innerHTML. Atomic dispatch on enabled click: setActiveLevelSubStep('class') FIRST, then setActiveLevel(N+1), then setExpandedLevel(N+1) — sub-step set before expanded-level because shell-store's setExpandedLevel has a `?? 'class'` fallback that would preserve a prior non-null sub-step if we set expandedLevel first (locked by Suite B1). Scoped CSS .level-editor__action-bar: position:sticky bottom:0 background:--color-panel border-top:1px solid --color-panel-edge display:flex justify-content:flex-end padding:--space-md z-index:1 — zero new font-weight:700, zero hex colors, zero tokens. data-testid=\"level-editor-action-bar\" on the <footer> + data-testid=\"advance-to-level-{N+1}\" on the button give deterministic E2E selectors. OQ-1 RESOLVED: @playwright/test NOT installed at repo root (node_modules/@playwright/ missing + package.json devDependencies has no entry) → RTL-driven full-flow fallback in .spec.tsx under the Phase-12.4 jsdom glob. E2E concreteness audit (checker Warning #5): 4 concrete fireEvent.click with specific selectors (fighterRowL1 = [data-class-id=class:fighter], advanceToL2 = [data-testid=advance-to-level-2] real enabled click, fighterRowL2, advanceToL16) + 2 DOM assertions (L1 visible actionBarL1 !== null + L16 terminal actionBarL16 === null per D-06). grep for //placeholder|TBD|scaffold inside test body returns zero matches. Race pivot in E2E: Humano → Elfo. Humano L1 budget.featSlots.total=3 but useFeatStore holds only 2 slots (race-bonus slot not yet in store shape — 12.4-07 known limitation) so advance button never enables for Humano L1 at current store capacity. Elfo L1 has no race-feat bonus → 2/2 store cap matches 2/2 budget → real user-clickable advance path. Unit spec Suite A1 still exercises Humano L1 for the 'Faltan 3 dotes' disabled label path. Unit 12/12 green; E2E 1/1 green; phase-12.4 total 131/131; full suite 629/630 (only pre-existing DEF-12.4-02 font-weight:700 at app.css:113 remains). Commits b1b896f (RED, 13 assertions / 5 suites) + dff972c (GREEN component + selector + CSS + copy) + adc13a0 (E2E RTL fallback) + this docs commit. Phase 12.4 now FUNCTIONALLY COMPLETE — 9/9 plans shipped: F1..F8 + X1 of UAT-FINDINGS-2026-04-19 all closed at code level. Next gates: /gsd-verify-work 12.4 programmatic verification + human UAT re-sweep before closing milestone.
 - [Phase 12.7-01]: <LevelEditorActionBar> hoisted out of <LevelProgressionRow />'s `{isActive && ...}` expanded slot (12.6-04 mount) into <CreationStepper /> as a sibling of `.creation-stepper__bottom`, gated on `expandedLevel !== null` (D-01). Closes F7 BLOCKER: bar is now visible on Clase / Habilidades / Dotes sub-steps for the active level — previously the bar disappeared whenever BuildProgressionBoard unmounted on sub-step switch (`center-content.tsx` only mounts the board under `activeLevelSubStep === 'class'`). Stable React key contract (D-02): `key={expandedLevel}` — NOT activeLevelSubStep — preserves the exact DOM node across sub-step transitions within a single level (locked by Suite A5 `expect(after).toBe(before)`). Old mount + import + two doc-block references all deleted from `level-progression-row.tsx` (D-03; grep returns 0 occurrences — prevents double-render / testid collision per threat T-12.7-01-02). Testid contract (D-04) preserved verbatim: `[data-testid=\"advance-to-level-{N+1}\"]` + `[data-testid=\"level-editor-action-bar\"]` unchanged. Phase 12.4-09 E2E spec harness updated from solo `<BuildProgressionBoard />` to a narrow local `ShellHarness()` sibling-mounting `<BuildProgressionBoard />` + `<LevelEditorActionBar key={expandedLevel} />` (full CreationStepper's origin-step subscriptions blew the Vitest worker's 4 GB heap across the L1→L16 rerender loop — narrow harness avoids the OOM while preserving production-mount semantics). Phase 12.6 scan spec C1/D1 assertions flipped from `.not.toBeNull()` → `.toBeNull()` for action-bar / advance-button inside the expanded row (old Plan 12.6-04 contract superseded; hoisted-mount positive coverage lives in the new phase-12.7 spec). New spec `tests/phase-12.7/level-editor-action-bar-stepper-mount.spec.tsx` (6 suites: A1 Clase + A2 Habilidades + A3 Dotes visibility + A4 L20 null short-circuit + A5 stable-key proof + A6 advance-to-level-2 testid). vitest.config.ts extended with `['tests/phase-12.7/**/*.spec.tsx', 'jsdom']` (mirrors 12.6-01 glob pattern). Full suite 797 passed / 2 skipped / 1 todo across 97 test files (0 failures); typecheck exit 0. Commits d5d7246 (RED, 5 failing / 1 passing at baseline A4) + d38ee18 (GREEN hoist + delete + Rule-3 cross-spec harness updates). Plan duration ~10 min.
 - [Phase 12.7-03]: Three UAT-2026-04-20 polish findings closed in one Wave 3 plan — R3 (F2) Habilidades sub-step scroll reset via useLayoutEffect + useRef<HTMLElement> in <SkillSheet /> zeroing .skill-sheet scrollTop on mount AND on [activeSheet.level] dep change (pre-paint so mid-list flash never user-visible; D-10 auto-focus root cause preserved); R4 (F3) deleted `<span>{row.costTypeLabel}</span>` from .skill-sheet__meta-inline (category already surfaced by section headings Habilidades de clase / Habilidades transclase; Solo entrenada badge preserved per 12.4-05 orthogonal invariant; SkillSheetRowView.costTypeLabel FIELD not deleted — out of 12.7-03 scope); R5 (F1) new `shellCopyEs.progression.rowLevelPrefix(level: number) => \"Nivel ${level}\"` template fn (mirrors pointBuyMissing single-param precedent) consumed by level-progression-row.tsx:153 header strong. ZERO new CSS — .level-progression-row__header already has `gap: var(--space-sm)` at app.css:2191 (D-11 / D-13 invariant; `git diff apps/planner/src/styles/` is empty). Invariant greps all 0 (no new font-weight:700, no new hex, no new space tokens). Acceptance greps all met (rowLevelPrefix 1+1, useLayoutEffect 3, scrollerRef 4, row.costTypeLabel 0). Three Rule-3 auto-fixes during GREEN verification: (1) Suite C1 refactored from dirty-then-rerender to unmount-then-fresh-mount because setActiveLevel(1) when level=1 is a no-op that doesn't re-fire the useLayoutEffect dep array; (2) prefix regex relaxed from spec's .+ inter-token separator to [^\\d/]+ / .* because CSS `gap` is visual-only — jsdom textContent concatenates adjacent flex children without whitespace (spec author assumed gap rendered in textContent; reality differs); token-order still locked; (3) deletion comment re-phrased to hyphen-separated English so `grep -c row.costTypeLabel` returns 0 (original backtick code-fragment in comment matched the gate). Phase 12.7 suite 1286/1286 green across 7 test files. Commits 61fb9f5 (RED, 7 failing / 3 passing) + c856da7 (GREEN impl + test-authoring corrections). Plan duration ~12 min.
+- [Phase ?]: [Phase 12.8-01] Scroll reset retargeted via document.querySelector('.skill-board .selection-screen__content') — D-02 replaces Phase 12.7-03's wrong-target useRef; jsdom spec realigned, Playwright is authoritative regression guard
+- [Phase ?]: [Phase 12.8-01] Playwright harness at repo root (testDir=tests/phase-12.8, testMatch=/.*\.e2e\.spec\.ts/, workers=1, reuseExistingServer=true) complements Vitest via configDefaults.exclude spread — tests/**/*.e2e.spec.ts naming contract keeps the two runners disjoint without double-collection
+- [Phase ?]: [Phase 12.8-01] Playwright fixture stability via runtime data-* attributes (data-class-id, data-substep, data-slot-section, data-testid, data-feat-id) not localized ARIA names — Spanish copy can drift without breaking fixtures; pattern seeded for 12.8-03 Dotes fixture reuse
 
 ### Pending Todos
 
@@ -201,10 +205,11 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-23
-Stopped at: **Phase 12.7 UAT COMPLETE (commit a94ce40) — 4/5 PASS, T3 R3 scroll-reset regression (major) deferred to Phase 12.8.** Agent-driven MCP Chrome UAT against master HEAD 809ff11 (fixture Elfo + Neutral puro + Guerrero L1): T1 F7 action-bar mount persistence PASS (stable DOM node across Clase/Habilidades/Dotes), T2 F4/R2 skill `+` budget gate PASS (39/39 disabled at exhaustion, rest never negative), T3 R3 scroll reset FAIL — `useLayoutEffect` attaches `scrollerRef` to `.skill-sheet` which is NOT the overflow owner (clientHeight===scrollHeight===1982); real scroller is `.selection-screen__content` (scrollTop=206 on entry); `scroll-snap-type: y` at app.css:473 + `scroll-snap-align: start` at app.css:477 compound regression; jsdom specs green against wrong target. Matches UAT-FINDINGS-2026-04-23 F1+F2. T4 R4 per-row label drop PASS (0 offending spans, trained badges preserved), T5 R5 Nivel-N prefix PASS (token order + strong text correct). Gap deferred to 12.8 per decision: rolling into 12.8 avoids churn since UAT-04-23 F1+F2+F3+F4+F5+F6 are already queued for that phase. 12.7 UAT status: partial (1 explicit deferral tracked in 12.7-UAT.md gap block).
+Last session: 2026-04-24T11:01:43.985Z
+Stopped at: Phase 12.8-01 EXECUTION COMPLETE — F1 + F2 closed. Playwright 5/5 green; Vitest baseline preserved (3 pre-existing fail files / 7 tests — all in prestige-gate schema surface that 12.8-02 D-08 fixes). 12.7 T3 closed at code level. Next: Wave 1 parallel — 12.8-02 (F5 prestige gate extension) + 12.8-04 (F6 Semielfo dedupe), then Wave 2 — 12.8-03 (F3+F4 Dotes UX with D-15 cross-phase marker).
 
 ### Historical session continuity (Phase 12.7-03 execution — preserved for audit)
+
 **Phase 12.7-03 COMPLETE — R3 scroll reset + R4 per-row label drop + R5 Nivel-N prefix shipped.** Wave 3 polish plan (depends_on: 12.7-01 + 12.7-02 — both merged to master before this plan ran; worktree was rebased onto master to pick them up). All three UAT-2026-04-20 findings closed in one coherent plan. R3 (F2): `<SkillSheet />` gains `useLayoutEffect + useRef<HTMLElement>` pair that zeros `.skill-sheet` scrollTop on mount AND on `[activeSheet.level]` dep change (pre-paint so mid-list flash is never user-visible; D-10 auto-focus root cause preserved). R4 (F3): deleted `<span>{row.costTypeLabel}</span>` from `.skill-sheet__meta-inline` (category already surfaced by section headings `Habilidades de clase` / `Habilidades transclase`); `Solo entrenada` badge preserved per 12.4-05 invariant; `SkillSheetRowView.costTypeLabel` FIELD preserved (out of scope). R5 (F1): new template fn `shellCopyEs.progression.rowLevelPrefix(level: number) => 'Nivel ${level}'`; consumer swapped `<strong>{level}</strong>` → `<strong>{rowLevelPrefix(level)}</strong>`. **ZERO new CSS** — `.level-progression-row__header` already has `gap: var(--space-sm)` at app.css:2191 (D-13 invariant; `git diff apps/planner/src/styles/` is empty). Invariant greps all 0 (no new font-weight:700, no new hex, no new tokens). Three Rule-3 auto-fixes during GREEN verification: (1) Suite C1 refactored from dirty-then-rerender to unmount-then-fresh-mount because setActiveLevel(1) when level=1 is a no-op that doesn't re-fire useLayoutEffect dep array; (2) prefix regex relaxed because CSS `gap` is visual-only — jsdom textContent concatenates adjacent flex children without whitespace (spec author's assumption that gap rendered in textContent is false); (3) deletion comment re-phrased to satisfy grep gate. Commits 61fb9f5 (RED, 7 failing / 3 passing on scroll + label + prefix) + c856da7 (GREEN impl + test-authoring corrections). Full Phase 12.7 suite 1286/1286 across 7 test files. Full Phase 12.x suite 1689 passed / 2 skipped / 1 todo / 1 pre-existing failure (tests/phase-12/extract-counter-magic-off.spec.ts fails on `better-sqlite3` module-not-found; verified baseline-fail via `git stash` / unchanged by this plan). Typecheck 0 errors in touched files. Plan duration ~12 min.
 
 Resume options next session:
@@ -213,5 +218,5 @@ Resume options next session:
 2. **Quick task 12.7 T3 fix in isolation** — CSS removal of `scroll-snap-type` at app.css:473 + re-wire `scrollerRef` to `.selection-screen__content` in skill-sheet.tsx + Playwright regression guard. Short fix if user wants to unblock Habilidades UX before 12.8 spec lands.
 3. **Milestone v1.0 audit** — `/gsd-audit-milestone` before accepting more scope into 12.8.
 
-Resume file: `.planning/phases/12.7-uat-04-20-post-12.6-residuals/12.7-UAT.md` (gap deferral record)
+Resume file: .planning/phases/12.8-uat-04-23-residuals/12.8-01-SUMMARY.md
 Dev server: running background task `bfl04rdu4` on localhost:5173
