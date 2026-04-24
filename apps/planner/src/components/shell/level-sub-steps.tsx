@@ -68,7 +68,7 @@ export function LevelSubSteps({ level }: LevelSubStepsProps) {
   }
 
   return (
-    <div className="level-sub-steps" role="group" aria-label={`Sub-pasos del nivel`}>
+    <div className="level-sub-steps" role="group" aria-label={`Sub-pasos del nivel ${level}`}>
       {levelSubSteps.map((subStep) => (
         <StepperStep
           dataSubStep={subStep.id}

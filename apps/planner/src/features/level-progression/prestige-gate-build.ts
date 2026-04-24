@@ -343,23 +343,6 @@ function computeHighestSpellLevel(
   return highest;
 }
 
-function computeHighestClassLevel(
-  classLevels: Record<string, number>,
-  allowedClassIds?: ReadonlySet<CanonicalId>,
-) {
-  let highest = 0;
-
-  for (const [classId, classLevel] of Object.entries(classLevels)) {
-    if (allowedClassIds && !allowedClassIds.has(classId as CanonicalId)) {
-      continue;
-    }
-
-    highest = Math.max(highest, classLevel);
-  }
-
-  return highest;
-}
-
 export function buildPrestigeGateBuildState(
   progressionState: LevelProgressionStoreState,
   foundationState: CharacterFoundationStoreState,
