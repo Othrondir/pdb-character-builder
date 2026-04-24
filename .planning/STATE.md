@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: "Phase 12.9-01 COMPLETE — selector trim + copy keys + CSS deltas + vitest phase-12.9 jsdom glob shipped in 2 atomic commits (5a803be + 2bfc097). Task 1: ResumenViewModel.attributes[] + AttributeRow + ATTRIBUTE_ORDER deleted; skill-section reconstructs abilityTotalByKey inline from foundation.baseAttributes + racialAdj + levelUpAdj (D-08). shellCopyEs.resumen.emptyState.heading + .body keys added with Spanish ficha voice (D-04). Task 2: .resumen-board__actions → var(--space-sm, 8px) symmetric padding; .resumen-table__block → var(--space-md, 16px); .resumen-table__heading gains padding: 0 var(--space-sm, 8px) (R3/D-05). New BEM modifiers .resumen-table__block--progresion + --habilidades with grid-column: 1 / -1 (R1/R2 groundwork); .resumen-table__identity-header + __dataset selectors (R2/D-03 groundwork); .resumen-board__empty-state + scoped h3/p selectors (R4/D-04 groundwork). Old .resumen-table__identity dt/dd rules deleted preemptively. ZERO new hex triplets, ZERO new font-weight:700, ZERO new tokens. vitest.config.ts gains tests/phase-12.9/**/*.spec.tsx jsdom entry (D-09). Deviations: (1) Rule 3 runtime guard (model.attributes ?? []) wrapped the doomed block alongside the @ts-expect-error breadcrumb — plan-text assumed typecheck-only impact but ResumenTable renders at runtime and crashes on undefined.map; 7 phase-08 specs regressed before the guard, all green after. (2) Rule 1 obsolete coverage: 2 test cases in tests/phase-08/resumen-selectors.spec.ts that asserted against the deleted attributes[] field dropped; remaining 4 cases preserved. Phase-08 back to baseline (97 pass / 1 pre-existing ruleset-version BUILD_ENCODING_VERSION fail). Phase 12.8 env-glob unaffected (46/46 green). Typecheck: 2 pre-existing feats/selectors.ts errors only, 0 new errors. Boundary gates all zero-diff (rules-engine, compiled-*, persistence, save-slot-dialog, tokens.css). Breadcrumb count: 1 at resumen-table.tsx:55. Next: 12.9-02 (JSX rewrite: compact identity header + isProjectable empty-state gate + full-width Progresión/Habilidades + 3 Vitest RTL specs)."
-last_updated: "2026-04-24T20:45:00.000Z"
-last_activity: 2026-04-24 -- Phase 12.9-01 shipped (groundwork wave for Resumen UX Pass). Next: 12.9-02
+stopped_at: "Phase 12.9-02 COMPLETE — ResumenTable rewrite + isProjectable gate + empty-state frame + 3 Vitest RTL specs + R6 orphan-copy cleanup shipped in 3 atomic commits (cdaeba8 + bc64dad + 0230a23). Task 1 (cdaeba8): resumen-table.tsx rewritten end-to-end — deleted identity <dl> + attrs <table> + Plan 01 @ts-expect-error breadcrumb + (model.attributes ?? []) runtime guard in one shot; added <header>.resumen-table__identity-header rendering compact U+00B7-separated identity line with .__dataset span around datasetLabel (D-03); added .resumen-table__block--progresion + --habilidades BEM modifier classNames (R1/R2); aria-labelledby on remaining 2 <section>s preserved; 136→113 lines. Task 2 (bc64dad): resumen-board.tsx single 7-line ternary hunk wraps <ResumenTable model={model} /> in isProjectable ? ... : <NwnFrame.resumen-board__empty-state> with copy.emptyState.heading/.body (D-04). Handler bodies + 5 action button contracts + SaveSlotDialog/LoadSlotDialog/VersionMismatchDialog mounts BYTE-IDENTICAL (R5/D-07 — git diff origin/master on persistence/, save-slot-dialog.tsx, version-mismatch-dialog.tsx all empty). Rule 1 obsolete-coverage fix batched into same commit: tests/phase-08/resumen-board.spec.tsx `renders 3 blocks labelled via aria-labelledby` case rewritten to match new 2-framed + 1-plain-header shape (identity aria-labelledby now absent, compact-header landmark present); DEFAULT_MODEL fixture literal dropped obsolete attributes[] field. Phase 8 back to baseline 97 pass / 1 pre-existing BUILD_ENCODING_VERSION fail. Task 3 (0230a23): 3 new Vitest RTL specs under tests/phase-12.9/ — resumen-progresion-full-width.spec.tsx (3 it blocks, R1 structural: BEM modifier + 8 <th> + 20 <tr>; NO scrollWidth/clientWidth stubs; MCP Chrome UAT D-10 deferral documented inline), resumen-identity-dedup.spec.tsx (3 it blocks, R2: 0 .resumen-table__attrs + 1 .resumen-table__identity-header + >=3 middots), resumen-empty-state.spec.tsx (4 it blocks, R4: pre-race empty-state mount + post-race ResumenTable mount + copy-key distinctness vs stepper voice + Cargar/Importar clickable in empty state). All 10 it blocks green; all 3 specs follow D-09 convention (createElement not JSX + afterEach(cleanup) + @vitest-environment jsdom). R6 orphan cleanup also landed in Task 3: identityBlockHeading + columnLabels.{attribute,total,modifier} + attributeLabels.* keys deleted from es.ts after global grep confirmed zero external consumers. Full-suite delta: 2141 passed (+8 vs baseline of 2133) / 6 pre-existing failed (0 new regressions). Typecheck: 4 pre-existing errors only (2 feats/selectors.ts + 2 phase-12.4 prestige-gate.fixture.spec.ts), 0 new. All zero-diff gates pass (persistence, save-slot-dialog, version-mismatch-dialog, rules-engine, compiled-*, tokens.css). Live MCP Chrome UAT for R1 scroll-free rendering + R4 empty-state copy visuals DEFERRED to phase-close verify-work step per D-10 (jsdom cannot measure layout). Phase 12.9 = 2/2 plans merged — ready for /gsd-verify-work 12.9."
+last_updated: "2026-04-24T21:00:00.000Z"
+last_activity: 2026-04-24 -- Phase 12.9-02 shipped (JSX rewrite + empty-state gate + Vitest RTL wave). Phase 12.9 2/2 plans merged.
 progress:
   total_phases: 24
   completed_phases: 22
   total_plans: 88
-  completed_plans: 87
-  percent: 93
+  completed_plans: 88
+  percent: 94
 ---
 
 # Project State
@@ -25,9 +25,9 @@ See: .planning/PROJECT.md (updated 2026-03-30)
 
 ## Current Position
 
-Phase: 12.9 (resumen-hoja-de-personaje-ux-pass) — EXECUTING (1/2 plans merged)
-Plan: 1 of 2 (12.9-01 groundwork merged 2026-04-24 via 5a803be + 2bfc097; 12.9-02 JSX rewrite pending)
-Status: 12.9-01 complete — ready for 12.9-02
+Phase: 12.9 (resumen-hoja-de-personaje-ux-pass) — CODE-COMPLETE (2/2 plans merged)
+Plan: 2 of 2 (12.9-01 groundwork 5a803be + 2bfc097 + 62428f1; 12.9-02 JSX rewrite + empty-state + Vitest RTL wave cdaeba8 + bc64dad + 0230a23)
+Status: 12.9-02 complete — ready for /gsd-verify-work 12.9 + live MCP Chrome UAT per D-10
 
 - B1 attributes overspend gate (nextIncrementCost + canIncrementAttribute, 12.3-01)
 - B2+B8+B9 multiclass active-level wiring (LevelRail dispatch, 12.3-02)
@@ -93,6 +93,7 @@ Progress: [██████████] 100%
 | Phase 12.8 P04 | 7m  | 1 task (TDD RED+GREEN) | 4 files (3 modified + 1 created) |
 | Phase 12.8 P03 | 12m | 3 tasks (TDD + auto-scroll + e2e)  | 8 files (5 source + 2 tests + 1 doc) |
 | Phase 12.9 P01 | 25m | 2 tasks (selector trim + CSS deltas) | 6 files (4 source + 1 spec + 1 config) |
+| Phase 12.9 P02 | 35m | 3 tasks (JSX rewrite + empty-state + Vitest RTL wave) | 7 files (3 source + 3 new specs + 1 phase-08 spec update) |
 
 ## Accumulated Context
 
