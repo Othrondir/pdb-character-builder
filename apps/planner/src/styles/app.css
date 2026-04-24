@@ -1709,7 +1709,12 @@ a {
   color: var(--color-text-muted);
   font-size: 13px;
   line-height: 1.4;
-  margin: calc(var(--space-sm) * -1) 0 var(--space-sm);
+  /* UAT-2026-04-24 E8 — previously `margin-top: calc(--space-sm * -1)` pulled
+   * the counter copy UP into the section heading row, overlapping the
+   * heading's border-bottom. Normal flow below the heading instead. */
+  margin: 0 0 var(--space-sm);
+  padding-left: var(--space-xs, 4px);
+  padding-right: var(--space-xs, 4px);
 }
 
 .feat-sheet {
