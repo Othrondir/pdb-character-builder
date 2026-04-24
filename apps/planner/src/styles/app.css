@@ -1689,6 +1689,11 @@ a {
   display: flex;
   gap: var(--space-sm);
   justify-content: space-between;
+  /* UAT-2026-04-24 E7 — "Dotes generales" heading was rendering flush with
+   * the group border; the decorative gold border clipped the first letter.
+   * Nudge the header inward so the heading + pill never graze the frame. */
+  padding-left: var(--space-xs, 4px);
+  padding-right: var(--space-xs, 4px);
 }
 
 .feat-board__section-pill {
