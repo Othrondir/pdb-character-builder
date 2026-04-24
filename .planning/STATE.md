@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: verifying
-stopped_at: "Phase 12.8-04 EXECUTION COMPLETE — F6 Semielfo roster dedupe closed. Excised race:halfelf2 object (16 lines) from apps/planner/src/data/compiled-races.ts (748 → 732 lines); primary race:halfelf row at line 84 preserved. Rule-1 cross-file propagation: deleted race:halfelf2 from packages/rules-engine/src/foundation/data/puerta-point-buy.json (6 lines) + puerta-point-buy.md (1 docs row) to restore 12.6 point-buy-snapshot-coverage invariant (Object.keys(PUERTA_POINT_BUY_SNAPSHOT).length === deduped canonical-id count). 5-assertion Vitest regression lock at tests/phase-12.8/race-roster-dedupe.spec.ts (5/5 green). Full suite 2128 passed / 6 pre-existing failed; baseline delta −3 failures (RED flipped to GREEN), 0 new failures, 0 new typecheck errors. Commits e97d704 (test RED) + 5d4e1ad (fix GREEN). Wave 1 complete (12.8-01 + 12.8-02 + 12.8-04 all merged). Next: Wave 2 — 12.8-03 (F3+F4 Dotes UX with D-15 cross-phase marker)."
-last_updated: "2026-04-24T13:28:00.000Z"
+stopped_at: "Phase 12.8-03 EXECUTION COMPLETE — F3 (auto-scroll) + F4 (per-chip × deselect) closed in one Wave 2 plan, with D-15 cross-phase closure marker appended to 12.7-UAT.md. Phase 12.8 NOW FULLY CLOSED (4/4 plans: 12.8-01 + 12.8-02 + 12.8-04 + 12.8-03). F3: useRef + useEffect in feat-sheet.tsx watches null → non-null class-slot transition and defers scrollIntoView({block:'nearest',behavior:'smooth'}) one rAF frame onto first button.feat-picker__row inside [data-slot-section=\"general\"]. F4: FeatSummaryChosenEntry extended with slotKind + slotIndex (D-06); feat-summary-card.tsx rewritten with per-chip × button (aria-label 'Quitar selección: {label}' + data-testid deselect-chip-{kind}-{idx}); feat-board.tsx threads onDeselect reusing the existing `const activeLevel = boardView.activeSheet.level;` at line 64 (revision BLOCKER 2 invariant — grep = 1). 5 Vitest + 4 Playwright e2e cases green. Full Vitest 2133 passed / 6 pre-existing failed; 0 new failures. 0 new TS errors. Phase 12.8 Playwright total 9/9 (5 from 12.8-01 + 4 from 12.8-03). Commits fe57620 (test RED) + 1579ca0 (feat GREEN chip deselect) + c29dd9a (feat GREEN auto-scroll) + 7ed52b0 (test + D-15 marker). 12.7 T3 gap status: resolved. Next: Phase 12.8 verification (`/gsd-verify-work 12.8`) + agent-driven UAT re-sweep."
+last_updated: "2026-04-24T11:47:20.000Z"
 last_activity: 2026-04-24
 progress:
   total_phases: 23
   completed_phases: 22
   total_plans: 86
-  completed_plans: 85
-  percent: 99
+  completed_plans: 86
+  percent: 100
 ---
 
 # Project State
@@ -91,6 +91,7 @@ Progress: [██████████] 100%
 | Phase 12.8 P01 | 21m | 2 tasks | 7 files |
 | Phase 12.8 P02 | 11m | 2 tasks | 9 files (6 modified + 2 created + 1 config) |
 | Phase 12.8 P04 | 7m  | 1 task (TDD RED+GREEN) | 4 files (3 modified + 1 created) |
+| Phase 12.8 P03 | 12m | 3 tasks (TDD + auto-scroll + e2e)  | 8 files (5 source + 2 tests + 1 doc) |
 
 ## Accumulated Context
 
@@ -174,6 +175,11 @@ Recent decisions affecting current work:
 - [Phase ?]: [Phase 12.8-04] D-11 source-delete excises race:halfelf2 at compiled-races.ts (not dedupeByCanonicalId label extension) — set-on-id gate stays minimal; distinct canonical IDs with duplicate labels resolved at emit boundary
 - [Phase ?]: [Phase 12.8-04] Rule-1 cross-data-source propagation — deletion of race:halfelf2 in compiled-races.ts flipped tests/phase-12.6/point-buy-snapshot-coverage.spec.ts red because the snapshot asserts Object.keys(PUERTA_POINT_BUY_SNAPSHOT).length === unique-canonical-id count; fix required deleting race:halfelf2 entry from puerta-point-buy.json + .md at the same data-source boundary (CONTEXT D-12's 'harmless unused key' prediction missed the coverage invariant)
 - [Phase ?]: [Phase 12.8-04] Windows CRLF-safe line-range delete idiom — when Edit tool old_string normalization fails on long multi-line CRLF blocks in extractor-compiled .ts/.json files, fall back to `powershell -Command 'ReadAllLines + RemoveRange(start, count) + WriteAllText with CRLF'`; git checkout -- <file> reverts any partial corruption cleanly
+- [Phase ?]: [Phase 12.8-03] D-04 auto-scroll idiom — useRef holds prior classFeatId across renders; guard `prev === null && next !== null` distinguishes fresh pick from initial-mount revisit; requestAnimationFrame defers scrollIntoView one frame so React's `feat-sheet__group--current` class swap paints first; `block: 'nearest'` avoids gratuitous scroll on wider viewports where general section is already visible
+- [Phase ?]: [Phase 12.8-03] D-06 chip shape extension — FeatSummaryChosenEntry grew slotKind + slotIndex; projection walks store record directly (classFeatId → generalFeatId → bonusGeneralFeatIds[]) so each chip carries its own clear-target; `counters.chosen` pivoted from `chosenIds.length` to `chosenFeats.length` (identical value, semantic consistency with the new projection); no share-URL schema leak (grep of packages/rules-engine + persistence returns 0)
+- [Phase ?]: [Phase 12.8-03] Revision BLOCKER 2 closed — feat-board.tsx has EXACTLY ONE `const activeLevel = boardView.activeSheet.level;` declaration (at line 64 post-edit; pre-existing since Phase 12.4-07 D-04); new onDeselect callback captures the symbol without redeclaration or cross-file import; grep-verified single hit
+- [Phase ?]: [Phase 12.8-03] Vitest RTL convention locked — this repo uses `createElement(Component, props)` NOT JSX in `.spec.tsx` files because Vitest default esbuild does not auto-inject React runtime; JSX throws `ReferenceError: React is not defined`. Every Vitest RTL suite with multiple `it` blocks needs explicit `afterEach(cleanup)` since Vitest default globals don't auto-cleanup
+- [Phase ?]: [Phase 12.8-03] D-15 cross-phase closure pattern — append `## Closure (YYYY-MM-DD)` block to prior-phase UAT doc citing the fixer plan + pointer plan; mark `{test-id} gap status: resolved`. Applied to 12.7-UAT.md T3 gap (Habilidades scroll-reset), citing 12.8-01 as the code fixer and 12.8-03 as the pointer host
 
 ### Pending Todos
 
@@ -215,8 +221,8 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-24T13:28:00.000Z
-Stopped at: Phase 12.8-04 EXECUTION COMPLETE — F6 Semielfo roster dedupe closed. Excised race:halfelf2 object (16 lines) from apps/planner/src/data/compiled-races.ts (748 → 732 lines); primary race:halfelf row at line 84 preserved untouched. Rule-1 cross-file propagation: deleted race:halfelf2 from packages/rules-engine/src/foundation/data/puerta-point-buy.json (6 lines) + puerta-point-buy.md (1 docs row) to restore tests/phase-12.6/point-buy-snapshot-coverage.spec.ts invariant (Object.keys(PUERTA_POINT_BUY_SNAPSHOT).length === unique canonical-id count — CONTEXT D-12's 'harmless unused key' prediction missed this). 5-assertion Vitest regression lock at tests/phase-12.8/race-roster-dedupe.spec.ts (total count ≤44, Semielfo singleton, race:halfelf2 absent, race:halfelf primary preserved, all ids unique) — 5/5 green. Full suite 2128 passed / 6 pre-existing failed / 0 new failures; typecheck 0 new errors (4 pre-existing out-of-scope). Commits e97d704 (test RED — 3 failing / 2 passing) + 5d4e1ad (fix GREEN — data delete + cross-file propagation). TDD gate sequence present. Wave 1 COMPLETE (12.8-01 + 12.8-02 + 12.8-04). Windows CRLF edit idiom captured as pattern (PowerShell RemoveRange fallback when Edit tool normalizes multi-line blocks incorrectly).
+Last session: 2026-04-24T11:47:20.000Z
+Stopped at: Phase 12.8-03 EXECUTION COMPLETE — F3 (Dotes auto-scroll to general section on class-slot fill) + F4 (<FeatSummaryCard> per-chip × deselect) closed in one Wave 2 plan; D-15 cross-phase closure marker appended to `.planning/phases/12.7-uat-04-20-post-12.6-residuals/12.7-UAT.md` (T3 gap status: resolved). Phase 12.8 NOW FULLY CLOSED (4/4 plans merged: 12.8-01 + 12.8-02 + 12.8-04 Wave 1; 12.8-03 Wave 2). F3 code: useRef + useEffect in apps/planner/src/features/feats/feat-sheet.tsx watches `currentRecord?.classFeatId` for null → non-null transition; defers scrollIntoView({block:'nearest',behavior:'smooth'}) one rAF frame onto first `button.feat-picker__row` inside `[data-slot-section="general"]`; falls back to section element if row missing; `prev === undefined` initial ref value rejects the revisited-level case. F4 code: FeatSummaryChosenEntry grew `slotKind: 'class-bonus' | 'general'` + `slotIndex: number` (D-06); `selectFeatBoardView` chosenFeats projection rewritten to walk the store record (classFeatId → generalFeatId → bonusGeneralFeatIds); feat-summary-card.tsx rewritten with per-chip × button (aria-label `Quitar selección: {label}` + data-slot-kind + data-slot-index + data-testid `deselect-chip-{kind}-{idx}`) + new onDeselect callback prop; `Modificar selección` NwnButton preserved alongside; feat-board.tsx threads onDeselect with clearClassFeat/clearGeneralFeat narrow subscriptions reusing the existing `const activeLevel = boardView.activeSheet.level;` declaration at line 64 (Revision BLOCKER 2 invariant — grep-verified EXACTLY 1 hit); dispatch also flips setIsEditingCompleted(true) so the sheet re-opens immediately. New copy key `shellCopyEs.feats.deselectChipAriaLabel = 'Quitar selección'` (LANG-01). 5 Vitest RTL cases + 4 Playwright e2e cases all green; phase-12.8 Playwright total 9/9 (5 from 12.8-01 + 4 from 12.8-03). Full Vitest suite 2133 passed / 6 pre-existing failed / 0 new failures; typecheck 4 pre-existing errors / 0 new. 5 deviations documented in SUMMARY (all auto-fixed Rule-1/3: JSX runtime fallback to createElement, RTL cleanup, 3 grep-pattern calibrations — zero scope creep). Commits fe57620 (test RED) + 1579ca0 (feat GREEN chip deselect) + c29dd9a (feat GREEN auto-scroll) + 7ed52b0 (test + D-15 marker). TDD gate sequence present (test → feat → test). Phase 12.8 ready for `/gsd-verify-work` + agent-driven UAT re-sweep. Milestone v1.0 audit unblocked after 12.8 verification.
 
 ### Historical session continuity (Phase 12.7-03 execution — preserved for audit)
 
@@ -224,9 +230,9 @@ Stopped at: Phase 12.8-04 EXECUTION COMPLETE — F6 Semielfo roster dedupe close
 
 Resume options next session:
 
-1. **Execute Wave 2 (12.8-03)** — `/gsd-execute-phase 12.8` will pick up 12.8-03 (Dotes F3 auto-scroll + F4 FeatSummaryCard chip deselect + 12.7 T3 closure marker per D-15). Only remaining plan in Phase 12.8. Depends on 12.8-01 Playwright harness (already landed).
-2. **Phase 12.8 verification** — Once 12.8-03 lands, run `/gsd-verify-work 12.8` + agent-driven UAT re-sweep against master to confirm F1..F6 closure holds in live browser.
-3. **Milestone v1.0 audit** — `/gsd-audit-milestone` after 12.8 fully closes.
+1. **Phase 12.8 verification** — `/gsd-verify-work 12.8` + agent-driven UAT re-sweep against master to confirm F1..F6 closure holds in live browser. All 4 plans merged (12.8-01 + 12.8-02 + 12.8-03 + 12.8-04); Playwright 9/9 green in automation.
+2. **Milestone v1.0 audit** — `/gsd-audit-milestone` after 12.8 verification lands.
+3. **Next UAT feedback loop** — open a new UAT findings doc + spec if the re-sweep surfaces fresh regressions.
 
-Resume file: .planning/phases/12.8-uat-04-23-residuals/12.8-04-SUMMARY.md
+Resume file: .planning/phases/12.8-uat-04-23-residuals/12.8-03-SUMMARY.md
 Dev server: running background task `bfl04rdu4` on localhost:5173
