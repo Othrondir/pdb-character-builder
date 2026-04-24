@@ -4,14 +4,14 @@ milestone: v1.0
 milestone_name: milestone
 status: idle
 stopped_at: "Phase 12.8 FULLY CLOSED (4/4 plans + live UAT 6/6 pass). Agent-driven MCP Chrome UAT against Elfo + Neutral puro + Guerrero L1 fixture at localhost:5173 exposed F3 auto-scroll gap — feat-sheet.tsx:283-300 RAF wrapper around scrollIntoView(smooth) silently no-ops on aside.feat-sheet nested scrollable ancestor in real Chrome (2s polling, scrollTop=0; direct call without RAF scrolls 0→19860). Fixed via commit 14ee309 — dropped RAF wrapper; useEffect already runs post-commit so DOM swap for feat-sheet__group--current is live when effect runs, frame defer was redundant. Re-UAT: scrollBefore=0 → samples[0..14]=19860 @ 100ms, genFirstAfter_top=724 ∈ viewport. Playwright feat-auto-scroll.e2e.spec.ts 4/4 still green. Vitest phase-12.8 46/46 + full suite 2133 pass / 6 pre-existing fail / 0 new regressions. Phase 12.8 commits: 9c33d36..0f567ad (12.8-01 F1+F2, 12.8-02 F5, 12.8-04 F6, 12.8-03 F3+F4 + D-15 closure, REVIEW+VERIFICATION+HUMAN-UAT persisted, 14ee309 F3 RAF fix, 0f567ad UAT gap closure)."
-last_updated: "2026-04-24T18:20:00.000Z"
-last_activity: 2026-04-24 -- Phase 12.8 closed + UAT-2026-04-24 Dotes UX sweep 13 fixes (E1..E13) inline on master — see .planning/UAT-FINDINGS-2026-04-24.md
+last_updated: "2026-04-24T19:00:00.000Z"
+last_activity: 2026-04-24 -- Phase 12.8 closed + UAT-2026-04-24 Dotes UX sweep 16 fixes (E1..E16) inline on master + Phase 12.9 Resumen UX Pass promoted from backlog. Next: /gsd-spec-phase 12.9
 progress:
-  total_phases: 23
+  total_phases: 24
   completed_phases: 22
   total_plans: 86
   completed_plans: 86
-  percent: 100
+  percent: 92
 ---
 
 # Project State

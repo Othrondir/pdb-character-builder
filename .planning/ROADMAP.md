@@ -458,10 +458,26 @@ Plans:
 - [x] 12.8-04-PLAN.md — Delete race:halfelf2 duplicate row + Vitest regression lock on Semielfo singleton (F6, CHAR-01) [Wave 1] — complete 2026-04-24
 **UI hint**: yes
 
+### Phase 12.9: Resumen (Hoja de personaje) UX Pass (INSERTED, promoted from Backlog 999.1)
+**Goal**: Full UX/usability pass over the Resumen (Hoja de personaje) screen. UAT-2026-04-24 flagged the section as visually broken: overlap in the Progresión block, duplication between the character-sheet section and the creation-stepper summary items, inconsistent spacing vs the Dotes sweep polish (E1..E16). Audit the full screen, reorganize sections, deduplicate cross-sectional content, verify empty/filled states for L1..L20, preserve Export / Import / Share / Guardar / Cargar dialog surfaces.
+**Depends on**: Phase 12.8 (Dotes polish set the spacing baseline — E11/E13/E15 8px inner-padding pattern; resumen-table CSS at `.resumen-table__heading` + `resumen-table__block`); Phase 08 (Summary / Persistence / Shared Builds — the underlying selectors + save/load surface).
+**Requirements**: TBD (lock in `/gsd-spec-phase 12.9`).
+**Success Criteria** (what must be TRUE — refined in `/gsd-spec-phase 12.9`):
+  1. No overlapping content in any Resumen section at the locked fixture (Elfo + Neutral puro + Guerrero L1..L20).
+  2. No visual duplication of information that the creation-stepper summary bar already shows (identidad + atributos).
+  3. Progresión table: every column reachable without horizontal scroll at `localhost:5173` default viewport.
+  4. Save / Load / Export / Import / Share dialogs keep their current functional contract while adopting the E11/E13 inner-padding polish.
+  5. Empty-state copy reads cleanly pre-character-creation.
+**Plans**: TBD (size after `/gsd-spec-phase 12.9` + `/gsd-discuss-phase 12.9`).
+
+Plans:
+- [ ] TBD (run /gsd-spec-phase 12.9 to lock requirements, then /gsd-plan-phase 12.9)
+**UI hint**: yes
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 12.1 -> 12.2 -> 12.3 -> 12.4 -> 12.6 -> 12.7 -> 12.8
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 12.1 -> 12.2 -> 12.3 -> 12.4 -> 12.6 -> 12.7 -> 12.8 -> 12.9
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -488,14 +504,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -
 | 12.6 UAT-2026-04-20 Residuals (INSERTED) | 6/6 | Complete | 2026-04-20 |
 | 12.7 UAT-2026-04-20 Post-12.6 Residuals (INSERTED) | 4/4 | Complete (F7 BLOCKER + F4 gate + F6 verify + F1/F2/F3 polish closed) | 2026-04-20 |
 | 12.8 UAT-2026-04-23 Residuals (INSERTED) | 4/4 | Complete (12.8-01 F1+F2 scroll-snap, 12.8-02 prestige schema, 12.8-04 Semielfo dedupe, 12.8-03 Dotes F3+F4 UX + 12.7 T3 closure marker) | 2026-04-24 |
-
-## Backlog
-
-### Phase 999.1: Resumen (Hoja de personaje) UX pass (BACKLOG)
-
-**Goal:** Full UX/usability pass over the Resumen (Hoja de personaje) screen — user feedback during UAT-2026-04-24 flagged it as "horrible" with overlapping content in the Progresión block, duplication between the character-sheet section and creation-stepper summary items, and general visual debt. Needs a scoped phase: audit the full screen, reorganize sections, deduplicate cross-sectional content, verify empty/filled states.
-**Requirements:** TBD
-**Plans:** 0 plans
-
-Plans:
-- [ ] TBD (promote with /gsd-review-backlog when ready)
+| 12.9 Resumen (Hoja de personaje) UX Pass (INSERTED) | 0/TBD | Pending — awaiting /gsd-spec-phase 12.9 | - |
