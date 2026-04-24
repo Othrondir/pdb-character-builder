@@ -18,13 +18,6 @@ import {
 import type { AttributeKey } from '@planner/features/character-foundation/foundation-fixture';
 import type { ProgressionLevel } from '@planner/lib/sections';
 
-type AttributeRow = {
-  key: AttributeKey;
-  label: string;
-  total: number;
-  modifier: number;
-};
-
 type ProgressionRow = {
   level: ProgressionLevel;
   classLabel: string | null;
@@ -54,12 +47,9 @@ export interface ResumenViewModel {
     alignmentLabel: string;
     datasetLabel: string;
   };
-  attributes: AttributeRow[];
   progression: ProgressionRow[];
   skills: SkillRow[];
 }
-
-const ATTRIBUTE_ORDER: AttributeKey[] = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
 
 function abilityModifier(score: number): number {
   return Math.floor((score - 10) / 2);
@@ -128,31 +118,6 @@ export function useResumenViewModel(): ResumenViewModel {
   const subraceLabel = findSubraceLabel(foundation.subraceId);
   const alignmentLabel = findAlignmentLabel(foundation.alignmentId);
 
-  // --- Attributes: base attributes + (future) racial mods + level-up mods ---
-  // Racial modifiers come from compiledRaceCatalog.races[*].abilityAdjustments.
-  const racialAdj = compiledRaceCatalog.races.find((r) => r.id === foundation.raceId)
-    ?.abilityAdjustments as Record<AttributeKey, number> | undefined;
-  // Level-up ability increases are cumulative across all 16 levels (Phase 4 rules).
-  const levelUpAdj: Record<AttributeKey, number> = {
-    str: 0, dex: 0, con: 0, int: 0, wis: 0, cha: 0,
-  };
-  for (const rec of progression.levels) {
-    if (rec.abilityIncrease) {
-      levelUpAdj[rec.abilityIncrease] += 1;
-    }
-  }
-  const attributes: AttributeRow[] = ATTRIBUTE_ORDER.map((key) => {
-    const base = foundation.baseAttributes[key];
-    const racial = racialAdj?.[key] ?? 0;
-    const total = base + racial + levelUpAdj[key];
-    return {
-      key,
-      label: shellCopyEs.resumen.attributeLabels[key],
-      total,
-      modifier: abilityModifier(total),
-    };
-  });
-
   // --- Progression: 16 rows with derived stats at each level ---
   const progressionRows: ProgressionRow[] = progression.levels.map((lv) => {
     const classLevels = computeCumulativeClassLevels(
@@ -184,8 +149,24 @@ export function useResumenViewModel(): ResumenViewModel {
   });
 
   // --- Skills: total ranks across levels + ability modifier from final attribute total ---
+  // Inline ability-total reconstruction (Phase 12.9-01 / D-08): ResumenViewModel no
+  // longer exposes attributes[], but skill rows still need a per-key total to compute
+  // the ability modifier. Recompute locally from base + racial + level-up deltas.
   const abilityTotalByKey = new Map<AttributeKey, number>();
-  for (const attr of attributes) abilityTotalByKey.set(attr.key, attr.total);
+  const racialAdj = compiledRaceCatalog.races.find((r) => r.id === foundation.raceId)
+    ?.abilityAdjustments as Record<AttributeKey, number> | undefined;
+  const levelUpAdj: Record<AttributeKey, number> = {
+    str: 0, dex: 0, con: 0, int: 0, wis: 0, cha: 0,
+  };
+  for (const rec of progression.levels) {
+    if (rec.abilityIncrease) levelUpAdj[rec.abilityIncrease] += 1;
+  }
+  for (const key of ['str', 'dex', 'con', 'int', 'wis', 'cha'] as AttributeKey[]) {
+    abilityTotalByKey.set(
+      key,
+      foundation.baseAttributes[key] + (racialAdj?.[key] ?? 0) + levelUpAdj[key],
+    );
+  }
 
   const rankByskillId = new Map<string, number>();
   for (const lvSkill of skills.levels) {
@@ -218,7 +199,6 @@ export function useResumenViewModel(): ResumenViewModel {
       alignmentLabel,
       datasetLabel: formatDatasetLabel(),
     },
-    attributes,
     progression: progressionRows,
     skills: skillRows,
   };

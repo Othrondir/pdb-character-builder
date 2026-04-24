@@ -52,7 +52,8 @@ export function ResumenTable({ model }: ResumenTableProps) {
             </tr>
           </thead>
           <tbody>
-            {model.attributes.map((a) => (
+            {/* @ts-expect-error Plan 12.9-02-01 deletes this consumer */}
+            {(model.attributes ?? []).map((a) => (
               <tr key={a.key}>
                 <th scope="row">{a.label}</th>
                 <td>{a.total}</td>

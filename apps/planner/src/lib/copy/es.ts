@@ -44,6 +44,10 @@ export const shellCopyEs = {
     },
     loadingState: 'Cargando slots…',
     noSlotsMessage: 'No hay builds guardadas todavía.',
+    emptyState: {
+      heading: 'Todavía no hay ficha que mostrar',
+      body: 'Elige raza y alineamiento en Construcción para ver la ficha completa de tu personaje. Mientras tanto puedes cargar una build guardada o importar un JSON.',
+    },
   },
   persistence: {
     saveDialog: {

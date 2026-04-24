@@ -31,29 +31,12 @@ describe('useResumenViewModel', () => {
     expect(result.current.identity.datasetLabel).toBe(formatDatasetLabel());
   });
 
-  it('emits six attribute rows in STR/DEX/CON/INT/WIS/CHA order', () => {
-    const foundation = useCharacterFoundationStore.getState();
-    foundation.setRace('race:human');
-    foundation.setAlignment('alignment:lawful-good');
-
-    const { result } = renderHook(() => useResumenViewModel());
-    expect(result.current.attributes).toHaveLength(6);
-    expect(result.current.attributes.map((a) => a.key)).toEqual([
-      'str', 'dex', 'con', 'int', 'wis', 'cha',
-    ]);
-  });
-
-  it('derives ability modifier as floor((total - 10) / 2)', () => {
-    const foundation = useCharacterFoundationStore.getState();
-    foundation.setRace('race:human');
-    foundation.setAlignment('alignment:lawful-good');
-    foundation.setBaseAttribute('str', 14);
-
-    const { result } = renderHook(() => useResumenViewModel());
-    const str = result.current.attributes.find((a) => a.key === 'str')!;
-    expect(str.total).toBe(14);
-    expect(str.modifier).toBe(2);
-  });
+  // Phase 12.9-01 / D-08: ResumenViewModel.attributes field removed — the
+  // Resumen route no longer renders an attributes table (identity-header
+  // replaces it in Plan 02). The previous "emits six attribute rows ..." and
+  // "derives ability modifier ..." cases exercised deleted surface and are
+  // dropped here. Ability-total reconstruction survives inline in the skills
+  // section (still covered by the skills regression below).
 
   it('emits progression rows for all 20 levels; empty classes render null classLabel (UAT-2026-04-20 P6)', () => {
     const { result } = renderHook(() => useResumenViewModel());
