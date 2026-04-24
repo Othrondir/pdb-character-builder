@@ -1799,6 +1799,9 @@ a {
   letter-spacing: 0.04em;
   text-transform: uppercase;
   margin: var(--space-sm, 8px) 0 var(--space-xs, 4px);
+  /* UAT-2026-04-24 E11 — match E10 inner spacing so "Disponibles" /
+   * "No disponibles" headings are not flush with the partition edge. */
+  padding: 0 var(--space-sm, 8px);
   color: var(--text-muted, #7a6a56);
 }
 
