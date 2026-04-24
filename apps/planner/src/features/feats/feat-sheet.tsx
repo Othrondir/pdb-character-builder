@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { shellCopyEs } from '@planner/lib/copy/es';
 import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
 import { useFeatStore } from './store';
@@ -264,6 +264,42 @@ export function FeatSheet({ boardView, focusedFeatId, onFocusFeat }: FeatSheetPr
   // the active-level's class-bonus (or general) pick RELEASES the slot
   // instead of re-setting the same id. Second click = un-select.
   const currentRecord = featLevels.find((r) => r.level === activeLevel);
+
+  // Phase 12.8-03 (D-04, UAT-2026-04-23 F3) — auto-scroll to the general
+  // section when the class-bonus slot fills. Without this the viewport
+  // stays on the class section and the user's second click lands on
+  // class rows again (UAT evidence: counter stuck at 1/2 with the first
+  // pick overwritten). Uses `block: 'nearest'` so wider viewports where
+  // the general section is already visible do not get a gratuitous
+  // scroll.
+  //
+  // Guard: only trigger on an actual null → non-null transition.
+  // `prevClassFeatIdRef.current` starts `undefined` so the initial-mount
+  // case (revisited level with classFeatId already set) is rejected by
+  // the `prev === null` check — we only scroll on a fresh pick.
+  const prevClassFeatIdRef = useRef<string | null | undefined>(undefined);
+  useEffect(() => {
+    const prev = prevClassFeatIdRef.current;
+    const next = currentRecord?.classFeatId ?? null;
+    if (prev === null && next !== null) {
+      // Defer one frame so React commit finishes first — the general
+      // section swaps its `feat-sheet__group--current` class on the
+      // same render, and we want to scroll AFTER that swap paints.
+      requestAnimationFrame(() => {
+        const generalSection = document.querySelector<HTMLElement>(
+          '[data-slot-section="general"]',
+        );
+        if (generalSection === null) {
+          return;
+        }
+        const firstRow =
+          generalSection.querySelector<HTMLElement>('button.feat-picker__row') ??
+          generalSection;
+        firstRow.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      });
+    }
+    prevClassFeatIdRef.current = next;
+  }, [currentRecord?.classFeatId]);
 
   const handleSelectClassFeat = (featId: string) => {
     onFocusFeat(featId);
