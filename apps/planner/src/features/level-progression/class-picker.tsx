@@ -188,7 +188,15 @@ function ClassPickerRow({
   const multiclassBlocked = option.status === 'blocked';
 
   const disabled = multiclassBlocked || !gateResult.reachable;
-  const prestigeReasonLabel = isPrestige ? gateResult.blockers[0]?.label : null;
+  // UAT-2026-04-24 E1 — suppress the generic "Disponible a partir del nivel 2"
+  // copy at L1. The row still renders disabled (blocked state wins), but the
+  // redundant reason line is dropped — users seeing the prestige section at L1
+  // know it unlocks at L2 from context. Real-prereq blockers at L2+ still surface.
+  const firstBlocker = gateResult.blockers[0];
+  const prestigeReasonLabel =
+    isPrestige && firstBlocker && firstBlocker.kind !== 'l1'
+      ? firstBlocker.label
+      : null;
 
   const rowClass = [
     'class-picker__row',

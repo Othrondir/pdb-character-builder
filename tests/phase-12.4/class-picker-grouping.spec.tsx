@@ -95,7 +95,7 @@ describe('Phase 12.4-06 — ClassPicker grouping + prestige gate (SPEC R1 / CLAS
     }
   });
 
-  it('at L1, every prestige row is disabled with "Disponible a partir del nivel 2"', () => {
+  it('at L1, every prestige row is disabled with no reason line (UAT-2026-04-24 E1)', () => {
     setupL1Humano();
     render(createElement(ClassPicker));
 
@@ -107,7 +107,10 @@ describe('Phase 12.4-06 — ClassPicker grouping + prestige gate (SPEC R1 / CLAS
     expect(prestigeRows.length).toBeGreaterThan(0);
     for (const row of Array.from(prestigeRows)) {
       expect(row.getAttribute('aria-disabled')).toBe('true');
-      expect(row.textContent).toMatch(/Disponible a partir del nivel 2/);
+      // L1 blocker (kind:'l1') is suppressed in the UI — row stays disabled but
+      // no redundant "Disponible a partir del nivel 2" copy surfaces.
+      expect(row.querySelector('em.class-picker__reason')).toBeNull();
+      expect(row.textContent).not.toMatch(/Disponible a partir del nivel 2/);
     }
   });
 
