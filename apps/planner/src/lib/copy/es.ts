@@ -5,13 +5,13 @@ export const shellCopyEs = {
   resumen: {
     heading: 'Resumen del personaje',
     datasetHeadingAria: 'Versión del ruleset y del dataset de esta build',
-    identityBlockHeading: 'Identidad y atributos',
     progressionBlockHeading: 'Progresión',
     skillsBlockHeading: 'Habilidades',
+    // Phase 12.9-02 / R6 tidy: the old identity-block heading key, the attribute
+    // column-label keys, and the ability-label subtree were dropped alongside the
+    // identity + attrs table deletion (D-03 + D-08). Repo-wide grep confirmed zero
+    // consumers outside the prior declaration site.
     columnLabels: {
-      attribute: 'Atributo',
-      total: 'Total',
-      modifier: 'Mod.',
       level: 'Nivel',
       className: 'Clase',
       bab: 'BAB',
@@ -24,14 +24,6 @@ export const shellCopyEs = {
       ranks: 'Rangos',
       abilityMod: 'Mod. atr.',
       skillTotal: 'Total',
-    },
-    attributeLabels: {
-      str: 'Fuerza',
-      dex: 'Destreza',
-      con: 'Constitución',
-      int: 'Inteligencia',
-      wis: 'Sabiduría',
-      cha: 'Carisma',
     },
     emptyNamePlaceholder: 'Sin nombre',
     notAvailable: '—',
