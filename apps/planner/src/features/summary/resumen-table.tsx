@@ -6,15 +6,21 @@ interface ResumenTableProps {
 }
 
 /**
- * Flat 3-block Resumen table mirroring `excel simulador de fichas/Plantilla Base.xlsx`
- * sheet 1 "Resumen Ficha" layout:
- *   1. Identity + Attributes block (top-left in xlsx)
- *   2. Progression block (top-right in xlsx — 20-level class + BAB + saves + feats, UAT-2026-04-20 P6)
- *   3. Habilidades block (bottom in xlsx — 39 skills with ranks + ability mod + total)
+ * Phase 12.9: Compact ficha layout.
  *
- * All derived-stat cells render `copy.notAvailable` ('—') when the rules-engine helper
- * is unavailable. NEVER substitute `0` — a ficha showing BAB/Fort/Ref/Will = 0 for every
- * level is misleading, not a clear handoff (SHAR-01).
+ *   1. Compact identity header  ({name} · {race}{subrace?} · {alignment} · <span>{dataset}</span>)
+ *   2. Progresión block         (20-row × 8-col table, full-width via --progresion modifier)
+ *   3. Habilidades block        (39-row × 4-col table, full-width via --habilidades modifier)
+ *
+ * Identity was collapsed from the prior definition-list + attribute table surfaces (R2/D-03) because
+ * the creation-stepper summary bar already surfaces labeled identity + atributo chips.
+ * Keeping the compact header inside <ResumenTable> preserves the ficha handoff self-containment.
+ *
+ * Middot separator: U+00B7 '·' matching .character-sheet__stat-mod precedent.
+ * Dataset span color tint via .resumen-table__identity-header__dataset CSS class (no inline style).
+ *
+ * All derived-stat cells render `copy.notAvailable` ('—') when the rules-engine helper is
+ * unavailable. NEVER substitute `0` (SHAR-01 carry-over).
  */
 export function ResumenTable({ model }: ResumenTableProps) {
   const copy = shellCopyEs.resumen;
@@ -22,51 +28,23 @@ export function ResumenTable({ model }: ResumenTableProps) {
 
   return (
     <div className="resumen-table">
-      {/* Block 1: Identity + Attributes */}
-      <section
-        className="resumen-table__block nwn-frame"
-        aria-labelledby="resumen-identity-heading"
-      >
-        <h3 id="resumen-identity-heading" className="resumen-table__heading">
-          {copy.identityBlockHeading}
-        </h3>
-        <dl className="resumen-table__identity">
-          <dt>Nombre</dt>
-          <dd>{model.identity.name}</dd>
-          <dt>Raza</dt>
-          <dd>
-            {model.identity.raceLabel}
-            {model.identity.subraceLabel ? ` · ${model.identity.subraceLabel}` : ''}
-          </dd>
-          <dt>Alineamiento</dt>
-          <dd>{model.identity.alignmentLabel}</dd>
-          <dt>Ruleset · Dataset</dt>
-          <dd>{model.identity.datasetLabel}</dd>
-        </dl>
-        <table className="resumen-table__attrs">
-          <thead>
-            <tr>
-              <th scope="col">{copy.columnLabels.attribute}</th>
-              <th scope="col">{copy.columnLabels.total}</th>
-              <th scope="col">{copy.columnLabels.modifier}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {/* @ts-expect-error Plan 12.9-02-01 deletes this consumer */}
-            {(model.attributes ?? []).map((a) => (
-              <tr key={a.key}>
-                <th scope="row">{a.label}</th>
-                <td>{a.total}</td>
-                <td>{a.modifier >= 0 ? `+${a.modifier}` : a.modifier}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </section>
+      {/* Compact identity header (replaces the prior identity + attribute surfaces) */}
+      <header className="resumen-table__identity-header">
+        {model.identity.name}
+        {' · '}
+        {model.identity.raceLabel}
+        {model.identity.subraceLabel ? ` · ${model.identity.subraceLabel}` : ''}
+        {' · '}
+        {model.identity.alignmentLabel}
+        {' · '}
+        <span className="resumen-table__identity-header__dataset">
+          {model.identity.datasetLabel}
+        </span>
+      </header>
 
-      {/* Block 2: Progression (16 rows) */}
+      {/* Block 1: Progresión (20 rows × 8 cols — full-width via BEM modifier) */}
       <section
-        className="resumen-table__block nwn-frame"
+        className="resumen-table__block resumen-table__block--progresion nwn-frame"
         aria-labelledby="resumen-progression-heading"
       >
         <h3 id="resumen-progression-heading" className="resumen-table__heading">
@@ -102,9 +80,9 @@ export function ResumenTable({ model }: ResumenTableProps) {
         </table>
       </section>
 
-      {/* Block 3: Skills */}
+      {/* Block 2: Habilidades (39 rows × 4 cols — full-width via BEM modifier) */}
       <section
-        className="resumen-table__block nwn-frame"
+        className="resumen-table__block resumen-table__block--habilidades nwn-frame"
         aria-labelledby="resumen-skills-heading"
       >
         <h3 id="resumen-skills-heading" className="resumen-table__heading">
