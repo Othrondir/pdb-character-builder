@@ -461,17 +461,18 @@ Plans:
 ### Phase 12.9: Resumen (Hoja de personaje) UX Pass (INSERTED, promoted from Backlog 999.1)
 **Goal**: Full UX/usability pass over the Resumen (Hoja de personaje) screen. UAT-2026-04-24 flagged the section as visually broken: overlap in the Progresión block, duplication between the character-sheet section and the creation-stepper summary items, inconsistent spacing vs the Dotes sweep polish (E1..E16). Audit the full screen, reorganize sections, deduplicate cross-sectional content, verify empty/filled states for L1..L20, preserve Export / Import / Share / Guardar / Cargar dialog surfaces.
 **Depends on**: Phase 12.8 (Dotes polish set the spacing baseline — E11/E13/E15 8px inner-padding pattern; resumen-table CSS at `.resumen-table__heading` + `resumen-table__block`); Phase 08 (Summary / Persistence / Shared Builds — the underlying selectors + save/load surface).
-**Requirements**: TBD (lock in `/gsd-spec-phase 12.9`).
+**Requirements**: R1, R2, R3, R4, R5, R6 (locked via SPEC.md 2026-04-24).
 **Success Criteria** (what must be TRUE — refined in `/gsd-spec-phase 12.9`):
   1. No overlapping content in any Resumen section at the locked fixture (Elfo + Neutral puro + Guerrero L1..L20).
   2. No visual duplication of information that the creation-stepper summary bar already shows (identidad + atributos).
   3. Progresión table: every column reachable without horizontal scroll at `localhost:5173` default viewport.
   4. Save / Load / Export / Import / Share dialogs keep their current functional contract while adopting the E11/E13 inner-padding polish.
   5. Empty-state copy reads cleanly pre-character-creation.
-**Plans**: TBD (size after `/gsd-spec-phase 12.9` + `/gsd-discuss-phase 12.9`).
+**Plans**: 2 plans
 
 Plans:
-- [ ] TBD (run /gsd-spec-phase 12.9 to lock requirements, then /gsd-plan-phase 12.9)
+- [ ] 12.9-01-PLAN.md — R3+R6 groundwork: trim ResumenViewModel.attributes[], add emptyState copy keys, land CSS BEM modifiers + 8px padding deltas + empty-state selectors, add phase-12.9 vitest jsdom glob
+- [ ] 12.9-02-PLAN.md — R1+R2+R4+R5 wave: rewrite <ResumenTable> (compact header + full-width Progresión + Habilidades), gate <ResumenTable> mount behind isProjectable with empty-state NwnFrame, author 3 Vitest RTL specs (progresion full-width + identity dedup + empty-state)
 **UI hint**: yes
 
 ## Progress
