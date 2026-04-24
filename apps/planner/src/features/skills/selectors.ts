@@ -61,13 +61,6 @@ const CATEGORY_LABELS: Record<string, string> = {
   utility: 'Utilidad',
 };
 
-const STATUS_ORDER: Record<SkillEvaluationStatus, number> = {
-  blocked: 1,
-  illegal: 0,
-  legal: 2,
-  pending: 3,
-};
-
 export interface SkillRailEntryView {
   active: boolean;
   classId: CanonicalId | null;
@@ -325,10 +318,6 @@ function formatCurrentTotalLabel(value: number) {
   return `${shellCopyEs.skills.rankLabel}: ${formatNumericValue(value)}`;
 }
 
-function compareStatuses(left: SkillEvaluationStatus, right: SkillEvaluationStatus) {
-  return STATUS_ORDER[left] - STATUS_ORDER[right];
-}
-
 function selectBoardArtifacts(
   skillState: SkillStoreState,
   progressionState: LevelProgressionStoreState,
@@ -536,11 +525,12 @@ function buildActiveSkillRows(
         trainedOnly: skill.trainedOnly,
       };
     })
-    .sort((left, right) => {
-      const statusDelta = compareStatuses(left.status, right.status);
-
-      return statusDelta !== 0 ? statusDelta : left.label.localeCompare(right.label);
-    });
+    // UAT-2026-04-24 E2 — fixed row order. Previously sorted by status first
+    // (illegal → blocked → legal → pending), which caused rows to reshuffle
+    // whenever the user added a rank and the row flipped pending → legal.
+    // Rows now stay in alphabetical order so +/- clicks never reposition the
+    // skill under the cursor.
+    .sort((left, right) => left.label.localeCompare(right.label));
 }
 
 export function selectActiveSkillSheetView(
