@@ -12,8 +12,8 @@
  * React runtime, so JSX would throw "React is not defined".
  */
 
-import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { afterEach, describe, it, expect, vi } from 'vitest';
+import { cleanup, render, screen, fireEvent } from '@testing-library/react';
 import { createElement } from 'react';
 import {
   FeatSummaryCard,
@@ -26,6 +26,13 @@ const CHOSEN: FeatSummaryChosenEntry[] = [
 ];
 
 describe('Phase 12.8-03 — FeatSummaryCard per-chip × deselect', () => {
+  // Explicit cleanup so `screen.getByRole(...)` queries in each test see
+  // only that test's render output — RTL does not auto-cleanup across
+  // `it` blocks under Vitest's default globals.
+  afterEach(() => {
+    cleanup();
+  });
+
   it('renders one × button per chosen chip with Spanish aria label', () => {
     render(
       createElement(FeatSummaryCard, {

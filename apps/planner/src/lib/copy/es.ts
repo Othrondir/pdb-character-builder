@@ -351,6 +351,11 @@ export const shellCopyEs = {
       budgetExhausted: 'Sin slots disponibles en este nivel',
     },
     modifySelectionLabel: 'Modificar selección',
+    // Phase 12.8-03 (D-05, UAT-2026-04-23 F4) — per-chip deselect aria label.
+    // Spanish-first per LANG-01. Rendered as `${deselectChipAriaLabel}: ${featLabel}`
+    // on each × button inside <FeatSummaryCard> so screen readers announce
+    // the feat name being cleared.
+    deselectChipAriaLabel: 'Quitar selección',
     // Phase 12.4-08 — parameterized feat-family fold + inline expander
     // (SPEC R7 / CONTEXT D-05). Pill reads `{N} objetivos` or `1 objetivo`;
     // expander legend reads `Elige {paramLabel}` (`habilidad`, `escuela de

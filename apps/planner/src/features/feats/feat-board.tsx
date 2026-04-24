@@ -43,6 +43,10 @@ export function FeatBoard() {
   const progressionState = useLevelProgressionStore();
   const foundationState = useCharacterFoundationStore();
   const skillState = useSkillStore();
+  // Phase 12.8-03 (D-05 + D-06) — narrow subscriptions for per-chip deselect.
+  // Mirrors the pattern at feat-sheet.tsx:239-240.
+  const clearClassFeat = useFeatStore((s) => s.clearClassFeat);
+  const clearGeneralFeat = useFeatStore((s) => s.clearGeneralFeat);
   const boardView = selectFeatBoardView(
     featState,
     progressionState,
@@ -98,6 +102,24 @@ export function FeatBoard() {
         {shouldCollapse ? (
           <FeatSummaryCard
             chosenFeats={boardView.chosenFeats}
+            onDeselect={(entry) => {
+              // Phase 12.8-03 (D-05 + D-06, UAT-2026-04-23 F4) — per-chip ×
+              // dispatch. `activeLevel` is the symbol declared higher up in
+              // this component body (see the setIsEditingCompleted reset
+              // effect introduced by Phase 12.4-07 D-04). Do NOT redeclare
+              // here; reuse so the deselect dispatches to the same level
+              // the sheet is currently viewing.
+              if (entry.slotKind === 'class-bonus') {
+                clearClassFeat(activeLevel, entry.slotIndex);
+              } else {
+                clearGeneralFeat(activeLevel, entry.slotIndex);
+              }
+              // Re-expand the sheet so the user can pick a replacement.
+              // Without this, the card would keep rendering (with the
+              // remaining chip + "Modificar selección") until the user
+              // clicks Modificar — defeating the F4 acceptance.
+              setIsEditingCompleted(true);
+            }}
             onModify={() => setIsEditingCompleted(true)}
           />
         ) : (

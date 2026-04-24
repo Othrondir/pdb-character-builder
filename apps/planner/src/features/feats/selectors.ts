@@ -147,9 +147,20 @@ export type FeatListEntry =
   | { kind: 'feat'; option: FeatOptionView }
   | { kind: 'family'; family: FeatFamilyView };
 
+/**
+ * Phase 12.8-03 (D-06, UAT-2026-04-23 F4) — richer chip entry shape.
+ * `slotKind` + `slotIndex` let <FeatSummaryCard> dispatch the correct
+ * clear action per chip (clearClassFeat / clearGeneralFeat with index).
+ * `slotIndex` semantics match the store:
+ *   - slotKind='class-bonus', slotIndex=0 → classFeatId
+ *   - slotKind='general',     slotIndex=0 → generalFeatId
+ *   - slotKind='general',     slotIndex=1…N → bonusGeneralFeatIds[index-1]
+ */
 export interface FeatSummaryChosenEntry {
   featId: string;
   label: string;
+  slotKind: 'class-bonus' | 'general';
+  slotIndex: number;
 }
 
 export interface ActiveFeatSheetView {
@@ -1098,12 +1109,41 @@ export function selectFeatBoardView(
   };
 
   // Phase 12.4-07 (D-04) — chosen feats at the active level, for the
-  // FeatSummaryCard collapse view. Dedupe in case the same feat id lands
-  // in both store slots (defensive — store should prevent this).
-  const chosenIds = Array.from(new Set(getChosenFeatIds(activeFeatRecord)));
-  const chosenFeats: FeatSummaryChosenEntry[] = chosenIds.map((id) => {
+  // FeatSummaryCard collapse view.
+  //
+  // Phase 12.8-03 (D-06, UAT-2026-04-23 F4) — project per-slot so each chip
+  // carries its own (slotKind, slotIndex) clear-target. Order: class-bonus
+  // first, then general primary (slotIndex=0), then bonus-general slots
+  // (1..N). Walks the store record directly (not the flattened chosenIds)
+  // so each chip's clear-action dispatch is unambiguous.
+  const chosenFeats: FeatSummaryChosenEntry[] = [];
+  const findLabel = (id: string): string => {
     const feat = compiledFeatCatalog.feats.find((f) => f.id === id);
-    return { featId: id, label: feat?.label ?? id };
+    return feat?.label ?? id;
+  };
+  if (activeFeatRecord?.classFeatId) {
+    chosenFeats.push({
+      featId: activeFeatRecord.classFeatId,
+      label: findLabel(activeFeatRecord.classFeatId),
+      slotKind: 'class-bonus',
+      slotIndex: 0,
+    });
+  }
+  if (activeFeatRecord?.generalFeatId) {
+    chosenFeats.push({
+      featId: activeFeatRecord.generalFeatId,
+      label: findLabel(activeFeatRecord.generalFeatId),
+      slotKind: 'general',
+      slotIndex: 0,
+    });
+  }
+  (activeFeatRecord?.bonusGeneralFeatIds ?? []).forEach((id, idx) => {
+    chosenFeats.push({
+      featId: id,
+      label: findLabel(id),
+      slotKind: 'general',
+      slotIndex: idx + 1,
+    });
   });
 
   // Slot counter reads budget.featSlots (authoritative; includes raceBonus).
@@ -1111,7 +1151,7 @@ export function selectFeatBoardView(
   // level) so collapse-on-complete triggers correctly for non-Humano and
   // for Humano when all store-addressable slots are filled.
   const counters: FeatBoardCounters = {
-    chosen: chosenIds.length,
+    chosen: chosenFeats.length,
     slots: budget.featSlots.total,
   };
 
