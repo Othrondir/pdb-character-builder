@@ -164,15 +164,17 @@ describe('Phase 12.4-08 — feat-family fold + inline expander (SPEC R7)', () =>
       expect(candidates.length).toBe(1);
     });
 
-    it('B2: family row carries an "{N} objetivos" pill (plural-aware)', () => {
+    it('B2: family row carries a "Seleccionar tipo" pill (UAT-2026-04-24 E9)', () => {
       setupL1HumanoGuerrero();
       render(createElement(FeatBoard));
       const familyRow = document.querySelector<HTMLElement>(
         'button[data-family-id="feat:skill-focus"]',
       );
       expect(familyRow).not.toBeNull();
-      // Pill text must match "{N} objetivos" (or "1 objetivo" when N===1).
-      expect(familyRow!.textContent).toMatch(/\d+ objetivos?/);
+      // UAT-2026-04-24 E9 — pill copy moved from "{N} objetivos" to
+      // action-style "Seleccionar tipo" so the row reads as a control,
+      // not a count. Count removed by design (expander still lists targets).
+      expect(familyRow!.textContent).toMatch(/Seleccionar tipo/);
     });
 
     it('B3: clicking the family row opens inline <fieldset class="feat-family-expander"> with legend "Elige habilidad"', () => {
