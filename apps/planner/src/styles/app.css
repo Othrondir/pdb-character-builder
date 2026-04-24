@@ -1711,8 +1711,9 @@ a {
   line-height: 1.4;
   /* UAT-2026-04-24 E8 — previously `margin-top: calc(--space-sm * -1)` pulled
    * the counter copy UP into the section heading row, overlapping the
-   * heading's border-bottom. Normal flow below the heading instead. */
-  margin: 0 0 var(--space-sm);
+   * heading's border-bottom. Add a positive margin-top so the counter sits
+   * clearly below the heading's gold underline instead of touching it. */
+  margin: var(--space-sm, 8px) 0;
   padding-left: var(--space-xs, 4px);
   padding-right: var(--space-xs, 4px);
 }
