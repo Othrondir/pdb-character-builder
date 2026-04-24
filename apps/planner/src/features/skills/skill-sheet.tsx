@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, type ChangeEvent } from 'react';
+import { useLayoutEffect, type ChangeEvent } from 'react';
 import {
   canIncrementSkill,
   type SkillBudgetSnapshot,
@@ -140,24 +140,24 @@ export function SkillSheet() {
   // framework-agnostic (12.4-03 invariant).
   const snapshot = buildSkillBudgetSnapshotFromSheet(activeSheet);
 
-  // Phase 12.7-03 (F2 R3, D-08/D-09) — Habilidades sub-step scroll reset.
-  // UAT-2026-04-20 showed the sub-step opens mid-list (scrollHeight 2069 /
-  // clientHeight 748) because a browser-native focus side-effect scrolls
-  // the first interactive button into view. useLayoutEffect fires
-  // synchronously after DOM mutation but BEFORE the browser paints, so
-  // the user never sees the mid-list flash even on slow hardware. The
-  // effect also runs on `[activeSheet.level]` dependency change so the
-  // scroller resets when the user navigates L1 → L2 via the level rail.
-  const scrollerRef = useRef<HTMLElement | null>(null);
+  // Phase 12.8-01 (D-02, UAT-2026-04-23 F1+F2) — retarget scroll reset
+  // to the real overflow owner. The `<aside className="skill-sheet">`
+  // below is NOT the scroller (clientHeight===scrollHeight); the parent
+  // selection-screen content element inside the skill-board is. Selector
+  // binds at runtime because BuildProgressionBoard → LevelProgressionRow
+  // mounts SkillSheet under SelectionScreen with className="skill-board".
+  // The layout-effect fires synchronously pre-paint so no mid-list flash.
   useLayoutEffect(() => {
-    if (scrollerRef.current !== null) {
-      scrollerRef.current.scrollTop = 0;
+    const scroller = document.querySelector<HTMLElement>(
+      '.skill-board .selection-screen__content',
+    );
+    if (scroller !== null) {
+      scroller.scrollTop = 0;
     }
   }, [activeSheet.level]);
 
   return (
     <aside
-      ref={scrollerRef}
       className="planner-panel planner-panel--inner level-sheet skill-sheet"
     >
       <div>

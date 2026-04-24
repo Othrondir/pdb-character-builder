@@ -470,11 +470,6 @@ a {
   grid-template-columns: 1fr;
   overflow-y: auto;
   padding-bottom: var(--space-sm);
-  scroll-snap-type: y proximity;
-}
-
-.skill-board .skill-sheet__row {
-  scroll-snap-align: start;
 }
 
 .skill-board .skill-sheet {
