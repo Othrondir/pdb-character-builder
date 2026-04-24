@@ -2004,7 +2004,7 @@ a {
   display: flex;
   gap: 0.75rem;
   flex-wrap: wrap;
-  padding: 0.75rem 1rem;
+  padding: var(--space-sm, 8px) var(--space-sm, 8px);
 }
 .resumen-table {
   display: grid;
@@ -2012,12 +2012,13 @@ a {
   grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
 }
 .resumen-table__block {
-  padding: 1rem;
+  padding: var(--space-md, 16px);
 }
 .resumen-table__heading {
   font-family: var(--font-display);
   color: var(--color-gold);
   margin-top: 0;
+  padding: 0 var(--space-sm, 8px);
 }
 .resumen-table table {
   width: 100%;
@@ -2028,13 +2029,39 @@ a {
   border-bottom: 1px solid var(--color-gold-faded);
   text-align: left;
 }
-.resumen-table__identity dt {
-  font-family: var(--font-display);
-  color: var(--color-gold-faded);
-  font-size: 0.875rem;
+
+/* ===== Phase 12.9: Resumen UX Pass (R1/R2/R3/R4) ===== */
+
+/* Phase 12.9 R1/R2 (D-01, D-02) — Progresión + Habilidades full-width grid breakout */
+.resumen-table__block--progresion,
+.resumen-table__block--habilidades {
+  grid-column: 1 / -1;
 }
-.resumen-table__identity dd {
-  margin: 0 0 0.5rem 0;
+
+/* Phase 12.9 R2 (D-03) — Compact identity header replaces <dl>.resumen-table__identity */
+.resumen-table__identity-header {
+  color: var(--color-text);
+  font-family: var(--font-body);
+  grid-column: 1 / -1;
+  padding: 0 var(--space-sm, 8px);
+}
+.resumen-table__identity-header__dataset {
+  color: var(--color-gold-faded);
+  font-variant: small-caps;
+}
+
+/* Phase 12.9 R4 (D-04) — Pre-race empty-state frame */
+.resumen-board__empty-state {
+  padding: var(--space-md, 16px);
+}
+.resumen-board__empty-state h3 {
+  font-family: var(--font-display);
+  color: var(--color-gold);
+  margin-top: 0;
+}
+.resumen-board__empty-state p {
+  color: var(--color-text-muted);
+  margin: 0;
 }
 .save-slot-dialog, .load-slot-dialog {
   min-width: 20rem;
