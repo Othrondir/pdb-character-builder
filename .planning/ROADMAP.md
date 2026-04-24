@@ -475,10 +475,61 @@ Plans:
 - [x] 12.9-02-PLAN.md — R1+R2+R4+R5 wave: rewrite <ResumenTable> (compact header + full-width Progresión + Habilidades), gate <ResumenTable> mount behind isProjectable with empty-state NwnFrame, author 3 Vitest RTL specs (progresion full-width + identity dedup + empty-state) — complete 2026-04-24
 **UI hint**: yes
 
+### Phase 13: Verification + Orphan Sweep (GAP)
+**Goal**: Close the two unauthored VERIFICATION.md stubs (12.6, 12.7) and remove dead-code / orphan primitives surfaced by the 2026-04-24 v1.0 re-audit tech_debt list. Retro-author verification against existing UAT + SUMMARY evidence; delete unreferenced symbols behind zero-diff callsite guards.
+**Depends on**: Phase 12.9 (baseline)
+**Requirements**: (none — process + dead-code cleanup, no REQ-IDs reopened)
+**Gap Closure**: Closes `unverified_phases` (12.6, 12.7) + 07.2 / 12.8 / 05.1 dead-code items from v1.0-MILESTONE-AUDIT.md tech_debt
+**Success Criteria** (what must be TRUE):
+  1. `12.6-VERIFICATION.md` + `12.7-VERIFICATION.md` exist with `status: passed` derived from disk evidence (UAT.md + per-plan SUMMARY.md).
+  2. `ConfirmDialog` primitive removed from `apps/planner/src/components/ui/` (0 callers post-magic-purge).
+  3. `computeHighestClassLevel` + `ARCANE_SPELLCASTER_IDS` removed from `prestige-gate-build.ts`.
+  4. `level-sub-steps.tsx` unused `level` prop dropped; aria-label interpolates active level.
+  5. `packages/data-extractor/src/cli.ts:263-273` wasted 2DA parse moved inside the `EMIT_MAGIC_CATALOGS=1` branch (IN-06).
+  6. `pnpm typecheck` + `vitest run` still green; zero-diff gates hold for files not touched.
+**Plans**: TBD (2 planned — retro-verify wave + dead-code sweep)
+
+### Phase 14: Persistence Robustness (GAP)
+**Goal**: Close Phase 08 polish batch surfaced by 2026-04-24 re-audit: eliminate toast clobber race, LoadSlot-null ZodError bubble, hydrate silently dropping `build.name`, url-budget double-slash risk, skill ability-modifier magic-10 fallback, and `plannerVersion`-excluded docstring drift.
+**Depends on**: Phase 13 (clean baseline)
+**Requirements**: SHAR-02, SHAR-03, SHAR-05 (robustness refinements; traceability table unchanged — work is defensive hardening within existing Complete requirements)
+**Gap Closure**: Closes Phase 08 tech_debt cluster from v1.0-MILESTONE-AUDIT.md
+**Success Criteria** (what must be TRUE):
+  1. Toast mechanism prevents a new message clobbering an unread one within rapid succession.
+  2. `loadSlot(null)` returns a typed "no-op" result instead of throwing ZodError upward.
+  3. `hydrateBuildDocument` persists `doc.build.name` into the foundation store (not dropped).
+  4. `buildShareUrl` never emits a `//` double-slash regardless of origin trailing state.
+  5. Skill ability-modifier path removes the magic-10 fallback; divergent fixture removed.
+  6. Persistence docstrings list `plannerVersion` parity with schema.
+  7. Regression tests cover each fix path.
+
+### Phase 15: A11y + Modal Polish (GAP)
+**Goal**: Close Phase 07.1 WR-02..04 + Phase 06 / 12.8 selector-scope cluster from the re-audit: install focus trap on `aria-modal` surfaces, automate focus-return on dialog close, install body scroll lock, scope the 4 cross-cutting `document.querySelector` / unscoped zustand callsites.
+**Depends on**: Phase 13 (clean baseline)
+**Requirements**: (none — a11y hygiene + perf scope; no REQ-IDs reopened)
+**Gap Closure**: Closes Phase 07.1 WR-02/03/04 + Phase 12.8 WR-01/02 + Phase 06 WR-01/02 from v1.0-MILESTONE-AUDIT.md tech_debt
+**Success Criteria** (what must be TRUE):
+  1. All `aria-modal="true"` surfaces trap focus (Tab / Shift-Tab cycle stays inside the dialog).
+  2. Automated Vitest / RTL test asserts focus returns to invoking element on dialog close.
+  3. Body scroll lock installs on dialog open, removes on close; no stray scroll bleed.
+  4. `feat-sheet.tsx:288-299` + `skill-sheet.tsx:150-154` drop `document.querySelector` in favor of ref-based or scoped selectors.
+  5. Phase 06 zustand subscriptions tightened (subscribe only to needed slices); unsafe type assertion removed.
+
+### Phase 16: Feat Engine Completion (GAP)
+**Goal**: Close Phase 06 bonus-feat TODO cluster + Phase 12.4 Humano L1 feat-slot store-capacity gap surfaced by the re-audit. Wire class gain tables for bonus feat schedules; implement Human bonus feat logic; expand foundation store feat-slot capacity from 2→3 on Humano L1 so the Advance button resolves legal.
+**Depends on**: Phase 13 (clean baseline)
+**Requirements**: FEAT-01, FEAT-02 (completion — bonus feat visibility closes prior placeholder state without reopening traceability; Complete → Complete)
+**Gap Closure**: Closes Phase 06 feat-eligibility.ts TODOs L45 + L49 + Phase 12.4 Humano L1 store-capacity gap from v1.0-MILESTONE-AUDIT.md tech_debt
+**Success Criteria** (what must be TRUE):
+  1. `feat-eligibility.ts` L45 TODO closed: class bonus feat schedules wired from `cls_bfeat_*.2da` extraction.
+  2. `feat-eligibility.ts` L49 TODO closed: Humano race receives the extra L1 bonus feat slot per Puerta rules.
+  3. Humano L1 advance ActionBar resolves `status: 'legal'` when 3 feat slots are filled (store capacity 2→3 fix).
+  4. Vitest coverage for both bonus-feat paths + a regression lock on Humano L1 advance.
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 12.1 -> 12.2 -> 12.3 -> 12.4 -> 12.6 -> 12.7 -> 12.8 -> 12.9
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11 -> 12 -> 12.1 -> 12.2 -> 12.3 -> 12.4 -> 12.6 -> 12.7 -> 12.8 -> 12.9 -> 13 -> 14 -> 15 -> 16
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -506,3 +557,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -
 | 12.7 UAT-2026-04-20 Post-12.6 Residuals (INSERTED) | 4/4 | Complete (F7 BLOCKER + F4 gate + F6 verify + F1/F2/F3 polish closed) | 2026-04-20 |
 | 12.8 UAT-2026-04-23 Residuals (INSERTED) | 4/4 | Complete (12.8-01 F1+F2 scroll-snap, 12.8-02 prestige schema, 12.8-04 Semielfo dedupe, 12.8-03 Dotes F3+F4 UX + 12.7 T3 closure marker) | 2026-04-24 |
 | 12.9 Resumen (Hoja de personaje) UX Pass (INSERTED) | 2/2 | Complete (UAT 9/9 pass, SECURITY 0 threats open, VERIFICATION 13/13 gates green) | 2026-04-24 |
+| 13. Verification + Orphan Sweep (GAP) | 0/TBD | Not started | - |
+| 14. Persistence Robustness (GAP) | 0/TBD | Not started | - |
+| 15. A11y + Modal Polish (GAP) | 0/TBD | Not started | - |
+| 16. Feat Engine Completion (GAP) | 0/TBD | Not started | - |
