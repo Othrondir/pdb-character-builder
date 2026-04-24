@@ -56,7 +56,7 @@ const STATUS_ORDER: Record<FeatEvaluationStatus, number> = {
  *   - "WeapFocSap" (untranslated stub from the NWN EE canon).
  */
 const PUERTA_ADMIN_LABEL_PATTERN =
-  /^(?:\(PB\)|Herramienta\b|WeapFocSap$)/i;
+  /^(?:\(PB\)|Herramienta\b|WeapFocSap$|ImpCritSap$)/i;
 
 function isPuertaAdminLabel(label: string): boolean {
   return PUERTA_ADMIN_LABEL_PATTERN.test(label.trim());

@@ -1787,6 +1787,10 @@ a {
   display: flex;
   flex-direction: column;
   gap: var(--space-xs, 4px);
+  /* UAT-2026-04-24 E12 — inset rows from the group edge so the chosen-row
+   * gold border never sits flush against the group's own gold border
+   * (visual "overflow" user feedback). Symmetric with E10/E11. */
+  padding: 0 var(--space-sm, 8px);
 }
 
 .feat-picker__partition + .feat-picker__partition {
