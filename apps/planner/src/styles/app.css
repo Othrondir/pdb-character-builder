@@ -2217,6 +2217,10 @@ a {
   font-variant-numeric: lining-nums tabular-nums;
   justify-content: space-between;
   margin-bottom: var(--space-sm);
+  /* UAT-2026-04-24 E10 — keep "Dotes del nivel N: X/Y" text clear of the
+   * gold separator line. Horizontal padding matches E7/E8 nudges. */
+  padding-left: var(--space-xs, 4px);
+  padding-right: var(--space-xs, 4px);
 }
 .feat-picker__counter {
   border-bottom: 1px solid var(--color-gold);
@@ -2228,7 +2232,9 @@ a {
   letter-spacing: 0.10em;
   line-height: 1.2;
   margin: 0;
-  padding-bottom: var(--space-xs);
+  /* UAT-2026-04-24 E10 — small inner padding so "Dotes del nivel N: X/Y"
+   * is not flush with the gold separator line on either end. */
+  padding: 0 var(--space-sm, 8px) var(--space-xs, 4px);
   text-transform: uppercase;
   width: 100%;
 }

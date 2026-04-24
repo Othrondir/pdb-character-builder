@@ -362,8 +362,12 @@ export const shellCopyEs = {
     // (SPEC R7 / CONTEXT D-05). Pill reads `{N} objetivos` or `1 objetivo`;
     // expander legend reads `Elige {paramLabel}` (`habilidad`, `escuela de
     // magia`, `arma`) fed by the extractor `parameterizedFeatFamily.paramLabel`.
-    familyPillSingular: '1 objetivo',
-    familyPillPluralTemplate: '{N} objetivos',
+    // UAT-2026-04-24 E9 — pill copy reads "Seleccionar tipo" instead of
+    // the previous "{N} objetivos" — user feedback in Dotes sweep said
+    // the "objetivos" framing was opaque. Count is dropped; the expander
+    // legend still lists every target.
+    familyPillSingular: 'Seleccionar tipo',
+    familyPillPluralTemplate: 'Seleccionar tipo',
     familyLegendPrefix: 'Elige',
   },
   stepper: {

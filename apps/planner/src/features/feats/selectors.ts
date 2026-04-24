@@ -74,6 +74,8 @@ const SYNTHETIC_FAMILY_PREFIXES: Array<{ prefix: string; groupKey: string }> = [
   { prefix: 'Competencia con arma exótica', groupKey: 'synthetic:competencia-arma-exotica' },
   { prefix: 'Competencia con arma marcial', groupKey: 'synthetic:competencia-arma-marcial' },
   { prefix: 'Crítico mejorado', groupKey: 'synthetic:critico-mejorado' },
+  { prefix: 'Defensa arcana', groupKey: 'synthetic:defensa-arcana' },
+  { prefix: 'Resistencia a la energía', groupKey: 'synthetic:resistencia-energia' },
 ];
 
 function matchSyntheticFamilyPrefix(label: string): { prefix: string; groupKey: string } | null {
