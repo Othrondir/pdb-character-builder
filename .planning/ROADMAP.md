@@ -455,7 +455,7 @@ Plans:
 - [x] 12.8-01-PLAN.md — Remove .skill-board scroll-snap CSS + retarget scrollerRef to .selection-screen__content + Playwright regression harness (F1 + F2, SKIL-01) [Wave 1] — complete 2026-04-24
 - [x] 12.8-02-PLAN.md — Extend ClassPrereqInput schema with 6 new prereq field kinds + evaluator branches + shadowdancer override enrichment + Spanish copy templates (F5, CLAS-02) [Wave 1] — complete 2026-04-24
 - [ ] 12.8-03-PLAN.md — Dotes auto-scroll to general section on class-slot completion + FeatSummaryCard per-chip × deselect + 12.7 T3 closure marker (F3 + F4, FEAT-02) [Wave 2, depends on 12.8-01]
-- [ ] 12.8-04-PLAN.md — Delete race:halfelf2 duplicate row + Vitest regression lock on Semielfo singleton (F6, CHAR-01) [Wave 1]
+- [x] 12.8-04-PLAN.md — Delete race:halfelf2 duplicate row + Vitest regression lock on Semielfo singleton (F6, CHAR-01) [Wave 1] — complete 2026-04-24
 **UI hint**: yes
 
 ## Progress
@@ -487,4 +487,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -
 | 12.4 Construcción Correctness & Clarity (INSERTED) | 9/9 | Complete | 2026-04-20 |
 | 12.6 UAT-2026-04-20 Residuals (INSERTED) | 6/6 | Complete | 2026-04-20 |
 | 12.7 UAT-2026-04-20 Post-12.6 Residuals (INSERTED) | 4/4 | Complete (F7 BLOCKER + F4 gate + F6 verify + F1/F2/F3 polish closed) | 2026-04-20 |
-| 12.8 UAT-2026-04-23 Residuals (INSERTED) | 2/4 | In progress (12.8-01 F1+F2 scroll-snap DONE; 12.8-02 prestige schema DONE; 12.8-03 Dotes UX + 12.8-04 Semielfo pending) | - |
+| 12.8 UAT-2026-04-23 Residuals (INSERTED) | 3/4 | In progress (Wave 1 complete: 12.8-01 F1+F2 scroll-snap, 12.8-02 prestige schema, 12.8-04 Semielfo dedupe; Wave 2 pending: 12.8-03 Dotes UX) | - |

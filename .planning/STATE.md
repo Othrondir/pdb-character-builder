@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: verifying
-stopped_at: "Phase 12.8-02 EXECUTION COMPLETE — F5 prestige gate schema extension closed. ClassPrereqInput gained 6 new decodedPrereqs fields + 6 BlockerKind alternatives + 3 PrestigeGateInput fields (highestArcaneSpellLevel/highestSpellLevel/raceId). Shadowdancer enriched (BAB + skill-rank Moverse sigilosamente 8 + Equilibrio 5 + feat Esquiva + Movilidad). 9 new Spanish copy keys. Typecheck 23 → 4 errors; Vitest +36 new passes / -1 pre-existing failure. Fail-closed branch byte-identical (D-10). Next: Wave 2 — 12.8-03 (F3+F4 Dotes UX with D-15 cross-phase marker). 12.8-04 (F6 Semielfo dedupe) available in parallel."
-last_updated: "2026-04-24T11:16:00.000Z"
+stopped_at: "Phase 12.8-04 EXECUTION COMPLETE — F6 Semielfo roster dedupe closed. Excised race:halfelf2 object (16 lines) from apps/planner/src/data/compiled-races.ts (748 → 732 lines); primary race:halfelf row at line 84 preserved. Rule-1 cross-file propagation: deleted race:halfelf2 from packages/rules-engine/src/foundation/data/puerta-point-buy.json (6 lines) + puerta-point-buy.md (1 docs row) to restore 12.6 point-buy-snapshot-coverage invariant (Object.keys(PUERTA_POINT_BUY_SNAPSHOT).length === deduped canonical-id count). 5-assertion Vitest regression lock at tests/phase-12.8/race-roster-dedupe.spec.ts (5/5 green). Full suite 2128 passed / 6 pre-existing failed; baseline delta −3 failures (RED flipped to GREEN), 0 new failures, 0 new typecheck errors. Commits e97d704 (test RED) + 5d4e1ad (fix GREEN). Wave 1 complete (12.8-01 + 12.8-02 + 12.8-04 all merged). Next: Wave 2 — 12.8-03 (F3+F4 Dotes UX with D-15 cross-phase marker)."
+last_updated: "2026-04-24T13:28:00.000Z"
 last_activity: 2026-04-24
 progress:
   total_phases: 23
   completed_phases: 22
   total_plans: 86
-  completed_plans: 84
-  percent: 98
+  completed_plans: 85
+  percent: 99
 ---
 
 # Project State
@@ -90,6 +90,7 @@ Progress: [██████████] 100%
 | Phase 12.7-03 | 12m | 2 tasks | 6 files |
 | Phase 12.8 P01 | 21m | 2 tasks | 7 files |
 | Phase 12.8 P02 | 11m | 2 tasks | 9 files (6 modified + 2 created + 1 config) |
+| Phase 12.8 P04 | 7m  | 1 task (TDD RED+GREEN) | 4 files (3 modified + 1 created) |
 
 ## Accumulated Context
 
@@ -170,6 +171,9 @@ Recent decisions affecting current work:
 - [Phase ?]: [Phase 12.8-02] PrestigeGateBuildState.highestArcaneClassLevel renamed to highestArcaneSpellLevel and computation switched from computeHighestClassLevel to computeHighestSpellLevel(..., 'arcane') — class level is NOT spell level in NWN (Wizard L5 casts L3 spells); previous computation would under-gate prestige classes with minArcaneSpellLevel ≥ 4 for paladin/ranger/assassin callers
 - [Phase ?]: [Phase 12.8-02] Shadowdancer override enriched to BAB + Moverse sigilosamente 8 + Equilibrio 5 + Esquiva + Movilidad — canonical IDs verified against compiled-skills.ts:749 (skill:equilibrio = NWN1 Tumble analogue) and compiled-feats.ts:42588+42710 (feat:dodge + feat:mobility); Object.keys(PRESTIGE_PREREQ_OVERRIDES) it.each snapshot locks blockers.length > 0 for all 21 gated rows at L2 Elfo Guerrero BAB=2
 - [Phase ?]: [Phase 12.8-02] D-10 fail-closed branch byte-identical — git diff HEAD~2 HEAD on prestige-gate.ts returns zero matches for 'Requisitos en revisión' or 'kind: unvetted' add/remove lines; regression-proof live
+- [Phase ?]: [Phase 12.8-04] D-11 source-delete excises race:halfelf2 at compiled-races.ts (not dedupeByCanonicalId label extension) — set-on-id gate stays minimal; distinct canonical IDs with duplicate labels resolved at emit boundary
+- [Phase ?]: [Phase 12.8-04] Rule-1 cross-data-source propagation — deletion of race:halfelf2 in compiled-races.ts flipped tests/phase-12.6/point-buy-snapshot-coverage.spec.ts red because the snapshot asserts Object.keys(PUERTA_POINT_BUY_SNAPSHOT).length === unique-canonical-id count; fix required deleting race:halfelf2 entry from puerta-point-buy.json + .md at the same data-source boundary (CONTEXT D-12's 'harmless unused key' prediction missed the coverage invariant)
+- [Phase ?]: [Phase 12.8-04] Windows CRLF-safe line-range delete idiom — when Edit tool old_string normalization fails on long multi-line CRLF blocks in extractor-compiled .ts/.json files, fall back to `powershell -Command 'ReadAllLines + RemoveRange(start, count) + WriteAllText with CRLF'`; git checkout -- <file> reverts any partial corruption cleanly
 
 ### Pending Todos
 
@@ -211,8 +215,8 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-24T11:16:00.000Z
-Stopped at: Phase 12.8-02 EXECUTION COMPLETE — F5 prestige gate schema extension closed. Schema + 6 evaluator branches + 9 Spanish copy keys + shadowdancer override enrichment + 36 new Vitest cases (tests/phase-12.8/prestige-gate-schema.spec.ts 12 cases, prestige-gate-overrides.spec.ts 24 cases). Typecheck 23 → 4 errors (18 from F5 surface closed; 4 remaining out-of-scope pre-existing). Vitest +36 passes / -1 pre-existing failure. Fail-closed branch byte-identical (D-10). Commits 6f79455 (feat) + 4371827 (test). Next: Wave 2 — 12.8-03 (F3+F4 Dotes UX with D-15 cross-phase marker). 12.8-04 (F6 Semielfo dedupe) available for parallel execution.
+Last session: 2026-04-24T13:28:00.000Z
+Stopped at: Phase 12.8-04 EXECUTION COMPLETE — F6 Semielfo roster dedupe closed. Excised race:halfelf2 object (16 lines) from apps/planner/src/data/compiled-races.ts (748 → 732 lines); primary race:halfelf row at line 84 preserved untouched. Rule-1 cross-file propagation: deleted race:halfelf2 from packages/rules-engine/src/foundation/data/puerta-point-buy.json (6 lines) + puerta-point-buy.md (1 docs row) to restore tests/phase-12.6/point-buy-snapshot-coverage.spec.ts invariant (Object.keys(PUERTA_POINT_BUY_SNAPSHOT).length === unique canonical-id count — CONTEXT D-12's 'harmless unused key' prediction missed this). 5-assertion Vitest regression lock at tests/phase-12.8/race-roster-dedupe.spec.ts (total count ≤44, Semielfo singleton, race:halfelf2 absent, race:halfelf primary preserved, all ids unique) — 5/5 green. Full suite 2128 passed / 6 pre-existing failed / 0 new failures; typecheck 0 new errors (4 pre-existing out-of-scope). Commits e97d704 (test RED — 3 failing / 2 passing) + 5d4e1ad (fix GREEN — data delete + cross-file propagation). TDD gate sequence present. Wave 1 COMPLETE (12.8-01 + 12.8-02 + 12.8-04). Windows CRLF edit idiom captured as pattern (PowerShell RemoveRange fallback when Edit tool normalizes multi-line blocks incorrectly).
 
 ### Historical session continuity (Phase 12.7-03 execution — preserved for audit)
 
@@ -220,9 +224,9 @@ Stopped at: Phase 12.8-02 EXECUTION COMPLETE — F5 prestige gate schema extensi
 
 Resume options next session:
 
-1. **Spec Phase 12.8** — `/gsd-spec-phase 12.8` with UAT-FINDINGS-2026-04-23 as source. Scope: F1+F2 (scroll-snap + scrollerRef re-target — carries 12.7 T3 deferral), F3 (Dotes multi-slot viewport nudge), F4 (FeatSummaryCard deselect), F5 (prestige fail-closed tightening + 3-class enrichment), F6 (Semielfo dedupe — quick task, not plan).
-2. **Quick task 12.7 T3 fix in isolation** — CSS removal of `scroll-snap-type` at app.css:473 + re-wire `scrollerRef` to `.selection-screen__content` in skill-sheet.tsx + Playwright regression guard. Short fix if user wants to unblock Habilidades UX before 12.8 spec lands.
-3. **Milestone v1.0 audit** — `/gsd-audit-milestone` before accepting more scope into 12.8.
+1. **Execute Wave 2 (12.8-03)** — `/gsd-execute-phase 12.8` will pick up 12.8-03 (Dotes F3 auto-scroll + F4 FeatSummaryCard chip deselect + 12.7 T3 closure marker per D-15). Only remaining plan in Phase 12.8. Depends on 12.8-01 Playwright harness (already landed).
+2. **Phase 12.8 verification** — Once 12.8-03 lands, run `/gsd-verify-work 12.8` + agent-driven UAT re-sweep against master to confirm F1..F6 closure holds in live browser.
+3. **Milestone v1.0 audit** — `/gsd-audit-milestone` after 12.8 fully closes.
 
-Resume file: .planning/phases/12.8-uat-04-23-residuals/12.8-01-SUMMARY.md
+Resume file: .planning/phases/12.8-uat-04-23-residuals/12.8-04-SUMMARY.md
 Dev server: running background task `bfl04rdu4` on localhost:5173
