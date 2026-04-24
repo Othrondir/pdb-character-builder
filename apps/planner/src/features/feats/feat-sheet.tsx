@@ -282,21 +282,22 @@ export function FeatSheet({ boardView, focusedFeatId, onFocusFeat }: FeatSheetPr
     const prev = prevClassFeatIdRef.current;
     const next = currentRecord?.classFeatId ?? null;
     if (prev === null && next !== null) {
-      // Defer one frame so React commit finishes first — the general
-      // section swaps its `feat-sheet__group--current` class on the
-      // same render, and we want to scroll AFTER that swap paints.
-      requestAnimationFrame(() => {
-        const generalSection = document.querySelector<HTMLElement>(
-          '[data-slot-section="general"]',
-        );
-        if (generalSection === null) {
-          return;
-        }
+      // UAT-2026-04-24 gap F3-AUTO-SCROLL-RAF — the previous RAF +
+      // `scrollIntoView({behavior:'smooth'})` combo silently no-ops on the
+      // nested `aside.feat-sheet` scrollable ancestor in real Chrome (DOM
+      // evidence: scrollTop stayed 0 over 2s of polling; direct call
+      // without RAF scrolls correctly). useEffect already runs post-commit,
+      // so the `feat-sheet__group--current` swap is live in the DOM when
+      // this runs — no frame defer needed.
+      const generalSection = document.querySelector<HTMLElement>(
+        '[data-slot-section="general"]',
+      );
+      if (generalSection !== null) {
         const firstRow =
           generalSection.querySelector<HTMLElement>('button.feat-picker__row') ??
           generalSection;
         firstRow.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-      });
+      }
     }
     prevClassFeatIdRef.current = next;
   }, [currentRecord?.classFeatId]);
