@@ -1004,6 +1004,18 @@ a {
 }
 .creation-stepper__origin { padding: var(--space-md); }
 .creation-stepper__progression { min-height: 0; overflow-y: auto; padding: var(--space-md); }
+
+/* UAT-2026-04-24 E16 — breathing room for the "Progresión 1-20" rail
+ * title bar in BuildProgressionBoard. The previous render had the h2
+ * flush against the panel edge; 8px inner padding mirrors the rest of
+ * the Dotes sweep. */
+.build-progression-board__title-bar {
+  padding: var(--space-xs, 4px) var(--space-sm, 8px);
+}
+.build-progression-board__title-bar h2 {
+  margin: 0;
+  padding: 0 var(--space-xs, 4px);
+}
 .creation-stepper__steps { display: flex; flex-direction: column; gap: var(--space-sm); list-style: none; margin: 0; padding: 0; }
 .creation-stepper__unlock-card {
   background: var(--color-selection);
