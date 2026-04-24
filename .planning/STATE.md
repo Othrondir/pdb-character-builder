@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: verifying
-stopped_at: "Phase 12.8-01 EXECUTION COMPLETE — F1 + F2 closed. Playwright 5/5 green; Vitest baseline preserved (3 pre-existing fail files / 7 tests — all in prestige-gate schema surface that 12.8-02 D-08 fixes). 12.7 T3 closed at code level. Next: Wave 1 parallel — 12.8-02 (F5 prestige gate extension) + 12.8-04 (F6 Semielfo dedupe), then Wave 2 — 12.8-03 (F3+F4 Dotes UX with D-15 cross-phase marker)."
-last_updated: "2026-04-24T11:01:43.990Z"
+stopped_at: "Phase 12.8-02 EXECUTION COMPLETE — F5 prestige gate schema extension closed. ClassPrereqInput gained 6 new decodedPrereqs fields + 6 BlockerKind alternatives + 3 PrestigeGateInput fields (highestArcaneSpellLevel/highestSpellLevel/raceId). Shadowdancer enriched (BAB + skill-rank Moverse sigilosamente 8 + Equilibrio 5 + feat Esquiva + Movilidad). 9 new Spanish copy keys. Typecheck 23 → 4 errors; Vitest +36 new passes / -1 pre-existing failure. Fail-closed branch byte-identical (D-10). Next: Wave 2 — 12.8-03 (F3+F4 Dotes UX with D-15 cross-phase marker). 12.8-04 (F6 Semielfo dedupe) available in parallel."
+last_updated: "2026-04-24T11:16:00.000Z"
 last_activity: 2026-04-24
 progress:
   total_phases: 23
   completed_phases: 22
   total_plans: 86
-  completed_plans: 83
-  percent: 97
+  completed_plans: 84
+  percent: 98
 ---
 
 # Project State
@@ -89,6 +89,7 @@ Progress: [██████████] 100%
 | Phase 12.7-02 | 10m | 3 tasks | 5 files |
 | Phase 12.7-03 | 12m | 2 tasks | 6 files |
 | Phase 12.8 P01 | 21m | 2 tasks | 7 files |
+| Phase 12.8 P02 | 11m | 2 tasks | 9 files (6 modified + 2 created + 1 config) |
 
 ## Accumulated Context
 
@@ -164,6 +165,11 @@ Recent decisions affecting current work:
 - [Phase ?]: [Phase 12.8-01] Scroll reset retargeted via document.querySelector('.skill-board .selection-screen__content') — D-02 replaces Phase 12.7-03's wrong-target useRef; jsdom spec realigned, Playwright is authoritative regression guard
 - [Phase ?]: [Phase 12.8-01] Playwright harness at repo root (testDir=tests/phase-12.8, testMatch=/.*\.e2e\.spec\.ts/, workers=1, reuseExistingServer=true) complements Vitest via configDefaults.exclude spread — tests/**/*.e2e.spec.ts naming contract keeps the two runners disjoint without double-collection
 - [Phase ?]: [Phase 12.8-01] Playwright fixture stability via runtime data-* attributes (data-class-id, data-substep, data-slot-section, data-testid, data-feat-id) not localized ARIA names — Spanish copy can drift without breaking fixtures; pattern seeded for 12.8-03 Dotes fixture reuse
+- [Phase ?]: [Phase 12.8-02] F5 root-cause is schema under-specification, not partial enrichment — ClassPrereqInput.decodedPrereqs extended with 6 new fields (minArcaneSpellLevel/minSpellLevel/excludedClassIds/requiredAnyFeatGroups/requiredAnyRaceIds/requiredAnyClassLevels); evaluator gains 6 matching branches emitted in deterministic order; copy templates mirrored as LANG-01 grep anchor
+- [Phase ?]: [Phase 12.8-02] PrestigeGateInput uses caller-aligned field names highestArcaneSpellLevel + highestSpellLevel + raceId: string | null | undefined (plan-text's arcaneCasterLevel + raceId: string renamed Rule-1-style to match pre-existing class-picker.tsx + fixture spec contract — closes 18 of 23 pre-existing TS errors in one pass)
+- [Phase ?]: [Phase 12.8-02] PrestigeGateBuildState.highestArcaneClassLevel renamed to highestArcaneSpellLevel and computation switched from computeHighestClassLevel to computeHighestSpellLevel(..., 'arcane') — class level is NOT spell level in NWN (Wizard L5 casts L3 spells); previous computation would under-gate prestige classes with minArcaneSpellLevel ≥ 4 for paladin/ranger/assassin callers
+- [Phase ?]: [Phase 12.8-02] Shadowdancer override enriched to BAB + Moverse sigilosamente 8 + Equilibrio 5 + Esquiva + Movilidad — canonical IDs verified against compiled-skills.ts:749 (skill:equilibrio = NWN1 Tumble analogue) and compiled-feats.ts:42588+42710 (feat:dodge + feat:mobility); Object.keys(PRESTIGE_PREREQ_OVERRIDES) it.each snapshot locks blockers.length > 0 for all 21 gated rows at L2 Elfo Guerrero BAB=2
+- [Phase ?]: [Phase 12.8-02] D-10 fail-closed branch byte-identical — git diff HEAD~2 HEAD on prestige-gate.ts returns zero matches for 'Requisitos en revisión' or 'kind: unvetted' add/remove lines; regression-proof live
 
 ### Pending Todos
 
@@ -205,8 +211,8 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-04-24T11:01:43.985Z
-Stopped at: Phase 12.8-01 EXECUTION COMPLETE — F1 + F2 closed. Playwright 5/5 green; Vitest baseline preserved (3 pre-existing fail files / 7 tests — all in prestige-gate schema surface that 12.8-02 D-08 fixes). 12.7 T3 closed at code level. Next: Wave 1 parallel — 12.8-02 (F5 prestige gate extension) + 12.8-04 (F6 Semielfo dedupe), then Wave 2 — 12.8-03 (F3+F4 Dotes UX with D-15 cross-phase marker).
+Last session: 2026-04-24T11:16:00.000Z
+Stopped at: Phase 12.8-02 EXECUTION COMPLETE — F5 prestige gate schema extension closed. Schema + 6 evaluator branches + 9 Spanish copy keys + shadowdancer override enrichment + 36 new Vitest cases (tests/phase-12.8/prestige-gate-schema.spec.ts 12 cases, prestige-gate-overrides.spec.ts 24 cases). Typecheck 23 → 4 errors (18 from F5 surface closed; 4 remaining out-of-scope pre-existing). Vitest +36 passes / -1 pre-existing failure. Fail-closed branch byte-identical (D-10). Commits 6f79455 (feat) + 4371827 (test). Next: Wave 2 — 12.8-03 (F3+F4 Dotes UX with D-15 cross-phase marker). 12.8-04 (F6 Semielfo dedupe) available for parallel execution.
 
 ### Historical session continuity (Phase 12.7-03 execution — preserved for audit)
 

@@ -126,7 +126,7 @@
 | PROG-02 | Phase 4 | Complete |
 | PROG-03 | Phase 4 | Complete |
 | CLAS-01 | Phase 4 | Complete |
-| CLAS-02 | Phase 4 | Complete |
+| CLAS-02 | Phase 4 → Phase 12.8-02 | Complete (regression closed 2026-04-24 via schema extension — 6 new decodedPrereqs fields surface pale-master + caballero-arcano + shadowdancer prereqs that were silently ignored) |
 | CLAS-03 | Phase 4 | Complete |
 | CLAS-04 | Phase 4 | Complete |
 | SKIL-01 | Phase 5 | Complete |
