@@ -487,7 +487,11 @@ Plans:
   4. `level-sub-steps.tsx` unused `level` prop dropped; aria-label interpolates active level.
   5. `packages/data-extractor/src/cli.ts:263-273` wasted 2DA parse moved inside the `EMIT_MAGIC_CATALOGS=1` branch (IN-06).
   6. `pnpm typecheck` + `vitest run` still green; zero-diff gates hold for files not touched.
-**Plans**: TBD (2 planned — retro-verify wave + dead-code sweep)
+**Plans**: 2 plans across 2 waves.
+
+Plans:
+- [ ] 13-01-PLAN.md — Retro-author 12.6-VERIFICATION.md + 12.7-VERIFICATION.md from on-disk UAT + SUMMARY evidence (docs-only; zero source drift) [Wave 1]
+- [ ] 13-02-PLAN.md — Dead-code + orphan sweep: pre-flight ConfirmDialog callsite audit (delete or re-classify) + delete computeHighestClassLevel/ARCANE_SPELLCASTER_IDS + level-sub-steps aria-label level interpolation + cli.ts 2DA parse gated behind EMIT_MAGIC_CATALOGS [Wave 2, depends on 13-01]
 
 ### Phase 14: Persistence Robustness (GAP)
 **Goal**: Close Phase 08 polish batch surfaced by 2026-04-24 re-audit: eliminate toast clobber race, LoadSlot-null ZodError bubble, hydrate silently dropping `build.name`, url-budget double-slash risk, skill ability-modifier magic-10 fallback, and `plannerVersion`-excluded docstring drift.
