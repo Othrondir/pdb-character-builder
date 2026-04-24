@@ -1,8 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { shellCopyEs } from '@planner/lib/copy/es';
 import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
 import { useFeatStore } from './store';
-import { FeatSearch } from './feat-search';
 import { FeatFamilyExpander } from './feat-family-expander';
 import type {
   FeatBoardView,
@@ -227,9 +226,6 @@ function FeatEntryList({
 }
 
 export function FeatSheet({ boardView, focusedFeatId, onFocusFeat }: FeatSheetProps) {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [debouncedQuery, setDebouncedQuery] = useState('');
-
   // Phase 12.4-08 — which folded family row is currently expanded. Only one
   // expander open at a time; clicking an already-open family closes it.
   const [expandedFamilyId, setExpandedFamilyId] = useState<string | null>(null);
@@ -243,20 +239,6 @@ export function FeatSheet({ boardView, focusedFeatId, onFocusFeat }: FeatSheetPr
   const handleToggleFamily = (groupKey: string) => {
     setExpandedFamilyId((curr) => (curr === groupKey ? null : groupKey));
   };
-
-  // Debounce search query at 200ms (T-06-08 mitigation)
-  useEffect(() => {
-    if (searchQuery.length < 2) {
-      setDebouncedQuery('');
-      return;
-    }
-
-    const timer = setTimeout(() => {
-      setDebouncedQuery(searchQuery);
-    }, 200);
-
-    return () => clearTimeout(timer);
-  }, [searchQuery]);
 
   const activeLevel = boardView.activeSheet.level;
 
@@ -350,109 +332,111 @@ export function FeatSheet({ boardView, focusedFeatId, onFocusFeat }: FeatSheetPr
           .replace('{slots}', String(boardView.activeSheet.generalSlotCount))
       : generalSlotStatus?.valueLabel ?? null;
 
+  const isEntrySelectable = (entry: FeatListEntry) =>
+    entry.kind === 'feat'
+      ? entry.option.rowState === 'selectable'
+      : entry.family.rowState === 'selectable';
+
+  const renderSplitEntries = (
+    entries: FeatListEntry[],
+    onSelect: (featId: string) => void,
+  ) => {
+    const available = entries.filter(isEntrySelectable);
+    const unavailable = entries.filter((e) => !isEntrySelectable(e));
+    return (
+      <>
+        {available.length > 0 ? (
+          <div className="feat-picker__partition feat-picker__partition--available">
+            <h4 className="feat-picker__partition-heading">
+              {shellCopyEs.feats.availableHeading}
+            </h4>
+            <FeatEntryList
+              entries={available}
+              expandedFamilyId={expandedFamilyId}
+              focusedFeatId={focusedFeatId}
+              onFocus={handleFocusFeat}
+              onSelect={onSelect}
+              onSelectTarget={onSelect}
+              onToggleFamily={handleToggleFamily}
+            />
+          </div>
+        ) : null}
+        {unavailable.length > 0 ? (
+          <div className="feat-picker__partition feat-picker__partition--unavailable">
+            <h4 className="feat-picker__partition-heading">
+              {shellCopyEs.feats.unavailableHeading}
+            </h4>
+            <FeatEntryList
+              entries={unavailable}
+              expandedFamilyId={expandedFamilyId}
+              focusedFeatId={focusedFeatId}
+              onFocus={handleFocusFeat}
+              onSelect={onSelect}
+              onSelectTarget={onSelect}
+              onToggleFamily={handleToggleFamily}
+            />
+          </div>
+        ) : null}
+      </>
+    );
+  };
+
   return (
     <aside className="planner-panel planner-panel--inner feat-sheet">
-      <div className="feat-board__search">
-        <input
-          type="search"
-          role="searchbox"
-          aria-label="Buscar dotes"
-          placeholder={shellCopyEs.feats.searchPlaceholder}
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-        {searchQuery && (
-          <button
-            className="feat-board__search-clear"
-            onClick={() => setSearchQuery('')}
-            type="button"
-            aria-label="Limpiar busqueda"
-          >
-            X
-          </button>
-        )}
-      </div>
-
-      {debouncedQuery.length >= 2 ? (
-        <FeatSearch
-          query={debouncedQuery}
-          boardView={boardView}
-          onSelectFeat={handleFocusFeat}
-        />
-      ) : (
-        <>
-          {showClassSection ? (
-            <section
-              className={`feat-sheet__group${
-                classSlotStatus?.state === 'current'
-                  ? ' feat-sheet__group--current'
-                  : ''
-              }`}
-              data-slot-section="class-bonus"
-            >
-              <div className="feat-board__section-header">
-                <h3 className="feat-board__section-heading">
-                  {shellCopyEs.feats.sectionClassFeats}
-                </h3>
-                {classSlotStatus ? (
-                  <span className="feat-board__section-pill">
-                    {classSlotStatus.stateLabel}
-                  </span>
-                ) : null}
-              </div>
-              {classSlotStatus ? (
-                <p className="feat-board__section-note">
-                  {classSlotStatus.valueLabel}
-                </p>
-              ) : null}
-              <FeatEntryList
-                entries={boardView.classBonusEntries}
-                expandedFamilyId={expandedFamilyId}
-                focusedFeatId={focusedFeatId}
-                onFocus={handleFocusFeat}
-                onSelect={handleSelectClassFeat}
-                onSelectTarget={handleSelectClassFeat}
-                onToggleFamily={handleToggleFamily}
-              />
-            </section>
+      {showClassSection ? (
+        <section
+          className={`feat-sheet__group${
+            classSlotStatus?.state === 'current'
+              ? ' feat-sheet__group--current'
+              : ''
+          }`}
+          data-slot-section="class-bonus"
+        >
+          <div className="feat-board__section-header">
+            <h3 className="feat-board__section-heading">
+              {shellCopyEs.feats.sectionClassFeats}
+            </h3>
+            {classSlotStatus ? (
+              <span className="feat-board__section-pill">
+                {classSlotStatus.stateLabel}
+              </span>
+            ) : null}
+          </div>
+          {classSlotStatus ? (
+            <p className="feat-board__section-note">
+              {classSlotStatus.valueLabel}
+            </p>
           ) : null}
-          {showGeneralSection ? (
-            <section
-              className={`feat-sheet__group${
-                generalSlotStatus?.state === 'current'
-                  ? ' feat-sheet__group--current'
-                  : ''
-              }`}
-              data-slot-section="general"
-            >
-              <div className="feat-board__section-header">
-                <h3 className="feat-board__section-heading">
-                  {shellCopyEs.feats.sectionGeneralFeats}
-                </h3>
-                {generalSlotStatus ? (
-                  <span className="feat-board__section-pill">
-                    {generalSlotStatus.stateLabel}
-                  </span>
-                ) : null}
-              </div>
-              {generalSlotStatus ? (
-                <p className="feat-board__section-note">
-                  {generalSectionNote}
-                </p>
-              ) : null}
-              <FeatEntryList
-                entries={boardView.generalEntries}
-                expandedFamilyId={expandedFamilyId}
-                focusedFeatId={focusedFeatId}
-                onFocus={handleFocusFeat}
-                onSelect={handleSelectGeneralFeat}
-                onSelectTarget={handleSelectGeneralFeat}
-                onToggleFamily={handleToggleFamily}
-              />
-            </section>
+          {renderSplitEntries(boardView.classBonusEntries, handleSelectClassFeat)}
+        </section>
+      ) : null}
+      {showGeneralSection ? (
+        <section
+          className={`feat-sheet__group${
+            generalSlotStatus?.state === 'current'
+              ? ' feat-sheet__group--current'
+              : ''
+          }`}
+          data-slot-section="general"
+        >
+          <div className="feat-board__section-header">
+            <h3 className="feat-board__section-heading">
+              {shellCopyEs.feats.sectionGeneralFeats}
+            </h3>
+            {generalSlotStatus ? (
+              <span className="feat-board__section-pill">
+                {generalSlotStatus.stateLabel}
+              </span>
+            ) : null}
+          </div>
+          {generalSlotStatus ? (
+            <p className="feat-board__section-note">
+              {generalSectionNote}
+            </p>
           ) : null}
-        </>
-      )}
+          {renderSplitEntries(boardView.generalEntries, handleSelectGeneralFeat)}
+        </section>
+      ) : null}
     </aside>
   );
 }

@@ -47,6 +47,45 @@ const STATUS_ORDER: Record<FeatEvaluationStatus, number> = {
   pending: 3,
 };
 
+/**
+ * UAT-2026-04-24 E3 — drop extractor artifacts that are not player-facing
+ * feats. Covers three distinct classes of noise rows that appeared in the
+ * picker against master 2026-04-24:
+ *   - "(PB) …" entries (Puerta Baldur admin tools exposed via the feat table).
+ *   - "Herramienta …" entries (DM / voice / player-tool admin feats).
+ *   - "WeapFocSap" (untranslated stub from the NWN EE canon).
+ */
+const PUERTA_ADMIN_LABEL_PATTERN =
+  /^(?:\(PB\)|Herramienta\b|WeapFocSap$)/i;
+
+function isPuertaAdminLabel(label: string): boolean {
+  return PUERTA_ADMIN_LABEL_PATTERN.test(label.trim());
+}
+
+/**
+ * UAT-2026-04-24 E4 — synthetic family prefixes. The NWN EE feat table
+ * expands these groups into one row per parameter (e.g. one row per weapon),
+ * which floods the picker with 40+ near-duplicates. The compiled data lacks
+ * `parameterizedFeatFamily` metadata for them, so we synthesize a family at
+ * the selector layer: every singleton whose label starts with one of these
+ * prefixes gets folded into a shared expander.
+ */
+const SYNTHETIC_FAMILY_PREFIXES: Array<{ prefix: string; groupKey: string }> = [
+  { prefix: 'Competencia con arma exótica', groupKey: 'synthetic:competencia-arma-exotica' },
+  { prefix: 'Competencia con arma marcial', groupKey: 'synthetic:competencia-arma-marcial' },
+  { prefix: 'Crítico mejorado', groupKey: 'synthetic:critico-mejorado' },
+];
+
+function matchSyntheticFamilyPrefix(label: string): { prefix: string; groupKey: string } | null {
+  const trimmed = label.trim();
+  for (const entry of SYNTHETIC_FAMILY_PREFIXES) {
+    if (trimmed.startsWith(`${entry.prefix} (`)) {
+      return entry;
+    }
+  }
+  return null;
+}
+
 // ---------------------------------------------------------------------------
 // View model interfaces
 // ---------------------------------------------------------------------------
@@ -668,6 +707,11 @@ function groupIntoFamilyEntries(options: FeatOptionView[]): FeatListEntry[] {
   // a map once for this call.
   const featById = new Map(compiledFeatCatalog.feats.map((f) => [f.id, f]));
 
+  // UAT-2026-04-24 E4 — synthetic family groupKey chosen for each option.
+  // `null` means the option is a true singleton; a string means it should
+  // participate in either the real (metadata-driven) or synthetic family.
+  const syntheticMeta = new Map<string, { prefix: string; groupKey: string }>();
+
   for (const opt of options) {
     const feat = featById.get(opt.featId);
     const family = feat?.parameterizedFeatFamily ?? null;
@@ -675,9 +719,17 @@ function groupIntoFamilyEntries(options: FeatOptionView[]): FeatListEntry[] {
       const list = familyBuckets.get(family.groupKey) ?? [];
       list.push(opt);
       familyBuckets.set(family.groupKey, list);
-    } else {
-      singletons.push(opt);
+      continue;
     }
+    const synthetic = matchSyntheticFamilyPrefix(opt.label);
+    if (synthetic) {
+      const list = familyBuckets.get(synthetic.groupKey) ?? [];
+      list.push(opt);
+      familyBuckets.set(synthetic.groupKey, list);
+      syntheticMeta.set(synthetic.groupKey, synthetic);
+      continue;
+    }
+    singletons.push(opt);
   }
 
   const entries: FeatListEntry[] = [];
@@ -688,7 +740,8 @@ function groupIntoFamilyEntries(options: FeatOptionView[]): FeatListEntry[] {
     const firstTarget = targets[0];
     const firstFeat = featById.get(firstTarget.featId);
     const familyMeta = firstFeat?.parameterizedFeatFamily ?? null;
-    if (!familyMeta) continue;
+    const synthetic = familyMeta ? null : (syntheticMeta.get(groupKey) ?? null);
+    if (!familyMeta && !synthetic) continue;
 
     const selectedTarget = targets.find((t) => t.isChosenAtLevel) ?? null;
 
@@ -715,13 +768,19 @@ function groupIntoFamilyEntries(options: FeatOptionView[]): FeatListEntry[] {
       blockedReason = picked.blockedReason;
     }
 
+    const canonicalId = familyMeta?.canonicalId ?? (groupKey as CanonicalId);
+    const paramLabel = familyMeta?.paramLabel ?? '';
+    const label = familyMeta
+      ? stripFamilyParameter(firstTarget.label)
+      : (synthetic?.prefix ?? stripFamilyParameter(firstTarget.label));
+
     entries.push({
       kind: 'family',
       family: {
-        canonicalId: familyMeta.canonicalId,
+        canonicalId,
         groupKey,
-        label: stripFamilyParameter(firstTarget.label),
-        paramLabel: familyMeta.paramLabel,
+        label,
+        paramLabel,
         rowState,
         blockedReason,
         targets,
@@ -1050,6 +1109,7 @@ export function selectFeatBoardView(
   for (const feat of compiledFeatCatalog.feats) {
     if (feat.prerequisites.preReqEpic === true) continue;
     if (isSentinelLabel(feat.label)) continue;
+    if (isPuertaAdminLabel(feat.label)) continue;
 
     const inClassBonusPool = classBonusFeatIds.has(feat.id);
     const inGeneralPool =

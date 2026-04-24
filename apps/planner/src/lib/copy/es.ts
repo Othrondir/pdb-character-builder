@@ -315,6 +315,8 @@ export const shellCopyEs = {
     searchPlaceholder: 'Buscar dotes...',
     sectionClassFeats: 'Dotes de clase',
     sectionGeneralFeats: 'Dotes generales',
+    availableHeading: 'Disponibles',
+    unavailableHeading: 'No disponibles',
     sheetTabTotal: '{count} dotes',
     sheetTabInvalid: '{count} invalidas',
     autoGrantedLabel: 'Automatica',

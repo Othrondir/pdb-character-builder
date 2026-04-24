@@ -1563,8 +1563,23 @@ a {
 .feat-board__slot-card-header {
   align-items: center;
   display: flex;
-  gap: var(--space-sm);
+  flex-wrap: wrap;
+  gap: var(--space-xs, 4px) var(--space-sm, 8px);
   justify-content: space-between;
+  min-width: 0;
+}
+
+.feat-board__slot-card-header > * {
+  min-width: 0;
+}
+
+/* UAT-2026-04-24 E6 — the "Pendiente" pill is wider than the narrow slot
+ * card at the current layout, causing the pill to overflow the card edge
+ * and visually overlap the picker rows below. Keep the pill inside the
+ * card by allowing it to wrap onto its own line when the title + pill
+ * exceed the header width. */
+.feat-board__slot-card-pill {
+  flex-shrink: 0;
 }
 
 .feat-board__slot-card-title {
@@ -1698,6 +1713,18 @@ a {
   flex-direction: column;
   min-height: 0;
   overflow-y: auto;
+  /* UAT-2026-04-24 E5 — kill the brown side gutters. `.planner-panel--inner`
+   * applies var(--space-lg) padding all round; the feat list needs full
+   * horizontal bleed so rows reach the panel edge. Keep top/bottom padding
+   * so the inner decorative frame (::before inset:8px) still breathes. */
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.feat-sheet > .feat-sheet__group,
+.feat-sheet > .feat-board__section-header {
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .feat-sheet__group {
@@ -1734,6 +1761,38 @@ a {
  */
 .feat-picker__list {
   overflow-y: auto;
+  /* UAT-2026-04-24 E2 — drop default <ul> bullet + indent; rows are full-width
+   * buttons that carry their own visuals. */
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.feat-picker__list > li {
+  list-style: none;
+}
+
+.feat-picker__partition {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs, 4px);
+}
+
+.feat-picker__partition + .feat-picker__partition {
+  margin-top: var(--space-sm, 8px);
+}
+
+.feat-picker__partition-heading {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: var(--space-sm, 8px) 0 var(--space-xs, 4px);
+  color: var(--text-muted, #7a6a56);
+}
+
+.feat-picker__partition--unavailable .feat-picker__partition-heading {
+  color: var(--text-disabled, #9a8a78);
 }
 
 .feat-board .selection-screen__content {
