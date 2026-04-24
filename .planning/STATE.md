@@ -2,10 +2,10 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: verifying
-stopped_at: "Phase 12.8-03 EXECUTION COMPLETE — F3 (auto-scroll) + F4 (per-chip × deselect) closed in one Wave 2 plan, with D-15 cross-phase closure marker appended to 12.7-UAT.md. Phase 12.8 NOW FULLY CLOSED (4/4 plans: 12.8-01 + 12.8-02 + 12.8-04 + 12.8-03). F3: useRef + useEffect in feat-sheet.tsx watches null → non-null class-slot transition and defers scrollIntoView({block:'nearest',behavior:'smooth'}) one rAF frame onto first button.feat-picker__row inside [data-slot-section=\"general\"]. F4: FeatSummaryChosenEntry extended with slotKind + slotIndex (D-06); feat-summary-card.tsx rewritten with per-chip × button (aria-label 'Quitar selección: {label}' + data-testid deselect-chip-{kind}-{idx}); feat-board.tsx threads onDeselect reusing the existing `const activeLevel = boardView.activeSheet.level;` at line 64 (revision BLOCKER 2 invariant — grep = 1). 5 Vitest + 4 Playwright e2e cases green. Full Vitest 2133 passed / 6 pre-existing failed; 0 new failures. 0 new TS errors. Phase 12.8 Playwright total 9/9 (5 from 12.8-01 + 4 from 12.8-03). Commits fe57620 (test RED) + 1579ca0 (feat GREEN chip deselect) + c29dd9a (feat GREEN auto-scroll) + 7ed52b0 (test + D-15 marker). 12.7 T3 gap status: resolved. Next: Phase 12.8 verification (`/gsd-verify-work 12.8`) + agent-driven UAT re-sweep."
-last_updated: "2026-04-24T11:47:20.000Z"
-last_activity: 2026-04-24
+status: idle
+stopped_at: "Phase 12.8 FULLY CLOSED (4/4 plans + live UAT 6/6 pass). Agent-driven MCP Chrome UAT against Elfo + Neutral puro + Guerrero L1 fixture at localhost:5173 exposed F3 auto-scroll gap — feat-sheet.tsx:283-300 RAF wrapper around scrollIntoView(smooth) silently no-ops on aside.feat-sheet nested scrollable ancestor in real Chrome (2s polling, scrollTop=0; direct call without RAF scrolls 0→19860). Fixed via commit 14ee309 — dropped RAF wrapper; useEffect already runs post-commit so DOM swap for feat-sheet__group--current is live when effect runs, frame defer was redundant. Re-UAT: scrollBefore=0 → samples[0..14]=19860 @ 100ms, genFirstAfter_top=724 ∈ viewport. Playwright feat-auto-scroll.e2e.spec.ts 4/4 still green. Vitest phase-12.8 46/46 + full suite 2133 pass / 6 pre-existing fail / 0 new regressions. Phase 12.8 commits: 9c33d36..0f567ad (12.8-01 F1+F2, 12.8-02 F5, 12.8-04 F6, 12.8-03 F3+F4 + D-15 closure, REVIEW+VERIFICATION+HUMAN-UAT persisted, 14ee309 F3 RAF fix, 0f567ad UAT gap closure)."
+last_updated: "2026-04-24T15:25:00.000Z"
+last_activity: 2026-04-24 -- completed phase 12.8 UAT-2026-04-23 residuals (6/6 F findings closed + live UAT pass)
 progress:
   total_phases: 23
   completed_phases: 22
