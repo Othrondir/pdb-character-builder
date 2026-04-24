@@ -43,14 +43,7 @@ const DEFAULT_MODEL: ResumenViewModel = {
     alignmentLabel: 'Legal bueno',
     datasetLabel: 'Ruleset v1.0.0 · Dataset 2026-04-17 (cf6e8aad)',
   },
-  attributes: [
-    { key: 'str', label: 'Fuerza', total: 14, modifier: 2 },
-    { key: 'dex', label: 'Destreza', total: 12, modifier: 1 },
-    { key: 'con', label: 'Constitución', total: 14, modifier: 2 },
-    { key: 'int', label: 'Inteligencia', total: 10, modifier: 0 },
-    { key: 'wis', label: 'Sabiduría', total: 10, modifier: 0 },
-    { key: 'cha', label: 'Carisma', total: 10, modifier: 0 },
-  ],
+  // Phase 12.9-01 / D-08 deleted ResumenViewModel.attributes; this fixture tracks.
   progression: Array.from({ length: 16 }, (_, i) => ({
     level: (i + 1) as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16,
     classLabel: null,
@@ -82,17 +75,23 @@ describe('ResumenBoard', () => {
     useCharacterFoundationStore.getState().resetFoundation();
   });
 
-  it('renders 3 blocks labelled via aria-labelledby', () => {
+  it('renders 2 framed blocks labelled via aria-labelledby (Phase 12.9-02 / D-03: identity block collapsed into compact header)', () => {
     render(createElement(ResumenBoard));
-    // Heading IDs must be unique enough to be found.
+    // Phase 12.9-02 / D-03 collapsed the identity <dl> + attrs table into a plain
+    // <header>.resumen-table__identity-header (no aria-labelledby), so only 2 framed
+    // blocks remain. Progresión + Habilidades keep their aria-labelledby ids.
     expect(
       document.querySelector('[aria-labelledby="resumen-identity-heading"]'),
-    ).toBeInTheDocument();
+    ).not.toBeInTheDocument();
     expect(
       document.querySelector('[aria-labelledby="resumen-progression-heading"]'),
     ).toBeInTheDocument();
     expect(
       document.querySelector('[aria-labelledby="resumen-skills-heading"]'),
+    ).toBeInTheDocument();
+    // Compact identity header is present as a plain <header> landmark.
+    expect(
+      document.querySelector('.resumen-table__identity-header'),
     ).toBeInTheDocument();
   });
 

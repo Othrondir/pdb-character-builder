@@ -184,7 +184,14 @@ export function ResumenBoard() {
         />
       </NwnFrame>
 
-      <ResumenTable model={model} />
+      {isProjectable ? (
+        <ResumenTable model={model} />
+      ) : (
+        <NwnFrame className="resumen-board__empty-state">
+          <h3>{copy.emptyState.heading}</h3>
+          <p>{copy.emptyState.body}</p>
+        </NwnFrame>
+      )}
 
       <SaveSlotDialog open={saveOpen} onClose={() => setSaveOpen(false)} />
       <LoadSlotDialog open={loadOpen} onClose={() => setLoadOpen(false)} />
