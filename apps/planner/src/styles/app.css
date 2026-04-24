@@ -1725,12 +1725,12 @@ a {
   flex-direction: column;
   min-height: 0;
   overflow-y: auto;
-  /* UAT-2026-04-24 E5 — kill the brown side gutters. `.planner-panel--inner`
-   * applies var(--space-lg) padding all round; the feat list needs full
-   * horizontal bleed so rows reach the panel edge. Keep top/bottom padding
-   * so the inner decorative frame (::before inset:8px) still breathes. */
-  padding-left: 0;
-  padding-right: 0;
+  /* UAT-2026-04-24 E5 / E14 — shrink the brown side gutters but preserve
+   * clearance for the decorative inner frame (`.planner-panel::before`
+   * drawn at inset:8px). Use 8px symmetric padding so headings + notes +
+   * partitions never graze the frame line. */
+  padding-left: var(--space-sm, 8px);
+  padding-right: var(--space-sm, 8px);
 }
 
 .feat-sheet > .feat-sheet__group,
