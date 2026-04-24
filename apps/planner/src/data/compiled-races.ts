@@ -201,22 +201,6 @@ export const compiledRaceCatalog: RaceCatalog = raceCatalogSchema.parse({
     {
       "abilityAdjustments": {
         "str": 0,
-        "dex": 0,
-        "con": -2,
-        "int": 0,
-        "wis": 0,
-        "cha": 2
-      },
-      "description": "Ajuste de los semielfos a las características: +2 Car, -2 Con.\nClase predilecta (cualquiera): A la hora de determinar si un semielfo multiclase sufre algún penalizador a los PX, no cuenta la clase del nivel más alto que tenga.\n\nAptitudes especiales:\n- Insomnio: Son inmunes a los conjuros y efectos del subtipo \"Dormir\".\n- Fortaleza contra encantamientos: Bonificador racial +2 a los tiros de salvación contra conjuros enajenadores.\n- Afinidad parcial con una habilidad (Escuchar): Bonificador racial +1 a las pruebas de Escuchar.\n- Afinidad parcial con una habilidad (Buscar): Bonificador racial +1 a las pruebas de Buscar.\n- Afinidad parcial con una habilidad (Avistar): Bonificador racial +1 a las pruebas de Avistar.\n Visión en la penumbra: Les permite ver mejor de lo normal en la oscuridad.\n- Bonificador a las habilidades: +2 Reunir Información y Diplomacia",
-      "favoredClass": null,
-      "id": "race:halfelf2",
-      "label": "Semielfo",
-      "size": "medium",
-      "sourceRow": 165
-    },
-    {
-      "abilityAdjustments": {
-        "str": 0,
         "dex": -2,
         "con": 2,
         "int": 0,
