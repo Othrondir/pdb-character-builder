@@ -527,11 +527,11 @@ Plans:
   3. Body scroll lock installs on dialog open, removes on close; no stray scroll bleed.
   4. `feat-sheet.tsx:288-299` + `skill-sheet.tsx:150-154` drop `document.querySelector` in favor of ref-based or scoped selectors.
   5. Phase 06 zustand subscriptions tightened (subscribe only to needed slices); unsafe type assertion removed.
-**Plans:** 3 plans
+**Plans:** 3 plans across 2 waves (15-03 serializes after 15-02 due to shared feat-board.tsx file ownership; checker B1 resolution)
 Plans:
-- [ ] 15-01-PLAN.md — A11y hooks + dialog wiring (useFocusTrap + useBodyScrollLock; drawer + 4 dialogs; specs D-08/D-09/D-10/D-11)
-- [ ] 15-02-PLAN.md — querySelector scope-down at feat-sheet:274 + skill-sheet:151 (ref-thread via SelectionScreen.contentRef) + canonicalIdRegex.test guards at feat-sheet handlers (D-07)
-- [ ] 15-03-PLAN.md — Phase 06 cleanup: useShallow rollout to feat-board / feat-detail-panel / feat-sheet-tab (3 files; feat-search.tsx not on disk — out of scope)
+- [ ] 15-01-PLAN.md (wave 1) — A11y hooks + dialog wiring (useFocusTrap + useBodyScrollLock; drawer + 4 dialogs; jsdom focus-return polyfill + 4 specs D-08/D-09/D-10/D-11 + use-focus-trap unit)
+- [ ] 15-02-PLAN.md (wave 1) — querySelector scope-down at feat-sheet:274 + skill-sheet:151 (ref-thread via SelectionScreen.contentRef) + canonicalIdRegex.test guards at feat-sheet handlers (D-07). Owns feat-board.tsx JSX-tree edits.
+- [ ] 15-03-PLAN.md (wave 2, depends_on: 15-02) — Phase 06 cleanup: useShallow slice-as-input rollout to feat-board / feat-detail-panel / feat-sheet-tab (3 files; feat-search.tsx not on disk -- CONTEXT.md D-06 amended in-place). Owns feat-board.tsx subscription edits.
 
 ### Phase 16: Feat Engine Completion (GAP)
 **Goal**: Close Phase 06 bonus-feat TODO cluster + Phase 12.4 Humano L1 feat-slot store-capacity gap surfaced by the re-audit. Wire class gain tables for bonus feat schedules; implement Human bonus feat logic; expand foundation store feat-slot capacity from 2→3 on Humano L1 so the Advance button resolves legal.

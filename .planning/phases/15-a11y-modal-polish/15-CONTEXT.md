@@ -45,10 +45,10 @@ Hygiene cleanup of accessibility + selector-scope debt surfaced by v1.0-MILESTON
 
 ### Phase 06 Cleanup
 - **D-06 Zustand subscription tightening:** Use `useShallow` from `zustand/react/shallow` (Zustand 5.x canonical). Single-line import per file. Apply to:
-  - `feat-search.tsx:55` (replace `useFeatStore()` with `useFeatStore(useShallow((s) => ({...})))` selecting only `levels`, `activeLevel`, `datasetId`, `lastEditedLevel`)
-  - `feat-board.tsx:14` (same pattern)
-  - `feat-detail-panel.tsx:17` (same pattern, narrow to slices used)
-  - `feat-sheet-tab.tsx:15` (same pattern)
+  - feat-board.tsx:42 (replace useFeatStore() with useFeatStore(useShallow((s) => ({...}))) selecting only levels, activeLevel, datasetId, lastEditedLevel)
+  - feat-detail-panel.tsx:17 (same pattern, narrow to slices used)
+  - feat-sheet-tab.tsx:15 (same pattern)
+  - **AMENDED 2026-04-25**: original D-06 listed feat-search.tsx:55 as a fourth target. feat-search.tsx is not on disk (post-Phase-06 refactor; verified absent from apps/planner/src/features/feats/ -- only feat-board / feat-detail-panel / feat-family-expander / feat-sheet-tab / feat-sheet / feat-summary-card present). Rollout shrinks to 3 files. The feat-board.tsx line was originally listed as L14 (import line); corrected to L42 where the offending const featState = useFeatStore(); actually lives.
   Reason: action functions excluded from subscription → reference stable across unrelated mutations → `useMemo` deps stop thrashing → cascade fix for Phase 06 WR-04 (selectFeatBoardView per-render thrash). Already on Zustand 5.0.10 — no upgrade needed.
 - **D-07 Unsafe cast remediation (Phase 06 WR-02):** Add `canonicalIdRegex.test(featId)` guard at `feat-sheet.tsx` line 287 (handleSelectClassFeat) + line 296 (handleSelectGeneralFeat) before `setClassFeat` / `setGeneralFeat` dispatch. Silent fail-closed on mismatch (early return) — matches existing OptionList contract where invalid selections are programmer errors not user-visible. No new copy. `canonicalIdRegex` already exported from `@rules-engine/contracts/canonical-id`.
 
