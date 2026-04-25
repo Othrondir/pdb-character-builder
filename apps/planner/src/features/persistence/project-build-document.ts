@@ -77,7 +77,19 @@ export function projectBuildDocument(name?: string): BuildDocument {
   //   explicit `name` arg > foundation.buildName > undefined (field omitted).
   // Lets the Dexie save dialog override on-demand without losing the round-trip
   // identity that hydrate now persists into the store.
-  const resolvedName = name ?? foundation.buildName ?? undefined;
+  //
+  // Phase 14 REVIEW MR-02 — defend the projection boundary against an unbounded
+  // store value: `setBuildName` accepts any string length (A5 spec); only callers
+  // currently cap at 80 (hydrate via schema, SaveSlotDialog via maxLength). A
+  // future Resumen rename UI could push >80 chars into the store; clamp here so
+  // projection fails closed via IncompleteBuildError-or-omitted-field, never via
+  // a raw ZodError leaking past SaveSlotDialog's typed catch.
+  const storeName = foundation.buildName;
+  const fallbackName =
+    storeName !== null && storeName.length > 0 && storeName.length <= 80
+      ? storeName
+      : undefined;
+  const resolvedName = name ?? fallbackName;
 
   // Pre-projection guard: fail with a typed error BEFORE Zod sees nulls. Preserves
   // schema strictness (D-07) while giving callers an actionable surface.

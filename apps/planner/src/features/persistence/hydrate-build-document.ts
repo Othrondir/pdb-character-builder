@@ -37,6 +37,20 @@ export function hydrateBuildDocument(doc: BuildDocument): void {
   foundation.setRace(doc.build.raceId as CanonicalId);
   if (doc.build.subraceId !== null) {
     foundation.setSubrace(doc.build.subraceId as CanonicalId);
+    // Phase 14 REVIEW MR-03 — fail-loud on parentage drift instead of silent
+    // null. `setSubrace` runs `subraceMatchesRace(...) ? id : null`; if a
+    // migrated/tampered doc carries a regex-valid subraceId that does NOT
+    // belong to the current race fixture, the setter rejects it and the build
+    // hydrates without the subrace. Console-warn so cross-version drift is
+    // observable — full superRefine parentage validation is deferred to a
+    // schema-side fix in a follow-up plan.
+    if (
+      useCharacterFoundationStore.getState().subraceId !== doc.build.subraceId
+    ) {
+      console.warn(
+        `[hydrate] subraceId "${doc.build.subraceId}" does not match raceId "${doc.build.raceId}"; subrace dropped.`,
+      );
+    }
   }
   foundation.setAlignment(doc.build.alignmentId as CanonicalId);
   (Object.keys(doc.build.baseAttributes) as AttributeKey[]).forEach((key) => {

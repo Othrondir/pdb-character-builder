@@ -37,10 +37,24 @@ export type LoadSlotResult =
  * Load a slot. Re-validates with Zod on read (Pitfall 6 mitigation: a tampered Dexie row
  * must not hydrate stores with unknown-shape data). Returns a typed discriminated union
  * — see {@link LoadSlotResult} — instead of throwing ZodError or returning a bare null.
- * Phase 14-02 hardening.
+ *
+ * Both error escapes are typed:
+ * - Zod parse failure → `{kind: 'invalid', reason: <Zod message>}`
+ * - Dexie rejection (transaction abort, IndexedDB quota, storage revoked) →
+ *   `{kind: 'invalid', reason: <Error message>}` (review MR-01).
+ *
+ * Phase 14-02 hardening + Phase 14 REVIEW MR-01 closure.
  */
 export async function loadSlot(name: string): Promise<LoadSlotResult> {
-  const row = await getPlannerDb().builds.get(name);
+  let row;
+  try {
+    row = await getPlannerDb().builds.get(name);
+  } catch (err) {
+    return {
+      kind: 'invalid',
+      reason: err instanceof Error ? err.message : 'IndexedDB read failed',
+    };
+  }
   if (!row) return { kind: 'not-found' };
   const parsed = buildDocumentSchema.safeParse(row.payload);
   if (!parsed.success) {
