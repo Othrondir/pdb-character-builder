@@ -9,6 +9,7 @@ import {
   evaluateFeatPrerequisites,
   type BuildStateAtLevel,
 } from './feat-prerequisite';
+import { isManualFeatSelectionBlocked } from './feat-eligibility';
 
 export type FeatEvaluationStatus = 'legal' | 'illegal' | 'blocked' | 'pending';
 
@@ -104,6 +105,12 @@ export function revalidateFeatSnapshotAfterChange(input: {
     let hasIllegal = false;
 
     for (const classFeatId of levelInput.classFeatIds) {
+      if (isManualFeatSelectionBlocked(classFeatId)) {
+        hasIllegal = true;
+        issues.push(createIllegalIssue([classFeatId]));
+        continue;
+      }
+
       const feat = input.featCatalog.feats.find(
         (f) => f.id === classFeatId,
       );
@@ -124,6 +131,12 @@ export function revalidateFeatSnapshotAfterChange(input: {
     }
 
     for (const generalFeatId of levelInput.generalFeatIds) {
+      if (isManualFeatSelectionBlocked(generalFeatId)) {
+        hasIllegal = true;
+        issues.push(createIllegalIssue([generalFeatId]));
+        continue;
+      }
+
       const feat = input.featCatalog.feats.find(
         (f) => f.id === generalFeatId,
       );

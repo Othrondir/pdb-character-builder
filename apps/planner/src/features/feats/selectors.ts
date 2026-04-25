@@ -8,7 +8,12 @@ import {
   type BuildStateAtLevel,
   type PrerequisiteCheck,
 } from '@rules-engine/feats/feat-prerequisite';
-import { determineFeatSlots } from '@rules-engine/feats/feat-eligibility';
+import {
+  determineFeatSlots,
+  getAutoGrantedFeatIdsThroughClassLevel,
+  isManualFeatSelectionBlocked,
+  isSelectableRestrictedGeneralFeat,
+} from '@rules-engine/feats/feat-eligibility';
 import {
   revalidateFeatSnapshotAfterChange,
   type FeatEvaluationStatus,
@@ -339,9 +344,11 @@ export function computeBuildStateAtLevel(
     }
   }
 
-  // Also add auto-granted feats from prior levels
+  // Also add auto-granted feats from all class levels up to and including
+  // the active level. They are not player picks, but they should still count
+  // as already owned for prerequisite evaluation and picker filtering.
   for (const rec of progressionState.levels) {
-    if (rec.level < level && rec.classId) {
+    if (rec.level <= level && rec.classId) {
       const classLevelInClass = progressionState.levels
         .filter((r) => r.level <= rec.level && r.classId === rec.classId)
         .length;
@@ -370,6 +377,34 @@ export function computeBuildStateAtLevel(
     selectedFeatIds,
     skillRanks,
   };
+}
+
+function collectAutoGrantedFeatIdsThroughLevel(
+  progressionState: LevelProgressionStoreState,
+  activeLevel: ProgressionLevel,
+): Set<string> {
+  const autoGrantedFeatIds = new Set<string>();
+
+  for (const rec of progressionState.levels) {
+    if (rec.level > activeLevel || !rec.classId) {
+      continue;
+    }
+
+    const classLevelInClass = progressionState.levels
+      .filter((r) => r.level <= rec.level && r.classId === rec.classId)
+      .length;
+    const activeClassAutoGrants = getAutoGrantedFeatIdsThroughClassLevel(
+      rec.classId,
+      classLevelInClass,
+      compiledFeatCatalog.classFeatLists,
+    );
+
+    for (const featId of activeClassAutoGrants) {
+      autoGrantedFeatIds.add(featId);
+    }
+  }
+
+  return autoGrantedFeatIds;
 }
 
 // ---------------------------------------------------------------------------
@@ -489,6 +524,14 @@ function formatBlockedReason(check: PrerequisiteCheck): string {
 
   if (check.type === 'level') {
     return tpl.prereqCharacterLevelTemplate.replace('{N}', check.required);
+  }
+
+  if (check.type === 'max-level') {
+    const match = check.required.match(/\d+/);
+    return tpl.prereqMaxCharacterLevelTemplate.replace(
+      '{N}',
+      match?.[0] ?? check.required,
+    );
   }
 
   return tpl.prereqGeneric;
@@ -1048,6 +1091,10 @@ export function selectFeatBoardView(
     { classFeatLists: compiledFeatCatalog.classFeatLists },
     { races: [] },
   );
+  const autoGrantedFeatIds = collectAutoGrantedFeatIdsThroughLevel(
+    progressionState,
+    activeLevel,
+  );
 
   // Bucket membership: whether a feat belongs to the class-bonus pool or
   // the general pool for the active class. Used for section-assignment
@@ -1058,10 +1105,10 @@ export function selectFeatBoardView(
   const generalListZeroFeatIds = new Set<string>();
   if (compiledFeatCatalog.classFeatLists[classId]) {
     for (const entry of compiledFeatCatalog.classFeatLists[classId]) {
-      if (entry.list === 1 || entry.list === 2) {
+      if ((entry.list === 1 || entry.list === 2) && entry.onMenu) {
         classBonusFeatIds.add(entry.featId);
       }
-      if (entry.list === 0) {
+      if (entry.list === 0 && entry.onMenu) {
         generalListZeroFeatIds.add(entry.featId);
       }
     }
@@ -1109,17 +1156,22 @@ export function selectFeatBoardView(
   const generalOptions: FeatOptionView[] = [];
 
   for (const feat of compiledFeatCatalog.feats) {
+    if (isManualFeatSelectionBlocked(feat.id)) continue;
+    if (autoGrantedFeatIds.has(feat.id)) continue;
     if (feat.prerequisites.preReqEpic === true) continue;
     if (isSentinelLabel(feat.label)) continue;
     if (isPuertaAdminLabel(feat.label)) continue;
+    const featId = feat.id as CanonicalId;
 
-    const inClassBonusPool = classBonusFeatIds.has(feat.id);
+    const inClassBonusPool = classBonusFeatIds.has(featId);
     const inGeneralPool =
-      feat.allClassesCanUse || generalListZeroFeatIds.has(feat.id);
+      feat.allClassesCanUse ||
+      generalListZeroFeatIds.has(featId) ||
+      isSelectableRestrictedGeneralFeat(classId, featId);
     if (!inClassBonusPool && !inGeneralPool) continue;
 
     const isChosenAtLevel =
-      selectedClassFeatId === feat.id || selectedGeneralFeatIds.includes(feat.id);
+      selectedClassFeatId === featId || selectedGeneralFeatIds.includes(featId);
     const { rowState, blockedReason } = resolveFeatRowState({
       feat,
       buildState,
@@ -1135,7 +1187,7 @@ export function selectFeatBoardView(
       label: feat.label,
       prereqSummary: buildPrereqSummary(feat.id, buildState),
       selected:
-        feat.id === selectedClassFeatId || selectedGeneralFeatIds.includes(feat.id),
+        featId === selectedClassFeatId || selectedGeneralFeatIds.includes(featId),
       rowState,
       blockedReason,
       isChosenAtLevel,

@@ -28,6 +28,43 @@ export interface EligibleFeatSet {
   generalFeats: CompiledFeat[];
 }
 
+/**
+ * Feats that may appear in cls_feat_* manual pools but should never be picked
+ * by the player. They can still be auto-granted through list=3 entries.
+ */
+const MANUAL_SELECTION_BLOCKED_FEAT_IDS = new Set<string>([
+  'feat:feat-dragon-dis-breath',
+]);
+
+/**
+ * Curated class-scoped feats that should behave like normal selectable
+ * general feats even though the source tables do not expose them through
+ * `ALLCLASSESCANUSE` / `list=0,onMenu=true`.
+ */
+const RESTRICTED_GENERAL_FEAT_ALLOWLIST: Record<string, Set<string>> = {
+  'class:warlock': new Set([
+    'feat:feat-craft-wand',
+    'feat:maximizaraptitud-sortilega',
+    'feat:potenciaraptitud-sortilega',
+    'feat:solturaaptitud-sortilega',
+  ]),
+};
+
+export function isManualFeatSelectionBlocked(featId: string): boolean {
+  return MANUAL_SELECTION_BLOCKED_FEAT_IDS.has(featId);
+}
+
+export function isSelectableRestrictedGeneralFeat(
+  classId: CanonicalId | null,
+  featId: string,
+): boolean {
+  if (!classId) {
+    return false;
+  }
+
+  return RESTRICTED_GENERAL_FEAT_ALLOWLIST[classId]?.has(featId) ?? false;
+}
+
 /** General feat levels: character levels 1, 3, 6, 9, 12, 15 */
 const GENERAL_FEAT_LEVELS = [1, 3, 6, 9, 12, 15];
 
@@ -72,8 +109,6 @@ export function determineFeatSlots(
   let classBonusFeatSlot = false;
 
   if (classId && classFeatLists[classId]) {
-    let hasNullLevelPool = false;
-
     for (const entry of classFeatLists[classId]) {
       // Auto-granted: list=3 with grantedOnLevel matching this class level
       if (entry.list === 3 && entry.grantedOnLevel === classLevelInClass) {
@@ -97,19 +132,12 @@ export function determineFeatSlots(
       ) {
         classBonusFeatSlot = true;
       }
-
-      // Track if this class uses pool-style bonus feats (grantedOnLevel=null)
-      if (
-        (entry.list === 1 || entry.list === 2) &&
-        entry.grantedOnLevel === null &&
-        entry.onMenu === true
-      ) {
-        hasNullLevelPool = true;
-      }
     }
 
-    // For classes with pool-style bonus feats, check the hardcoded schedule
-    if (!classBonusFeatSlot && hasNullLevelPool) {
+    // For classes with pool-style bonus feats, check the hardcoded schedule.
+    // Puerta custom tables may encode pools as GrantedOnLevel=99 rather than
+    // null, so the class schedule itself is the authoritative slot signal.
+    if (!classBonusFeatSlot) {
       const schedule = CLASS_BONUS_FEAT_SCHEDULES[classId];
       if (schedule && schedule.includes(classLevelInClass)) {
         classBonusFeatSlot = true;
@@ -120,6 +148,35 @@ export function determineFeatSlots(
   const generalFeatSlot = GENERAL_FEAT_LEVELS.includes(characterLevel);
 
   return { classBonusFeatSlot, generalFeatSlot, autoGrantedFeatIds };
+}
+
+export function getAutoGrantedFeatIdsThroughClassLevel(
+  classId: CanonicalId | null,
+  classLevelInClass: number,
+  classFeatLists: FeatCatalog['classFeatLists'],
+): Set<string> {
+  const autoGrantedFeatIds = new Set<string>();
+
+  if (!classId || !classFeatLists[classId]) {
+    return autoGrantedFeatIds;
+  }
+
+  for (const entry of classFeatLists[classId]) {
+    if (entry.grantedOnLevel == null || entry.grantedOnLevel > classLevelInClass) {
+      continue;
+    }
+
+    if (entry.list === 3) {
+      autoGrantedFeatIds.add(entry.featId);
+      continue;
+    }
+
+    if ((entry.list === 1 || entry.list === 2) && entry.onMenu === false) {
+      autoGrantedFeatIds.add(entry.featId);
+    }
+  }
+
+  return autoGrantedFeatIds;
 }
 
 /**
@@ -138,19 +195,32 @@ export function getEligibleFeats(
 ): EligibleFeatSet {
   const classBonusFeats: CompiledFeat[] = [];
   const generalFeats: CompiledFeat[] = [];
+  const currentClassAutoGrantedFeatIds = getAutoGrantedFeatIdsThroughClassLevel(
+    classId,
+    classLevelInClass,
+    featCatalog.classFeatLists,
+  );
 
   // Build a set of class bonus feat IDs for the current class
   const classBonusFeatIds = new Set<string>();
 
   if (classId && featCatalog.classFeatLists[classId]) {
     for (const entry of featCatalog.classFeatLists[classId]) {
-      if (entry.list === 1 || entry.list === 2) {
+      if ((entry.list === 1 || entry.list === 2) && entry.onMenu) {
         classBonusFeatIds.add(entry.featId);
       }
     }
   }
 
   for (const feat of featCatalog.feats) {
+    if (isManualFeatSelectionBlocked(feat.id)) {
+      continue;
+    }
+
+    if (currentClassAutoGrantedFeatIds.has(feat.id)) {
+      continue;
+    }
+
     // Skip already-selected feats
     if (buildState.selectedFeatIds.has(feat.id)) {
       continue;
@@ -183,10 +253,13 @@ export function getEligibleFeats(
       generalFeats.push(feat);
     } else if (classId && featCatalog.classFeatLists[classId]) {
       const hasGeneralEntry = featCatalog.classFeatLists[classId].some(
-        (entry) => entry.featId === feat.id && entry.list === 0,
+        (entry) => entry.featId === feat.id && entry.list === 0 && entry.onMenu,
       );
 
-      if (hasGeneralEntry) {
+      if (
+        hasGeneralEntry ||
+        isSelectableRestrictedGeneralFeat(classId, feat.id)
+      ) {
         generalFeats.push(feat);
       }
     }

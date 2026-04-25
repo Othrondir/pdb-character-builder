@@ -54,14 +54,14 @@ describe('Phase 12.4-06 — reachableAtLevelN (SPEC R1 / D-02)', () => {
     expect(reachableAtLevelN(input)).toEqual({ reachable: true, blockers: [] });
   });
 
-  it('prestige at L1: l1 blocker with threshold 2 + truthful exact copy', () => {
+  it('prestige at L1: l1 blocker with threshold 2 + current exact copy', () => {
     const result = reachableAtLevelN(baseInput({ level: 1 }));
     expect(result.reachable).toBe(false);
     expect(result.blockers).toHaveLength(1);
     expect(result.blockers[0]).toMatchObject({
       kind: 'l1',
       threshold: 2,
-      label: 'Clase de prestigio: no disponible en nivel 1; revisa sus requisitos',
+      label: 'Disponible a partir del nivel 2',
     });
   });
 
@@ -333,7 +333,7 @@ describe('Phase 12.4-06 — reachableAtLevelN (SPEC R1 / D-02)', () => {
     expect(labels).toContain('Requiere dote: Voluntad de hierro');
   });
 
-  it('campeondivino override: BAB 7 blocker + feat-or con 32 Weapon Focus per-arma (incluye unarmed)', () => {
+  it('campeondivino override: BAB 7 blocker + any-feat-group con 32 Weapon Focus per-arma (incluye unarmed)', () => {
     const result = reachableAtLevelN(
       baseInput({
         level: 5,
@@ -359,15 +359,15 @@ describe('Phase 12.4-06 — reachableAtLevelN (SPEC R1 / D-02)', () => {
       label: 'Requiere BAB ≥ 7',
     });
 
-    const featOr = result.blockers.find((b) => b.kind === 'feat-or');
-    expect(featOr, 'feat-or blocker must fire when no weapon focus owned').toBeDefined();
+    const featOr = result.blockers.find((b) => b.kind === 'any-feat-group');
+    expect(featOr, 'any-feat-group blocker must fire when no weapon focus owned').toBeDefined();
     expect(featOr?.label.startsWith('Requiere una de estas dotes: ')).toBe(true);
     // Proves the unarmed variant is part of the disjunction (distinguishes
     // campeondivino from weaponmaster).
     expect(featOr?.label).toContain('Soltura con un arma (impacto sin arma)');
   });
 
-  it('campeondivino override: con weapfocunarm en featIds, feat-or satisfecho (sólo BAB blocker queda)', () => {
+  it('campeondivino override: con weapfocunarm en featIds, any-feat-group satisfecho (sólo BAB blocker queda)', () => {
     const result = reachableAtLevelN(
       baseInput({
         level: 5,
@@ -387,7 +387,7 @@ describe('Phase 12.4-06 — reachableAtLevelN (SPEC R1 / D-02)', () => {
     expect(result).toEqual({ reachable: true, blockers: [] });
   });
 
-  it('weaponmaster override: BAB 5 + skill intimidar 4 + 4 feats + feat-or sin unarmed', () => {
+  it('weaponmaster override: BAB 5 + skill intimidar 4 + 4 feats + any-feat-group sin unarmed', () => {
     const result = reachableAtLevelN(
       baseInput({
         level: 5,
@@ -415,12 +415,12 @@ describe('Phase 12.4-06 — reachableAtLevelN (SPEC R1 / D-02)', () => {
       }),
     );
     expect(result.reachable).toBe(false);
-    // 1 bab + 1 skill-rank + 4 feat + 1 feat-or = 7 blockers
+    // 1 bab + 1 skill-rank + 4 feat + 1 any-feat-group = 7 blockers
     expect(result.blockers.map((b) => b.kind).sort()).toEqual(
-      ['bab', 'feat', 'feat', 'feat', 'feat', 'feat-or', 'skill-rank'],
+      ['any-feat-group', 'bab', 'feat', 'feat', 'feat', 'feat', 'skill-rank'],
     );
 
-    const featOr = result.blockers.find((b) => b.kind === 'feat-or');
+    const featOr = result.blockers.find((b) => b.kind === 'any-feat-group');
     // Confirms weaponmaster FEATOR excludes unarmed (per cls_pres_weaponmaster.2da).
     expect(featOr?.label).not.toContain('Soltura con un arma (impacto sin arma)');
   });

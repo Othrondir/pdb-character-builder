@@ -2444,8 +2444,17 @@ a {
 /* .level-row__pill. 100% token reuse (tokens.css); zero new hex      */
 /* colors; zero new 700-weight declarations (DEF-12.4-02 invariant).  */
 /* ------------------------------------------------------------------ */
+.build-progression-board {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
 .level-progression__list {
   display: grid;
+  flex: 1 1 auto;
   gap: var(--space-xs);
   grid-template-rows: repeat(20, auto);
   list-style: none;

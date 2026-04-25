@@ -49,6 +49,25 @@ function parseIntOrNull(value: string | null | undefined): number | null {
   return Number.isFinite(n) ? n : null;
 }
 
+const LEVEL_ONE_ONLY_PREREQ_PATTERN =
+  /prerrequisito:\s*esta\s+dote\s+solo\s+se\s+puede\s+escoger\s+a\s+(?:1\s*\.?\s*er\.?|primer)\s+nivel/i;
+const SPELLCASTER_LEVEL_PREREQ_PATTERN =
+  /prerrequisito:\s*lanzador\s+de\s+conjuros\s+de\s+nivel\s+(\d+)\+/i;
+
+function hasLevelOneOnlyPrereqText(description: string): boolean {
+  return LEVEL_ONE_ONLY_PREREQ_PATTERN.test(description);
+}
+
+function parseSpellcasterLevelPrereq(description: string): number | null {
+  const match = description.match(SPELLCASTER_LEVEL_PREREQ_PATTERN);
+  if (!match) {
+    return null;
+  }
+
+  const level = parseInt(match[1] ?? '', 10);
+  return Number.isFinite(level) ? level : null;
+}
+
 // ---------------------------------------------------------------------------
 // Phase 12.4-08 (SPEC R7 / CONTEXT D-05) — parameterized feat family detection
 // ---------------------------------------------------------------------------
@@ -361,9 +380,21 @@ export function assembleFeatCatalog(
 
     const minLevel = parseIntOrNull(row.MinLevel);
     if (minLevel != null && minLevel > 0) prerequisites.minLevel = minLevel;
+    if (prerequisites.minLevel == null) {
+      const derivedSpellcasterLevel = parseSpellcasterLevelPrereq(resolvedDesc);
+      if (derivedSpellcasterLevel != null && derivedSpellcasterLevel > 0) {
+        prerequisites.minLevel = derivedSpellcasterLevel;
+      }
+    }
 
     const maxLevel = parseIntOrNull(row.MaxLevel);
     if (maxLevel != null && maxLevel > 0) prerequisites.maxLevel = maxLevel;
+    if (
+      prerequisites.maxLevel == null &&
+      hasLevelOneOnlyPrereqText(resolvedDesc)
+    ) {
+      prerequisites.maxLevel = 1;
+    }
 
     // MinLevelClass is a class index; resolve to canonical ID
     const minLevelClassRow = parseIntOrNull(row.MinLevelClass);

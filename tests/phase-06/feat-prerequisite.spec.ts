@@ -313,4 +313,27 @@ describe('phase 06 feat prerequisite evaluator', () => {
 
     expect(resultFail.met).toBe(false);
   });
+
+  it('backfills Fabricar varita with a level-5 prerequisite', () => {
+    const feat = findFeat('feat:feat-craft-wand');
+
+    const resultL4 = evaluateFeatPrerequisites(
+      feat,
+      createBuildState({ characterLevel: 4 }),
+      compiledFeatCatalog,
+      compiledClassCatalog,
+    );
+    const resultL5 = evaluateFeatPrerequisites(
+      feat,
+      createBuildState({ characterLevel: 5 }),
+      compiledFeatCatalog,
+      compiledClassCatalog,
+    );
+
+    const levelCheckL4 = resultL4.checks.find((c) => c.type === 'level');
+    const levelCheckL5 = resultL5.checks.find((c) => c.type === 'level');
+
+    expect(levelCheckL4).toMatchObject({ met: false, required: '5' });
+    expect(levelCheckL5).toMatchObject({ met: true, required: '5' });
+  });
 });

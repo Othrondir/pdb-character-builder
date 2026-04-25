@@ -1,6 +1,7 @@
 import type {
   CompiledFeat,
   FeatCatalog,
+  FeatPrerequisites,
 } from '@data-extractor/contracts/feat-catalog';
 import type { ClassCatalog } from '@data-extractor/contracts/class-catalog';
 import { getClassLabel } from './get-class-label';
@@ -68,6 +69,23 @@ export const ABILITY_PREREQ_MAP: Record<string, string> = {
 };
 
 /**
+ * Runtime backfills for known prerequisite gaps in the committed dataset.
+ * Remove entries once the compiled catalog is regenerated with matching data.
+ */
+const FEAT_PREREQUISITE_OVERRIDES: Record<string, Partial<FeatPrerequisites>> = {
+  'feat:feat-craft-wand': {
+    minLevel: 5,
+  },
+};
+
+function getEffectiveFeatPrerequisites(feat: CompiledFeat): FeatPrerequisites {
+  return {
+    ...feat.prerequisites,
+    ...(FEAT_PREREQUISITE_OVERRIDES[feat.id] ?? {}),
+  };
+}
+
+/**
  * Evaluate all prerequisites for a single feat against the current build state.
  * Returns a per-prerequisite pass/fail report with Spanish labels.
  *
@@ -82,7 +100,7 @@ export function evaluateFeatPrerequisites(
   classCatalog: ClassCatalog,
 ): PrerequisiteCheckResult {
   const checks: PrerequisiteCheck[] = [];
-  const prereqs = feat.prerequisites;
+  const prereqs = getEffectiveFeatPrerequisites(feat);
 
   // Ability score checks
   for (const [prereqKey, abilityKey] of Object.entries(ABILITY_PREREQ_MAP)) {

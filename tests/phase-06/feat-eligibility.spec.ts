@@ -94,6 +94,32 @@ describe('phase 06 feat slot determination', () => {
     expect(slots.autoGrantedFeatIds).toEqual([]);
     expect(slots.classBonusFeatSlot).toBe(false);
   });
+
+  it('does not grant Brujo class bonus feat slots for invocation unlock levels', () => {
+    for (const classLevel of [1, 6, 11, 16]) {
+      const slots = determineFeatSlots(
+        classLevel,
+        'class:warlock',
+        classLevel,
+        compiledFeatCatalog.classFeatLists,
+      );
+
+      expect(slots.classBonusFeatSlot).toBe(false);
+    }
+  });
+
+  it('does not grant Brujo class bonus feat slots between unlock levels either', () => {
+    for (const classLevel of [2, 5, 10, 15]) {
+      const slots = determineFeatSlots(
+        classLevel,
+        'class:warlock',
+        classLevel,
+        compiledFeatCatalog.classFeatLists,
+      );
+
+      expect(slots.classBonusFeatSlot).toBe(false);
+    }
+  });
 });
 
 describe('phase 06 feat eligibility filtering', () => {
@@ -210,5 +236,133 @@ describe('phase 06 feat eligibility filtering', () => {
     );
 
     expect(powerAttack).toBeDefined();
+  });
+
+  it('excludes Arma de aliento from manual selectable pools', () => {
+    const result = getEligibleFeats(
+      createBuildState({
+        characterLevel: 1,
+        classLevels: { 'class:fighter': 1 },
+      }),
+      'class:fighter',
+      1,
+      compiledFeatCatalog,
+      compiledClassCatalog,
+    );
+
+    expect(
+      result.generalFeats.some((f) => f.id === 'feat:feat-dragon-dis-breath'),
+    ).toBe(false);
+    expect(
+      result.classBonusFeats.some((f) => f.id === 'feat:feat-dragon-dis-breath'),
+    ).toBe(false);
+  });
+
+  it('excludes auto-granted fighter proficiencies from level-1 selectable pools', () => {
+    const result = getEligibleFeats(
+      createBuildState({
+        characterLevel: 1,
+        classLevels: { 'class:fighter': 1 },
+      }),
+      'class:fighter',
+      1,
+      compiledFeatCatalog,
+      compiledClassCatalog,
+    );
+
+    expect(
+      result.generalFeats.some((f) => f.id === 'feat:competenciaarmaduraligera'),
+    ).toBe(false);
+    expect(
+      result.generalFeats.some((f) => f.id === 'feat:competenciaarmadurapesada'),
+    ).toBe(false);
+    expect(
+      result.generalFeats.some((f) => f.id === 'feat:competenciaconescudopaves'),
+    ).toBe(false);
+  });
+
+  it('excludes auto-granted warlock proficiencies from level-1 selectable pools', () => {
+    const result = getEligibleFeats(
+      createBuildState({
+        characterLevel: 1,
+        classLevels: { 'class:warlock': 1 },
+      }),
+      'class:warlock',
+      1,
+      compiledFeatCatalog,
+      compiledClassCatalog,
+    );
+
+    expect(
+      result.generalFeats.some((f) => f.id === 'feat:competenciaarmaduraligera'),
+    ).toBe(false);
+  });
+
+  it('includes Soltura Aptitud Sortilega in Brujo selectable pools', () => {
+    const result = getEligibleFeats(
+      createBuildState({
+        characterLevel: 1,
+        classLevels: { 'class:warlock': 1 },
+      }),
+      'class:warlock',
+      1,
+      compiledFeatCatalog,
+      compiledClassCatalog,
+    );
+
+    expect(
+      result.generalFeats.some(
+        (f) => f.id === 'feat:solturaaptitud-sortilega',
+      ),
+    ).toBe(true);
+  });
+
+  it('does not surface Brujo invocations in general selectable pools', () => {
+    const result = getEligibleFeats(
+      createBuildState({
+        characterLevel: 1,
+        classLevels: { 'class:warlock': 1 },
+      }),
+      'class:warlock',
+      1,
+      compiledFeatCatalog,
+      compiledClassCatalog,
+    );
+
+    expect(
+      result.generalFeats.some((f) => f.id === 'feat:inv-lanzasobrenatural'),
+    ).toBe(false);
+  });
+
+  it('unlocks Fabricar varita for Brujo once the level gate is met', () => {
+    const resultL1 = getEligibleFeats(
+      createBuildState({
+        characterLevel: 1,
+        classLevels: { 'class:warlock': 1 },
+      }),
+      'class:warlock',
+      1,
+      compiledFeatCatalog,
+      compiledClassCatalog,
+    );
+
+    expect(
+      resultL1.generalFeats.some((f) => f.id === 'feat:feat-craft-wand'),
+    ).toBe(false);
+
+    const resultL6 = getEligibleFeats(
+      createBuildState({
+        characterLevel: 6,
+        classLevels: { 'class:warlock': 6 },
+      }),
+      'class:warlock',
+      6,
+      compiledFeatCatalog,
+      compiledClassCatalog,
+    );
+
+    expect(
+      resultL6.generalFeats.some((f) => f.id === 'feat:feat-craft-wand'),
+    ).toBe(true);
   });
 });

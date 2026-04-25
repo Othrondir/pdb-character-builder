@@ -92,6 +92,74 @@ function setupL1Guerrero(): void {
   useFeatStore.getState().setActiveLevel(1 as ProgressionLevel);
 }
 
+function setupL1Brujo(): void {
+  useCharacterFoundationStore
+    .getState()
+    .setRace('race:elf' as CanonicalId);
+  useCharacterFoundationStore
+    .getState()
+    .setAlignment('alignment:true-neutral' as CanonicalId);
+  useLevelProgressionStore
+    .getState()
+    .setLevelClassId(1 as ProgressionLevel, 'class:warlock' as CanonicalId);
+  useLevelProgressionStore
+    .getState()
+    .setActiveLevel(1 as ProgressionLevel);
+  useFeatStore.getState().setActiveLevel(1 as ProgressionLevel);
+}
+
+function setupL1HumanoBrujo(): void {
+  useCharacterFoundationStore
+    .getState()
+    .setRace('race:human' as CanonicalId);
+  useCharacterFoundationStore
+    .getState()
+    .setAlignment('alignment:true-neutral' as CanonicalId);
+  useLevelProgressionStore
+    .getState()
+    .setLevelClassId(1 as ProgressionLevel, 'class:warlock' as CanonicalId);
+  useLevelProgressionStore
+    .getState()
+    .setActiveLevel(1 as ProgressionLevel);
+  useFeatStore.getState().setActiveLevel(1 as ProgressionLevel);
+}
+
+function setupL3Guerrero(): void {
+  useCharacterFoundationStore
+    .getState()
+    .setRace('race:elf' as CanonicalId);
+  useCharacterFoundationStore
+    .getState()
+    .setAlignment('alignment:lawful-good' as CanonicalId);
+  for (const level of [1, 2, 3] as ProgressionLevel[]) {
+    useLevelProgressionStore
+      .getState()
+      .setLevelClassId(level, 'class:fighter' as CanonicalId);
+  }
+  useLevelProgressionStore
+    .getState()
+    .setActiveLevel(3 as ProgressionLevel);
+  useFeatStore.getState().setActiveLevel(3 as ProgressionLevel);
+}
+
+function setupL6Brujo(): void {
+  useCharacterFoundationStore
+    .getState()
+    .setRace('race:elf' as CanonicalId);
+  useCharacterFoundationStore
+    .getState()
+    .setAlignment('alignment:true-neutral' as CanonicalId);
+  for (const level of [1, 2, 3, 4, 5, 6] as ProgressionLevel[]) {
+    useLevelProgressionStore
+      .getState()
+      .setLevelClassId(level, 'class:warlock' as CanonicalId);
+  }
+  useLevelProgressionStore
+    .getState()
+    .setActiveLevel(6 as ProgressionLevel);
+  useFeatStore.getState().setActiveLevel(6 as ProgressionLevel);
+}
+
 // --------------------------------------------------------------------------
 // Suite
 // --------------------------------------------------------------------------
@@ -130,6 +198,16 @@ describe('Phase 12.4-07 — Dotes selectability states (SPEC R5)', () => {
       render(createElement(FeatBoard));
       const generalCards = document.querySelectorAll('[data-slot-card^="general-"]');
       expect(generalCards.length).toBe(2);
+    });
+
+    it('A2c: L1 Humano+Brujo renders "Dotes del nivel 1: 0/2" with no class-bonus card', () => {
+      setupL1HumanoBrujo();
+      render(createElement(FeatBoard));
+
+      expect(screen.getByText(/Dotes del nivel 1:\s*0\/2/)).toBeInTheDocument();
+      expect(
+        document.querySelector('[data-slot-card="class-bonus-0"]'),
+      ).toBeNull();
     });
 
     it('A3: after selecting 1 feat at L1 non-Humano Guerrero, counter shows 1/2', () => {
@@ -285,6 +363,91 @@ describe('Phase 12.4-07 — Dotes selectability states (SPEC R5)', () => {
         expect(row).toBeVisible();
         expect(window.getComputedStyle(row).display).not.toBe('none');
       }
+    });
+
+    it('B6: Arma de aliento is not rendered as a manual selectable feat', () => {
+      setupL1Guerrero();
+      render(createElement(FeatBoard));
+
+      expect(
+        document.querySelector('[data-feat-id="feat:feat-dragon-dis-breath"]'),
+      ).toBeNull();
+    });
+
+    it('B6b: Guerrero L1 does not render proficiencies already auto-granted by the class', () => {
+      setupL1Guerrero();
+      render(createElement(FeatBoard));
+
+      expect(
+        document.querySelector('[data-feat-id="feat:competenciaarmadurapesada"]'),
+      ).toBeNull();
+      expect(
+        document.querySelector('[data-feat-id="feat:competenciaconescudopaves"]'),
+      ).toBeNull();
+    });
+
+    it('B7: first-level-only feats are blocked after level 1 with exact reason', () => {
+      setupL3Guerrero();
+      render(createElement(FeatBoard));
+
+      const row = document.querySelector<HTMLElement>(
+        '[data-feat-id="feat:strongsoul"]',
+      );
+      expect(row).not.toBeNull();
+      expect(row!.getAttribute('aria-disabled')).toBe('true');
+      expect(row!.textContent).toMatch(/Disponible solo hasta nivel 1/);
+    });
+
+    it('B8: Brujo L1 does not render invocation rows as feat selections', () => {
+      setupL1Brujo();
+      render(createElement(FeatBoard));
+
+      expect(
+        document.querySelector('[data-feat-id="feat:inv-lanzasobrenatural"]'),
+      ).toBeNull();
+    });
+
+    it('B9: Brujo L1 renders Soltura Aptitud Sortilega as a selectable row', () => {
+      setupL1Brujo();
+      render(createElement(FeatBoard));
+
+      const row = document.querySelector<HTMLElement>(
+        '[data-feat-id="feat:solturaaptitud-sortilega"]',
+      );
+      expect(row).not.toBeNull();
+      expect(row!.getAttribute('aria-disabled')).toBe('false');
+    });
+
+    it('B9b: Brujo L1 does not render light-armor proficiency already auto-granted', () => {
+      setupL1Brujo();
+      render(createElement(FeatBoard));
+
+      expect(
+        document.querySelector('[data-feat-id="feat:competenciaarmaduraligera"]'),
+      ).toBeNull();
+    });
+
+    it('B10: Brujo L1 shows Fabricar varita blocked by level', () => {
+      setupL1Brujo();
+      render(createElement(FeatBoard));
+
+      const row = document.querySelector<HTMLElement>(
+        '[data-feat-id="feat:feat-craft-wand"]',
+      );
+      expect(row).not.toBeNull();
+      expect(row!.getAttribute('aria-disabled')).toBe('true');
+      expect(row!.textContent).toMatch(/Requiere nivel de personaje ≥ 5/);
+    });
+
+    it('B11: Brujo L6 unlocks Fabricar varita as selectable', () => {
+      setupL6Brujo();
+      render(createElement(FeatBoard));
+
+      const row = document.querySelector<HTMLElement>(
+        '[data-feat-id="feat:feat-craft-wand"]',
+      );
+      expect(row).not.toBeNull();
+      expect(row!.getAttribute('aria-disabled')).toBe('false');
     });
   });
 

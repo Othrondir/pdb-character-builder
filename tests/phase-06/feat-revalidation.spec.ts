@@ -175,4 +175,26 @@ describe('phase 06 feat revalidation', () => {
       status: 'pending',
     });
   });
+
+  it('marks Arma de aliento as illegal when manually selected', () => {
+    const revalidated = revalidateFeatSnapshotAfterChange({
+      levels: [
+        createLevel(1, {
+          buildState: createBuildState({
+            characterLevel: 1,
+            classLevels: { 'class:fighter': 1 },
+          }),
+          generalFeatIds: ['feat:feat-dragon-dis-breath'],
+        }),
+      ],
+      featCatalog: compiledFeatCatalog,
+      classCatalog: compiledClassCatalog,
+    });
+
+    expect(revalidated[0]).toMatchObject({
+      level: 1,
+      status: 'illegal',
+      inheritedFromLevel: null,
+    });
+  });
 });

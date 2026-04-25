@@ -82,6 +82,8 @@ LABEL	Name	Description	Icon	ALLCLASSESCANUSE	PREREQFEAT1	PREREQFEAT2	OrReqFeat0	
 3	ImprovedCritical	530	531	****	0	2	****	****	****	****	****	****	****	****	****	****	8	****	****	****	****	****	****	****	****	****	****	****	0	2
 4	SkillFocus_Lore	540	541	****	1	****	****	****	****	****	****	****	2	5	****	****	****	****	****	****	****	****	****	****	****	****	****	****	0	3
 5	MonsterFeat	550	551	****	0	****	****	****	****	****	****	****	****	****	****	****	****	****	****	****	****	****	****	****	****	****	****	****	0	99
+6	FirstLevelOnly	560	561	****	1	****	****	****	****	****	****	****	****	****	****	****	****	****	****	****	****	****	****	****	****	****	****	****	0	1
+7	CraftWand	570	571	****	1	****	****	****	****	****	****	****	****	****	****	****	****	****	****	****	****	****	****	****	****	****	****	****	0	4
 `;
 
 const MINIMAL_SKILLS_2DA = `2DA V2.0
@@ -125,6 +127,10 @@ describe('assembleFeatCatalog (unit)', () => {
     541: 'Desc conocimiento enfocado',
     550: 'Dote de Monstruo',
     551: 'Desc dote monstruo',
+    560: 'Rasgo de primer nivel',
+    561: 'Tipo de dote: General\nPrerrequisito: Esta dote solo se puede escoger a 1er. nivel.\nDetalles: fixture',
+    570: 'Fabricar varita',
+    571: 'Tipo de dote: Creación de objetos\nPrerrequisito: Lanzador de conjuros de nivel 5+.\nDetalles: fixture',
   });
   const customTlk = mockTlkTable({});
   const resolver = new TlkResolver(baseTlk, customTlk);
@@ -189,6 +195,38 @@ describe('assembleFeatCatalog (unit)', () => {
       id: 'skill:lore',
       minRanks: 5,
     });
+  });
+
+  it('derives maxLevel=1 from first-level-only prerequisite text', () => {
+    const resources: Record<string, string> = {
+      feat: MINIMAL_FEAT_2DA,
+      skills: MINIMAL_SKILLS_2DA,
+      cls_feat_fight: MINIMAL_CLS_FEAT_FIGHT,
+      cls_feat_wiz: MINIMAL_CLS_FEAT_WIZ,
+    };
+    const reader = mockNwsyncReader(resources);
+    const baseReader = mockBaseGameReader();
+
+    const result = assembleFeatCatalog(reader, baseReader, resolver, classRows, TEST_DATASET_ID);
+
+    const feat = result.catalog.feats.find((f) => f.id === 'feat:firstlevelonly')!;
+    expect(feat.prerequisites.maxLevel).toBe(1);
+  });
+
+  it('derives minLevel from spellcaster-level prerequisite text', () => {
+    const resources: Record<string, string> = {
+      feat: MINIMAL_FEAT_2DA,
+      skills: MINIMAL_SKILLS_2DA,
+      cls_feat_fight: MINIMAL_CLS_FEAT_FIGHT,
+      cls_feat_wiz: MINIMAL_CLS_FEAT_WIZ,
+    };
+    const reader = mockNwsyncReader(resources);
+    const baseReader = mockBaseGameReader();
+
+    const result = assembleFeatCatalog(reader, baseReader, resolver, classRows, TEST_DATASET_ID);
+
+    const feat = result.catalog.feats.find((f) => f.id === 'feat:craftwand')!;
+    expect(feat.prerequisites.minLevel).toBe(5);
   });
 
   it('builds class feat lists keyed by class canonical ID', () => {

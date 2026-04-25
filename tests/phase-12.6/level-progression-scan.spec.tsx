@@ -156,6 +156,18 @@ describe('Phase 12.6 P5 — 20-row scan surface (Plan 03 Suites A+B)', () => {
     );
   });
 
+  it('A3: app.css declares .build-progression-board as a full-height flex column', () => {
+    expect(appCss).toMatch(
+      /\.build-progression-board\s*\{[^}]*display\s*:\s*flex[^}]*flex-direction\s*:\s*column[^}]*height\s*:\s*100%[^}]*min-height\s*:\s*0[^}]*overflow\s*:\s*hidden/s,
+    );
+  });
+
+  it('A4: app.css lets .level-progression__list consume remaining height via flex', () => {
+    expect(appCss).toMatch(
+      /\.level-progression__list\s*\{[^}]*flex\s*:\s*1\s+1\s+auto/s,
+    );
+  });
+
   // ----------------------------------------------------------------
   // Suite B — DOM structure (20 rows + 4 pills each).
   // ----------------------------------------------------------------
@@ -208,6 +220,25 @@ describe('Phase 12.6 P5 — 20-row scan surface (Plan 03 Suites A+B)', () => {
     const cs = getComputedStyle(list as HTMLElement).gridTemplateRows;
     const tokens = cs.trim().split(/\s+/).filter(Boolean).length;
     expect(cs.includes('repeat(20') || tokens === 20).toBe(true);
+  });
+
+  it('B5: computed styles expose a column host + scrollable list after injecting app.css', () => {
+    setupElfoL1();
+    render(createElement(BuildProgressionBoard));
+    injectAppCss();
+
+    const board = document.querySelector(
+      '.build-progression-board',
+    ) as HTMLElement | null;
+    const list = document.querySelector(
+      '.level-progression__list',
+    ) as HTMLElement | null;
+
+    expect(board).not.toBeNull();
+    expect(list).not.toBeNull();
+    expect(getComputedStyle(board as HTMLElement).display).toBe('flex');
+    expect(getComputedStyle(board as HTMLElement).flexDirection).toBe('column');
+    expect(getComputedStyle(list as HTMLElement).overflowY).toBe('auto');
   });
 
   // ----------------------------------------------------------------
