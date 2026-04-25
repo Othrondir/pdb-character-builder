@@ -19,13 +19,34 @@ export async function saveSlot(name: string, doc: BuildDocument): Promise<void> 
 }
 
 /**
- * Load a slot. Re-validates with Zod on read (Pitfall 6 mitigation: a tampered Dexie row
- * must not hydrate stores with unknown-shape data).
+ * Discriminated union returned by {@link loadSlot}. Replaces the pre-Phase-14-02
+ * `BuildDocument | null` shape so that callers explicitly handle three outcomes:
+ *
+ * - `{kind: 'ok', doc}` — row exists AND its payload re-validated against
+ *   {@link buildDocumentSchema}.
+ * - `{kind: 'not-found'}` — no row exists for that slot name.
+ * - `{kind: 'invalid', reason}` — row exists but its payload failed Zod
+ *   validation (tamper, cross-version drift). Caller MUST NOT hydrate.
  */
-export async function loadSlot(name: string): Promise<BuildDocument | null> {
+export type LoadSlotResult =
+  | { kind: 'ok'; doc: BuildDocument }
+  | { kind: 'not-found' }
+  | { kind: 'invalid'; reason: string };
+
+/**
+ * Load a slot. Re-validates with Zod on read (Pitfall 6 mitigation: a tampered Dexie row
+ * must not hydrate stores with unknown-shape data). Returns a typed discriminated union
+ * — see {@link LoadSlotResult} — instead of throwing ZodError or returning a bare null.
+ * Phase 14-02 hardening.
+ */
+export async function loadSlot(name: string): Promise<LoadSlotResult> {
   const row = await getPlannerDb().builds.get(name);
-  if (!row) return null;
-  return buildDocumentSchema.parse(row.payload);
+  if (!row) return { kind: 'not-found' };
+  const parsed = buildDocumentSchema.safeParse(row.payload);
+  if (!parsed.success) {
+    return { kind: 'invalid', reason: parsed.error.message };
+  }
+  return { kind: 'ok', doc: parsed.data };
 }
 
 /**

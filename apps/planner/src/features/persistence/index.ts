@@ -19,6 +19,7 @@ export {
   listSlots,
   deleteSlot,
   slotExists,
+  type LoadSlotResult,
 } from './slot-api';
 export { downloadBuildAsJson } from './json-export';
 export { importBuildFromFile, JsonImportError } from './json-import';
