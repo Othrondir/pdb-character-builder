@@ -527,6 +527,11 @@ Plans:
   3. Body scroll lock installs on dialog open, removes on close; no stray scroll bleed.
   4. `feat-sheet.tsx:288-299` + `skill-sheet.tsx:150-154` drop `document.querySelector` in favor of ref-based or scoped selectors.
   5. Phase 06 zustand subscriptions tightened (subscribe only to needed slices); unsafe type assertion removed.
+**Plans:** 3 plans
+Plans:
+- [ ] 15-01-PLAN.md — A11y hooks + dialog wiring (useFocusTrap + useBodyScrollLock; drawer + 4 dialogs; specs D-08/D-09/D-10/D-11)
+- [ ] 15-02-PLAN.md — querySelector scope-down at feat-sheet:274 + skill-sheet:151 (ref-thread via SelectionScreen.contentRef) + canonicalIdRegex.test guards at feat-sheet handlers (D-07)
+- [ ] 15-03-PLAN.md — Phase 06 cleanup: useShallow rollout to feat-board / feat-detail-panel / feat-sheet-tab (3 files; feat-search.tsx not on disk — out of scope)
 
 ### Phase 16: Feat Engine Completion (GAP)
 **Goal**: Close Phase 06 bonus-feat TODO cluster + Phase 12.4 Humano L1 feat-slot store-capacity gap surfaced by the re-audit. Wire class gain tables for bonus feat schedules; implement Human bonus feat logic; expand foundation store feat-slot capacity from 2→3 on Humano L1 so the Advance button resolves legal.
@@ -572,5 +577,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -
 | 12.9 Resumen (Hoja de personaje) UX Pass (INSERTED) | 2/2 | Complete (UAT 9/9 pass, SECURITY 0 threats open, VERIFICATION 13/13 gates green) | 2026-04-24 |
 | 13. Verification + Orphan Sweep (GAP) | 2/2 | Complete (12.6 + 12.7 VERIFICATION.md retro-authored, 3 source files cleaned, REVIEW clean 0/0/0, VERIFICATION 7/7 passed) | 2026-04-24 |
 | 14. Persistence Robustness (GAP) | 6/6 | Complete (toast queue + LoadSlotResult union + buildName round-trip + url double-slash guard + abilityModifier consolidation + plannerVersion docstring parity; 48/48 phase-14 specs green) | 2026-04-25 |
-| 15. A11y + Modal Polish (GAP) | 0/TBD | Not started | - |
+| 15. A11y + Modal Polish (GAP) | 0/3 | Not started | - |
 | 16. Feat Engine Completion (GAP) | 0/TBD | Not started | - |
