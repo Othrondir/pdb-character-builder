@@ -24,23 +24,20 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, render, screen } from '@testing-library/react';
 import { createElement } from 'react';
 import {
+  MIN_VISIBLE_MS,
   Toast,
+  __resetToastForTests,
   dismissToast,
   pushToast,
   useToast,
 } from '@planner/components/ui/toast';
 
-// Spec-local oracle. After Task 2 (GREEN) the implementation exports
-// MIN_VISIBLE_MS = 1500; a sentinel test asserts parity. The constant
-// is duplicated here so the spec stays independent of import shape.
-const MIN_VISIBLE_MS = 1500;
-
 describe('Phase 14-01 — toast clobber race + queue drain', () => {
   beforeEach(() => {
     vi.useFakeTimers();
-    // Flush any leftover module state from prior tests. dismissToast()
-    // is idempotent; after Task 2 it will also drain the queue head.
-    dismissToast();
+    // Deterministic module-state reset: clears queue + current +
+    // visibleSince + drainTimer + notifies listeners.
+    __resetToastForTests();
   });
 
   afterEach(() => {
@@ -48,8 +45,11 @@ describe('Phase 14-01 — toast clobber race + queue drain', () => {
     // setTimeout from <Toast/>'s 5-second auto-dismiss does not leak.
     vi.useRealTimers();
     cleanup();
-    // Final dismiss to reset module-scoped `current` for the next test.
-    dismissToast();
+    __resetToastForTests();
+  });
+
+  it('exports MIN_VISIBLE_MS = 1500', () => {
+    expect(MIN_VISIBLE_MS).toBe(1500);
   });
 
   it('A1 — second pushToast within 50 ms is queued, not visible immediately', () => {
@@ -120,7 +120,7 @@ describe('Phase 14-01 — toast clobber race + queue drain', () => {
     expect(screen.queryByText('segundo')).not.toBeNull();
   });
 
-  it('A4 — auto-dismiss after 5000 ms surfaces queued toast immediately', () => {
+  it('A4 — queue drain surfaces queued toast; subsequent 5s auto-dismiss applies to the new head', () => {
     render(createElement(Toast));
 
     act(() => {
@@ -135,14 +135,24 @@ describe('Phase 14-01 — toast clobber race + queue drain', () => {
     expect(screen.queryByText('primero')).not.toBeNull();
     expect(screen.queryByText('segundo')).toBeNull();
 
-    // Advance to the 5-second auto-dismiss boundary. With queue drain
-    // wired through dismissToast, the queued message should surface.
+    // Stage 1: advance past the queue-drain boundary. drainTimer fires at
+    // +1500ms relative to primero's visibleSince (i.e. +1450 from now) and
+    // calls dismissToast → segundo surfaces. We isolate this in its own
+    // `act` block so React's useEffect cleanup runs and clears primero's
+    // pending 5s setTimeout BEFORE we advance further.
+    act(() => {
+      vi.advanceTimersByTime(MIN_VISIBLE_MS);
+    });
+    expect(screen.queryByText('primero')).toBeNull();
+    expect(screen.queryByText('segundo')).not.toBeNull();
+
+    // Stage 2: advance to segundo's own 5s auto-dismiss boundary. After
+    // dismissToast() segundo's auto-dismiss should fire; queue is now
+    // empty so current → null and the toast is removed from the DOM.
     act(() => {
       vi.advanceTimersByTime(5000);
     });
-
-    expect(screen.queryByText('primero')).toBeNull();
-    expect(screen.queryByText('segundo')).not.toBeNull();
+    expect(screen.queryByText('segundo')).toBeNull();
   });
 
   it('A5 — tone is preserved per-message across queue drain (info stays mid-window, warn surfaces after)', () => {
