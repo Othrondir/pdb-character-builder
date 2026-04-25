@@ -8,6 +8,7 @@ import {
 } from '@planner/features/character-foundation/selectors';
 import { selectProgressionSummary } from '@planner/features/level-progression/selectors';
 import { applyRaceModifiers } from '@rules-engine/foundation/apply-race-modifiers';
+import { abilityModifier } from '@rules-engine/foundation';
 import { computeHitPoints } from '@rules-engine/progression/compute-hit-points';
 import { compiledClassCatalog } from '@planner/data/compiled-classes';
 import { usePlannerShellStore } from '@planner/state/planner-shell';
@@ -36,9 +37,9 @@ const DERIVED_STAT_LABELS = {
   will: 'Voluntad',
 } as const;
 
-function computeModifier(score: number): number {
-  return Math.floor((score - 10) / 2);
-}
+// Phase 14-05 — local `computeModifier(score)` (formerly inlined the
+// magic-10 formula) deleted; all call sites below resolve to the
+// canonical `abilityModifier` import from `@rules-engine/foundation`.
 
 function formatModifier(mod: number): string {
   return mod >= 0 ? `(+${mod})` : `(${mod})`;
@@ -53,7 +54,7 @@ function StatsPanel() {
     foundationState.baseAttributes,
     foundationState.racialModifiers,
   );
-  const conModifier = computeModifier(finalAttributes.con);
+  const conModifier = abilityModifier(finalAttributes.con);
   const hitPoints = computeHitPoints(
     progressionState.levels,
     compiledClassCatalog,
@@ -68,7 +69,7 @@ function StatsPanel() {
       <dl className="character-sheet__stat-grid">
         {ATTRIBUTE_KEYS.map((key) => {
           const value = finalAttributes[key];
-          const mod = computeModifier(value);
+          const mod = abilityModifier(value);
           return (
             <div key={key}>
               <dt>{ATTRIBUTE_LABELS[key]}</dt>
@@ -82,7 +83,7 @@ function StatsPanel() {
       <dl className="character-sheet__derived">
         <div>
           <dt>{DERIVED_STAT_LABELS.ac}</dt>
-          <dd>{10 + computeModifier(finalAttributes.dex)}</dd>
+          <dd>{10 + abilityModifier(finalAttributes.dex)}</dd>
         </div>
         <div>
           <dt>{DERIVED_STAT_LABELS.hp}</dt>
@@ -94,15 +95,15 @@ function StatsPanel() {
         </div>
         <div>
           <dt>{DERIVED_STAT_LABELS.fortitude}</dt>
-          <dd>{computeModifier(finalAttributes.con)}</dd>
+          <dd>{abilityModifier(finalAttributes.con)}</dd>
         </div>
         <div>
           <dt>{DERIVED_STAT_LABELS.reflex}</dt>
-          <dd>{computeModifier(finalAttributes.dex)}</dd>
+          <dd>{abilityModifier(finalAttributes.dex)}</dd>
         </div>
         <div>
           <dt>{DERIVED_STAT_LABELS.will}</dt>
-          <dd>{computeModifier(finalAttributes.wis)}</dd>
+          <dd>{abilityModifier(finalAttributes.wis)}</dd>
         </div>
       </dl>
     </div>

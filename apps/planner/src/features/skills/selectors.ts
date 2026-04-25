@@ -1,5 +1,6 @@
 import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
 import type { ValidationOutcome } from '@rules-engine/contracts/validation-outcome';
+import { abilityModifier } from '@rules-engine/foundation';
 import {
   evaluateSkillSnapshot,
   type ArmorCategory,
@@ -218,15 +219,14 @@ function getIntelligenceModifier(
   // UAT-2026-04-20 P3 — fold racial INT adjustment into the modifier so
   // skill points track the same total attribute AttributesBoard shows
   // (A2). Elfo does not touch INT; Puerta custom races may (extractor
-  // catalog is the source of truth).
+  // catalog is the source of truth). Phase 14-05 — delegated to the
+  // canonical `abilityModifier` helper from `@rules-engine/foundation`.
   const racialInt = foundationState.racialModifiers?.int ?? 0;
   const intelligenceIncreases = progressionState.levels.filter(
     (record) => record.level <= level && record.abilityIncrease === 'int',
   ).length;
 
-  return Math.floor(
-    (baseIntelligence + racialInt + intelligenceIncreases - 10) / 2,
-  );
+  return abilityModifier(baseIntelligence + racialInt + intelligenceIncreases);
 }
 
 function createSkillLevelInput(

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { computePerLevelBudget, type BuildSnapshot, type ClassCatalogInput, type FeatCatalogInput, type RaceCatalogInput } from '@rules-engine/progression/per-level-budget';
+import { abilityModifier } from '@rules-engine/foundation';
 import { compiledClassCatalog } from '@planner/data/compiled-classes';
 import { compiledFeatCatalog } from '@planner/data/compiled-feats';
 import { compiledRaceCatalog } from '@planner/data/compiled-races';
@@ -95,7 +96,11 @@ describe('Phase 12.7-04 — L2..L20 skill budget formula verification (R6 verify
     describe(`${classId} (classBase=${classBase}) — L2..L20 × INT ∈ {8,10,12,14,16,18}`, () => {
       for (const intScore of INT_SCORES) {
         for (const level of LEVELS) {
-          const intMod = Math.floor((intScore - 10) / 2);
+          // Phase 14-05 — divergent fixture removed; this spec now uses
+          // the same canonical helper the production sites consume so
+          // the L2..L20 formula assertion stays in lock-step with any
+          // future change to `abilityModifier`.
+          const intMod = abilityModifier(intScore);
           const expected = Math.max(1, classBase + intMod);
 
           it(`L${level} INT=${intScore} → skillPoints.budget === max(1, ${classBase} + ${intMod}) === ${expected}`, () => {
