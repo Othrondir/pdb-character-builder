@@ -509,12 +509,12 @@ Plans:
 **Plans**: 6 plans across 2 waves.
 
 Plans:
-- [ ] 14-01-PLAN.md — Toast clobber race fix: FIFO queue + MIN_VISIBLE_MS=1500ms guard in toast.tsx (closes SC#1) [Wave 1]
-- [ ] 14-02-PLAN.md — loadSlot typed LoadSlotResult discriminated union {ok|not-found|invalid} + Spanish loadInvalid toast wired into LoadSlotDialog (closes SC#2) [Wave 1]
-- [ ] 14-03-PLAN.md — Foundation store buildName slice + hydrateBuildDocument persists doc.build.name + projectBuildDocument falls back to store value (closes SC#3) [Wave 1]
-- [ ] 14-04-PLAN.md — buildShareUrl collapseDoubleSlash safety net regex; permutation matrix spec covers origin/window pathname edge cases (closes SC#4) [Wave 1]
-- [ ] 14-05-PLAN.md — Canonical abilityModifier helper extracted to @rules-engine/foundation; 4 call sites migrated (skills/selectors, attributes-board, resumen-selectors, character-sheet); divergent fixture sweep (closes SC#5) [Wave 1]
-- [ ] 14-06-PLAN.md — plannerVersion docstring parity sweep across persistence/*.ts(x); Vitest sentinel locks invariant (closes SC#6, finalizes SC#7) [Wave 2, depends on 14-01..14-05]
+- [x] 14-01-PLAN.md — Toast clobber race fix: FIFO queue + MIN_VISIBLE_MS=1500ms guard in toast.tsx (closes SC#1) [Wave 1] — complete 2026-04-25
+- [x] 14-02-PLAN.md — loadSlot typed LoadSlotResult discriminated union {ok|not-found|invalid} + Spanish loadInvalid toast wired into LoadSlotDialog (closes SC#2) [Wave 1] — complete 2026-04-25
+- [x] 14-03-PLAN.md — Foundation store buildName slice + hydrateBuildDocument persists doc.build.name + projectBuildDocument falls back to store value (closes SC#3) [Wave 1] — complete 2026-04-25
+- [x] 14-04-PLAN.md — buildShareUrl collapseDoubleSlash safety net regex; permutation matrix spec covers origin/window pathname edge cases (closes SC#4) [Wave 1] — complete 2026-04-25
+- [x] 14-05-PLAN.md — Canonical abilityModifier helper extracted to @rules-engine/foundation; 4 call sites migrated (skills/selectors, attributes-board, resumen-selectors, character-sheet); divergent fixture sweep (closes SC#5) [Wave 1] — complete 2026-04-25
+- [x] 14-06-PLAN.md — plannerVersion docstring parity sweep across persistence/*.ts(x); Vitest sentinel locks invariant (closes SC#6, finalizes SC#7) [Wave 2, depends on 14-01..14-05] — complete 2026-04-25
 
 ### Phase 15: A11y + Modal Polish (GAP)
 **Goal**: Close Phase 07.1 WR-02..04 + Phase 06 / 12.8 selector-scope cluster from the re-audit: install focus trap on `aria-modal` surfaces, automate focus-return on dialog close, install body scroll lock, scope the 4 cross-cutting `document.querySelector` / unscoped zustand callsites.
@@ -571,6 +571,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -
 | 12.8 UAT-2026-04-23 Residuals (INSERTED) | 4/4 | Complete (12.8-01 F1+F2 scroll-snap, 12.8-02 prestige schema, 12.8-04 Semielfo dedupe, 12.8-03 Dotes F3+F4 UX + 12.7 T3 closure marker) | 2026-04-24 |
 | 12.9 Resumen (Hoja de personaje) UX Pass (INSERTED) | 2/2 | Complete (UAT 9/9 pass, SECURITY 0 threats open, VERIFICATION 13/13 gates green) | 2026-04-24 |
 | 13. Verification + Orphan Sweep (GAP) | 2/2 | Complete (12.6 + 12.7 VERIFICATION.md retro-authored, 3 source files cleaned, REVIEW clean 0/0/0, VERIFICATION 7/7 passed) | 2026-04-24 |
-| 14. Persistence Robustness (GAP) | 0/6 | Not started | - |
+| 14. Persistence Robustness (GAP) | 6/6 | Complete (toast queue + LoadSlotResult union + buildName round-trip + url double-slash guard + abilityModifier consolidation + plannerVersion docstring parity; 48/48 phase-14 specs green) | 2026-04-25 |
 | 15. A11y + Modal Polish (GAP) | 0/TBD | Not started | - |
 | 16. Feat Engine Completion (GAP) | 0/TBD | Not started | - |

@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: "Phase 13 EXECUTION COMPLETE — Verification + Orphan Sweep (2/2 plans merged across 2 waves). Wave 1 (13-01, docs-only): retro-authored 12.6-VERIFICATION.md (133 lines, status=passed, 10/10 truths, cites commit b6952ba 4×) + 12.7-VERIFICATION.md (120 lines, status=passed, T3 Habilidades-scroll recorded as RESOLVED-CROSS-PHASE via Phase 12.8-03 D-15 marker at 12.7-UAT.md:87-102). Closes v1.0 re-audit unverified_phases gap items — milestone rolls 22/24 → 24/24 verified. Zero source-code drift verified. Commits 3f9fd19 + d429900 + b508c31 merged via ead56267. Wave 2 (13-02): surgical dead-code + orphan sweep. 5 commits: e0a79d0 (ConfirmDialog audit Branch B false-positive — 1 live caller in save-slot-dialog.tsx + 3 phase-08 tests, primitive + CSS byte-identical), 184d3da (computeHighestClassLevel deleted from prestige-gate-build.ts — ARCANE_SPELLCASTER_IDS PRESERVED per Rule-1 plan correction: grep-verified as consumed by live computeHighestSpellLevel at line 336), 1146e47 (level-sub-steps.tsx aria-label interpolates level prop; level prop preserved — consumed by 3 completeness predicates), a5fcfb9 (packages/data-extractor/src/cli.ts loadClassLabels + loadSpellsColumnNames moved inside if (EMIT_MAGIC_CATALOGS) block — default extractor runs skip wasted 2DA parse), 78b5940 (SUMMARY). Post-merge gates: typecheck 4/4 baseline errors / 0 new, vitest 2141 pass / 6 pre-existing failed / 0 new regressions. Code review (13-REVIEW.md, commit 0faebc7) returned CLEAN 0/0/0. Verification (13-VERIFICATION.md) status=passed 7/7 truths (5 directly + 2 via documented Rule-1 overrides: ARCANE_SPELLCASTER_IDS preservation + ConfirmDialog Branch B). Zero-diff gates hold: packages/rules-engine/, apps/planner/src/features/persistence/, apps/planner/src/data/, apps/planner/src/styles/tokens.css all empty diffs. v1.0 milestone ready for close."
-last_updated: "2026-04-24T22:30:00.000Z"
-last_activity: 2026-04-24 -- Phase 13 complete (2/2 plans merged, REVIEW clean, VERIFICATION 7/7 passed)
+stopped_at: "Phase 14 EXECUTION COMPLETE — Persistence Robustness (6/6 plans merged across 2 waves; SC#1..SC#7 closed). Wave 1a (14-01 solo): toast FIFO queue + MIN_VISIBLE_MS=1500ms guard in apps/planner/src/components/ui/toast.tsx + DoS cap (queue.length≥8) + tests/phase-14 jsdom glob in vitest.config.ts (commits c2bedba+59889b6+3053dcf). Wave 1b parallel (14-02..14-05 in 4 worktrees): 14-02 LoadSlotResult discriminated union {ok|not-found|invalid} + Spanish loadInvalid toast in save-slot-dialog (e456730+67f64e2+5e7e816); 14-03 foundation buildName slice + hydrate/project round-trip parity (91319a5+7a0c15d+a870e84); 14-04 collapseDoubleSlash safety net in url-budget.ts (bc7c268+af21702+2af4615); 14-05 canonical abilityModifier helper extracted to @rules-engine/foundation + 4 call sites migrated + divergent fixture migration (9274f02+74f59c0+707ea73). Stray aa977ee orphan from 14-02 agent pwd-escape resolved via reset to e8f425a (preserved in reflog). deferred-items.md merge conflict (14-03+14-05 both filed pre-existing dexie module-resolution failure) resolved by merge of both blocks. Wave 2 (14-06 solo): plannerVersion docstring parity sweep across 13 persistence/*.ts(x) files + Vitest sentinel (ed6a439+6519879+7657e81). Final gates: phase-14 48/48 specs green; 6 pre-existing baseline failures (BUILD_ENCODING_VERSION literal=1 stale + 5 prestige-gate.fixture/class-picker schema spec drift) carried forward unchanged from Phase 13 baseline; 0 new regressions. Deferred (env-only, not phase 14): dexie module symlink missing in worktree node_modules — separate plan needed. Persistence Robustness Phase 08 tech_debt cluster from v1.0-MILESTONE-AUDIT closed."
+last_updated: "2026-04-25T18:30:00.000Z"
+last_activity: 2026-04-25 -- Phase 14 complete (6/6 plans merged across 3 waves; phase-14 48/48 specs green; 0 new regressions)
 progress:
-  total_phases: 28
-  completed_phases: 25
-  total_plans: 90
-  completed_plans: 90
+  total_phases: 29
+  completed_phases: 26
+  total_plans: 96
+  completed_plans: 96
   percent: 100
 ---
 
@@ -21,13 +21,13 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-30)
 
 **Core value:** A player can build a Puerta de Baldur character from level 1 to 16 with strict server-valid validation and share that exact build reliably.
-**Current focus:** Phase 14 — persistence-robustness (GAP) — Phase 13 complete
+**Current focus:** Phase 15 — A11y + Modal Polish (GAP) — Phase 14 complete
 
 ## Current Position
 
-Phase: 13 (verification-orphan-sweep) — COMPLETE (2/2 plans merged)
-Plan: 2 of 2
-Status: Phase 13 complete — next up Phase 14 (Persistence Robustness GAP)
+Phase: 14 (persistence-robustness) — COMPLETE (6/6 plans merged across 3 waves)
+Plan: 6 of 6
+Status: Phase 14 complete — next up Phase 15 (A11y + Modal Polish GAP)
 
 - B1 attributes overspend gate (nextIncrementCost + canIncrementAttribute, 12.3-01)
 - B2+B8+B9 multiclass active-level wiring (LevelRail dispatch, 12.3-02)
