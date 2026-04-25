@@ -6,6 +6,7 @@ import { ActionBar } from '@planner/components/ui/action-bar';
 import { usePlannerShellStore } from '@planner/state/planner-shell';
 import { compiledRaceCatalog } from '@planner/data/compiled-races';
 import { canIncrementAttribute } from '@rules-engine/foundation/ability-budget';
+import { abilityModifier } from '@rules-engine/foundation';
 import {
   ATTRIBUTE_KEYS,
   type AttributeKey,
@@ -120,11 +121,12 @@ export function AttributesBoard() {
           const racialDelta = foundationState.racialModifiers?.[key] ?? 0;
           const totalValue = baseValue + racialDelta;
           // UAT-2026-04-20 — show D&D ability modifier alongside the
-          // score (floor((score - 10) / 2)). Column stays aligned because
-          // the label is always present (e.g. `+0`, `-1`, `+2`).
-          const abilityModifier = Math.floor((totalValue - 10) / 2);
-          const modifierLabel =
-            abilityModifier >= 0 ? `+${abilityModifier}` : `${abilityModifier}`;
+          // score. Phase 14-05: routed through the canonical
+          // `abilityModifier` helper from `@rules-engine/foundation` so
+          // the magic-10 baseline lives in exactly one place. Local name
+          // is `mod` to avoid shadowing the imported helper.
+          const mod = abilityModifier(totalValue);
+          const modifierLabel = mod >= 0 ? `+${mod}` : `${mod}`;
           return (
             <div className="attributes-editor__row" key={key}>
               <span className="attributes-editor__label">
@@ -147,9 +149,9 @@ export function AttributesBoard() {
                   <span
                     aria-label={`Modificador de ${ATTRIBUTE_LABELS[key]}`}
                     className={`attributes-editor__racial${
-                      abilityModifier > 0
+                      mod > 0
                         ? ' attributes-editor__racial--positive'
-                        : abilityModifier < 0
+                        : mod < 0
                           ? ' attributes-editor__racial--negative'
                           : ' attributes-editor__racial--zero'
                     }`}

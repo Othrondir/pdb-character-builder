@@ -15,6 +15,7 @@ import {
   computeRefSave,
   computeWillSave,
 } from '@rules-engine/feats/bab-calculator';
+import { abilityModifier } from '@rules-engine/foundation';
 import type { AttributeKey } from '@planner/features/character-foundation/foundation-fixture';
 import type { ProgressionLevel } from '@planner/lib/sections';
 
@@ -51,9 +52,10 @@ export interface ResumenViewModel {
   skills: SkillRow[];
 }
 
-function abilityModifier(score: number): number {
-  return Math.floor((score - 10) / 2);
-}
+// Phase 14-05 — local `abilityModifier(score)` removed; the canonical
+// helper is imported from `@rules-engine/foundation` at the top of this
+// file. Call sites below (line ~184) keep their syntax unchanged because
+// the imported symbol is named identically.
 
 function findRaceLabel(raceId: string | null): string {
   if (!raceId) return shellCopyEs.resumen.notAvailable;
