@@ -11,7 +11,11 @@ findings:
   low: 4
   nit: 4
   total: 11
-status: issues_found
+status: resolved
+fixes:
+  mr_01: 313ae6b — slot-api.ts wraps Dexie await in try/catch returning {kind:'invalid'}
+  mr_02: 313ae6b — project-build-document.ts clamps foundation.buildName <=80 before fallback
+  mr_03: 313ae6b — hydrate-build-document.ts console-warns on setSubrace parentage rejection
 ---
 
 # Phase 14 Code Review
