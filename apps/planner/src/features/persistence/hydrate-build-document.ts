@@ -20,6 +20,11 @@ import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
  * deityId is currently ignored (foundation store has no setter). Safe because projection
  * emits null today.
  *
+ * Phase 14-03: `build.name` is now persisted into `foundation.buildName` (was previously
+ * dropped on hydrate; SHAR-05 round-trip parity). Bounding (max 80 chars) is enforced at
+ * the schema boundary BEFORE this function sees the doc — the setter receives a bounded
+ * string or null.
+ *
  * Note on `as CanonicalId` casts: Zod's `z.string().regex(canonicalIdRegex)` infers to
  * `string`, not the branded `CanonicalId` template-literal type. The regex guard at the
  * schema boundary already rejects malformed IDs, so the cast is safe at runtime.
@@ -28,6 +33,7 @@ export function hydrateBuildDocument(doc: BuildDocument): void {
   // --- Foundation ---
   const foundation = useCharacterFoundationStore.getState();
   foundation.resetFoundation();
+  foundation.setBuildName(doc.build.name ?? null);
   foundation.setRace(doc.build.raceId as CanonicalId);
   if (doc.build.subraceId !== null) {
     foundation.setSubrace(doc.build.subraceId as CanonicalId);

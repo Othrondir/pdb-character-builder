@@ -1,17 +1,19 @@
 # Phase 14 — Deferred Items
 
-Out-of-scope discoveries surfaced during plan execution. Tracked here so they
-can be picked up in a follow-up plan or environment fix.
+Out-of-scope discoveries surfaced during plan execution. Tracked here so they can be picked up in a follow-up plan or environment fix.
 
-## 14-05 — phase-12.9 dexie module-resolution failure (worktree env)
+## 14-03 + 14-05 — `dexie` module-resolution failure (worktree env)
 
-- **Discovered:** 2026-04-25 during 14-05 execution.
-- **Symptom:** `Failed to resolve import "dexie" from "apps/planner/src/features/persistence/dexie-db.ts"` when running `pnpm vitest run tests/phase-12.9/`.
-- **Root cause (verified):** the parallel-executor worktree at `.claude/worktrees/agent-a9fab2f979b658595` has its own `node_modules/` that lacks the `dexie` package symlink. The pnpm store at `<repo>/node_modules/.pnpm/dexie@4.4.2/` is present but not surfaced into the worktree's top-level `node_modules`.
-- **Pre-existing:** confirmed by stashing 14-05 changes via `git stash --keep-index` and re-running phase-12.9 — same 3 files fail with identical resolve error before any 14-05 file is touched.
-- **Out of scope for 14-05:** plan 14-05 is a pure-helper refactor; ability-modifier delegation does not import dexie. Test failures are entirely unrelated to the migration.
-- **Recommended fix (separate plan):** run `pnpm install` from inside the worktree, OR document that wave executors must run from the repo root and rely on hoisted node_modules. Likely 14-X persistence-robustness follow-up plan.
-- **Affected files (all environment-only, not 14-05 changes):**
+- **Discovered:** 2026-04-25 during 14-03 + 14-05 parallel execution (independently surfaced by both plans).
+- **Symptom:**
+  - vitest: `Failed to resolve import "dexie" from "apps/planner/src/features/persistence/dexie-db.ts"`
+  - `tsc --noEmit`: errors at `dexie-db.ts:1,30,50,64` (already tracked as baseline per STATE.md).
+- **Root cause (verified):** parallel-executor worktrees have their own `node_modules/` lacking the `dexie` symlink. Repo pnpm store at `<repo>/node_modules/.pnpm/dexie@4.4.2/` is present but not surfaced into the worktree-local `node_modules`.
+- **Pre-existing:** verified via `git stash --keep-index` baseline reproduction on `3053dcf` (both 14-03 and 14-05 confirmed independently). No relation to either plan's source changes.
+- **Tests blocked (all env-only, not plan changes):**
+  - `tests/phase-08/share-url.spec.ts`
   - `tests/phase-12.9/resumen-identity-dedup.spec.tsx`
   - `tests/phase-12.9/resumen-progresion-full-width.spec.tsx`
-  - 1 additional phase-12.9 spec failing the same import.
+  - +1 additional phase-12.9 spec failing the same import.
+- **Tests NOT blocked:** round-trip identity for `build.name` (14-03) fully covered by `tests/phase-14/hydrate-build-name.spec.ts` B7 + `tests/phase-08/hydrate-build-document.spec.ts`; `abilityModifier` consolidation (14-05) covered by `tests/phase-14/ability-modifier.spec.ts`.
+- **Recommended fix (separate plan):** run `pnpm install` from inside the worktree, OR document that wave executors must run from the repo root and rely on hoisted `node_modules`. Likely a 14-X follow-up plan or pre-execute environment guard.

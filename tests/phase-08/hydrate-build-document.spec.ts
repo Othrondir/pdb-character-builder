@@ -49,7 +49,7 @@ describe('hydrateBuildDocument', () => {
     ).toBe(true);
   });
 
-  it('round-trips: hydrate -> project preserves identity and structure (ignoring timestamps and name)', () => {
+  it('round-trips: hydrate -> project preserves identity and structure (ignoring timestamps; name persisted via Phase 14-03)', () => {
     const original = sampleBuildDocument();
     hydrateBuildDocument(original);
     const projected = projectBuildDocument();
@@ -69,5 +69,6 @@ describe('hydrateBuildDocument', () => {
     expect(projected.build.levels).toEqual(original.build.levels);
     expect(projected.build.skillAllocations).toEqual(original.build.skillAllocations);
     expect(projected.build.featSelections).toEqual(original.build.featSelections);
+    expect(projected.build.name).toEqual(original.build.name);
   });
 });

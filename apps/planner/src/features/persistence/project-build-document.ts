@@ -60,6 +60,8 @@ export function isBuildProjectable(): boolean {
  *   past schema drift). Indicates a real bug.
  *
  * @param name optional build name stamped into `build.name` (used by Dexie save flow).
+ *   When omitted/undefined, falls back to `foundation.buildName`. When both are absent,
+ *   the field is omitted from the document — schema marks it optional. Phase 14-03.
  *
  * NOTE: `deityId` is always emitted as `null` until the foundation store exposes a deity
  * field. The schema accepts nullable so this is forward-compatible. Documented in
@@ -70,6 +72,12 @@ export function projectBuildDocument(name?: string): BuildDocument {
   const progression = useLevelProgressionStore.getState();
   const skills = useSkillStore.getState();
   const feats = useFeatStore.getState();
+
+  // Phase 14-03 — name resolution precedence:
+  //   explicit `name` arg > foundation.buildName > undefined (field omitted).
+  // Lets the Dexie save dialog override on-demand without losing the round-trip
+  // identity that hydrate now persists into the store.
+  const resolvedName = name ?? foundation.buildName ?? undefined;
 
   // Pre-projection guard: fail with a typed error BEFORE Zod sees nulls. Preserves
   // schema strictness (D-07) while giving callers an actionable surface.
@@ -87,7 +95,7 @@ export function projectBuildDocument(name?: string): BuildDocument {
     datasetId: CURRENT_DATASET_ID,
     createdAt: new Date().toISOString(),
     build: {
-      ...(name ? { name } : {}),
+      ...(resolvedName ? { name: resolvedName } : {}),
       raceId: foundation.raceId,
       subraceId: foundation.subraceId,
       alignmentId: foundation.alignmentId,

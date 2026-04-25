@@ -13,12 +13,17 @@ export type BaseAttributes = Record<AttributeKey, number>;
 export interface CharacterFoundationStoreState {
   alignmentId: CanonicalId | null;
   baseAttributes: BaseAttributes;
+  // Phase 14-03 — buildName lives on the foundation store so hydrate can persist
+  // `doc.build.name` and project can echo it back. Bounding (max 80 chars) is the
+  // persistence boundary's job (build-document-schema.ts), NOT the store's.
+  buildName: string | null;
   datasetId: string;
   raceId: CanonicalId | null;
   racialModifiers: Record<AttributeKey, number> | null;
   resetFoundation: () => void;
   setAlignment: (alignmentId: CanonicalId | null) => void;
   setBaseAttribute: (key: AttributeKey, value: number) => void;
+  setBuildName: (name: string | null) => void;
   setRace: (raceId: CanonicalId | null) => void;
   setSubrace: (subraceId: CanonicalId | null) => void;
   subraceId: CanonicalId | null;
@@ -37,6 +42,7 @@ function createInitialFoundationState() {
   return {
     alignmentId: null,
     baseAttributes: createBaseAttributes(),
+    buildName: null as string | null,
     datasetId: CURRENT_DATASET_ID,
     raceId: null,
     racialModifiers: null as Record<AttributeKey, number> | null,
@@ -85,6 +91,7 @@ export const useCharacterFoundationStore = create<CharacterFoundationStoreState>
           [key]: value,
         },
       })),
+    setBuildName: (buildName) => set({ buildName }),
     setRace: (raceId) =>
       set((state) => ({
         raceId,
