@@ -63,6 +63,8 @@ export const shellCopyEs = {
     importSuccess: 'Build importada correctamente.',
     saveSuccess: 'Build "{name}" guardada.',
     loadSuccess: 'Build "{name}" cargada.',
+    loadInvalid:
+      'No se pudo cargar la build "{name}": archivo dañado o de una versión incompatible. Usa Importar JSON con un archivo válido.',
     privateModeUnavailable: 'Guardado local no disponible en este modo del navegador.',
     incompleteBuild:
       'Completa raza y alineamiento antes de guardar, exportar o compartir la build.',

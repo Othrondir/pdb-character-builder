@@ -28,14 +28,20 @@ describe('slot-api (Dexie via fake-indexeddb)', () => {
     const doc = sampleBuildDocument();
     await saveSlot('my-paladin', doc);
 
+    // Phase 14-02: loadSlot now returns LoadSlotResult discriminated union
+    // instead of BuildDocument | null.
     const loaded = await loadSlot('my-paladin');
-    expect(loaded).not.toBeNull();
-    expect(loaded?.build.raceId).toBe('race:human');
+    expect(loaded.kind).toBe('ok');
+    if (loaded.kind === 'ok') {
+      expect(loaded.doc.build.raceId).toBe('race:human');
+    }
   });
 
-  it('returns null when loading a nonexistent slot', async () => {
+  it('returns {kind: "not-found"} when loading a nonexistent slot', async () => {
+    // Phase 14-02: loadSlot now returns LoadSlotResult discriminated union;
+    // pre-fix shape was `Promise<null>`.
     const loaded = await loadSlot('does-not-exist');
-    expect(loaded).toBeNull();
+    expect(loaded).toEqual({ kind: 'not-found' });
   });
 
   it('slotExists reports true only when a row exists', async () => {

@@ -155,21 +155,40 @@ export function LoadSlotDialog({ open, onClose }: LoadDialogProps) {
   }, [open]);
 
   async function onPick(slotName: string) {
-    const doc = await loadSlot(slotName);
-    if (!doc) return;
-    const diff = diffRuleset(doc);
-    if (diff) {
-      // Fail-closed: do NOT hydrate. Route the user through the shared
-      // VersionMismatchDialog surface — same precedent as share-entry.tsx:62-72.
-      setMismatch({ doc, diff });
-      return;
+    const result = await loadSlot(slotName);
+    switch (result.kind) {
+      case 'not-found':
+        // Race against listSlots(): row was deleted between list + pick.
+        // Pre-Phase-14-02 behaviour was a silent return; preserved here.
+        return;
+      case 'invalid':
+        // Phase 14-02: Zod parse failed (tampered row / cross-version drift).
+        // Fail-closed — do NOT hydrate. Surface a Spanish toast and keep the
+        // dialog open so the user can pick a different slot. The raw Zod
+        // reason is intentionally NOT shown to the user (T-14-02-02 accept).
+        pushToast(
+          shellCopyEs.persistence.loadInvalid.replace('{name}', slotName),
+          'warn',
+        );
+        return;
+      case 'ok': {
+        const diff = diffRuleset(result.doc);
+        if (diff) {
+          // Fail-closed parity with /share decode (D-07 / SHAR-05). Do NOT
+          // hydrate. Route the user through the shared VersionMismatchDialog
+          // surface — same precedent as share-entry.tsx:62-72.
+          setMismatch({ doc: result.doc, diff });
+          return;
+        }
+        hydrateBuildDocument(result.doc);
+        pushToast(
+          shellCopyEs.persistence.loadSuccess.replace('{name}', slotName),
+          'info',
+        );
+        onClose();
+        return;
+      }
     }
-    hydrateBuildDocument(doc);
-    pushToast(
-      shellCopyEs.persistence.loadSuccess.replace('{name}', slotName),
-      'info',
-    );
-    onClose();
   }
 
   return (
