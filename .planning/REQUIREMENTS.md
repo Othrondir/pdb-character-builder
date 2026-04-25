@@ -1,7 +1,7 @@
 # Requirements: NWN 1 Character Builder
 
 **Defined:** 2026-03-29
-**Core Value:** A player can build a Puerta de Baldur character from level 1 to 16 with strict server-valid validation and share that exact build reliably.
+**Core Value:** A player can build a Puerta de Baldur character from level 1 to 20 with strict server-valid validation and share that exact build reliably. _(Range extended 1-16 → 1-20 per UAT-2026-04-20 P6; locked in Phase 12.6.)_
 
 ## v1 Requirements
 
@@ -28,9 +28,12 @@
 
 - [x] **ABIL-01**: El usuario puede definir las caracteristicas iniciales segun las reglas de creacion soportadas por el planner.
 - [x] **ABIL-02**: El usuario puede asignar aumentos de caracteristica en los niveles que correspondan.
-- [x] **PROG-01**: El usuario puede construir una progresion completa desde nivel 1 hasta nivel 16.
+- [x] **ATTR-01**: El presupuesto de point-buy del usuario se resuelve por raza desde un snapshot del servidor con semantica fail-closed cuando falte la curva.
+- [x] **PROG-01**: El usuario puede construir una progresion completa desde nivel 1 hasta nivel 20.
 - [x] **PROG-02**: El usuario puede subir y bajar niveles sin romper el estado interno de la build.
 - [x] **PROG-03**: El usuario puede ver la progresion nivel a nivel de su personaje.
+- [x] **PROG-04**: El usuario puede planificar la progresion completa hasta nivel 20 (extension del rango original 1-16). _Promoted v2 → v1 (2026-04-20) per UAT-2026-04-20 P6._
+- [x] **PROG-05**: La barra de avance al siguiente nivel permanece visible en cada sub-paso (Clase / Habilidades / Dotes) del nivel activo. _Added v1 (2026-04-20) per Phase 12.7-01 — closes UAT F7 BLOCKER._
 
 ### Clases y clases de prestigio
 
@@ -89,7 +92,7 @@
 ### Contenido ampliado
 
 - **LORE-01**: El usuario puede consultar una enciclopedia interna de clases, dotes y conjuros sin salir del planner.
-- **PROG-04**: El usuario puede planificar por encima de nivel 16 cuando el proyecto amplie el alcance.
+- **PROG-06**: El usuario puede planificar por encima de nivel 20 cuando el proyecto amplie el alcance. _Renumbered from v2 PROG-04 (2026-04-25) — original v2 PROG-04 ("por encima de nivel 16") closed by v1 PROG-04 (extension to 1-20)._
 
 ### Descoped from v1 (2026-04-18)
 
@@ -120,11 +123,14 @@
 | CHAR-02 | Phase 3 | Complete |
 | CHAR-03 | — | Descoped v1 → v2 (2026-04-18) |
 | CHAR-04 | Phase 3 | Complete |
-| ABIL-01 | Phase 3 | Complete |
+| ABIL-01 | Phase 3 → Phase 12.6 | Complete (per-race point-buy curve resolution added in Phase 12.6-02) |
 | ABIL-02 | Phase 4 | Complete |
-| PROG-01 | Phase 4 | Complete |
+| ATTR-01 | Phase 12.6 | Complete (puerta-point-buy.json snapshot + fail-closed-on-missing-curve in 12.6-02 / 12.6-06) |
+| PROG-01 | Phase 4 → Phase 12.6 | Complete (range extended 1-16 → 1-20 via Phase 12.6-05) |
 | PROG-02 | Phase 4 | Complete |
 | PROG-03 | Phase 4 | Complete |
+| PROG-04 | Phase 12.6 | Complete (level cap 1-20 + 20-row scan surface — promoted v2 → v1 per UAT-2026-04-20 P6; reshape shipped in 12.6-05) |
+| PROG-05 | Phase 12.7 | Complete (LevelEditorActionBar hoisted into CreationStepper with stable key={expandedLevel} — closes F7 BLOCKER per Phase 12.7-01) |
 | CLAS-01 | Phase 4 | Complete |
 | CLAS-02 | Phase 4 → Phase 12.8-02 | Complete (regression closed 2026-04-24 via schema extension — 6 new decodedPrereqs fields surface pale-master + caballero-arcano + shadowdancer prereqs that were silently ignored) |
 | CLAS-03 | Phase 4 | Complete |
@@ -151,11 +157,11 @@
 | SHAR-05 | Phase 8 → Phase 10 | Complete (slot-load fail-closed parity in Phase 10) |
 
 **Coverage:**
-- v1 requirements: 39 total
-- Active in v1: 34 (5 descoped: CHAR-03, MAGI-01, MAGI-02, MAGI-03, MAGI-04)
-- Mapped to phases: 34
+- v1 requirements: 42 total
+- Active in v1: 37 (5 descoped: CHAR-03, MAGI-01, MAGI-02, MAGI-03, MAGI-04)
+- Mapped to phases: 37
 - Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-03-29*
-*Last updated: 2026-04-18 after milestone v1.0 audit + Phase 9 verification-traceability closure (pending Phases 10-12 integration/UAT/tech-debt closures)*
+*Last updated: 2026-04-25 after milestone v1.0 re-audit closure — added ATTR-01 (Phase 12.6), promoted PROG-04 v2→v1 (Phase 12.6 level cap 1-20), added PROG-05 (Phase 12.7 stepper-global advance), renamed v2 PROG-04 → PROG-06 ("above level 20"). Previously updated 2026-04-18 after Phase 9 verification-traceability closure.*
