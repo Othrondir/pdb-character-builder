@@ -18,6 +18,8 @@ function createBuildState(
     fortitudeSave: 0,
     selectedFeatIds: new Set(),
     skillRanks: {},
+    raceId: null,
+    activeClassIdAtLevel: null,
     ...overrides,
   };
 }
@@ -93,9 +95,11 @@ describe('phase 06 proficiency feats (FEAT-03)', () => {
   it('auto-granted proficiency feats appear via determineFeatSlots for barbarian', () => {
     // Barbarian auto-grants proficiency feats at class level 1 (list=3)
     const slots = determineFeatSlots(
-      1,
-      'class:barbarian',
-      1,
+      createBuildState({
+        characterLevel: 1,
+        classLevels: { 'class:barbarian': 1 },
+        activeClassIdAtLevel: 'class:barbarian',
+      }),
       compiledFeatCatalog.classFeatLists,
     );
 
@@ -109,9 +113,11 @@ describe('phase 06 proficiency feats (FEAT-03)', () => {
 
   it('auto-granted proficiency feats for fighter include weapon and armor competencies', () => {
     const slots = determineFeatSlots(
-      1,
-      'class:fighter',
-      1,
+      createBuildState({
+        characterLevel: 1,
+        classLevels: { 'class:fighter': 1 },
+        activeClassIdAtLevel: 'class:fighter',
+      }),
       compiledFeatCatalog.classFeatLists,
     );
 

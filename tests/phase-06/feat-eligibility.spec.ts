@@ -18,6 +18,8 @@ function createBuildState(
     fortitudeSave: 0,
     selectedFeatIds: new Set(),
     skillRanks: {},
+    raceId: null,
+    activeClassIdAtLevel: null,
     ...overrides,
   };
 }
@@ -25,9 +27,11 @@ function createBuildState(
 describe('phase 06 feat slot determination', () => {
   it('grants a general feat slot at character level 1', () => {
     const slots = determineFeatSlots(
-      1,
-      'class:fighter',
-      1,
+      createBuildState({
+        characterLevel: 1,
+        classLevels: { 'class:fighter': 1 },
+        activeClassIdAtLevel: 'class:fighter',
+      }),
       compiledFeatCatalog.classFeatLists,
     );
 
@@ -36,9 +40,11 @@ describe('phase 06 feat slot determination', () => {
 
   it('does not grant a general feat slot at character level 2', () => {
     const slots = determineFeatSlots(
-      2,
-      'class:fighter',
-      2,
+      createBuildState({
+        characterLevel: 2,
+        classLevels: { 'class:fighter': 2 },
+        activeClassIdAtLevel: 'class:fighter',
+      }),
       compiledFeatCatalog.classFeatLists,
     );
 
@@ -47,9 +53,11 @@ describe('phase 06 feat slot determination', () => {
 
   it('grants a general feat slot at character level 3', () => {
     const slots = determineFeatSlots(
-      3,
-      'class:fighter',
-      3,
+      createBuildState({
+        characterLevel: 3,
+        classLevels: { 'class:fighter': 3 },
+        activeClassIdAtLevel: 'class:fighter',
+      }),
       compiledFeatCatalog.classFeatLists,
     );
 
@@ -59,9 +67,11 @@ describe('phase 06 feat slot determination', () => {
   it('grants general feat slots at levels 6, 9, 12, 15', () => {
     for (const level of [6, 9, 12, 15]) {
       const slots = determineFeatSlots(
-        level,
-        'class:fighter',
-        level,
+        createBuildState({
+          characterLevel: level,
+          classLevels: { 'class:fighter': level },
+          activeClassIdAtLevel: 'class:fighter',
+        }),
         compiledFeatCatalog.classFeatLists,
       );
 
@@ -71,9 +81,11 @@ describe('phase 06 feat slot determination', () => {
 
   it('detects auto-granted feats for barbarian at class level 1 (list=3)', () => {
     const slots = determineFeatSlots(
-      1,
-      'class:barbarian',
-      1,
+      createBuildState({
+        characterLevel: 1,
+        classLevels: { 'class:barbarian': 1 },
+        activeClassIdAtLevel: 'class:barbarian',
+      }),
       compiledFeatCatalog.classFeatLists,
     );
 
@@ -85,9 +97,11 @@ describe('phase 06 feat slot determination', () => {
 
   it('returns no auto-granted feats for a null classId', () => {
     const slots = determineFeatSlots(
-      1,
-      null,
-      0,
+      createBuildState({
+        characterLevel: 1,
+        classLevels: {},
+        activeClassIdAtLevel: null,
+      }),
       compiledFeatCatalog.classFeatLists,
     );
 
@@ -98,9 +112,11 @@ describe('phase 06 feat slot determination', () => {
   it('does not grant Brujo class bonus feat slots for invocation unlock levels', () => {
     for (const classLevel of [1, 6, 11, 16]) {
       const slots = determineFeatSlots(
-        classLevel,
-        'class:warlock',
-        classLevel,
+        createBuildState({
+          characterLevel: classLevel,
+          classLevels: { 'class:warlock': classLevel },
+          activeClassIdAtLevel: 'class:warlock',
+        }),
         compiledFeatCatalog.classFeatLists,
       );
 
@@ -111,9 +127,11 @@ describe('phase 06 feat slot determination', () => {
   it('does not grant Brujo class bonus feat slots between unlock levels either', () => {
     for (const classLevel of [2, 5, 10, 15]) {
       const slots = determineFeatSlots(
-        classLevel,
-        'class:warlock',
-        classLevel,
+        createBuildState({
+          characterLevel: classLevel,
+          classLevels: { 'class:warlock': classLevel },
+          activeClassIdAtLevel: 'class:warlock',
+        }),
         compiledFeatCatalog.classFeatLists,
       );
 

@@ -27,6 +27,8 @@ function createBuildState(
     fortitudeSave: 0,
     selectedFeatIds: new Set<string>(),
     skillRanks: {},
+    raceId: null,
+    activeClassIdAtLevel: null,
     ...overrides,
   };
 }
