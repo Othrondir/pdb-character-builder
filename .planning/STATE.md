@@ -4,14 +4,14 @@ milestone: v1.0
 milestone_name: milestone
 status: executing
 stopped_at: "Phase 14 EXECUTION COMPLETE â€” Persistence Robustness (6/6 plans merged across 2 waves; SC#1..SC#7 closed). Wave 1a (14-01 solo): toast FIFO queue + MIN_VISIBLE_MS=1500ms guard in apps/planner/src/components/ui/toast.tsx + DoS cap (queue.lengthâ‰¥8) + tests/phase-14 jsdom glob in vitest.config.ts (commits c2bedba+59889b6+3053dcf). Wave 1b parallel (14-02..14-05 in 4 worktrees): 14-02 LoadSlotResult discriminated union {ok|not-found|invalid} + Spanish loadInvalid toast in save-slot-dialog (e456730+67f64e2+5e7e816); 14-03 foundation buildName slice + hydrate/project round-trip parity (91319a5+7a0c15d+a870e84); 14-04 collapseDoubleSlash safety net in url-budget.ts (bc7c268+af21702+2af4615); 14-05 canonical abilityModifier helper extracted to @rules-engine/foundation + 4 call sites migrated + divergent fixture migration (9274f02+74f59c0+707ea73). Stray aa977ee orphan from 14-02 agent pwd-escape resolved via reset to e8f425a (preserved in reflog). deferred-items.md merge conflict (14-03+14-05 both filed pre-existing dexie module-resolution failure) resolved by merge of both blocks. Wave 2 (14-06 solo): plannerVersion docstring parity sweep across 13 persistence/*.ts(x) files + Vitest sentinel (ed6a439+6519879+7657e81). Final gates: phase-14 48/48 specs green; 6 pre-existing baseline failures (BUILD_ENCODING_VERSION literal=1 stale + 5 prestige-gate.fixture/class-picker schema spec drift) carried forward unchanged from Phase 13 baseline; 0 new regressions. Deferred (env-only, not phase 14): dexie module symlink missing in worktree node_modules â€” separate plan needed. Persistence Robustness Phase 08 tech_debt cluster from v1.0-MILESTONE-AUDIT closed."
-last_updated: "2026-04-25T19:15:00.000Z"
-last_activity: 2026-04-25 -- Phase 15 CONTEXT.md captured (user delegated; D-NO-CSS / D-NO-COPY / D-NO-DEPS invariants locked; commit cd78057)
+last_updated: "2026-04-26T11:30:00.000Z"
+last_activity: 2026-04-26 -- Phase 15-01 EXECUTION COMPLETE (a11y hooks + drawer focus-trap + body-scroll-lock parity across 4 dialogs + jsdom polyfill; 14/14 plan-15-01 specs green; 2 commits 5c48a94+c550143)
 progress:
   total_phases: 29
   completed_phases: 26
-  total_plans: 96
-  completed_plans: 96
-  percent: 100
+  total_plans: 99
+  completed_plans: 97
+  percent: 98
 ---
 
 # Project State
@@ -21,13 +21,13 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-30)
 
 **Core value:** A player can build a Puerta de Baldur character from level 1 to 16 with strict server-valid validation and share that exact build reliably.
-**Current focus:** Phase 15 â€” A11y + Modal Polish (GAP) â€” Phase 14 complete
+**Current focus:** Phase 15 â€” A11y + Modal Polish (GAP) â€” Wave 1 in progress (15-01 complete; 15-02 next)
 
 ## Current Position
 
-Phase: 14 (persistence-robustness) â€” COMPLETE (6/6 plans merged across 3 waves)
-Plan: 6 of 6
-Status: Phase 14 complete â€” next up Phase 15 (A11y + Modal Polish GAP)
+Phase: 15 (a11y-modal-polish) â€” WAVE 1 IN PROGRESS (1/3 plans complete: 15-01 merged)
+Plan: 1 of 3 complete (15-01 done; 15-02 next)
+Status: 15-01 EXECUTION COMPLETE â€” Phase 07.1 WR-02/WR-03/WR-04 closed at code level via SC#1+SC#2+SC#3 spec coverage. Resume options: `/gsd-execute-plan 15-02` (wave 1; querySelector scope-down at feat-sheet:274 + skill-sheet:151 + canonicalIdRegex guards at feat-sheet handlers; RED specs already authored under tests/phase-15/) or `/gsd-checker-review-plan 15-01`.
 
 - B1 attributes overspend gate (nextIncrementCost + canIncrementAttribute, 12.3-01)
 - B2+B8+B9 multiclass active-level wiring (LevelRail dispatch, 12.3-02)
@@ -182,6 +182,10 @@ Recent decisions affecting current work:
 - [Phase ?]: [Phase 12.8-03] Revision BLOCKER 2 closed â€” feat-board.tsx has EXACTLY ONE `const activeLevel = boardView.activeSheet.level;` declaration (at line 64 post-edit; pre-existing since Phase 12.4-07 D-04); new onDeselect callback captures the symbol without redeclaration or cross-file import; grep-verified single hit
 - [Phase ?]: [Phase 12.8-03] Vitest RTL convention locked â€” this repo uses `createElement(Component, props)` NOT JSX in `.spec.tsx` files because Vitest default esbuild does not auto-inject React runtime; JSX throws `ReferenceError: React is not defined`. Every Vitest RTL suite with multiple `it` blocks needs explicit `afterEach(cleanup)` since Vitest default globals don't auto-cleanup
 - [Phase ?]: [Phase 12.8-03] D-15 cross-phase closure pattern â€” append `## Closure (YYYY-MM-DD)` block to prior-phase UAT doc citing the fixer plan + pointer plan; mark `{test-id} gap status: resolved`. Applied to 12.7-UAT.md T3 gap (Habilidades scroll-reset), citing 12.8-01 as the code fixer and 12.8-03 as the pointer host
+- [Phase 15-01]: useFocusTrap + useBodyScrollLock hooks live under apps/planner/src/lib/a11y/ (new directory). useFocusTrap attaches keydown listener at container scope (NOT window) bounded by enabled prop; cleans up on unmount. useBodyScrollLock has module-level activeLocks counter + savedOverflow capture; outermost-modal-only restore handles layered ConfirmDialog-atop-SaveSlotDialog. Both hooks SSR-safe.
+- [Phase 15-01]: Native `<dialog>` surfaces (4 of them) trust browser top-layer focus-trap â€” useFocusTrap is for non-`<dialog>` aria-modal surfaces ONLY (currently just the mobile-nav drawer). Future custom modals reuse the hook by attaching the ref to the trap container.
+- [Phase 15-01]: jsdom 29 ships HTMLDialogElement WITHOUT showModal/close on the prototype (Object.getOwnPropertyDescriptor returns undefined). Phase-15 polyfill at tests/phase-15/setup.ts is a complete reimplementation (toggles open attribute; records/restores activeElement); guarded by `typeof HTMLDialogElement !== 'undefined'` so non-jsdom suites no-op. Loaded via vitest test.setupFiles for global coverage. Test-only â€” never ships to production.
+- [Phase 15-01]: Drawer wrapper in mobile-nav-toggle.tsx carries role=dialog + aria-modal=true but does NOT carry id="planner-stepper-drawer" (the canonical id is owned by the stepper sidebar in planner-shell-frame.tsx:19, which the toggle's aria-controls already targets). Adding the id to both elements produced a duplicate-id collision that broke phase-07.1 querySelector ordering; Rule 1 fix dropped the id from the mobile-nav wrapper. Trap mechanism doesn't need the id â€” it uses the React ref to scope focusable lookups.
 
 ### Pending Todos
 
@@ -223,6 +227,11 @@ None yet.
 
 ## Session Continuity
 
+
+Last session: 2026-04-26T11:30:00Z
+Stopped at: **Phase 15-01 EXECUTION COMPLETE** â€” Wave 1 plan 1 of 3 merged. Closes Phase 07.1 WR-02 (focus trap on aria-modal drawer) + WR-03 (no automated focus-return tests) + WR-04 (body scroll lock confined to drawer). Two new hooks under `apps/planner/src/lib/a11y/`: `useFocusTrap(containerRef, enabled)` (Tab/Shift-Tab cycle inside container; container-scoped listener; T-15-01-02 mitigation) + `useBodyScrollLock(active)` (module-level stacking counter; outermost-modal-only restore; SSR-safe; T-15-01-01 mitigation). Drawer in mobile-nav-toggle.tsx replaces inline `document.body.style.overflow` effect with `useBodyScrollLock(mobileNavOpen)`, gains `drawerRef` + `useFocusTrap(drawerRef, mobileNavOpen)`, and wraps the close-button in a `<div role="dialog" aria-modal="true" ref={drawerRef}>` (no className change â€” D-NO-CSS preserved). 4 native `<dialog>` surfaces (ConfirmDialog, VersionMismatchDialog, SaveSlotDialog, LoadSlotDialog) gain `useBodyScrollLock(open)` siblings; show/close mirrors stay byte-identical (D-02 stable contract). New jsdom polyfill at `tests/phase-15/setup.ts`: jsdom 29 ships HTMLDialogElement WITHOUT showModal/close on the prototype, so the polyfill is a complete reimplementation (toggles open attribute, records/restores activeElement) â€” loaded via vitest test.setupFiles for global coverage; test-only, never ships to production. 4 phase-15 specs (use-focus-trap unit 3 cases, focus-trap-drawer wiring 2 cases, focus-return e2e via polyfill 5 cases, body-scroll-lock + stacking 4 cases) â€” 14/14 GREEN. vitest.config.ts gains tests/phase-15 jsdom glob + setupFiles entry. Two Rule auto-fixes during execution: (1) Rule 3 [Blocking] â€” original polyfill design wrapped `originalShowModal = HTMLDialogElement.prototype.showModal` then called `originalShowModal.call(this)` which crashed because jsdom 29 returns `undefined` for that property; rewrote as complete reimplementation; SC#2 contract preserved. (2) Rule 1 [Bug] â€” plan instructed `id="planner-stepper-drawer"` on the mobile-nav wrapper, but that id is already owned by the canonical stepper sidebar in planner-shell-frame.tsx; duplicate-id collision broke phase-07.1 spec; dropped the id from the mobile-nav wrapper. Full vitest suite: 2236/2243 passing (up from 2235 thanks to phase-07.1 spec unblock); the 4 remaining failures + 2 errors are pre-existing baseline (Phase 13 drift) or Plan 15-02 RED specs awaiting that wave. Typecheck clean. D-NO-CSS / D-NO-COPY / D-NO-DEPS gates all empty. Commits 5c48a94 (Task 1: hooks + polyfill + specs + vitest config) + c550143 (Task 2: drawer + 4 dialog wiring). Plan duration ~23 min. Resume options: /gsd-execute-plan 15-02 (wave 1; querySelector scope-down + canonicalIdRegex guards; RED specs `tests/phase-15/feat-sheet-scroll-scope.spec.tsx` + `skill-sheet-scroll-scope.spec.tsx` already untracked in working tree), or /gsd-checker-review-plan 15-01. Resume file: .planning/phases/15-a11y-modal-polish/15-02-PLAN.md.
+
+### Historical session continuity (Phase 15 plan revision â€” preserved for audit)
 
 Last session: 2026-04-25T20:00:00Z
 Stopped at: Phase 15 plans REVISED per checker feedback (B1+B2 BLOCKERs fixed; W1-W4 WARNINGs addressed). **Plan 15-03 moved to wave: 2, depends_on: ["15-02"]** to serialize file ownership on apps/planner/src/features/feats/feat-board.tsx (15-02 owns JSX-tree edits, 15-03 owns subscription edits â€” both files touched, but waves now disjoint). **Plan 15-01 GAINED tests/phase-15/setup.ts** (jsdom polyfill that monkey-patches HTMLDialogElement.prototype.showModal/close to implement browser top-layer focus-return â€” closes vacuous-assertion bug; vitest.config.ts setupFiles wired) AND **gained tests/phase-15/use-focus-trap.spec.tsx** (direct hook unit test against synthetic 3-focusable container â€” locks SC#1 mechanism cleanly; drawer-level spec downgraded to wiring smoke test). **Plan 15-03 strategy switched** from getState() snapshot + void discards to slice-as-input (slice IS selector input â€” closes Phase 06 WR-04 root cause structurally; no per-render thrash). **Plan 15-02 added asymmetry comments** above deselect-by-equality branches in handleSelectClassFeat + handleSelectGeneralFeat (one-line each, no behavior change). **CONTEXT.md D-06 amended in-place** (2026-04-25): rollout shrunk from 4 files to 3 (feat-search.tsx removed in post-Phase-06 refactor; verified absent from disk); feat-board.tsx line corrected from L14 (import) to L42 (offending subscription). **ROADMAP.md Phase 15 plans table updated** to reflect 2-wave structure. All three PLAN.md frontmatter validated (phase/plan/type/wave/depends_on/files_modified/autonomous/requirements/must_haves present). All three planner authority limits respected (no scope reduction; checker B1 split is file-ownership coordination, not feature drop). D-NO-CSS / D-NO-COPY / D-NO-DEPS invariants preserved across all revisions. Resume options: /gsd-checker-review-phase 15 (re-check), or /gsd-execute-phase 15 (proceed). Resume file: .planning/phases/15-a11y-modal-polish/15-01-PLAN.md.
