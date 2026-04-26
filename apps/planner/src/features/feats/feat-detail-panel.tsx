@@ -1,3 +1,4 @@
+import { useShallow } from 'zustand/react/shallow';
 import { DetailPanel } from '@planner/components/ui/detail-panel';
 import { shellCopyEs } from '@planner/lib/copy/es';
 import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
@@ -14,7 +15,27 @@ interface FeatDetailPanelProps {
 }
 
 export function FeatDetailPanel({ boardView, focusedFeatId }: FeatDetailPanelProps) {
-  const featState = useFeatStore();
+  // Phase 15-03 D-06 — slice-as-input via useShallow (Zustand 5.x). Same
+  // pattern as feat-board.tsx: the destructured slice IS the selector input
+  // for `computeBuildStateAtLevel(...featState)` (line below). No
+  // `getState()` snapshot, no `void` discards. Action references are
+  // reference-stable so including them satisfies the FeatStoreState typing
+  // without adding re-render cost. Closes Phase 06 WR-01 for this consumer.
+  const featState = useFeatStore(
+    useShallow((s) => ({
+      levels: s.levels,
+      activeLevel: s.activeLevel,
+      datasetId: s.datasetId,
+      lastEditedLevel: s.lastEditedLevel,
+      clearClassFeat: s.clearClassFeat,
+      clearGeneralFeat: s.clearGeneralFeat,
+      resetFeatSelections: s.resetFeatSelections,
+      resetLevel: s.resetLevel,
+      setActiveLevel: s.setActiveLevel,
+      setClassFeat: s.setClassFeat,
+      setGeneralFeat: s.setGeneralFeat,
+    })),
+  );
   const progressionState = useLevelProgressionStore();
   const foundationState = useCharacterFoundationStore();
   const skillState = useSkillStore();

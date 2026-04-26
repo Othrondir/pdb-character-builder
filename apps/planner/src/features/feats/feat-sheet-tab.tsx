@@ -1,3 +1,4 @@
+import { useShallow } from 'zustand/react/shallow';
 import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
 import { useLevelProgressionStore } from '@planner/features/level-progression/store';
 import { useSkillStore } from '@planner/features/skills/store';
@@ -12,7 +13,25 @@ const SLOT_LABELS: Record<string, string> = {
 };
 
 export function FeatSheetTab() {
-  const featState = useFeatStore();
+  // Phase 15-03 D-06 — slice-as-input via useShallow (Zustand 5.x). Same
+  // pattern as feat-board.tsx: the destructured slice IS the selector input
+  // for `selectFeatSheetTabView(featState, ...)` below. No `getState()`
+  // snapshot, no `void` discards. Closes Phase 06 WR-01 for this consumer.
+  const featState = useFeatStore(
+    useShallow((s) => ({
+      levels: s.levels,
+      activeLevel: s.activeLevel,
+      datasetId: s.datasetId,
+      lastEditedLevel: s.lastEditedLevel,
+      clearClassFeat: s.clearClassFeat,
+      clearGeneralFeat: s.clearGeneralFeat,
+      resetFeatSelections: s.resetFeatSelections,
+      resetLevel: s.resetLevel,
+      setActiveLevel: s.setActiveLevel,
+      setClassFeat: s.setClassFeat,
+      setGeneralFeat: s.setGeneralFeat,
+    })),
+  );
   const progressionState = useLevelProgressionStore();
   const foundationState = useCharacterFoundationStore();
   const skillState = useSkillStore();

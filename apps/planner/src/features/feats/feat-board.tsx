@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import { shellCopyEs } from '@planner/lib/copy/es';
 import { SelectionScreen } from '@planner/components/ui/selection-screen';
 import { DetailPanel } from '@planner/components/ui/detail-panel';
@@ -39,12 +40,39 @@ function FeatSlotStrip({ slotStatuses }: { slotStatuses: FeatSlotStatusView[] })
 }
 
 export function FeatBoard() {
-  const featState = useFeatStore();
+  // Phase 15-03 D-06 — slice-as-input via useShallow (Zustand 5.x). The
+  // destructured slice IS the selector input: no `getState()` snapshot,
+  // no `void` discards, no subscription/selector drift. Action functions
+  // are reference-stable across zustand renders, so including them in the
+  // shallow comparison adds no re-render cost; it satisfies the selector's
+  // FeatStoreState type expectation while letting useShallow narrow data
+  // re-renders to identity changes on { levels, activeLevel, datasetId,
+  // lastEditedLevel } only. Closes Phase 06 WR-01 for this consumer.
+  const featState = useFeatStore(
+    useShallow((s) => ({
+      levels: s.levels,
+      activeLevel: s.activeLevel,
+      datasetId: s.datasetId,
+      lastEditedLevel: s.lastEditedLevel,
+      clearClassFeat: s.clearClassFeat,
+      clearGeneralFeat: s.clearGeneralFeat,
+      resetFeatSelections: s.resetFeatSelections,
+      resetLevel: s.resetLevel,
+      setActiveLevel: s.setActiveLevel,
+      setClassFeat: s.setClassFeat,
+      setGeneralFeat: s.setGeneralFeat,
+    })),
+  );
   const progressionState = useLevelProgressionStore();
   const foundationState = useCharacterFoundationStore();
   const skillState = useSkillStore();
   // Phase 12.8-03 (D-05 + D-06) — narrow subscriptions for per-chip deselect.
-  // Mirrors the pattern at feat-sheet.tsx:239-240.
+  // Mirrors the pattern at feat-sheet.tsx:239-240. KEPT as atomic selectors
+  // alongside the useShallow slice above (per Phase 15-03 plan acceptance
+  // criteria) — both subscriptions return reference-equal action handles so
+  // there is no extra re-render cost. The atomic selectors are the
+  // consumer-facing reference path used by JSX callbacks (Phase 12.8-03 D-06
+  // invariant — chip deselect handlers consume them via the closure below).
   const clearClassFeat = useFeatStore((s) => s.clearClassFeat);
   const clearGeneralFeat = useFeatStore((s) => s.clearGeneralFeat);
   const boardView = selectFeatBoardView(
