@@ -10,7 +10,7 @@
 
 ### Dotes (feat engine completion)
 
-- [ ] **FEAT-05**: El catálogo extraído surface bonus-feat schedules per class (`cls_bfeat_*.2da`) y `feat-eligibility.ts` consume el contrato sin TODOs (cierra Phase 06 L45 TODO).
+- [ ] **FEAT-05**: El catálogo extraído surface bonus-feat schedules per class (`cls_bfeat_*.2da`) y `feat-eligibility.ts` consume el contrato sin TODOs (cierra Phase 06 L45 TODO). _(Plan 16-01 done 2026-04-26 — `1ad9a36` — extractor field shipped; consumer wiring pending Plan 16-02.)_
 - [ ] **FEAT-06**: Humano L1 ofrece la dote de bonus extra del servidor — store capacity 2→3 slots, advance ActionBar resuelve `legal` cuando los 3 slots están llenos (cierra Phase 06 L49 TODO + Phase 12.4 known limitation).
 
 ### Atributos (point-buy enrichment)
@@ -44,7 +44,7 @@
 
 | REQ-ID | Phase | Status |
 |--------|-------|--------|
-| FEAT-05 | 16 | Not started |
+| FEAT-05 | 16 | 16-01 done; 16-02 consumer pending |
 | FEAT-06 | 16 | Not started |
 | ATTR-02 | 17 | Not started |
 | TASK-01 | 18 | Not started |

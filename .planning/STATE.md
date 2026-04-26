@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Tech-Debt Closure
-status: ready_to_execute
-stopped_at: "Phase 16 PLANNED — 3 plans authored + verified across 3 revision iterations (initial check: 1 blocker + 4 warnings → revised → 1 count-drift blocker → revised → VERIFICATION PASSED). Plans (commit 1a982cb): 16-01 extractor bonusFeatSchedule field [wave 1, 3 tasks, FEAT-05]; 16-02 race-aware determineFeatSlots threading + Dote racial UI section + Humano + Mediano Fortecor [wave 2, 5 tasks, FEAT-05/06]; 16-03 persistence round-trip regression spec [wave 3, 1 task, FEAT-06 D-05]. Architectural decision B-01: determineFeatSlots(buildState, classFeatLists, compiledClass?) — compiledClass OPTIONAL; per-level-budget.ts omits it (legacy fallback wins for engine-internal budget math) to preserve framework-agnostic rules-engine boundary (Pattern S7). Coverage: FEAT-05 in {16-01, 16-02}; FEAT-06 in {16-02, 16-03}; 4 ROADMAP success criteria all map to grep-verifiable tasks (criterion #3 LevelEditorActionBar legal at Humano L1 explicitly enforced via Test 6 in tests/phase-16/feat-board-race-bonus-section.spec.tsx requiring `Continuar al nivel 2` + not.toBeDisabled()). VALIDATION.md Nyquist contract authored (13 verification rows + 6 it() count footnote). PATTERNS.md maps 14 files with verbatim code excerpts (path correction: copy lives at apps/planner/src/lib/copy/es.ts not i18n/es.ts). Resume: /gsd-execute-phase 16."
-last_updated: "2026-04-26T17:35:00.000Z"
-last_activity: 2026-04-26 -- Phase 16 PLANNED — 3 plans authored, verified PASSED iter 3/3, committed (1a982cb). Ready to execute.
+status: in_progress
+stopped_at: "Phase 16 Plan 01 EXECUTED — extractor bonusFeatSchedule field shipped + PIT-01 cadence dossier pinned (commits 1b46bc0, ee47fc5, 1ad9a36). 13min duration. 3 tasks atomic, 10/10 phase-16 it() blocks GREEN, phase-12.4/per-level-budget.fixture 28/28 GREEN, tsc clean. Three deviations documented in 16-01-SUMMARY.md (all Rule 1/3 auto-fixes): (a) Test 1 expected vanilla-NWN1 cadence [1,2,4,6,8,10,12,14,16] but extractor verifies Puerta canon [1,3,5,7,9,11,13,15,17,19] — test corrected; (b) PIT-01 dossier blanket non-null+length>0 contradicts extractor reality (swashbuckler null because cls_bfeat_swash MISSING from nwsync; monk empty because cls_bfeat_monk all zeros) — dossier rewritten with per-class assertions matching ground truth + side-by-side comparison table; (c) sibling regenerated catalogs (compiled-races/feats/skills/deities) reverted to 2026-04-17 baseline because the 2026-04-26 nwsync state introduces an unrelated race:halfelf2 Semielfo dup that breaks 8 phase-12.6/12.8 specs — out of scope for FEAT-05. compiled-classes.ts kept at bumped puerta-ee-2026-04-26+cf6e8aad. Resume: /gsd-execute-phase 16 (Plan 16-02 wave 2)."
+last_updated: "2026-04-26T16:15:38.000Z"
+last_activity: 2026-04-26 -- Phase 16 Plan 01 EXECUTED. 3 commits 1b46bc0/ee47fc5/1ad9a36. SUMMARY at .planning/phases/16-feat-engine-completion/16-01-SUMMARY.md.
 progress:
   total_phases: 4
   completed_phases: 0
   total_plans: 3
-  completed_plans: 0
-  percent: 0
+  completed_plans: 1
+  percent: 33
 ---
 
 # Project State
@@ -21,12 +21,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-30)
 
 **Core value:** A player can build a Puerta de Baldur character from level 1 to 16 with strict server-valid validation and share that exact build reliably.
-**Current focus:** Phase 15 â€” A11y + Modal Polish (GAP) â€” PHASE COMPLETE (3/3 plans merged; ready to advance to Phase 16 Feat Engine Completion)
+**Current focus:** Phase 16 — Feat Engine Completion (GAP) — Plan 16-01 EXECUTED (1/3 plans merged); Plan 16-02 next.
 
 ## Current Position
 
-Phase: 15 (a11y-modal-polish) â€” PHASE COMPLETE (3/3 plans merged across 2 waves)
-Plan: 3 of 3 complete (15-01 done; 15-02 done; 15-03 done)
+Phase: 16 (feat-engine-completion) — IN PROGRESS (1/3 plans merged in wave 1)
+Plan: 1 of 3 complete (16-01 done 2026-04-26 via 1b46bc0/ee47fc5/1ad9a36; 16-02 + 16-03 pending)
 Status: 15-03 EXECUTION COMPLETE â€” Phase 06 WR-01 closed (useShallow slice-as-input rollout to feat-board.tsx L42 + feat-detail-panel.tsx L17 + feat-sheet-tab.tsx L15; all 3 consumers swap `useFeatStore()` no-arg full subscription for `useFeatStore(useShallow((s) => ({...11-field slice})))`). The destructured slice IS the selector input â€” no `getState()` snapshot, no `void` discards, no subscription/selector drift. Action references are reference-stable in zustand 5.x so including them in the shallow comparison adds zero re-render cost. Atomic clearClassFeat/clearGeneralFeat selectors at feat-board.tsx L48-49 KEPT alongside the useShallow slice (Phase 12.8-03 D-06 chip-deselect invariant). Phase 12.8-03 BLOCKER 2 single-declaration invariant for `const activeLevel = boardView.activeSheet.level;` preserved. 6/6 plan-15-03 specs green (4 idiom locks via synthetic TestConsumer + 2 FeatBoard integration sanity). 103/103 phase-06 + phase-15 specs green; 1510/1512 phase-12.4/12.7/12.8/15 specs green (2 pre-existing class-picker-prestige-reachability baseline failures confirmed via stash-and-rerun). Typecheck clean. D-NO-CSS / D-NO-COPY / D-NO-DEPS gates empty. CONTEXT.md D-06 reconciliation: feat-search.tsx documented as not-on-disk (post-Phase-06 refactor); rollout shrunk to the 3 files that exist. Phase 15 PHASE COMPLETE â€” all SC #1..#5 closed; v1.0-MILESTONE-AUDIT.md tech_debt cluster (Phase 07.1 WR-02/03/04 + Phase 12.8 WR-01/02 + Phase 06 WR-01/02) fully retired. Resume options: `/gsd-execute-phase 16` (Feat Engine Completion â€” Humano L1 bonus feat slot + class bonus feat schedules from cls_bfeat_*.2da extraction).
 
 - B1 attributes overspend gate (nextIncrementCost + canIncrementAttribute, 12.3-01)
