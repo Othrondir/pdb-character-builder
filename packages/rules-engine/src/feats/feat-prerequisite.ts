@@ -25,6 +25,18 @@ export interface BuildStateAtLevel {
   selectedFeatIds: Set<string>;
   /** skillId -> cumulative ranks at this level */
   skillRanks: Record<string, number>;
+  /**
+   * Phase 16 (D-03) — race canonical id (e.g. 'race:human',
+   * 'race:mediano-fortecor'); null until origin set. Used by
+   * `determineFeatSlots` to gate Humano + Mediano Fortecor L1 bonus feat.
+   */
+  raceId: string | null;
+  /**
+   * Phase 16 (D-03) — class chosen for THIS character level (multiclass
+   * disambiguation). `determineFeatSlots` reads it as the active class
+   * for class-bonus / auto-grant scans instead of the highest-level class.
+   */
+  activeClassIdAtLevel: string | null;
 }
 
 export interface PrerequisiteCheck {

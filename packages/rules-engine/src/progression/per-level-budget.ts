@@ -1,4 +1,9 @@
 import { determineFeatSlots } from '../feats/feat-eligibility';
+import {
+  HUMAN_RACE_ID,
+  HUMAN_BONUS_FEAT_AT_L1,
+  HUMAN_SKILL_POINT_PER_LEVEL,
+} from './race-constants';
 
 /**
  * Minimal structural catalog inputs. Rules-engine stays framework-agnostic
@@ -58,19 +63,16 @@ export interface RaceCatalogInput {
 }
 
 /**
- * NWN1 EE canon hardcodes for Humano race bonuses — not yet surfaced by the
- * extractor on `CompiledRace`. Evidence: `compiled-races.ts` race:human
- * description text says:
- *   'Aprendizaje rápido: Ganan 1 dote adicional a 1.er nivel'
- *   'Habilidoso: 4 puntos de habilidades adicionales a 1.er nivel,
- *    mas 1 punto adicional a cada nivel subsiguiente'
- * These values MUST stay in sync with the fixture spec (
- * tests/phase-12.4/per-level-budget.fixture.spec.ts). When the extractor
- * emits race-level feat / skill bonuses, remove this block.
+ * NWN1 EE canon hardcodes for Humano race bonuses — Phase 16 (D-06) hoisted
+ * the constants into `progression/race-constants.ts` so the new
+ * `RACE_L1_BONUS_FEATS` allowlist (Humano + Mediano Fortecor) lives next to
+ * the skill-point + feat-bonus scalars without forcing a back-import from
+ * `feat-eligibility.ts` (which would create a circular dep).
+ *
+ * The extractor still does not surface race-level feat/skill bonuses on
+ * `CompiledRace`; until it does, the constants in `race-constants.ts` MUST
+ * stay in sync with `tests/phase-12.4/per-level-budget.fixture.spec.ts`.
  */
-const HUMAN_RACE_ID = 'race:human';
-const HUMAN_BONUS_FEAT_AT_L1 = 1;
-const HUMAN_SKILL_POINT_PER_LEVEL = 1;
 
 /** Per-level feat-slot + skill-point budget, computed from build + catalogs. */
 export interface PerLevelBudget {
