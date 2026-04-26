@@ -82,13 +82,45 @@ Cerrar TODOs de bonus feats en `feat-eligibility.ts` y resolver Humano L1 advanc
 - **diffRuleset still gates all 4 hydration paths** — no change to fail-closed posture.
 - **Phase 12.8-03 D-06 chip projection stable** — extends with `slotKind: 'race-bonus'` branch, doesn't rewrite.
 
+## Post-Research Updates (2026-04-26)
+
+### D-06 Mediano Fortecor scope expansion
+
+**Decision (resolves research Assumption A1):** FEAT-06 covers BOTH `race:humano` AND `race:mediano-fortecor`. Mediano Fortecor TLK description carries identical "Aprendizaje rápido: Ganan 1 dote adicional a 1.er nivel" text — same Puerta rule, different race.
+
+**Why:** Same canonical mechanic, no 2DA encoding for either; treating them differently is bookkeeping debt. Plan 16-02 race-bonus helper takes a Set, not a single canonical id.
+
+**Implication for planner:** `RACE_L1_BONUS_FEATS: Set<CanonicalId>` constant in rules-engine (or extractor-emitted via race catalog field if research surfaces a 2DA hook later — but research confirmed there is none). Both races trigger the same `slotKind: 'race-bonus'` UI section; section heading parameterizes by race name.
+
+### D-07 Store cap correction
+
+**Decision (resolves research finding 4):** D-02 reasoning was based on Phase 12.4-07's stale "store cap 2 vs total 3" claim. Research verified `bonusGeneralFeatIds[]` already supports N entries; persistence already iterates `.entries()` without length cap. **FEAT-06 is purely UI labelling + onDeselect dispatch branch + race-aware slot-count math.** No store mutator changes needed.
+
+**Why:** Reduces Plan 16-02 scope to UI-layer + rules-engine helper. Schema unchanged (D-05 confirmed).
+
+### Research-derived Pitfall locks (in addition to D-01..D-05)
+
+- **PIT-01:** Puerta cadences DIVERGE from vanilla NWN1 (rogue [7,10,13,15,17,19] vs [10,13,16,19]; cleric L3 grant; ranger L1+L2+L4+L9+L14+L19). Phase 12.4-03 hardcoded `LEGACY_CLASS_BONUS_FEAT_SCHEDULES` will be SILENTLY OVERRIDDEN once extractor lands. Plan 16-01 must update Phase 12.4-03 fixtures to consume extractor-derived values (not silent breakage).
+- **PIT-02:** `BuildStateAtLevel` does NOT carry `raceId` today (`feat-prerequisite.ts:13-28`). D-03 threading requires extending the interface with `raceId: string | null` + `activeClassIdAtLevel: string | null`. ~5 call sites + ~9 fixture sites — enumerated in `16-RESEARCH.md` § Plan Decomposition Hints.
+- **PIT-03:** `cls_bfeat_*.2da` is single-column (col `Bonus`, row idx = class level, value 0/1). `classes.2da` carries `BonusFeatsTable` at column 12 — currently UNREAD by `class-assembler.ts:188` (only reads `FeatsTable`). Plan 16-01 wires the column.
+
+### Extract verification (2026-04-26 14:03)
+
+Ran `corepack pnpm extract` — current code regenerated catalogs (datasetId bumped to `puerta-ee-2026-04-26+cf6e8aad`; 1611 items / 100 warnings). Reverted compiled-* artifacts to baseline `puerta-ee-2026-04-17+cf6e8aad` so Plan 16-01 can re-extract atomically with the new `bonusFeatSchedule` field included in the same commit.
+
 ## Deferred Ideas (out of phase 16 scope)
 
-- Subrace-driven feat bonuses (none in current Puerta roster — defer until extractor surfaces a candidate).
+- Subrace-driven feat bonuses other than Mediano Fortecor (none surfaced; defer if UAT raises a third race).
 - Per-feat exclusion lists per race (Drow tiene restricciones específicas que no tocan slot count) — separate phase if surfaced by UAT.
 - Bonus feat schedule migration for prestige classes not in `LEGACY_CLASS_BONUS_FEAT_SCHEDULES` — covered by D-01 fallback path; no proactive enrichment without extractor data.
 
+## Plan Decomposition (research-suggested)
+
+- **Plan 16-01** — Extractor adds `bonusFeatSchedule: number[] | null` to compiled-classes (FEAT-05). Files: `class-catalog.ts` schema + `class-assembler.ts:188` parse + regenerated `compiled-classes.ts`. New spec `tests/phase-16/bonus-feat-schedule-extractor.spec.ts`. Phase 12.4-03 fixtures updated to consume extractor values.
+- **Plan 16-02** — Rules-engine race-aware threading + UI section + Humano + Mediano Fortecor (FEAT-06 + half of FEAT-05 consumer wiring). Files: `feat-eligibility.ts` + `feat-prerequisite.ts` + new `race-constants.ts`; planner `selectors.ts` + `feat-board.tsx` + `feat-summary-card.tsx` + `es.ts` copy; ~10 files total. Spec: `tests/phase-16/race-bonus-feat.spec.tsx`.
+- **Plan 16-03** — Persistence round-trip regression spec. Single new spec file `tests/phase-16/humano-l1-build-roundtrip.spec.ts`. Schema unchanged. D-05 lock test.
+
 ## Resume Options
 
-- `/gsd-research-phase 16` — research how to extract `cls_feat_*.2da` schedules + verify NWN1 EE racial-feat rules
-- `/gsd-plan-phase 16` — plan directly with these decisions locked
+- `/gsd-plan-phase 16` — recommended; CONTEXT + RESEARCH both authored, decisions locked, 3-plan decomposition prescribed
+- Discuss further if user wants to revisit D-06 (Mediano Fortecor) or any other lock
