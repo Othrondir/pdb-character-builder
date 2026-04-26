@@ -4,14 +4,14 @@ milestone: v1.0
 milestone_name: milestone
 status: executing
 stopped_at: "Phase 14 EXECUTION COMPLETE â€” Persistence Robustness (6/6 plans merged across 2 waves; SC#1..SC#7 closed). Wave 1a (14-01 solo): toast FIFO queue + MIN_VISIBLE_MS=1500ms guard in apps/planner/src/components/ui/toast.tsx + DoS cap (queue.lengthâ‰¥8) + tests/phase-14 jsdom glob in vitest.config.ts (commits c2bedba+59889b6+3053dcf). Wave 1b parallel (14-02..14-05 in 4 worktrees): 14-02 LoadSlotResult discriminated union {ok|not-found|invalid} + Spanish loadInvalid toast in save-slot-dialog (e456730+67f64e2+5e7e816); 14-03 foundation buildName slice + hydrate/project round-trip parity (91319a5+7a0c15d+a870e84); 14-04 collapseDoubleSlash safety net in url-budget.ts (bc7c268+af21702+2af4615); 14-05 canonical abilityModifier helper extracted to @rules-engine/foundation + 4 call sites migrated + divergent fixture migration (9274f02+74f59c0+707ea73). Stray aa977ee orphan from 14-02 agent pwd-escape resolved via reset to e8f425a (preserved in reflog). deferred-items.md merge conflict (14-03+14-05 both filed pre-existing dexie module-resolution failure) resolved by merge of both blocks. Wave 2 (14-06 solo): plannerVersion docstring parity sweep across 13 persistence/*.ts(x) files + Vitest sentinel (ed6a439+6519879+7657e81). Final gates: phase-14 48/48 specs green; 6 pre-existing baseline failures (BUILD_ENCODING_VERSION literal=1 stale + 5 prestige-gate.fixture/class-picker schema spec drift) carried forward unchanged from Phase 13 baseline; 0 new regressions. Deferred (env-only, not phase 14): dexie module symlink missing in worktree node_modules â€” separate plan needed. Persistence Robustness Phase 08 tech_debt cluster from v1.0-MILESTONE-AUDIT closed."
-last_updated: "2026-04-26T12:05:00.000Z"
-last_activity: 2026-04-26 -- Phase 15-02 EXECUTION COMPLETE (querySelector scope-down at feat-sheet + skill-sheet via parent-owned scrollerRef + canonicalIdRegex.test silent fail-closed guards at feat-sheet handler entries; 7/7 plan-15-02 specs green + 12.7 fixture-only harness update preserves existing 3/3; 1 commit d375bb8 closes Phase 12.8 WR-01/WR-02 + Phase 06 WR-02)
+last_updated: "2026-04-26T12:17:00.000Z"
+last_activity: 2026-04-26 -- Phase 15-03 EXECUTION COMPLETE (useShallow slice-as-input rollout to feat-board.tsx + feat-detail-panel.tsx + feat-sheet-tab.tsx; 6/6 plan-15-03 specs green; 1 commit 61ee3c5 closes Phase 06 WR-01 — Phase 15 PHASE COMPLETE 3/3 plans merged)
 progress:
   total_phases: 29
-  completed_phases: 26
+  completed_phases: 27
   total_plans: 99
-  completed_plans: 98
-  percent: 99
+  completed_plans: 99
+  percent: 100
 ---
 
 # Project State
@@ -21,13 +21,13 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-30)
 
 **Core value:** A player can build a Puerta de Baldur character from level 1 to 16 with strict server-valid validation and share that exact build reliably.
-**Current focus:** Phase 15 â€” A11y + Modal Polish (GAP) â€” Wave 1 in progress (15-01 + 15-02 complete; 15-03 next, depends on 15-02)
+**Current focus:** Phase 15 â€” A11y + Modal Polish (GAP) â€” PHASE COMPLETE (3/3 plans merged; ready to advance to Phase 16 Feat Engine Completion)
 
 ## Current Position
 
-Phase: 15 (a11y-modal-polish) â€” WAVE 1 IN PROGRESS (2/3 plans complete: 15-01 + 15-02 merged)
-Plan: 2 of 3 complete (15-01 done; 15-02 done; 15-03 next)
-Status: 15-02 EXECUTION COMPLETE â€” Phase 12.8 WR-01/WR-02 closed (no more `document.querySelector` in feat-sheet.tsx / skill-sheet.tsx) + Phase 06 WR-02 closed (canonicalIdRegex.test silent fail-closed guards at feat-sheet handler entries). FeatBoard / SkillBoard now own the scrollerRef and thread it through SelectionScreen.contentRef + Sheet.scrollerRef props. Two new jsdom regression specs locked. Phase 12.7 spec harness updated as fixture-only edit (authorized by plan verification block) to mirror new ref-threading wiring. Resume options: `/gsd-execute-plan 15-03` (wave 2; useShallow rollout to feat-board.tsx L42 + feat-detail-panel.tsx L17 + feat-sheet-tab.tsx L15; 15-03 was promoted to wave 2 + depends_on: ["15-02"] per CONTEXT.md B1 file-coordination notice for shared feat-board.tsx).
+Phase: 15 (a11y-modal-polish) â€” PHASE COMPLETE (3/3 plans merged across 2 waves)
+Plan: 3 of 3 complete (15-01 done; 15-02 done; 15-03 done)
+Status: 15-03 EXECUTION COMPLETE â€” Phase 06 WR-01 closed (useShallow slice-as-input rollout to feat-board.tsx L42 + feat-detail-panel.tsx L17 + feat-sheet-tab.tsx L15; all 3 consumers swap `useFeatStore()` no-arg full subscription for `useFeatStore(useShallow((s) => ({...11-field slice})))`). The destructured slice IS the selector input â€” no `getState()` snapshot, no `void` discards, no subscription/selector drift. Action references are reference-stable in zustand 5.x so including them in the shallow comparison adds zero re-render cost. Atomic clearClassFeat/clearGeneralFeat selectors at feat-board.tsx L48-49 KEPT alongside the useShallow slice (Phase 12.8-03 D-06 chip-deselect invariant). Phase 12.8-03 BLOCKER 2 single-declaration invariant for `const activeLevel = boardView.activeSheet.level;` preserved. 6/6 plan-15-03 specs green (4 idiom locks via synthetic TestConsumer + 2 FeatBoard integration sanity). 103/103 phase-06 + phase-15 specs green; 1510/1512 phase-12.4/12.7/12.8/15 specs green (2 pre-existing class-picker-prestige-reachability baseline failures confirmed via stash-and-rerun). Typecheck clean. D-NO-CSS / D-NO-COPY / D-NO-DEPS gates empty. CONTEXT.md D-06 reconciliation: feat-search.tsx documented as not-on-disk (post-Phase-06 refactor); rollout shrunk to the 3 files that exist. Phase 15 PHASE COMPLETE â€” all SC #1..#5 closed; v1.0-MILESTONE-AUDIT.md tech_debt cluster (Phase 07.1 WR-02/03/04 + Phase 12.8 WR-01/02 + Phase 06 WR-01/02) fully retired. Resume options: `/gsd-execute-phase 16` (Feat Engine Completion â€” Humano L1 bonus feat slot + class bonus feat schedules from cls_bfeat_*.2da extraction).
 
 - B1 attributes overspend gate (nextIncrementCost + canIncrementAttribute, 12.3-01)
 - B2+B8+B9 multiclass active-level wiring (LevelRail dispatch, 12.3-02)

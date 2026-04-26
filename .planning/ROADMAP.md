@@ -531,7 +531,7 @@ Plans:
 Plans:
 - [x] 15-01-PLAN.md (wave 1) — A11y hooks + dialog wiring (useFocusTrap + useBodyScrollLock; drawer + 4 dialogs; jsdom focus-return polyfill + 4 specs D-08/D-09/D-10/D-11 + use-focus-trap unit) — complete 2026-04-26
 - [x] 15-02-PLAN.md (wave 1) — querySelector scope-down at feat-sheet + skill-sheet (ref-thread via SelectionScreen.contentRef + parent-owned scrollerRef) + canonicalIdRegex.test silent fail-closed guards at feat-sheet handler entries (D-07). Owns feat-board.tsx JSX-tree edits. Closes Phase 12.8 WR-01/WR-02 + Phase 06 WR-02. — complete 2026-04-26
-- [ ] 15-03-PLAN.md (wave 2, depends_on: 15-02) — Phase 06 cleanup: useShallow slice-as-input rollout to feat-board / feat-detail-panel / feat-sheet-tab (3 files; feat-search.tsx not on disk -- CONTEXT.md D-06 amended in-place). Owns feat-board.tsx subscription edits.
+- [x] 15-03-PLAN.md (wave 2, depends_on: 15-02) — Phase 06 cleanup: useShallow slice-as-input rollout to feat-board / feat-detail-panel / feat-sheet-tab (3 files; feat-search.tsx not on disk -- CONTEXT.md D-06 amended in-place). Owns feat-board.tsx subscription edits. — complete 2026-04-26
 
 ### Phase 16: Feat Engine Completion (GAP)
 **Goal**: Close Phase 06 bonus-feat TODO cluster + Phase 12.4 Humano L1 feat-slot store-capacity gap surfaced by the re-audit. Wire class gain tables for bonus feat schedules; implement Human bonus feat logic; expand foundation store feat-slot capacity from 2→3 on Humano L1 so the Advance button resolves legal.
@@ -577,5 +577,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -
 | 12.9 Resumen (Hoja de personaje) UX Pass (INSERTED) | 2/2 | Complete (UAT 9/9 pass, SECURITY 0 threats open, VERIFICATION 13/13 gates green) | 2026-04-24 |
 | 13. Verification + Orphan Sweep (GAP) | 2/2 | Complete (12.6 + 12.7 VERIFICATION.md retro-authored, 3 source files cleaned, REVIEW clean 0/0/0, VERIFICATION 7/7 passed) | 2026-04-24 |
 | 14. Persistence Robustness (GAP) | 6/6 | Complete (toast queue + LoadSlotResult union + buildName round-trip + url double-slash guard + abilityModifier consolidation + plannerVersion docstring parity; 48/48 phase-14 specs green) | 2026-04-25 |
-| 15. A11y + Modal Polish (GAP) | 2/3 | Wave 1 in progress (15-01 complete: a11y hooks + drawer focus-trap + body-scroll-lock parity, 14/14 phase-15-01 specs green; 15-02 complete: querySelector scope-down via parent-owned scrollerRef + canonicalIdRegex guards, 7/7 phase-15-02 specs green, Phase 12.8 WR-01/WR-02 + Phase 06 WR-02 closed) | - |
+| 15. A11y + Modal Polish (GAP) | 3/3 | Complete (15-01 a11y hooks + drawer focus-trap + body-scroll-lock; 15-02 querySelector scope-down + canonicalIdRegex guards; 15-03 useShallow narrow-subscription rollout to 3 feat-* consumers — Phase 06 WR-01/WR-02 + Phase 07.1 WR-02/03/04 + Phase 12.8 WR-01/WR-02 all closed; 14/14 phase-15-01 + 7/7 phase-15-02 + 6/6 phase-15-03 specs green) | 2026-04-26 |
 | 16. Feat Engine Completion (GAP) | 0/TBD | Not started | - |
