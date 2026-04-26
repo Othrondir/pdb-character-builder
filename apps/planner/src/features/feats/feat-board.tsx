@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { shellCopyEs } from '@planner/lib/copy/es';
 import { SelectionScreen } from '@planner/components/ui/selection-screen';
 import { DetailPanel } from '@planner/components/ui/detail-panel';
@@ -66,6 +66,11 @@ export function FeatBoard() {
     setIsEditingCompleted(false);
   }, [activeLevel]);
 
+  // Phase 15-02 D-04 — board owns the scroller ref; passed to <FeatSheet> so
+  // its auto-scroll-to-general effect can scope the [data-slot-section]
+  // querySelector under the FeatBoard subtree (no document-level lookup).
+  const scrollerRef = useRef<HTMLDivElement>(null);
+
   if (boardView.emptyStateBody) {
     return (
       <SelectionScreen title={shellCopyEs.stepper.stepTitles.feats}>
@@ -89,7 +94,7 @@ export function FeatBoard() {
 
   return (
     <SelectionScreen title={shellCopyEs.stepper.stepTitles.feats} className="feat-board">
-      <div className="feat-board__main">
+      <div className="feat-board__main" ref={scrollerRef}>
         <header className="feat-picker__header">
           <h3 className="feat-picker__counter">{boardView.counterLabel}</h3>
         </header>
@@ -127,6 +132,7 @@ export function FeatBoard() {
             boardView={boardView}
             focusedFeatId={focusedFeatId}
             onFocusFeat={setFocusedFeatId}
+            scrollerRef={scrollerRef}
           />
         )}
       </div>

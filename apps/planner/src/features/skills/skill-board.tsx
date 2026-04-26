@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { shellCopyEs } from '@planner/lib/copy/es';
 import { SelectionScreen } from '@planner/components/ui/selection-screen';
 import { DetailPanel } from '@planner/components/ui/detail-panel';
@@ -12,6 +13,11 @@ export function SkillBoard() {
   const progressionState = useLevelProgressionStore();
   const foundationState = useCharacterFoundationStore();
   const boardView = selectSkillBoardView(skillState, progressionState, foundationState);
+  // Phase 15-02 D-04 — board owns the scroller ref; we forward it to the
+  // SelectionScreen content div (so it lands on the real overflow owner)
+  // and to SkillSheet so its scroll-reset useLayoutEffect can mutate
+  // scrollTop without a global document.querySelector.
+  const scrollerRef = useRef<HTMLDivElement>(null);
 
   if (boardView.emptyStateBody) {
     return (
@@ -26,8 +32,12 @@ export function SkillBoard() {
   }
 
   return (
-    <SelectionScreen className="skill-board" title={shellCopyEs.stepper.stepTitles.skills}>
-      <SkillSheet />
+    <SelectionScreen
+      className="skill-board"
+      contentRef={scrollerRef}
+      title={shellCopyEs.stepper.stepTitles.skills}
+    >
+      <SkillSheet scrollerRef={scrollerRef} />
     </SelectionScreen>
   );
 }

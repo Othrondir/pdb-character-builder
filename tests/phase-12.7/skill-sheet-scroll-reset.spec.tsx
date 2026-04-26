@@ -33,7 +33,7 @@
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, render } from '@testing-library/react';
-import { createElement } from 'react';
+import { createElement, createRef, type RefObject } from 'react';
 
 import { SelectionScreen } from '@planner/components/ui/selection-screen';
 import { SkillSheet } from '@planner/features/skills/skill-sheet';
@@ -118,11 +118,23 @@ function resetStores() {
 // resolves in jsdom. Production mount path is equivalent
 // (BuildProgressionBoard → SelectionScreen className="skill-board" →
 // SkillSheet).
-function SkillSheetHarness() {
+//
+// Phase 15-02 D-04 (fixture-only update): SkillSheet's scroll-reset effect
+// now consumes a parent-owned `scrollerRef` prop instead of doing
+// `document.querySelector('.skill-board .selection-screen__content')`. The
+// production owner (SkillBoard) creates the ref and forwards it to both
+// SelectionScreen.contentRef and SkillSheet.scrollerRef; this harness
+// mirrors that wiring so C1/C2 assertions about the scroller's scrollTop
+// continue to exercise the same DOM node the effect mutates.
+function SkillSheetHarness({
+  scrollerRef,
+}: {
+  scrollerRef: RefObject<HTMLDivElement | null>;
+}) {
   return createElement(
     SelectionScreen,
-    { title: 'Habilidades', className: 'skill-board' },
-    createElement(SkillSheet),
+    { title: 'Habilidades', className: 'skill-board', contentRef: scrollerRef },
+    createElement(SkillSheet, { scrollerRef }),
   );
 }
 
@@ -137,7 +149,10 @@ describe('Phase 12.7-03 — SkillSheet scroll reset (F2 R3)', () => {
   it('Suite C1: fresh mount leaves .skill-board .selection-screen__content at scrollTop=0', () => {
     setupHumanoClerigoL1();
 
-    const { container } = render(createElement(SkillSheetHarness));
+    const scrollerRef = createRef<HTMLDivElement>();
+    const { container } = render(
+      createElement(SkillSheetHarness, { scrollerRef }),
+    );
     const scroller = container.querySelector(
       '.skill-board .selection-screen__content',
     ) as HTMLElement | null;
@@ -151,7 +166,10 @@ describe('Phase 12.7-03 — SkillSheet scroll reset (F2 R3)', () => {
   it('Suite C2: scroller.scrollTop resets to 0 on level change (L1 → L2)', () => {
     setupHumanoClerigoL1L2();
 
-    const { container, rerender } = render(createElement(SkillSheetHarness));
+    const scrollerRef = createRef<HTMLDivElement>();
+    const { container, rerender } = render(
+      createElement(SkillSheetHarness, { scrollerRef }),
+    );
     const scroller = container.querySelector(
       '.skill-board .selection-screen__content',
     ) as HTMLElement | null;
@@ -163,7 +181,7 @@ describe('Phase 12.7-03 — SkillSheet scroll reset (F2 R3)', () => {
     // User navigates to L2 via the level-rail or advance bar.
     useLevelProgressionStore.getState().setActiveLevel(2 as ProgressionLevel);
     useSkillStore.getState().setActiveLevel(2 as ProgressionLevel);
-    rerender(createElement(SkillSheetHarness));
+    rerender(createElement(SkillSheetHarness, { scrollerRef }));
 
     const scrollerAfter = container.querySelector(
       '.skill-board .selection-screen__content',
@@ -191,7 +209,8 @@ describe('Phase 12.7-03 — SkillSheet scroll reset (F2 R3)', () => {
 
     const spy = vi.spyOn(HTMLElement.prototype, 'scrollIntoView');
     try {
-      render(createElement(SkillSheetHarness));
+      const scrollerRef = createRef<HTMLDivElement>();
+      render(createElement(SkillSheetHarness, { scrollerRef }));
       expect(spy).not.toHaveBeenCalled();
     } finally {
       spy.mockRestore();

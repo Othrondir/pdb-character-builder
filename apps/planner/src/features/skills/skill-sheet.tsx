@@ -1,4 +1,4 @@
-import { useLayoutEffect, type ChangeEvent } from 'react';
+import { useLayoutEffect, type ChangeEvent, type RefObject } from 'react';
 import {
   canIncrementSkill,
   type SkillBudgetSnapshot,
@@ -125,7 +125,15 @@ function SkillRankRow({
   );
 }
 
-export function SkillSheet() {
+interface SkillSheetProps {
+  // Phase 15-02 D-04 — parent-owned ref to the real overflow owner
+  // (.selection-screen__content). Optional so existing call-sites that have
+  // not been threaded yet (and 12.7-03 fixture harnesses) keep mounting
+  // without throwing; effect no-ops when the ref is absent / unattached.
+  scrollerRef?: RefObject<HTMLDivElement | null>;
+}
+
+export function SkillSheet({ scrollerRef }: SkillSheetProps = {}) {
   const skillState = useSkillStore();
   const progressionState = useLevelProgressionStore();
   const foundationState = useCharacterFoundationStore();
@@ -140,21 +148,18 @@ export function SkillSheet() {
   // framework-agnostic (12.4-03 invariant).
   const snapshot = buildSkillBudgetSnapshotFromSheet(activeSheet);
 
-  // Phase 12.8-01 (D-02, UAT-2026-04-23 F1+F2) — retarget scroll reset
-  // to the real overflow owner. The `<aside className="skill-sheet">`
-  // below is NOT the scroller (clientHeight===scrollHeight); the parent
-  // selection-screen content element inside the skill-board is. Selector
-  // binds at runtime because BuildProgressionBoard → LevelProgressionRow
-  // mounts SkillSheet under SelectionScreen with className="skill-board".
-  // The layout-effect fires synchronously pre-paint so no mid-list flash.
+  // Phase 12.8-01 (D-02, UAT-2026-04-23 F1+F2) — scroll reset on the real
+  // overflow owner (.selection-screen__content) on level change. Phase 15-02
+  // D-04 retargeted this from a global document-level lookup to the
+  // parent-owned `scrollerRef` prop (threaded by SkillBoard via
+  // SelectionScreen.contentRef). Synchronous pre-paint scrollTop swap so
+  // no mid-list flash. project_raf_scroll_pitfall.md — no rAF wrapper.
   useLayoutEffect(() => {
-    const scroller = document.querySelector<HTMLElement>(
-      '.skill-board .selection-screen__content',
-    );
+    const scroller = scrollerRef?.current ?? null;
     if (scroller !== null) {
       scroller.scrollTop = 0;
     }
-  }, [activeSheet.level]);
+  }, [activeSheet.level, scrollerRef]);
 
   return (
     <aside

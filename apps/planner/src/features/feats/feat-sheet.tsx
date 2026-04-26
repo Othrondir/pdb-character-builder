@@ -1,6 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type RefObject } from 'react';
 import { shellCopyEs } from '@planner/lib/copy/es';
-import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
+import {
+  canonicalIdRegex,
+  type CanonicalId,
+} from '@rules-engine/contracts/canonical-id';
 import { useFeatStore } from './store';
 import { FeatFamilyExpander } from './feat-family-expander';
 import type {
@@ -15,6 +18,11 @@ interface FeatSheetProps {
   boardView: FeatBoardView;
   focusedFeatId: string | null;
   onFocusFeat: (featId: string | null) => void;
+  // Phase 15-02 D-04 — parent (FeatBoard) owns this ref; the auto-scroll
+  // effect scopes its [data-slot-section] lookup under it instead of doing
+  // a global document-level query. Optional so existing harnesses that
+  // don't thread the ref keep mounting; effect no-ops when ref is null.
+  scrollerRef?: RefObject<HTMLDivElement | null>;
 }
 
 /**
@@ -225,7 +233,12 @@ function FeatEntryList({
   );
 }
 
-export function FeatSheet({ boardView, focusedFeatId, onFocusFeat }: FeatSheetProps) {
+export function FeatSheet({
+  boardView,
+  focusedFeatId,
+  onFocusFeat,
+  scrollerRef,
+}: FeatSheetProps) {
   // Phase 12.4-08 — which folded family row is currently expanded. Only one
   // expander open at a time; clicking an already-open family closes it.
   const [expandedFamilyId, setExpandedFamilyId] = useState<string | null>(null);
@@ -271,33 +284,58 @@ export function FeatSheet({ boardView, focusedFeatId, onFocusFeat }: FeatSheetPr
       // without RAF scrolls correctly). useEffect already runs post-commit,
       // so the `feat-sheet__group--current` swap is live in the DOM when
       // this runs — no frame defer needed.
-      const generalSection = document.querySelector<HTMLElement>(
-        '[data-slot-section="general"]',
-      );
-      if (generalSection !== null) {
-        const firstRow =
-          generalSection.querySelector<HTMLElement>('button.feat-picker__row') ??
-          generalSection;
-        firstRow.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      //
+      // Phase 15-02 D-04 — the `[data-slot-section="general"]` lookup now
+      // scopes under `scrollerRef.current` (parent-owned ref attached to
+      // the .feat-board__main wrapper) instead of a global document-level
+      // query. Effect no-ops when the ref is unattached or not threaded;
+      // the call shape stays SYNCHRONOUS per project_raf_scroll_pitfall.md
+      // — do NOT reintroduce a frame-defer wrapper around scrollIntoView.
+      const root = scrollerRef?.current ?? null;
+      if (root !== null) {
+        const generalSection = root.querySelector<HTMLElement>(
+          '[data-slot-section="general"]',
+        );
+        if (generalSection !== null) {
+          const firstRow =
+            generalSection.querySelector<HTMLElement>('button.feat-picker__row') ??
+            generalSection;
+          firstRow.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        }
       }
     }
     prevClassFeatIdRef.current = next;
-  }, [currentRecord?.classFeatId]);
+  }, [currentRecord?.classFeatId, scrollerRef]);
 
   const handleSelectClassFeat = (featId: string) => {
     onFocusFeat(featId);
+    // Phase 15-02 D-07 — deselect-by-equality is unguarded by canonicalIdRegex
+    // on purpose: the equality predicate already implies the id was previously
+    // validated when stored. Guarding here would be redundant and could trap a
+    // user who needs to clear a slot whose stored id failed a tightened
+    // future regex.
     if (currentRecord?.classFeatId === featId) {
       clearClassFeat(activeLevel);
       return;
     }
+    // Phase 15-02 D-07 (Phase 06 WR-02 fix) — silent fail-closed before the
+    // unsafe CanonicalId cast hits the dispatch below.
+    if (!canonicalIdRegex.test(featId)) return;
     setClassFeat(activeLevel, featId as CanonicalId);
   };
 
   const handleSelectGeneralFeat = (featId: string) => {
     onFocusFeat(featId);
+    // Phase 15-02 D-07 (Phase 06 WR-02 fix) — silent fail-closed before any
+    // dispatch. Placed at handler entry so the cast sites below sit behind a
+    // verified runtime regex check.
+    if (!canonicalIdRegex.test(featId)) return;
     const selectedGeneralIndex =
       boardView.activeSheet.selectedGeneralFeatIds.indexOf(featId as CanonicalId);
 
+    // deselect-by-index follows the same asymmetry as the class-feat handler:
+    // an index >= 0 means the id was previously validated when stored, so the
+    // clear path needs no extra regex guard beyond the entry guard above.
     if (selectedGeneralIndex >= 0) {
       clearGeneralFeat(activeLevel, selectedGeneralIndex);
       return;
