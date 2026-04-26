@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Tech-Debt Closure
-status: planning
-stopped_at: "Phase 16 DISCUSS + RESEARCH complete; ready to plan. CONTEXT.md (commit 79e69a0 + post-research update) locks 7 decisions: D-01 extractor-primary schedule + hardcoded fallback; D-02 reuse bonusGeneralFeatIds[] (no schemaVersion bump); D-03 thread BuildStateAtLevel into determineFeatSlots; D-04 dedicated 'Dote racial' UI section; D-05 no-op backward compat; **D-06 (NEW) FEAT-06 covers Humano AND Mediano Fortecor — both races carry identical TLK 'Aprendizaje rápido: Ganan 1 dote adicional a 1.er nivel'**; **D-07 (NEW) store cap 'mismatch' was stale — bonusGeneralFeatIds[] already supports N entries; FEAT-06 reduces to UI labelling + onDeselect dispatch + race-aware slot-count math**. Research (commit 2770b67) HIGH confidence: cls_bfeat_*.2da is single-column schedule (col Bonus, row idx=class level, value 0/1); classes.2da BonusFeatsTable col 12 currently UNREAD by class-assembler.ts:188 (only reads FeatsTable). Puerta cadences DIVERGE from vanilla NWN1 (rogue [7,10,13,15,17,19] vs [10,13,16,19]; cleric L3 grant; ranger L1+L2+L4+L9+L14+L19) — Phase 12.4-03 LEGACY_CLASS_BONUS_FEAT_SCHEDULES will be silently overridden once extractor lands; Plan 16-01 must update Phase 12.4-03 fixtures. BuildStateAtLevel does NOT carry raceId today (feat-prerequisite.ts:13-28); D-03 needs interface extension + ~5 call-site migration + ~9 fixture migration. **Extract verification done 2026-04-26 14:03**: corepack pnpm extract regenerated catalogs (1611 items/100 warnings); REVERTED to baseline puerta-ee-2026-04-17+cf6e8aad so Plan 16-01 can re-extract atomically with new bonusFeatSchedule field. 3-plan decomposition prescribed: 16-01 extractor field; 16-02 race-aware threading + UI + Humano + Mediano Fortecor; 16-03 D-05 round-trip regression spec. Resume options next session: /gsd-plan-phase 16 (recommended)."
-last_updated: "2026-04-26T14:10:00.000Z"
-last_activity: 2026-04-26 -- Phase 16 DISCUSS + RESEARCH complete; D-06 (Mediano Fortecor scope expansion) + D-07 (store cap correction) added; extract verification + revert; 3-plan decomposition locked. Pausing to next session.
+status: ready_to_execute
+stopped_at: "Phase 16 PLANNED — 3 plans authored + verified across 3 revision iterations (initial check: 1 blocker + 4 warnings → revised → 1 count-drift blocker → revised → VERIFICATION PASSED). Plans (commit 1a982cb): 16-01 extractor bonusFeatSchedule field [wave 1, 3 tasks, FEAT-05]; 16-02 race-aware determineFeatSlots threading + Dote racial UI section + Humano + Mediano Fortecor [wave 2, 5 tasks, FEAT-05/06]; 16-03 persistence round-trip regression spec [wave 3, 1 task, FEAT-06 D-05]. Architectural decision B-01: determineFeatSlots(buildState, classFeatLists, compiledClass?) — compiledClass OPTIONAL; per-level-budget.ts omits it (legacy fallback wins for engine-internal budget math) to preserve framework-agnostic rules-engine boundary (Pattern S7). Coverage: FEAT-05 in {16-01, 16-02}; FEAT-06 in {16-02, 16-03}; 4 ROADMAP success criteria all map to grep-verifiable tasks (criterion #3 LevelEditorActionBar legal at Humano L1 explicitly enforced via Test 6 in tests/phase-16/feat-board-race-bonus-section.spec.tsx requiring `Continuar al nivel 2` + not.toBeDisabled()). VALIDATION.md Nyquist contract authored (13 verification rows + 6 it() count footnote). PATTERNS.md maps 14 files with verbatim code excerpts (path correction: copy lives at apps/planner/src/lib/copy/es.ts not i18n/es.ts). Resume: /gsd-execute-phase 16."
+last_updated: "2026-04-26T17:35:00.000Z"
+last_activity: 2026-04-26 -- Phase 16 PLANNED — 3 plans authored, verified PASSED iter 3/3, committed (1a982cb). Ready to execute.
 progress:
   total_phases: 4
   completed_phases: 0
-  total_plans: 0
+  total_plans: 3
   completed_plans: 0
   percent: 0
 ---
