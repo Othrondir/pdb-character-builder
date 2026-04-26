@@ -9,6 +9,7 @@ const SAVE_PROGRESSIONS = ['low', 'high'] as const;
 
 export const compiledClassSchema = z.object({
   attackBonusProgression: z.enum(BAB_PROGRESSIONS),
+  bonusFeatSchedule: z.array(z.number().int().positive()).nullable().optional(),
   description: z.string(),
   featTableRef: z.string().nullable(),
   hitDie: z.number().int().positive(),
