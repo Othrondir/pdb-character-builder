@@ -728,7 +728,7 @@ describe('Phase 17 — SC#4 reframe: per-race point-buy pipeline coverage', () =
 
 **If the planner can verify A1+A2 with a one-time `pnpm extract` dry-run before authoring plans, all four assumptions become VERIFIED.**
 
-## Open Questions
+## Open Questions (RESOLVED — see plan `<objective>` blocks for binding answers)
 
 1. **Should Phase 17 ship the `race:halfelf2` dedup hygiene fix in scope?**
    - What we know: Phase 16-01 SUMMARY documents the dup as "unrelated drift" reverted via sibling-catalog reset. CONTEXT.md § Specifics line 126 anticipates Phase 17 hitting it.

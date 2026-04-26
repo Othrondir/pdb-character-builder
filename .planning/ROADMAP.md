@@ -74,7 +74,10 @@ Full phase detail: `.planning/milestones/v1.0-ROADMAP.md`.
 2. `ability-budget.ts` consume catálogo enriquecido en lugar de curva uniforme.
 3. Atributos board refleja coste correcto al subir/bajar atributo según raza activa.
 4. Specs cubren al menos 3 razas con curvas distintas + regression sobre razas no-enriched (curva legacy preservada).
-**Plans:** TBD via `/gsd-plan-phase 17`.
+**Plans:** 3 plans
+- [ ] 17-01-PLAN.md — Extractor: schema field extension + race-assembler 2DA read + atomic regen + race:halfelf2 dedup hygiene + Wave 1 RED-gate spec.
+- [ ] 17-02-PLAN.md — Rules-engine + selector: NWN1_POINT_BUY_COST_TABLE + deriveAbilityBudgetRules helper + AbilityBudgetRules export promotion + selectAbilityBudgetRulesForRace rewire + Wave 2 helper + selector RED-gate specs (SC#4 D-03 reframe).
+- [ ] 17-03-PLAN.md — Atomic snapshot retirement: 5 importer specs migrated + point-buy-snapshot-coverage spec deleted + snapshot module + JSON + provenance dossier deleted + foundation barrel cleaned + UAT-FINDINGS-2026-04-20 §A1 closeout footer.
 
 ### Phase 18: Quick-Task Triage (GAP)
 **Goal:** Cerrar 3 directorios quick task untracked de 2026-04-25.
