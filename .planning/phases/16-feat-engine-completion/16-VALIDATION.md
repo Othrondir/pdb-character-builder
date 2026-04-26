@@ -55,6 +55,8 @@ created: 2026-04-26
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
+> **Note — table aggregates by behavior, not by `it()` count.** `tests/phase-16/feat-board-race-bonus-section.spec.tsx` authors **6 `it()` blocks** (per `16-02-PLAN.md` Task 16-02-01 lines 223-229): Tests 1, 2, 3 (Mediano Fortecor heading / D-06), 4 (Elfo regression-lock — non-Humano stays 2 cards), 5 (deselect clears `bonusGeneralFeatIds[0]`), and 6 (`<LevelEditorActionBar>` legal resolution / W-01). The per-task rows 16-02-06 / 07 / 08 fold those six behaviours into three representative acceptance gates; all six must pass for 16-02-PLAN.md acceptance line 841 to flip GREEN.
+
 ---
 
 ## Wave 0 Requirements

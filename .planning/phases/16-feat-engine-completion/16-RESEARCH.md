@@ -739,20 +739,23 @@ Source: [VERIFIED: extension of `apps/planner/src/features/feats/feat-board.tsx:
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Should `race:mediano-fortecor` also receive +1 dote at L1?**
    - What we know: TLK description text says yes. Phase 12.4-03 + per-level-budget.ts hardcode says no.
    - What's unclear: Is the Mediano Fortecor description text load-bearing canon, or decorative copy?
    - Recommendation: Plan-checker stage MUST surface this to the user as an explicit confirmation question. Default scope: Humano-only. Tracked as A1.
+   - **RESOLVED: YES — Mediano Fortecor receives +1 dote at L1 (per CONTEXT.md D-06).** Description text is load-bearing canon. `RACE_L1_BONUS_FEATS` allowlist includes both `race:human` and `race:mediano-fortecor`. Plan 16-02 § interfaces locks the canonical IDs.
 
 2. **What happens at character level 1 if user multiclasses at L1?**
    - NWN1 EE does not allow multiclassing AT level 1 — first level must be a single class. So this question is moot for L1 specifically.
    - Verified: progression-fixture.ts requires `levels[0].classId` set as the only class for L1 (single-classed start). Subsequent levels can multiclass.
+   - **RESOLVED: moot (engine constraint — multiclass disallowed at L1 by NWN1 EE; verified via progression-fixture.ts).**
 
 3. **Does the extractor need to handle epic-level entries (L21+) in `cls_bfeat_*.2da`?**
    - L1-L20 is sufficient for v1 scope (PROG-04 R5 caps at L20).
    - Recommendation: Plan 1 caps `parseBonusFeatSchedule` at `rowIndex >= 1 && rowIndex <= 20`. Out-of-range rows ignored silently (no warning — Puerta tables routinely include L21-40 epic data that is out of v1 scope).
+   - **RESOLVED: NO (out of v1 scope — PROG-04 R5 caps at L20; Plan 16-01 caps `parseBonusFeatSchedule` at `rowIndex <= 20`).**
 
 ---
 
