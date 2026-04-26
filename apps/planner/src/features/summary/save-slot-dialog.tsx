@@ -3,6 +3,7 @@ import { NwnButton } from '@planner/components/ui/nwn-button';
 import { ConfirmDialog } from '@planner/components/ui/confirm-dialog';
 import { VersionMismatchDialog } from '@planner/components/ui/version-mismatch-dialog';
 import { shellCopyEs } from '@planner/lib/copy/es';
+import { useBodyScrollLock } from '@planner/lib/a11y/use-body-scroll-lock';
 import {
   listSlots,
   saveSlot,
@@ -40,6 +41,10 @@ export function SaveSlotDialog({ open, onClose }: SaveDialogProps) {
     if (open && !el.open) el.showModal();
     else if (!open && el.open) el.close();
   }, [open]);
+
+  // Phase 15-01 D-03 — body scroll lock; stacking counter handles ConfirmDialog
+  // overwrite branch mounting atop SaveSlotDialog without premature release.
+  useBodyScrollLock(open);
 
   async function handleConfirm() {
     const trimmed = name.trim();
@@ -147,6 +152,10 @@ export function LoadSlotDialog({ open, onClose }: LoadDialogProps) {
         .catch(() => setSlots([]));
     } else if (!open && el.open) el.close();
   }, [open]);
+
+  // Phase 15-01 D-03 — body scroll lock; stacking counter handles
+  // VersionMismatchDialog mounting atop LoadSlotDialog without premature release.
+  useBodyScrollLock(open);
 
   // Reset local mismatch state when the parent closes the dialog so it does not
   // leak across reopens.

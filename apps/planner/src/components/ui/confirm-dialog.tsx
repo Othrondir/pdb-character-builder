@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { NwnButton } from './nwn-button';
+import { useBodyScrollLock } from '@planner/lib/a11y/use-body-scroll-lock';
 
 interface ConfirmDialogProps {
   body: string;
@@ -27,6 +28,10 @@ export function ConfirmDialog({
       dialog.close();
     }
   }, [open]);
+
+  // Phase 15-01 D-03 — body scroll lock; stacking counter handles ConfirmDialog
+  // mounted atop SaveSlotDialog (overwrite branch).
+  useBodyScrollLock(open);
 
   return (
     <dialog className="nwn-frame confirm-dialog" ref={dialogRef} onCancel={onCancel}>

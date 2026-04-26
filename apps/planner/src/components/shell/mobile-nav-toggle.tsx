@@ -2,6 +2,8 @@ import { useEffect, useRef } from 'react';
 import { Menu, X } from 'lucide-react';
 import { shellCopyEs } from '@planner/lib/copy/es';
 import { usePlannerShellStore } from '@planner/state/planner-shell';
+import { useBodyScrollLock } from '@planner/lib/a11y/use-body-scroll-lock';
+import { useFocusTrap } from '@planner/lib/a11y/use-focus-trap';
 
 export function MobileNavToggle() {
   const mobileNavOpen = usePlannerShellStore((state) => state.mobileNavOpen);
@@ -53,18 +55,17 @@ export function MobileNavToggle() {
     return undefined;
   }, [mobileNavOpen]);
 
-  // Body scroll lock — prevent background content from scrolling beneath the
-  // backdrop on mobile viewports (WR-04). iOS Safari in particular will bleed
-  // momentum scroll into body unless overflow:hidden is applied at document root.
-  useEffect(() => {
-    if (!mobileNavOpen) return undefined;
-    if (typeof document === 'undefined') return undefined;
-    const previous = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = previous;
-    };
-  }, [mobileNavOpen]);
+  // Phase 15-01 D-03 — body scroll lock now extracted to
+  // apps/planner/src/lib/a11y/use-body-scroll-lock.ts (stacking counter handles
+  // overlap with confirm/save-slot/version-mismatch dialogs).
+  useBodyScrollLock(mobileNavOpen);
+
+  // Phase 15-01 D-01 — Tab/Shift-Tab cycle inside the drawer surface.
+  // The hook is a no-op when mobileNavOpen=false. The drawer is the only
+  // non-<dialog> aria-modal in the planner; the 4 native <dialog> surfaces
+  // trust the browser top-layer focus contract.
+  const drawerRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(drawerRef, mobileNavOpen);
 
   return (
     <>
@@ -87,16 +88,30 @@ export function MobileNavToggle() {
         role="presentation"
       />
       {mobileNavOpen && (
-        <button
-          aria-label={shellCopyEs.stepper.closeNav}
-          className="planner-shell__mobile-close"
-          onClick={closeMobileNav}
-          ref={closeButtonRef}
-          type="button"
+        <div
+          ref={drawerRef}
+          role="dialog"
+          aria-modal="true"
         >
-          <X aria-hidden="true" size={20} />
-          <span>{shellCopyEs.stepper.closeNav}</span>
-        </button>
+          {/*
+            Plan 15-01 [Rule 1 fix]: Do NOT add `id="planner-stepper-drawer"` here.
+            The canonical `#planner-stepper-drawer` element is the stepper sidebar
+            in planner-shell-frame.tsx (which the toggle's `aria-controls` already
+            points at). Adding the id here produced a duplicate-id collision that
+            broke phase-07.1 selectors and HTML uniqueness; the focus-trap wrapper
+            does not need the id to function.
+          */}
+          <button
+            aria-label={shellCopyEs.stepper.closeNav}
+            className="planner-shell__mobile-close"
+            onClick={closeMobileNav}
+            ref={closeButtonRef}
+            type="button"
+          >
+            <X aria-hidden="true" size={20} />
+            <span>{shellCopyEs.stepper.closeNav}</span>
+          </button>
+        </div>
       )}
     </>
   );

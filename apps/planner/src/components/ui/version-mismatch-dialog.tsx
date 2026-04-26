@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { NwnButton } from './nwn-button';
 import { shellCopyEs } from '@planner/lib/copy/es';
 import type { RulesetDiff } from '@planner/features/persistence';
+import { useBodyScrollLock } from '@planner/lib/a11y/use-body-scroll-lock';
 
 interface VersionMismatchDialogProps {
   open: boolean;
@@ -36,6 +37,10 @@ export function VersionMismatchDialog({
       el.close();
     }
   }, [open]);
+
+  // Phase 15-01 D-03 — body scroll lock; stacking counter is shared across
+  // all modal surfaces so layered dialogs do not prematurely release.
+  useBodyScrollLock(open);
 
   return (
     <dialog
