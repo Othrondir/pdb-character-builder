@@ -253,11 +253,25 @@ function buildPriorFeatIds(
       (entry) => entry.level <= record.level && entry.classId === record.classId,
     ).length;
 
+    // Phase 16-02 (D-03): determineFeatSlots takes BuildStateAtLevel + optional
+    // compiledClass. We only need autoGrantedFeatIds from the result, so build
+    // a minimal snapshot. Pass compiledClass to honour D-01 precedence.
+    const compiledClassForLevel =
+      compiledClassCatalog.classes.find((c) => c.id === record.classId) ?? null;
     const slots = determineFeatSlots(
-      record.level,
-      record.classId,
-      classLevelInClass,
+      {
+        abilityScores: {},
+        bab: 0,
+        characterLevel: record.level,
+        classLevels: { [record.classId]: classLevelInClass },
+        fortitudeSave: 0,
+        selectedFeatIds: new Set(),
+        skillRanks: {},
+        raceId: null,
+        activeClassIdAtLevel: record.classId,
+      },
       compiledFeatCatalog.classFeatLists,
+      compiledClassForLevel,
     );
 
     for (const featId of slots.autoGrantedFeatIds) {

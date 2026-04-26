@@ -347,16 +347,32 @@ export function computeBuildStateAtLevel(
   // Also add auto-granted feats from all class levels up to and including
   // the active level. They are not player picks, but they should still count
   // as already owned for prerequisite evaluation and picker filtering.
+  //
+  // Phase 16-02: build a per-level BuildStateAtLevel snapshot for each
+  // walked level so determineFeatSlots can read raceId + activeClassIdAtLevel.
+  // Auto-grant collection only needs the autoGrantedFeatIds field — the
+  // race/class slots are derivative.
   for (const rec of progressionState.levels) {
     if (rec.level <= level && rec.classId) {
       const classLevelInClass = progressionState.levels
         .filter((r) => r.level <= rec.level && r.classId === rec.classId)
         .length;
+      const compiledClassForLevel =
+        compiledClassCatalog.classes.find((c) => c.id === rec.classId) ?? null;
       const slots = determineFeatSlots(
-        rec.level,
-        rec.classId,
-        classLevelInClass,
+        {
+          abilityScores: {},
+          bab: 0,
+          characterLevel: rec.level,
+          classLevels: { [rec.classId]: classLevelInClass },
+          fortitudeSave: 0,
+          selectedFeatIds: new Set(),
+          skillRanks: {},
+          raceId: foundationState.raceId,
+          activeClassIdAtLevel: rec.classId,
+        },
         compiledFeatCatalog.classFeatLists,
+        compiledClassForLevel,
       );
 
       for (const autoFeatId of slots.autoGrantedFeatIds) {
@@ -368,6 +384,11 @@ export function computeBuildStateAtLevel(
   // 6. Fortitude save
   const fortitudeSave = computeFortSave(classLevels, compiledClassCatalog);
 
+  // Phase 16-02 (D-03) — populate raceId + activeClassIdAtLevel so
+  // determineFeatSlots can read race-aware + per-level class signals.
+  const activeClassIdAtLevel =
+    progressionState.levels.find((r) => r.level === level)?.classId ?? null;
+
   return {
     abilityScores,
     bab,
@@ -376,6 +397,8 @@ export function computeBuildStateAtLevel(
     fortitudeSave,
     selectedFeatIds,
     skillRanks,
+    raceId: foundationState.raceId,
+    activeClassIdAtLevel,
   };
 }
 
@@ -1065,10 +1088,9 @@ export function selectFeatBoardView(
     featState,
   );
   const featSlots = determineFeatSlots(
-    activeLevel,
-    classId,
-    classLevelInClass,
+    buildState,
     compiledFeatCatalog.classFeatLists,
+    compiledClassCatalog.classes.find((c) => c.id === classId) ?? null,
   );
 
   // Phase 12.4-07 — per-level budget supplies authoritative slot counter
@@ -1331,10 +1353,9 @@ export function selectFeatSheetTabView(
 
     // Auto-granted feats
     const autoGranted = determineFeatSlots(
-      levelRecord.level,
-      classId,
-      classLevelInClass,
+      buildState,
       compiledFeatCatalog.classFeatLists,
+      compiledClassCatalog.classes.find((c) => c.id === classId) ?? null,
     ).autoGrantedFeatIds;
 
     const feats: FeatSheetTabRowView[] = [];

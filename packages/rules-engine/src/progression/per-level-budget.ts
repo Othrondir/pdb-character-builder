@@ -178,16 +178,35 @@ export function computePerLevelBudget(
     }
   }
 
-  // `determineFeatSlots` types its 4th param against the extractor's
+  // `determineFeatSlots` types its `classFeatLists` arg against the extractor's
   // `FeatCatalog['classFeatLists']` shape (mutable record of arrays). Our
   // structural `FeatCatalogInput.classFeatLists` is field-compatible but
   // `readonly`, so we cast at the call-site to preserve rules-engine framework
   // purity (no extractor-package import at this module level).
+  //
+  // Phase 16-02 (Pattern S7 + architectural decision B-01 option a):
+  // we OMIT the `compiledClass` arg here. `per-level-budget.ts` lives inside
+  // `packages/rules-engine/`; importing `compiledClassCatalog` would break
+  // the framework-agnostic boundary. Engine-internal budget math falls
+  // through to `LEGACY_CLASS_BONUS_FEAT_SCHEDULES`. Cadence parity with the
+  // extractor's Puerta-canon `bonusFeatSchedule` is reconciled at the
+  // Phase 12.4-03 fixture layer (PIT-01 — Plan 16-02 owns that update),
+  // not at this engine-internal call site.
   const slots = determineFeatSlots(
-    level,
-    classId as Parameters<typeof determineFeatSlots>[1],
-    classLevelInClass,
-    featCatalog.classFeatLists as unknown as Parameters<typeof determineFeatSlots>[3],
+    {
+      abilityScores: {},
+      bab: 0,
+      characterLevel: level,
+      classLevels: { [classId]: classLevelInClass },
+      fortitudeSave: 0,
+      selectedFeatIds: new Set(),
+      skillRanks: {},
+      raceId: build.raceId,
+      activeClassIdAtLevel: classId,
+    },
+    featCatalog.classFeatLists as unknown as Parameters<typeof determineFeatSlots>[1],
+    // compiledClass omitted — Pattern S7: rules-engine package must not import
+    // compiledClassCatalog. Legacy fallback wins for engine-internal budget math.
   );
 
   const general = slots.generalFeatSlot ? 1 : 0;

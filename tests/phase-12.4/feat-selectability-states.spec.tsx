@@ -324,7 +324,11 @@ describe('Phase 12.4-07 — Dotes selectability states (SPEC R5)', () => {
       expect(window.getComputedStyle(pillEl!).opacity).toBe('1');
     });
 
-    it('B4: blocked-already-taken pill reads "Tomada en N1" for feat chosen at L1 when editing L2', () => {
+    it('B4: blocked-already-taken pill reads "Tomada en N1" for feat chosen at L1 when editing L3', () => {
+      // Plan 16-02 PIT-01: Puerta cadence [1,3,5,7,...] supersedes vanilla
+      // [1,2,4,...]. Under D-01 extractor-primary precedence, Guerrero L2 has
+      // NO class-bonus slot — the next bonus after L1 is L3. Fixture moved
+      // from L2→L3 so the class-bonus row still renders for the assertion.
       setupL1Guerrero();
       // Take feat:carrera as the L1 class-bonus feat (list=1 for Guerrero).
       useFeatStore
@@ -335,12 +339,15 @@ describe('Phase 12.4-07 — Dotes selectability states (SPEC R5)', () => {
         .setLevelClassId(2 as ProgressionLevel, 'class:fighter' as CanonicalId);
       useLevelProgressionStore
         .getState()
-        .setActiveLevel(2 as ProgressionLevel);
-      useFeatStore.getState().setActiveLevel(2 as ProgressionLevel);
+        .setLevelClassId(3 as ProgressionLevel, 'class:fighter' as CanonicalId);
+      useLevelProgressionStore
+        .getState()
+        .setActiveLevel(3 as ProgressionLevel);
+      useFeatStore.getState().setActiveLevel(3 as ProgressionLevel);
       render(createElement(FeatBoard));
-      // At L2 Guerrero classBonus slot is available; feat:carrera appears in
-      // the class-bonus section but MUST be `blocked-already-taken` because
-      // it was chosen at L1.
+      // At L3 Guerrero classBonus slot is available (Puerta odd-level cadence);
+      // feat:carrera appears in the class-bonus section but MUST be
+      // `blocked-already-taken` because it was chosen at L1.
       const row = document.querySelector<HTMLElement>(
         '[data-feat-id="feat:carrera"]',
       );
