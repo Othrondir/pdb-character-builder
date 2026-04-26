@@ -19,6 +19,7 @@ export default defineConfig({
       ['tests/phase-12.8/**/*.spec.tsx', 'jsdom'],
       ['tests/phase-12.9/**/*.spec.tsx', 'jsdom'],
       ['tests/phase-14/**/*.spec.tsx', 'jsdom'],
+      ['tests/phase-15/**/*.spec.tsx', 'jsdom'],
     ],
     environment: 'node',
     include: ['tests/**/*.spec.ts', 'tests/**/*.spec.tsx'],
@@ -27,6 +28,6 @@ export default defineConfig({
     // would override rather than append; spreading the defaults preserves
     // them while adding the Playwright-only glob.
     exclude: [...configDefaults.exclude, 'tests/**/*.e2e.spec.ts'],
-    setupFiles: ['tests/setup.ts'],
+    setupFiles: ['tests/setup.ts', 'tests/phase-15/setup.ts'],
   },
 });
