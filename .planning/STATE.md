@@ -1,13 +1,14 @@
 ---
 gsd_state_version: 1.0
 milestone: v1.0
-milestone_name: milestone
-status: executing
-stopped_at: "Phase 15 EXECUTION COMPLETE — A11y + Modal Polish (3/3 plans merged sequentially on master; SC#1..SC#5 closed; verifier verdict PASS 5/5). Wave 1 sequential (no worktrees, gsd-sdk query subcommand unavailable on this Windows machine, fallback per <runtime_compatibility>): 15-01 useFocusTrap + useBodyScrollLock hooks + jsdom HTMLDialogElement polyfill + drawer/4-dialog wiring (commits 5c48a94 hooks+polyfill, c550143 wiring, f39333b docs); two essential auto-fixed deviations recorded — jsdom 29 ships HTMLDialogElement.prototype.showModal/close as undefined so polyfill rewritten as full reimplementation, and id='planner-stepper-drawer' on mobile-nav drawer dropped because it collided with canonical stepper sidebar in planner-shell-frame.tsx:19. 15-02 querySelector scope-down + parent-owned scrollerRef threaded via SelectionScreen.contentRef + canonicalIdRegex.test guards at feat-sheet handlers (commits d375bb8 feat, 727ac69 docs); document.querySelector hits in feat-sheet/skill-sheet now 0. Wave 2 sequential 15-03 useShallow slice-as-input rollout to feat-board.tsx + feat-detail-panel.tsx + feat-sheet-tab.tsx (commits 61ee3c5 feat, adf0c6b docs); CONTEXT D-06 reconciled in-place — feat-search.tsx absent post-Phase-06 refactor, rollout shrunk to 3 files. Final gates: 27 phase-15 specs green across 7 spec files; phase 07.1 drawer regression 12/12 green; phase 12.7 + 12.8 regression all green; corepack pnpm typecheck exits 0; D-NO-CSS / D-NO-COPY / D-NO-DEPS git diff bcbe969..HEAD all empty (zero CSS, zero shellCopyEs keys, zero new npm deps). Pre-existing baseline failures (NOT counted against phase 15): 2 cases in tests/phase-12.4/class-picker-prestige-reachability.spec.tsx confirmed predate phase 15 via git stash + rerun on bcbe969. v1.0-MILESTONE-AUDIT.md tech_debt cluster (Phase 06 WR-01 + Phase 07.1 WR-02/03/04 + Phase 12.8 WR-01/02) RETIRED. Verification report at .planning/phases/15-a11y-modal-polish/15-VERIFICATION.md. Resume options: /gsd-audit-milestone v1.0 (close milestone), /gsd-ship (PR + cross-AI review), or /gsd-next."
-last_updated: "2026-04-26T12:30:00.000Z"
-last_activity: 2026-04-26 -- Phase 15-03 EXECUTION COMPLETE (useShallow slice-as-input rollout to feat-board.tsx + feat-detail-panel.tsx + feat-sheet-tab.tsx; 6/6 plan-15-03 specs green; 1 commit 61ee3c5 closes Phase 06 WR-01 — Phase 15 PHASE COMPLETE 3/3 plans merged)
+milestone_name: MVP
+status: shipped
+shipped_at: "2026-04-26T13:00:00.000Z"
+stopped_at: "Milestone v1.0 SHIPPED — 27 phases / 99 plans / 597 commits / 28 days. Audit verdict: passed (37/37 active reqs satisfied, 27/27 phases verified, 36/36 wirings PASS, 19/19 E2E flows PASS). Archives: .planning/milestones/v1.0-ROADMAP.md + v1.0-REQUIREMENTS.md + v1.0-MILESTONE-AUDIT.md. MILESTONES.md created. ROADMAP.md collapsed to milestone summary; REQUIREMENTS.md removed via git rm (history preserved). PROJECT.md evolved with Current State + Validated/Descoped/Active sections. Tag v1.0 created. Phase 16 (Feat Engine Completion) deferred to v1.1 — close Phase 06 bonus-feat TODOs (feat-eligibility.ts L45+L49) + Humano L1 store-capacity 2→3. Carry-forward to v1.1: A1 point-buy per race, P5 level-table redesign, 3 untracked quick-task workspace dirs (q1m/qzv/r5j), Nyquist VALIDATION coverage gap, @playwright/test install. Resume options: /gsd-new-milestone v1.1 (open next cycle)."
+last_updated: "2026-04-26T13:00:00.000Z"
+last_activity: 2026-04-26 -- Milestone v1.0 SHIPPED (audit passed; archives + tag v1.0 + MILESTONES.md created)
 progress:
-  total_phases: 29
+  total_phases: 27
   completed_phases: 27
   total_plans: 99
   completed_plans: 99
@@ -212,6 +213,27 @@ None yet.
 - [Phase 1] Exact coverage for local `nwsync` plus TLK/custom text extraction still needs confirmation before extractor implementation.
 - [Phase 05] ~~UAT blocked: hardcoded skill catalog covers 8 of 39 server skills.~~ RESOLVED by Phase 05.1 extraction (39 skills now wired).
 - [Phase 8] Dataset mismatch UX still needs a final product decision before implementation.
+
+## Deferred Items
+
+Items acknowledged and deferred at v1.0 milestone close on 2026-04-26:
+
+| Category | Item | Status | Note |
+|----------|------|--------|------|
+| debug | class-picker-not-mounted | fixed | Closed by Phase 12.4-06; bookkeeping artifact only |
+| uat_gap | Phase 07 (07-UAT.md) | descoped | Phase 07.2 superseded magic UI; 12 scenarios no longer applicable |
+| uat_gap | Phase 12.7 (12.7-UAT.md) | partial | 0 open scenarios; status flag is bookkeeping noise |
+| uat_gap | Phase 12.8 (12.8-HUMAN-UAT.md) | resolved | 0 open scenarios; status flag is bookkeeping noise |
+| verification | Phase 05 (05-VERIFICATION.md) | human_needed | Skill catalog UAT closed by Phase 05.1 extraction; flag never flipped |
+| verification | Phase 06 (06-VERIFICATION.md) | human_needed | CR-01 closed by Phase 12; flag never flipped |
+| quick_task | 260414-gxx-ignorar-artefactos-locales-del-workspace | missing | Shipped via commit 089881b (Phase 11); tracking dir removed |
+| quick_task | 260419-47a-stepper-bottom-pin | missing | Shipped via commit 6a5fda8 |
+| quick_task | 260419-68b-fix-atributos-layout | missing | Shipped via commit 762aa57 |
+| quick_task | 260422-g7s-cablear-prestige-gate-reachability-en-cl | missing | Shipped via commit a81d8a3 |
+| quick_task | 260422-h9k-ampliar-cobertura-prestige-prereq-data-c | missing | Shipped via commit 7747e87 |
+| quick_task | 260425-q1m-revisar-dotes-de-brujo-y-corregir-select | missing | Carry-forward to v1.1 — untracked workspace dir |
+| quick_task | 260425-qzv-alinear-auto-dotes-por-clase-con-el-list | missing | Carry-forward to v1.1 — untracked workspace dir |
+| quick_task | 260425-r5j-a-adir-scroll-al-panel-de-progresion-1-2 | missing | Carry-forward to v1.1 — untracked workspace dir |
 
 ### Quick Tasks Completed
 

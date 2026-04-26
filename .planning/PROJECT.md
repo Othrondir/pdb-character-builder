@@ -8,26 +8,46 @@ The planner is primarily for personal use, but it must also make it easy to hand
 
 ## Core Value
 
-A player can build a Puerta de Baldur character from level 1 to 16 with strict server-valid validation and share that exact build reliably.
+A player can build a Puerta de Baldur character from level 1 to 20 with strict server-valid validation and share that exact build reliably. _(Range extended 1-16 → 1-20 in Phase 12.6.)_
+
+## Current State (post v1.0)
+
+**Shipped 2026-04-26** — see `.planning/MILESTONES.md` and `.planning/milestones/v1.0-ROADMAP.md`.
+
+- 27 phases / 99 plans / 597 commits / ~236k LOC
+- Spanish-first SPA on TanStack Router + Zustand + Zod 4 + Dexie + fflate; Vite build to GitHub Pages
+- Catalog data extracted via `packages/data-extractor` from local `nwsync` (2016 items across 6 catalogs)
+- Persistence: IndexedDB save slots + JSON import/export + share URL (hash routing for GH Pages)
+- A11y: focus-trap (drawer) + body-scroll-lock (5 surfaces, stacking counter) + jsdom HTMLDialogElement polyfill
 
 ## Requirements
 
-### Validated
+### Validated (v1.0)
 
-- [x] Versioned, provenance-aware Puerta rules contracts compile into public-safe planner datasets with fail-closed blocked states — Phase 1
-- [x] Users can navigate a static Spanish-first planner shell across the main builder areas with an NWN1-inspired presentation baseline — Phase 2
-- [x] Users can define a legal character foundation with origin restrictions, deity requirements, and budget-led starting attributes before later planning phases — Phase 3
-- [x] Users can build and repair a stable level 1-16 class path with prerequisite feedback, multiclass legality, and per-level gains — Phase 4
-- [x] Users can navigate a guided wizard flow with compact information display and clear visual hierarchy instead of an endless vertical scroll — Phase 05.2
+- [x] Versioned, provenance-aware Puerta rules contracts compile into public-safe planner datasets with fail-closed blocked states — Phase 1 ✓ v1.0
+- [x] Spanish-first planner shell with NWN1 visual identity — Phase 2 ✓ v1.0
+- [x] Legal character foundation: race/subrace/alignment/attributes with restriction feedback — Phase 3 + 12.2 ✓ v1.0
+- [x] Stable level 1-20 progression with prerequisite + multiclass legality + per-level gains — Phase 4 + 12.6 ✓ v1.0
+- [x] Guided wizard flow with compact information display + clear visual hierarchy — Phase 05.2 ✓ v1.0
+- [x] Feats + proficiencies with exact prerequisite feedback per level — Phase 6 + 12.4 + 12.8 ✓ v1.0
+- [x] Skills with server-accurate restrictions + synchronized derived stats — Phase 5 + 12.7 ✓ v1.0
+- [x] Save/load/import/export/share builds via files + URLs — Phase 8 + 14 ✓ v1.0
+- [x] Strict server-valid validation: illegal builds blocked not warned — Phases 1, 4, 12.2, 12.8 ✓ v1.0
+- [x] All 37 active v1 REQ-IDs satisfied — see `milestones/v1.0-REQUIREMENTS.md`
 
-### Active
+### Descoped (v1.0 → v2)
 
-- [ ] User can plan a character from level 1 to level 16 using Puerta de Baldur rules.
-- [x] User can choose feats and proficiencies with exact prerequisite feedback per level — Phase 6
-- [ ] User can choose race, subrace, alignment, deity, classes, prestige classes, domains, spells, and level progression.
-- [ ] User can use a UI flow equivalent to the NWN2DB builder's main planner screens.
-- [ ] User can only create legal builds according to the server's enforced rules and exceptions.
-- [ ] User can save, load, import, export, and share builds through both files and URLs.
+- ~~CHAR-03~~ deity picker — server manages deities via scripts, not 2DA
+- ~~MAGI-01..04~~ domain/spell pickers — Phase 07.2 product pivot to server's `Plantilla Base.xlsx`
+
+### Active (v1.1 candidates — to be locked via `/gsd-new-milestone`)
+
+- [ ] Phase 16: Feat Engine Completion — close Phase 06 bonus-feat TODOs (feat-eligibility.ts L45+L49) + Humano L1 feat-slot store capacity (2→3)
+- [ ] A1 point-buy cost per race (blocked on extractor enrichment or Puerta snapshot override)
+- [ ] P5 level-table redesign (open-ended UX)
+- [ ] 3 carry-forward quick tasks from 2026-04-25 (q1m bruja dotes, qzv auto-dotes-por-clase, r5j scroll progresión)
+- [ ] Nyquist VALIDATION.md coverage (systemic process gap; 4/27 currently compliant)
+- [ ] @playwright/test installation + Phase 12.4-09 SPEC R9 e2e migration off RTL fallback
 
 ### Out of Scope
 
@@ -56,7 +76,7 @@ Phase 1 locked the compiler-first contract layer: canonical IDs, public-safe dat
 - **Rules Fidelity**: Strict validation — illegal server builds must be blocked, not merely warned about.
 - **Game Scope**: Neverwinter Nights 1 Enhanced Edition — data model and terminology must align with NWN1 EE, not NWN2.
 - **Server Scope**: Puerta de Baldur rules and custom content — planner must support custom domains, feats, spells, classes, and other server-specific logic.
-- **Initial Level Range**: 1 to 16 — the first shipped planner targets the current agreed progression range.
+- **Level Range**: 1 to 20 — extended from original 1-16 in Phase 12.6 (UAT-2026-04-20 P6).
 - **Sharing**: Must support both URL-based sharing and JSON import/export — both are required for the intended workflow.
 
 ## Key Decisions
@@ -101,4 +121,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-16 after Phase 6*
+*Last updated: 2026-04-26 after v1.0 milestone close*
