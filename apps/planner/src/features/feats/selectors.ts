@@ -108,7 +108,7 @@ export type FeatRowState =
   | 'blocked-already-taken'
   | 'blocked-budget';
 
-export type FeatSlotKind = 'class-bonus' | 'general';
+export type FeatSlotKind = 'class-bonus' | 'general' | 'race-bonus';
 
 export interface FeatBlockedReason {
   kind: 'prereq' | 'already-taken' | 'budget';
@@ -205,7 +205,7 @@ export type FeatListEntry =
 export interface FeatSummaryChosenEntry {
   featId: string;
   label: string;
-  slotKind: 'class-bonus' | 'general';
+  slotKind: FeatSlotKind;
   slotIndex: number;
 }
 
@@ -947,8 +947,27 @@ function resolveFeatLabel(featId: CanonicalId | null): string | null {
   return compiledFeatCatalog.feats.find((feat) => feat.id === featId)?.label ?? featId;
 }
 
+/**
+ * Phase 16-02 (D-06) — resolve the per-race "Dote racial: {raceName}" heading.
+ * Hardcodes the two allowlist races (Humano + Mediano Fortecor) to their
+ * pre-translated copy keys; falls back to a generic template for any future
+ * race the allowlist gains. Returns the generic step title when no raceId.
+ */
+function resolveRaceBonusLabel(raceId: string | null): string {
+  if (raceId === 'race:human') {
+    return shellCopyEs.feats.raceBonusSectionTitleHumano;
+  }
+  if (raceId === 'race:mediano-fortecor') {
+    return shellCopyEs.feats.raceBonusSectionTitleMedianoFortecor;
+  }
+  return shellCopyEs.feats.raceBonusStepTitle;
+}
+
 function buildSlotStatuses(params: {
   hasClassBonusSlot: boolean;
+  raceBonusFeatSlot: boolean;
+  raceId: string | null;
+  raceBonusFeatId: CanonicalId | null;
   generalSlotCount: number;
   selectedClassFeatId: CanonicalId | null;
   selectedGeneralFeatIds: CanonicalId[];
@@ -956,6 +975,9 @@ function buildSlotStatuses(params: {
 }): FeatSlotStatusView[] {
   const {
     hasClassBonusSlot,
+    raceBonusFeatSlot,
+    raceId,
+    raceBonusFeatId,
     generalSlotCount,
     selectedClassFeatId,
     selectedGeneralFeatIds,
@@ -974,8 +996,10 @@ function buildSlotStatuses(params: {
     const isCurrentSlot =
       slot === 'class-bonus'
         ? sequentialStep === 'class-bonus'
-        : sequentialStep === 'general' &&
-          slotIndex === selectedGeneralFeatIds.length;
+        : slot === 'race-bonus'
+          ? sequentialStep === 'race-bonus'
+          : sequentialStep === 'general' &&
+            slotIndex === selectedGeneralFeatIds.length;
     const state: FeatSlotStatusView['state'] = selectedLabel
       ? 'chosen'
       : isCurrentSlot
@@ -1006,6 +1030,18 @@ function buildSlotStatuses(params: {
       0,
       shellCopyEs.feats.classFeatStepTitle,
       selectedClassFeatId,
+    );
+  }
+
+  // Phase 16-02 (D-04, Pitfall 6): race-bonus row between class-bonus and
+  // general. Heading text is pre-resolved per-race so feat-board renders
+  // straight from selector output without race lookups (Pattern S7).
+  if (raceBonusFeatSlot) {
+    pushStatus(
+      'race-bonus',
+      0,
+      resolveRaceBonusLabel(raceId),
+      raceBonusFeatId,
     );
   }
 
@@ -1137,15 +1173,36 @@ export function selectFeatBoardView(
   }
 
   const selectedClassFeatId = activeFeatRecord?.classFeatId ?? null;
-  const selectedGeneralFeatIds = getGeneralFeatIds(activeFeatRecord);
-  const selectedGeneralFeatId = selectedGeneralFeatIds[0] ?? null;
-  const generalSlotCount = budget.featSlots.general + budget.featSlots.raceBonus;
+  // Phase 16-02 (D-04): bonusGeneralFeatIds[0] is the race-bonus slot's
+  // backing storage when raceBonus > 0. Strip it from the general-slot
+  // address space so the general loop only iterates true general slots.
+  const rawGeneralFeatIds = getGeneralFeatIds(activeFeatRecord);
+  const raceBonusActive = budget.featSlots.raceBonus > 0;
+  const raceBonusFeatId = raceBonusActive
+    ? activeFeatRecord?.bonusGeneralFeatIds[0] ?? null
+    : null;
+  // selectedGeneralFeatIds for the general slot strip excludes the race-bonus
+  // backing slot. When raceBonus is active, store layout is:
+  //   generalFeatId         → general[0]
+  //   bonusGeneralFeatIds[0] → race-bonus[0]
+  //   bonusGeneralFeatIds[i] for i>=1 → general[i] (rare; kept for parity)
+  const selectedGeneralFeatIds = raceBonusActive
+    ? [
+        ...(activeFeatRecord?.generalFeatId ? [activeFeatRecord.generalFeatId] : []),
+        ...((activeFeatRecord?.bonusGeneralFeatIds ?? []).slice(1)),
+      ]
+    : rawGeneralFeatIds;
+  const selectedGeneralFeatId = activeFeatRecord?.generalFeatId ?? null;
+  // Phase 16-02 (D-04): race-bonus is its own card now, not a general slot.
+  const generalSlotCount = budget.featSlots.general;
 
-  // D-03: sequential step determination
+  // D-03: sequential step determination — class-bonus → race-bonus → general.
   let sequentialStep: FeatSlotKind | null = null;
 
   if (featSlots.classBonusFeatSlot && selectedClassFeatId === null) {
     sequentialStep = 'class-bonus';
+  } else if (featSlots.raceBonusFeatSlot && raceBonusFeatId === null) {
+    sequentialStep = 'race-bonus';
   } else if (generalSlotCount > selectedGeneralFeatIds.length) {
     sequentialStep = 'general';
   }
@@ -1265,6 +1322,17 @@ export function selectFeatBoardView(
       slotIndex: 0,
     });
   }
+  // Phase 16-02 (D-04 + S3): race-bonus chip.
+  // Convention: race-bonus chip's slotIndex=0 maps to bonusGeneralFeatIds[0].
+  // The store mutator addresses it as slotIndex=1 (clearGeneralFeat(level, 1)).
+  if (raceBonusActive && activeFeatRecord?.bonusGeneralFeatIds[0]) {
+    chosenFeats.push({
+      featId: activeFeatRecord.bonusGeneralFeatIds[0],
+      label: findLabel(activeFeatRecord.bonusGeneralFeatIds[0]),
+      slotKind: 'race-bonus',
+      slotIndex: 0,
+    });
+  }
   if (activeFeatRecord?.generalFeatId) {
     chosenFeats.push({
       featId: activeFeatRecord.generalFeatId,
@@ -1274,6 +1342,9 @@ export function selectFeatBoardView(
     });
   }
   (activeFeatRecord?.bonusGeneralFeatIds ?? []).forEach((id, idx) => {
+    // Phase 16-02 (D-04): when raceBonus is active, bonusGeneralFeatIds[0]
+    // is the race-bonus chip — already pushed above. Skip to avoid double-render.
+    if (raceBonusActive && idx === 0) return;
     chosenFeats.push({
       featId: id,
       label: findLabel(id),
@@ -1309,6 +1380,9 @@ export function selectFeatBoardView(
     ),
     slotStatuses: buildSlotStatuses({
       hasClassBonusSlot: featSlots.classBonusFeatSlot,
+      raceBonusFeatSlot: featSlots.raceBonusFeatSlot,
+      raceId: foundationState.raceId,
+      raceBonusFeatId,
       generalSlotCount,
       selectedClassFeatId,
       selectedGeneralFeatIds,

@@ -193,11 +193,20 @@ describe('Phase 12.4-07 — Dotes selectability states (SPEC R5)', () => {
       expect(screen.getByText(/Dotes del nivel 1:\s*0\/2/)).toBeInTheDocument();
     });
 
-    it('A2b: L1 Humano+Guerrero renders two general-slot cards so the third feat is selectable in the UI', () => {
+    it('A2b: L1 Humano+Guerrero renders three slot cards (class-bonus, race-bonus, general) so all 3 feats are selectable in the UI', () => {
+      // Plan 16-02 (D-04): race-bonus is now its own card, not folded into
+      // the general slot count. The 3-feat budget at Humano L1 Fighter now
+      // splits into class-bonus[0] + race-bonus[0] + general[0] cards.
       setupL1HumanoGuerrero();
       render(createElement(FeatBoard));
+      expect(
+        document.querySelector('[data-slot-card="class-bonus-0"]'),
+      ).not.toBeNull();
+      expect(
+        document.querySelector('[data-slot-card="race-bonus-0"]'),
+      ).not.toBeNull();
       const generalCards = document.querySelectorAll('[data-slot-card^="general-"]');
-      expect(generalCards.length).toBe(2);
+      expect(generalCards.length).toBe(1);
     });
 
     it('A2c: L1 Humano+Brujo renders "Dotes del nivel 1: 0/2" with no class-bonus card', () => {

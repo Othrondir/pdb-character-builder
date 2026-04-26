@@ -327,6 +327,13 @@ export const shellCopyEs = {
     slotStatusPending: 'Pendiente',
     slotStatusChosen: 'Elegida',
     slotStatusEmpty: 'Sin elegir',
+    // Phase 16-02 (FEAT-06, D-04, D-06) — race-bonus feat slot copy.
+    // Used by selectFeatBoardView::buildSlotStatuses + the new "Dote racial"
+    // section heading in feat-board.tsx.
+    raceBonusStepTitle: 'Dote racial',
+    raceBonusSectionTitleHumano: 'Dote racial: Humano',
+    raceBonusSectionTitleMedianoFortecor: 'Dote racial: Mediano Fortecor',
+    raceBonusSectionTitleTemplate: 'Dote racial: {raceName}',
     // Phase 12.4-07 — Dotes selectability states + slot counter + collapse
     // (SPEC R5 / CONTEXT D-03 + D-04). Template copy is rendered directly by
     // the feat-board selector; pill / reason labels emitted per row state.

@@ -142,8 +142,14 @@ export function FeatBoard() {
               // effect introduced by Phase 12.4-07 D-04). Do NOT redeclare
               // here; reuse so the deselect dispatches to the same level
               // the sheet is currently viewing.
+              //
+              // Phase 16-02 (D-04, D-07; PATTERNS S3): race-bonus chip's
+              // slotIndex=0 maps to store's bonusGeneralFeatIds[0], which
+              // the clearGeneralFeat mutator addresses as slotIndex=1.
               if (entry.slotKind === 'class-bonus') {
                 clearClassFeat(activeLevel, entry.slotIndex);
+              } else if (entry.slotKind === 'race-bonus') {
+                clearGeneralFeat(activeLevel, 1);
               } else {
                 clearGeneralFeat(activeLevel, entry.slotIndex);
               }

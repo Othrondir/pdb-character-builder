@@ -134,7 +134,10 @@ describe('Phase 12.3-03 — per-level Dotes gate + slot prompt (UAT B3 + B4)', (
   // Suite B — slotPrompt shape (B4 lock)
   // ------------------------------------------------------------------
   describe('Suite B — slotPrompt shape (B4 lock)', () => {
-    it('L1 Guerrero empty → slotPrompt mentions class and the pending general slots', () => {
+    it('L1 Guerrero empty → slotPrompt mentions class and the pending general slot (singular under Plan 16-02)', () => {
+      // Plan 16-02 (D-04): race-bonus is its own card, no longer folded into
+      // the general slot count. Humano L1 Guerrero now has generalSlotCount=1
+      // → slotPrompt uses the singular "dote general disponible" template.
       setupL1Guerrero();
       activateLevel(1 as ProgressionLevel);
 
@@ -142,10 +145,11 @@ describe('Phase 12.3-03 — per-level Dotes gate + slot prompt (UAT B3 + B4)', (
 
       expect(view.activeSheet.slotPrompt).not.toBeNull();
       expect(view.activeSheet.slotPrompt).toMatch(/dote de clase/i);
-      expect(view.activeSheet.slotPrompt).toMatch(/dotes generales disponibles/i);
+      expect(view.activeSheet.slotPrompt).toMatch(/dote general disponible/i);
     });
 
-    it('L1 Guerrero with class-bonus feat picked → slotPrompt drops class portion but keeps the pending general slots', () => {
+    it('L1 Guerrero with class-bonus feat picked → slotPrompt drops class portion but keeps the pending general slot', () => {
+      // Plan 16-02 (D-04): same singular-prompt change as above.
       setupL1Guerrero();
       activateLevel(1 as ProgressionLevel);
 
@@ -161,10 +165,14 @@ describe('Phase 12.3-03 — per-level Dotes gate + slot prompt (UAT B3 + B4)', (
 
       expect(view.activeSheet.slotPrompt).not.toBeNull();
       expect(view.activeSheet.slotPrompt).not.toMatch(/dote de clase disponible/i);
-      expect(view.activeSheet.slotPrompt).toMatch(/dotes generales disponibles/i);
+      expect(view.activeSheet.slotPrompt).toMatch(/dote general disponible/i);
     });
 
-    it('L1 Guerrero with class slot + first general slot filled → slotPrompt still shows the remaining bonus general slot', () => {
+    it('L1 Guerrero with class slot + general slot filled → slotPrompt is null (race-bonus tracked separately)', () => {
+      // Plan 16-02 (D-04): race-bonus is its own slot card, not part of the
+      // slotPrompt aggregate. With the single general slot filled at Humano
+      // L1, slotPrompt no longer reports a pending bonus general slot — the
+      // race-bonus slot strip card surfaces its own status instead.
       setupL1Guerrero();
       activateLevel(1 as ProgressionLevel);
 
@@ -183,7 +191,9 @@ describe('Phase 12.3-03 — per-level Dotes gate + slot prompt (UAT B3 + B4)', (
 
       const view = snapshotBoardView();
 
-      expect(view.activeSheet.slotPrompt).toMatch(/dote general disponible/i);
+      // Class slot filled + 1/1 general slot filled → no remaining slots
+      // tracked by slotPrompt. (Race-bonus slot card carries its own state.)
+      expect(view.activeSheet.slotPrompt).toBeNull();
     });
   });
 
@@ -223,13 +233,17 @@ describe('Phase 12.3-03 — per-level Dotes gate + slot prompt (UAT B3 + B4)', (
   // ------------------------------------------------------------------
   describe('Suite D — FeatBoard render shows slot prompt + new per-level copy', () => {
     it('renders slotPrompt text for L1 Guerrero empty', () => {
+      // Plan 16-02 (D-04): under Humano L1 the singular "dote general
+      // disponible" template fires (race-bonus is now its own card so the
+      // general slot count is 1, not 2). The class-bonus prompt and the
+      // singular general-slot prompt both render.
       setupL1Guerrero();
       activateLevel(1 as ProgressionLevel);
 
       render(createElement(FeatBoard));
 
       expect(screen.getByText(/dote de clase disponible/i)).toBeTruthy();
-      expect(screen.getByText(/dotes generales disponibles/i)).toBeTruthy();
+      expect(screen.getByText(/dote general disponible/i)).toBeTruthy();
     });
 
     it('renders per-level empty message at activeLevel=2 with no class', () => {
