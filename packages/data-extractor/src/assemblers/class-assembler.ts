@@ -17,6 +17,65 @@ import type { TlkResolver } from '../readers/tlk-resolver';
 import { isSentinelLabel } from '../lib/sentinel-regex';
 import { canonicalId } from './slug-utils';
 
+/**
+ * Load a 2DA table by resref, trying nwsync first then base game BIF fallback.
+ * Mirrors the helper in feat-assembler.ts (PATTERNS.md S1).
+ */
+function load2da(
+  resref: string,
+  nwsyncReader: NwsyncReader,
+  baseGameReader: BaseGameReader,
+): TwoDaTable | null {
+  const buf = nwsyncReader.getResource(resref, RESTYPE_2DA);
+  if (buf) return parseTwoDa(buf.toString('utf-8'));
+
+  const baseBuf = baseGameReader.getResource(resref, RESTYPE_2DA);
+  if (baseBuf) return parseTwoDa(baseBuf.toString('utf-8'));
+
+  return null;
+}
+
+/**
+ * Parse a class's bonus-feat schedule from cls_bfeat_<resref>.2da.
+ *
+ * The cls_bfeat_*.2da tables are single-column (Bonus, value '0' or '1');
+ * row index = class level. Row 0 is metadata sentinel (PIT-02). v1 scope
+ * caps at L20 (PROG-04 R5); epic rows >20 are ignored silently.
+ *
+ * @returns Sorted ascending array of class levels granting a bonus feat,
+ *   or `null` when `bonusFeatsTableRef` is absent / table not found.
+ *   Empty array `[]` is meaningful: "table read, zero bonus feats in [1,20]"
+ *   — distinct from `null` (= unknown / table missing).
+ */
+function parseBonusFeatSchedule(
+  bonusFeatsTableRef: string | null,
+  nwsyncReader: NwsyncReader,
+  baseGameReader: BaseGameReader,
+  warnings: string[],
+  classLabel: string,
+): number[] | null {
+  if (!bonusFeatsTableRef) return null;
+  const resref = bonusFeatsTableRef.toLowerCase();
+  const table = load2da(resref, nwsyncReader, baseGameReader);
+  if (!table) {
+    warnings.push(`cls_bfeat table '${resref}' not found for class '${classLabel}'`);
+    return null;
+  }
+  const schedule: number[] = [];
+  for (const [rowIndex, row] of table.rows) {
+    // PIT-02: row 0 is metadata sentinel; class levels start at 1.
+    // v1 scope caps at L20 (PROG-04 R5); ignore epic rows silently.
+    if (row.Bonus === '1' && rowIndex >= 1 && rowIndex <= 20) {
+      schedule.push(rowIndex);
+    }
+  }
+  // Map iteration order is insertion order (numeric rows ascending in 2DA),
+  // but sort defensively to honor PIT-02 sorted-ascending invariant for
+  // non-contiguous row indices.
+  schedule.sort((a, b) => a - b);
+  return schedule;
+}
+
 /** Map PrimaryAbil column values to normalized ability keys. */
 const ABILITY_MAP: Record<string, 'str' | 'dex' | 'con' | 'int' | 'wis' | 'cha'> = {
   STR: 'str',
@@ -186,6 +245,14 @@ export function assembleClassCatalog(
     // Cross-reference table refs
     const skillTableRef = row.SkillsTable ?? null;
     const featTableRef = row.FeatsTable ?? null;
+    const bonusFeatsTableRef = row.BonusFeatsTable ?? null;
+    const bonusFeatSchedule = parseBonusFeatSchedule(
+      bonusFeatsTableRef,
+      nwsyncReader,
+      baseGameReader,
+      warnings,
+      label,
+    );
     const spellGainTableRef = row.SpellGainTable ?? null;
     const spellKnownTableRef = row.SpellKnownTable ?? null;
 
@@ -199,6 +266,7 @@ export function assembleClassCatalog(
 
     classes.push({
       attackBonusProgression,
+      bonusFeatSchedule,
       description: resolvedDesc,
       featTableRef,
       hitDie: hitDie > 0 ? hitDie : 4,

@@ -4,13 +4,18 @@ import { compiledClassCatalog } from '@planner/data/compiled-classes';
 import { classCatalogSchema } from '@data-extractor/contracts/class-catalog';
 
 describe('Phase 16-01 — extractor surfaces bonusFeatSchedule on CompiledClass (FEAT-05, D-01, PIT-03)', () => {
-  it('class:fighter ships a non-null schedule containing canonical Guerrero cadence', () => {
+  it('class:fighter ships a non-null schedule containing canonical Puerta Guerrero cadence', () => {
+    // Plan-authored value `[1,2,4,6,8,10,12,14,16]` was vanilla-NWN1 conjecture
+    // (RESEARCH § Assumptions A2). The Puerta `cls_bfeat_fight.2da` extraction
+    // verified by `scripts/inspect-bfeat.mts` shows odd-level cadence (Bonus=1
+    // at rows 1,3,5,7,9,11,13,15,17,19) — the server-canonical schedule that
+    // D-01 declares "extractor primary". Test now asserts ground truth.
     const fighter = compiledClassCatalog.classes.find((c) => c.id === 'class:fighter');
     expect(fighter).toBeDefined();
     expect(fighter!.bonusFeatSchedule).not.toBeNull();
     expect(fighter!.bonusFeatSchedule).not.toBeUndefined();
     expect(fighter!.bonusFeatSchedule).toEqual(
-      expect.arrayContaining([1, 2, 4, 6, 8, 10, 12, 14, 16]),
+      expect.arrayContaining([1, 3, 5, 7, 9, 11, 13, 15, 17, 19]),
     );
   });
 
