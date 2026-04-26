@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Tech-Debt Closure
 status: in_progress
-stopped_at: "Phase 16 Plan 01 EXECUTED — extractor bonusFeatSchedule field shipped + PIT-01 cadence dossier pinned (commits 1b46bc0, ee47fc5, 1ad9a36). 13min duration. 3 tasks atomic, 10/10 phase-16 it() blocks GREEN, phase-12.4/per-level-budget.fixture 28/28 GREEN, tsc clean. Three deviations documented in 16-01-SUMMARY.md (all Rule 1/3 auto-fixes): (a) Test 1 expected vanilla-NWN1 cadence [1,2,4,6,8,10,12,14,16] but extractor verifies Puerta canon [1,3,5,7,9,11,13,15,17,19] — test corrected; (b) PIT-01 dossier blanket non-null+length>0 contradicts extractor reality (swashbuckler null because cls_bfeat_swash MISSING from nwsync; monk empty because cls_bfeat_monk all zeros) — dossier rewritten with per-class assertions matching ground truth + side-by-side comparison table; (c) sibling regenerated catalogs (compiled-races/feats/skills/deities) reverted to 2026-04-17 baseline because the 2026-04-26 nwsync state introduces an unrelated race:halfelf2 Semielfo dup that breaks 8 phase-12.6/12.8 specs — out of scope for FEAT-05. compiled-classes.ts kept at bumped puerta-ee-2026-04-26+cf6e8aad. Resume: /gsd-execute-phase 16 (Plan 16-02 wave 2)."
-last_updated: "2026-04-26T16:15:38.000Z"
-last_activity: 2026-04-26 -- Phase 16 Plan 01 EXECUTED. 3 commits 1b46bc0/ee47fc5/1ad9a36. SUMMARY at .planning/phases/16-feat-engine-completion/16-01-SUMMARY.md.
+stopped_at: "Phase 16 Plan 02 EXECUTED — race-aware determineFeatSlots + race-bonus UI surface shipped (commits df9e9f7, c917391, 75578ea, 7475bfb, f090ed2). ~15min duration. 5 tasks atomic, 12/12 new phase-16 it() blocks GREEN (6 rules-engine + 6 UI), phase-06 76/76 GREEN, phase-12.3 52/52 GREEN, phase-12.4/per-level-budget.fixture 28/28 GREEN, full vitest 2265 passed (3 pre-existing baseline failures only), tsc clean. Both feat-eligibility.ts TODOs (line 45 schedule + line 49 race) closed. Architectural decision B-01 option (a) preserved Pattern S7: per-level-budget.ts omits compiledClass arg (legacy fallback wins for engine-internal); selectors.ts + prestige-gate-build.ts pass it (D-01 extractor-primary at planner-side). Four Rule 1/3 deviations documented in 16-02-SUMMARY.md: (a) BuildStateAtLevel type fan-out broke 5 fixture files instead of 2 — all migrated atomically; (b) phase-12.4 feat-selectability-states B4 fixture moved L2→L3 because Puerta odd-level fighter cadence skips L2; (c) A2b card-count assertion updated for new race-bonus card layout; (d) phase-12.3 dotes-per-level-gate slotPrompt copy updated for singular general-slot template (race-bonus is its own card now). Resume: /gsd-execute-phase 16 (Plan 16-03 wave 3)."
+last_updated: "2026-04-26T16:36:08.000Z"
+last_activity: 2026-04-26 -- Phase 16 Plan 02 EXECUTED. 5 commits df9e9f7/c917391/75578ea/7475bfb/f090ed2. SUMMARY at .planning/phases/16-feat-engine-completion/16-02-SUMMARY.md.
 progress:
   total_phases: 4
   completed_phases: 0
   total_plans: 3
-  completed_plans: 1
-  percent: 33
+  completed_plans: 2
+  percent: 67
 ---
 
 # Project State
@@ -95,6 +95,8 @@ Progress: [â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–�
 | Phase 12.9 P01 | 25m | 2 tasks (selector trim + CSS deltas) | 6 files (4 source + 1 spec + 1 config) |
 | Phase 12.9 P02 | 35m | 3 tasks (JSX rewrite + empty-state + Vitest RTL wave) | 7 files (3 source + 3 new specs + 1 phase-08 spec update) |
 | Phase 15 P02 | 28m | 1 task (TDD GREEN against 2 pre-authored RED specs + canonicalIdRegex guards + 12.7 fixture-only harness update) | 8 files (5 source + 2 new specs + 1 fixture-only test) |
+| Phase 16 P01 | 13m | 3 tasks | 3 files (1 created + 2 modified) + 1 regenerated artifact |
+| Phase 16 P02 | 15m | 5 tasks (RED specs + race-aware refactor + 5 fixture migrations + UI surface + PIT-01 reconciliation) | 16 files (3 created + 13 modified) |
 
 ## Accumulated Context
 

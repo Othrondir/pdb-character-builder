@@ -60,9 +60,9 @@ Full phase detail: `.planning/milestones/v1.0-ROADMAP.md`.
 2. `feat-eligibility.ts:49` TODO cerrado: Humano L1 recibe el slot de bonus feat extra.
 3. Humano L1 `<LevelEditorActionBar>` resuelve `status: 'legal'` con 3 slots llenos (store capacity 2→3).
 4. Vitest cobertura para ambos paths + regression lock en Humano L1 advance.
-**Plans:** 3 plans (1/3 complete)
+**Plans:** 3 plans (2/3 complete)
 - [x] 16-01-PLAN.md — Extractor surfaces `bonusFeatSchedule: number[] | null` from `cls_bfeat_*.2da` (FEAT-05). _Done 2026-04-26 — `1ad9a36`._
-- [ ] 16-02-PLAN.md — Race-aware `determineFeatSlots` + "Dote racial" UI section (FEAT-05 consumer + FEAT-06; D-06 covers Humano + Mediano Fortecor).
+- [x] 16-02-PLAN.md — Race-aware `determineFeatSlots` + "Dote racial" UI section (FEAT-05 consumer + FEAT-06; D-06 covers Humano + Mediano Fortecor). _Done 2026-04-26 — `f090ed2`._
 - [ ] 16-03-PLAN.md — D-05 persistence round-trip regression spec (no `schemaVersion` bump).
 
 ### Phase 17: Per-Race Point-Buy (GAP)
