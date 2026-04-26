@@ -10,6 +10,18 @@ The planner is primarily for personal use, but it must also make it easy to hand
 
 A player can build a Puerta de Baldur character from level 1 to 20 with strict server-valid validation and share that exact build reliably. _(Range extended 1-16 → 1-20 in Phase 12.6.)_
 
+## Current Milestone: v1.1 Tech-Debt Closure
+
+**Goal:** Close v1.0 carry-forward bug/tech-debt items without expanding feature scope.
+
+**Target features:**
+- Feat engine completion (Phase 06 bonus-feat TODOs + Humano L1 slot)
+- Per-race point-buy cost curves (extractor enrichment)
+- Quick-task carry-forward closure (q1m bruja dotes, qzv auto-dotes, r5j progresión scroll)
+- Test infrastructure modernization (@playwright/test install + e2e migration)
+
+**Scope explicitly excludes:** P5 level-table redesign (open UX, separate cycle), Nyquist VALIDATION coverage (process audit, separate sweep), greenfield features.
+
 ## Current State (post v1.0)
 
 **Shipped 2026-04-26** — see `.planning/MILESTONES.md` and `.planning/milestones/v1.0-ROADMAP.md`.

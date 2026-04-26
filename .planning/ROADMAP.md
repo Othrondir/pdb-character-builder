@@ -42,21 +42,64 @@ Full phase detail: `.planning/milestones/v1.0-ROADMAP.md`.
 
 </details>
 
-### 📋 v1.1 — Planned
+### 🚧 v1.1 Tech-Debt Closure — In Progress
 
-- [ ] Phase 16: Feat Engine Completion (GAP) — close Phase 06 bonus-feat TODOs (`feat-eligibility.ts` L45+L49) + Phase 12.4 Humano L1 store-capacity gap (2→3 feat slots).
+- [ ] Phase 16: Feat Engine Completion (GAP) — FEAT-05 bonus-feat schedules from `cls_bfeat_*.2da` extraction + FEAT-06 Humano L1 extra slot (store capacity 2→3).
+- [ ] Phase 17: Per-Race Point-Buy (GAP) — ATTR-02 curvas de coste point-buy diferenciadas por raza desde extractor.
+- [ ] Phase 18: Quick-Task Triage (GAP) — TASK-01/02/03 triage de q1m bruja dotes + qzv auto-dotes + r5j scroll progresión.
+- [ ] Phase 19: Test Infra (GAP) — INFRA-01 `@playwright/test` install + Phase 12.4-09 R9 e2e migrada del fallback RTL.
 
-Carry-forward residuals (to be triaged into v1.1 phases via `/gsd-new-milestone`):
-- A1 point-buy cost per race (blocked on extractor enrichment or Puerta snapshot override)
-- P5 level-table redesign (open-ended UX)
-- 3 untracked quick-task workspace dirs from 2026-04-25 (q1m, qzv, r5j) — review first
-- Nyquist VALIDATION.md coverage 4/27 (systemic process gap; no correctness impact)
-- DEF-12.4-02 pre-existing font-weight:700 at app.css:113 (design-token hygiene backlog)
-- @playwright/test missing from package.json (Phase 12.4-09 SPEC R9 RTL fallback acknowledged)
+## Phase Details
+
+### Phase 16: Feat Engine Completion (GAP)
+**Goal:** Cerrar TODOs de bonus feats en `feat-eligibility.ts` y resolver Humano L1 advance gate.
+**Depends on:** v1.0 baseline.
+**Requirements:** FEAT-05, FEAT-06
+**Success Criteria:**
+1. `feat-eligibility.ts:45` TODO cerrado: bonus feat schedules emergen del extractor (`cls_bfeat_*.2da`).
+2. `feat-eligibility.ts:49` TODO cerrado: Humano L1 recibe el slot de bonus feat extra.
+3. Humano L1 `<LevelEditorActionBar>` resuelve `status: 'legal'` con 3 slots llenos (store capacity 2→3).
+4. Vitest cobertura para ambos paths + regression lock en Humano L1 advance.
+**Plans:** TBD via `/gsd-plan-phase 16`.
+
+### Phase 17: Per-Race Point-Buy (GAP)
+**Goal:** Reemplazar curva uniforme `ability-budget.ts` por curvas por raza desde extractor.
+**Depends on:** Phase 16 (feat engine baseline).
+**Requirements:** ATTR-02
+**Success Criteria:**
+1. Extractor surface coste point-buy por raza (Puerta snapshot override o 2DA enrichment, fail-closed si raza no enriched).
+2. `ability-budget.ts` consume catálogo enriquecido en lugar de curva uniforme.
+3. Atributos board refleja coste correcto al subir/bajar atributo según raza activa.
+4. Specs cubren al menos 3 razas con curvas distintas + regression sobre razas no-enriched (curva legacy preservada).
+**Plans:** TBD via `/gsd-plan-phase 17`.
+
+### Phase 18: Quick-Task Triage (GAP)
+**Goal:** Cerrar 3 directorios quick task untracked de 2026-04-25.
+**Depends on:** v1.0 baseline.
+**Requirements:** TASK-01, TASK-02, TASK-03
+**Success Criteria:**
+1. `260425-q1m-revisar-dotes-de-brujo-y-corregir-select` revisado — hallazgos cerrados o promovidos a phase plan; directorio movido a `.planning/quick/closed/` o eliminado.
+2. `260425-qzv-alinear-auto-dotes-por-clase-con-el-list` revisado — idem.
+3. `260425-r5j-anadir-scroll-al-panel-de-progresion-1-2` revisado — idem.
+4. STATE.md `Quick Tasks Completed` table actualizada con commits o status final.
+**Plans:** TBD via `/gsd-plan-phase 18`.
+
+### Phase 19: Test Infra (GAP)
+**Goal:** Instalar `@playwright/test` y migrar Phase 12.4-09 R9 e2e del fallback RTL a Playwright.
+**Depends on:** Phases 16-18 (cierre carry-forward antes de modernizar infra).
+**Requirements:** INFRA-01
+**Success Criteria:**
+1. `@playwright/test` instalado en `package.json` devDependencies; `playwright.config.ts` configurado para `tests/**/*.e2e.spec.ts`.
+2. Phase 12.4-09 R9 e2e migrada — antiguo RTL fallback eliminado o etiquetado como acompañante.
+3. Harness reutilizable documentado para futuras phases (helper functions, fixtures, page objects compartidos).
+4. CI pipeline ejecuta Playwright suite verde en máquina limpia (smoke validation).
+**Plans:** TBD via `/gsd-plan-phase 19`.
 
 ## Progress
 
 | Milestone | Phases | Plans | Status | Shipped |
 |-----------|--------|-------|--------|---------|
 | v1.0 MVP | 27 | 99/99 | ✅ Shipped | 2026-04-26 |
-| v1.1 | TBD | 0 | 📋 Planning | — |
+| v1.1 Tech-Debt Closure | 4 | 0 | 🚧 Planning | — |
+
+**v1.1 Phase Order:** 16 → 17 → 18 → 19 (numbering continues from v1.0).

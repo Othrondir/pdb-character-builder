@@ -1,18 +1,17 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.0
-milestone_name: MVP
-status: shipped
-shipped_at: "2026-04-26T13:00:00.000Z"
-stopped_at: "Milestone v1.0 SHIPPED — 27 phases / 99 plans / 597 commits / 28 days. Audit verdict: passed (37/37 active reqs satisfied, 27/27 phases verified, 36/36 wirings PASS, 19/19 E2E flows PASS). Archives: .planning/milestones/v1.0-ROADMAP.md + v1.0-REQUIREMENTS.md + v1.0-MILESTONE-AUDIT.md. MILESTONES.md created. ROADMAP.md collapsed to milestone summary; REQUIREMENTS.md removed via git rm (history preserved). PROJECT.md evolved with Current State + Validated/Descoped/Active sections. Tag v1.0 created. Phase 16 (Feat Engine Completion) deferred to v1.1 — close Phase 06 bonus-feat TODOs (feat-eligibility.ts L45+L49) + Humano L1 store-capacity 2→3. Carry-forward to v1.1: A1 point-buy per race, P5 level-table redesign, 3 untracked quick-task workspace dirs (q1m/qzv/r5j), Nyquist VALIDATION coverage gap, @playwright/test install. Resume options: /gsd-new-milestone v1.1 (open next cycle)."
-last_updated: "2026-04-26T13:00:00.000Z"
-last_activity: 2026-04-26 -- Milestone v1.0 SHIPPED (audit passed; archives + tag v1.0 + MILESTONES.md created)
+milestone: v1.1
+milestone_name: Tech-Debt Closure
+status: planning
+stopped_at: "Milestone v1.1 OPENED 2026-04-26 — 4 phases scoped (16 Feat Engine Completion FEAT-05/06; 17 Per-Race Point-Buy ATTR-02; 18 Quick-Task Triage TASK-01/02/03; 19 Test Infra INFRA-01). Continues phase numbering from v1.0 (last phase 15). Scope: bug/tech-debt closure of v1.0 carry-forward items. Explicit exclusions: P5 level-table redesign (open UX), Nyquist VALIDATION systemic coverage (process audit), greenfield features. REQUIREMENTS.md regenerated with 7 active REQ-IDs, 100% mapped to 4 phases. ROADMAP.md updated with v1.1 phase block + 4 success criteria each. Resume options: /gsd-discuss-phase 16 (recommended — gather context first), or /gsd-plan-phase 16 (skip discussion, plan directly)."
+last_updated: "2026-04-26T13:15:00.000Z"
+last_activity: 2026-04-26 -- Milestone v1.1 opened (4 phases scoped: 16 feat-engine-completion + 17 per-race-point-buy + 18 quick-task-triage + 19 test-infra)
 progress:
-  total_phases: 27
-  completed_phases: 27
-  total_plans: 99
-  completed_plans: 99
-  percent: 100
+  total_phases: 4
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State
