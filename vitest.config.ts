@@ -20,6 +20,7 @@ export default defineConfig({
       ['tests/phase-12.9/**/*.spec.tsx', 'jsdom'],
       ['tests/phase-14/**/*.spec.tsx', 'jsdom'],
       ['tests/phase-15/**/*.spec.tsx', 'jsdom'],
+      ['tests/phase-16/**/*.spec.tsx', 'jsdom'],
     ],
     environment: 'node',
     include: ['tests/**/*.spec.ts', 'tests/**/*.spec.tsx'],
