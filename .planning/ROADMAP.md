@@ -530,7 +530,7 @@ Plans:
 **Plans:** 3 plans across 2 waves (15-03 serializes after 15-02 due to shared feat-board.tsx file ownership; checker B1 resolution)
 Plans:
 - [x] 15-01-PLAN.md (wave 1) — A11y hooks + dialog wiring (useFocusTrap + useBodyScrollLock; drawer + 4 dialogs; jsdom focus-return polyfill + 4 specs D-08/D-09/D-10/D-11 + use-focus-trap unit) — complete 2026-04-26
-- [ ] 15-02-PLAN.md (wave 1) — querySelector scope-down at feat-sheet:274 + skill-sheet:151 (ref-thread via SelectionScreen.contentRef) + canonicalIdRegex.test guards at feat-sheet handlers (D-07). Owns feat-board.tsx JSX-tree edits.
+- [x] 15-02-PLAN.md (wave 1) — querySelector scope-down at feat-sheet + skill-sheet (ref-thread via SelectionScreen.contentRef + parent-owned scrollerRef) + canonicalIdRegex.test silent fail-closed guards at feat-sheet handler entries (D-07). Owns feat-board.tsx JSX-tree edits. Closes Phase 12.8 WR-01/WR-02 + Phase 06 WR-02. — complete 2026-04-26
 - [ ] 15-03-PLAN.md (wave 2, depends_on: 15-02) — Phase 06 cleanup: useShallow slice-as-input rollout to feat-board / feat-detail-panel / feat-sheet-tab (3 files; feat-search.tsx not on disk -- CONTEXT.md D-06 amended in-place). Owns feat-board.tsx subscription edits.
 
 ### Phase 16: Feat Engine Completion (GAP)
@@ -577,5 +577,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 5.1 -> 5.2 -> 6 -> 7 -
 | 12.9 Resumen (Hoja de personaje) UX Pass (INSERTED) | 2/2 | Complete (UAT 9/9 pass, SECURITY 0 threats open, VERIFICATION 13/13 gates green) | 2026-04-24 |
 | 13. Verification + Orphan Sweep (GAP) | 2/2 | Complete (12.6 + 12.7 VERIFICATION.md retro-authored, 3 source files cleaned, REVIEW clean 0/0/0, VERIFICATION 7/7 passed) | 2026-04-24 |
 | 14. Persistence Robustness (GAP) | 6/6 | Complete (toast queue + LoadSlotResult union + buildName round-trip + url double-slash guard + abilityModifier consolidation + plannerVersion docstring parity; 48/48 phase-14 specs green) | 2026-04-25 |
-| 15. A11y + Modal Polish (GAP) | 1/3 | Wave 1 in progress (15-01 complete: a11y hooks + drawer focus-trap + body-scroll-lock parity across 4 dialogs + jsdom polyfill, 14/14 phase-15-01 specs green) | - |
+| 15. A11y + Modal Polish (GAP) | 2/3 | Wave 1 in progress (15-01 complete: a11y hooks + drawer focus-trap + body-scroll-lock parity, 14/14 phase-15-01 specs green; 15-02 complete: querySelector scope-down via parent-owned scrollerRef + canonicalIdRegex guards, 7/7 phase-15-02 specs green, Phase 12.8 WR-01/WR-02 + Phase 06 WR-02 closed) | - |
 | 16. Feat Engine Completion (GAP) | 0/TBD | Not started | - |

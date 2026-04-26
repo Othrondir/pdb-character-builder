@@ -4,14 +4,14 @@ milestone: v1.0
 milestone_name: milestone
 status: executing
 stopped_at: "Phase 14 EXECUTION COMPLETE â€” Persistence Robustness (6/6 plans merged across 2 waves; SC#1..SC#7 closed). Wave 1a (14-01 solo): toast FIFO queue + MIN_VISIBLE_MS=1500ms guard in apps/planner/src/components/ui/toast.tsx + DoS cap (queue.lengthâ‰¥8) + tests/phase-14 jsdom glob in vitest.config.ts (commits c2bedba+59889b6+3053dcf). Wave 1b parallel (14-02..14-05 in 4 worktrees): 14-02 LoadSlotResult discriminated union {ok|not-found|invalid} + Spanish loadInvalid toast in save-slot-dialog (e456730+67f64e2+5e7e816); 14-03 foundation buildName slice + hydrate/project round-trip parity (91319a5+7a0c15d+a870e84); 14-04 collapseDoubleSlash safety net in url-budget.ts (bc7c268+af21702+2af4615); 14-05 canonical abilityModifier helper extracted to @rules-engine/foundation + 4 call sites migrated + divergent fixture migration (9274f02+74f59c0+707ea73). Stray aa977ee orphan from 14-02 agent pwd-escape resolved via reset to e8f425a (preserved in reflog). deferred-items.md merge conflict (14-03+14-05 both filed pre-existing dexie module-resolution failure) resolved by merge of both blocks. Wave 2 (14-06 solo): plannerVersion docstring parity sweep across 13 persistence/*.ts(x) files + Vitest sentinel (ed6a439+6519879+7657e81). Final gates: phase-14 48/48 specs green; 6 pre-existing baseline failures (BUILD_ENCODING_VERSION literal=1 stale + 5 prestige-gate.fixture/class-picker schema spec drift) carried forward unchanged from Phase 13 baseline; 0 new regressions. Deferred (env-only, not phase 14): dexie module symlink missing in worktree node_modules â€” separate plan needed. Persistence Robustness Phase 08 tech_debt cluster from v1.0-MILESTONE-AUDIT closed."
-last_updated: "2026-04-26T11:30:00.000Z"
-last_activity: 2026-04-26 -- Phase 15-01 EXECUTION COMPLETE (a11y hooks + drawer focus-trap + body-scroll-lock parity across 4 dialogs + jsdom polyfill; 14/14 plan-15-01 specs green; 2 commits 5c48a94+c550143)
+last_updated: "2026-04-26T12:05:00.000Z"
+last_activity: 2026-04-26 -- Phase 15-02 EXECUTION COMPLETE (querySelector scope-down at feat-sheet + skill-sheet via parent-owned scrollerRef + canonicalIdRegex.test silent fail-closed guards at feat-sheet handler entries; 7/7 plan-15-02 specs green + 12.7 fixture-only harness update preserves existing 3/3; 1 commit d375bb8 closes Phase 12.8 WR-01/WR-02 + Phase 06 WR-02)
 progress:
   total_phases: 29
   completed_phases: 26
   total_plans: 99
-  completed_plans: 97
-  percent: 98
+  completed_plans: 98
+  percent: 99
 ---
 
 # Project State
@@ -21,13 +21,13 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-30)
 
 **Core value:** A player can build a Puerta de Baldur character from level 1 to 16 with strict server-valid validation and share that exact build reliably.
-**Current focus:** Phase 15 â€” A11y + Modal Polish (GAP) â€” Wave 1 in progress (15-01 complete; 15-02 next)
+**Current focus:** Phase 15 â€” A11y + Modal Polish (GAP) â€” Wave 1 in progress (15-01 + 15-02 complete; 15-03 next, depends on 15-02)
 
 ## Current Position
 
-Phase: 15 (a11y-modal-polish) â€” WAVE 1 IN PROGRESS (1/3 plans complete: 15-01 merged)
-Plan: 1 of 3 complete (15-01 done; 15-02 next)
-Status: 15-01 EXECUTION COMPLETE â€” Phase 07.1 WR-02/WR-03/WR-04 closed at code level via SC#1+SC#2+SC#3 spec coverage. Resume options: `/gsd-execute-plan 15-02` (wave 1; querySelector scope-down at feat-sheet:274 + skill-sheet:151 + canonicalIdRegex guards at feat-sheet handlers; RED specs already authored under tests/phase-15/) or `/gsd-checker-review-plan 15-01`.
+Phase: 15 (a11y-modal-polish) â€” WAVE 1 IN PROGRESS (2/3 plans complete: 15-01 + 15-02 merged)
+Plan: 2 of 3 complete (15-01 done; 15-02 done; 15-03 next)
+Status: 15-02 EXECUTION COMPLETE â€” Phase 12.8 WR-01/WR-02 closed (no more `document.querySelector` in feat-sheet.tsx / skill-sheet.tsx) + Phase 06 WR-02 closed (canonicalIdRegex.test silent fail-closed guards at feat-sheet handler entries). FeatBoard / SkillBoard now own the scrollerRef and thread it through SelectionScreen.contentRef + Sheet.scrollerRef props. Two new jsdom regression specs locked. Phase 12.7 spec harness updated as fixture-only edit (authorized by plan verification block) to mirror new ref-threading wiring. Resume options: `/gsd-execute-plan 15-03` (wave 2; useShallow rollout to feat-board.tsx L42 + feat-detail-panel.tsx L17 + feat-sheet-tab.tsx L15; 15-03 was promoted to wave 2 + depends_on: ["15-02"] per CONTEXT.md B1 file-coordination notice for shared feat-board.tsx).
 
 - B1 attributes overspend gate (nextIncrementCost + canIncrementAttribute, 12.3-01)
 - B2+B8+B9 multiclass active-level wiring (LevelRail dispatch, 12.3-02)
@@ -94,6 +94,7 @@ Progress: [â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–�
 | Phase 12.8 P03 | 12m | 3 tasks (TDD + auto-scroll + e2e)  | 8 files (5 source + 2 tests + 1 doc) |
 | Phase 12.9 P01 | 25m | 2 tasks (selector trim + CSS deltas) | 6 files (4 source + 1 spec + 1 config) |
 | Phase 12.9 P02 | 35m | 3 tasks (JSX rewrite + empty-state + Vitest RTL wave) | 7 files (3 source + 3 new specs + 1 phase-08 spec update) |
+| Phase 15 P02 | 28m | 1 task (TDD GREEN against 2 pre-authored RED specs + canonicalIdRegex guards + 12.7 fixture-only harness update) | 8 files (5 source + 2 new specs + 1 fixture-only test) |
 
 ## Accumulated Context
 
