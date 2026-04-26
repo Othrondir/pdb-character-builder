@@ -10,8 +10,8 @@
 
 ### Dotes (feat engine completion)
 
-- [x] **FEAT-05**: El catálogo extraído surface bonus-feat schedules per class (`cls_bfeat_*.2da`) y `feat-eligibility.ts` consume el contrato sin TODOs (cierra Phase 06 L45 TODO). _(Plan 16-01 done 2026-04-26 — `1ad9a36` — extractor field shipped. Plan 16-02 done 2026-04-26 — `7475bfb` — consumer wired with D-01 precedence; LEGACY_CLASS_BONUS_FEAT_SCHEDULES is fallback only.)_
-- [x] **FEAT-06**: Humano L1 ofrece la dote de bonus extra del servidor — store capacity 2→3 slots, advance ActionBar resuelve `legal` cuando los 3 slots están llenos (cierra Phase 06 L49 TODO + Phase 12.4 known limitation). _(Plan 16-02 done 2026-04-26 — `f090ed2` — race-bonus card + chip + onDeselect dispatch; Mediano Fortecor included per D-06.)_
+- [x] **FEAT-05**: El catálogo extraído surface bonus-feat schedules per class (`cls_bfeat_*.2da`) y `feat-eligibility.ts` consume el contrato sin TODOs (cierra Phase 06 L45 TODO). _(Plan 16-01 done 2026-04-26 — `1ad9a36` — extractor field shipped. Plan 16-02 done 2026-04-26 — `7475bfb` — consumer wired with D-01 precedence; LEGACY_CLASS_BONUS_FEAT_SCHEDULES is fallback only. Plan 16-03 done 2026-04-26 — `0830364` — D-05 round-trip regression lock.)_
+- [x] **FEAT-06**: Humano L1 ofrece la dote de bonus extra del servidor — store capacity 2→3 slots, advance ActionBar resuelve `legal` cuando los 3 slots están llenos (cierra Phase 06 L49 TODO + Phase 12.4 known limitation). _(Plan 16-02 done 2026-04-26 — `f090ed2` — race-bonus card + chip + onDeselect dispatch; Mediano Fortecor included per D-06. Plan 16-03 done 2026-04-26 — `0830364` — D-05 round-trip regression lock + share-URL invariant locked.)_
 
 ### Atributos (point-buy enrichment)
 
@@ -44,8 +44,8 @@
 
 | REQ-ID | Phase | Status |
 |--------|-------|--------|
-| FEAT-05 | 16 | Done (16-01 extractor + 16-02 consumer) |
-| FEAT-06 | 16 | Done (16-02 race-bonus surface) |
+| FEAT-05 | 16 | Done (16-01 extractor + 16-02 consumer + 16-03 regression lock) |
+| FEAT-06 | 16 | Done (16-02 race-bonus surface + 16-03 D-05 round-trip lock) |
 | ATTR-02 | 17 | Not started |
 | TASK-01 | 18 | Not started |
 | TASK-02 | 18 | Not started |

@@ -44,7 +44,7 @@ Full phase detail: `.planning/milestones/v1.0-ROADMAP.md`.
 
 ### 🚧 v1.1 Tech-Debt Closure — In Progress
 
-- [ ] Phase 16: Feat Engine Completion (GAP) — FEAT-05 bonus-feat schedules from `cls_bfeat_*.2da` extraction + FEAT-06 Humano L1 extra slot (store capacity 2→3).
+- [x] Phase 16: Feat Engine Completion (GAP) — FEAT-05 bonus-feat schedules from `cls_bfeat_*.2da` extraction + FEAT-06 Humano L1 extra slot (store capacity 2→3). _Done 2026-04-26 — 3/3 plans (16-01 `1ad9a36`, 16-02 `f090ed2`, 16-03 `0830364`)._
 - [ ] Phase 17: Per-Race Point-Buy (GAP) — ATTR-02 curvas de coste point-buy diferenciadas por raza desde extractor.
 - [ ] Phase 18: Quick-Task Triage (GAP) — TASK-01/02/03 triage de q1m bruja dotes + qzv auto-dotes + r5j scroll progresión.
 - [ ] Phase 19: Test Infra (GAP) — INFRA-01 `@playwright/test` install + Phase 12.4-09 R9 e2e migrada del fallback RTL.
@@ -60,10 +60,10 @@ Full phase detail: `.planning/milestones/v1.0-ROADMAP.md`.
 2. `feat-eligibility.ts:49` TODO cerrado: Humano L1 recibe el slot de bonus feat extra.
 3. Humano L1 `<LevelEditorActionBar>` resuelve `status: 'legal'` con 3 slots llenos (store capacity 2→3).
 4. Vitest cobertura para ambos paths + regression lock en Humano L1 advance.
-**Plans:** 3 plans (2/3 complete)
+**Plans:** 3 plans (3/3 complete) — **PHASE 16 COMPLETE**
 - [x] 16-01-PLAN.md — Extractor surfaces `bonusFeatSchedule: number[] | null` from `cls_bfeat_*.2da` (FEAT-05). _Done 2026-04-26 — `1ad9a36`._
 - [x] 16-02-PLAN.md — Race-aware `determineFeatSlots` + "Dote racial" UI section (FEAT-05 consumer + FEAT-06; D-06 covers Humano + Mediano Fortecor). _Done 2026-04-26 — `f090ed2`._
-- [ ] 16-03-PLAN.md — D-05 persistence round-trip regression spec (no `schemaVersion` bump).
+- [x] 16-03-PLAN.md — D-05 persistence round-trip regression spec (no `schemaVersion` bump). _Done 2026-04-26 — `0830364`._
 
 ### Phase 17: Per-Race Point-Buy (GAP)
 **Goal:** Reemplazar curva uniforme `ability-budget.ts` por curvas por raza desde extractor.
