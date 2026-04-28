@@ -41,7 +41,15 @@ jobs:
       - name: Build planner
         run: pnpm build:planner
 
+      - name: Setup Pages with auto-enable
+        if: ${{ secrets.GH_PAGES_ADMIN_TOKEN != '' }}
+        uses: actions/configure-pages@v6
+        with:
+          enablement: true
+          token: ${{ secrets.GH_PAGES_ADMIN_TOKEN }}
+
       - name: Setup Pages
+        if: ${{ secrets.GH_PAGES_ADMIN_TOKEN == '' }}
         uses: actions/configure-pages@v6
 
       - name: Upload Pages artifact
