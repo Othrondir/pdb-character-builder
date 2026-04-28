@@ -1,10 +1,10 @@
 import type { ValidationOutcome } from '@rules-engine/contracts/validation-outcome';
 import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
-import { calculateAbilityBudgetSnapshot } from '@rules-engine/foundation/ability-budget';
 import {
-  PUERTA_POINT_BUY_SNAPSHOT,
-  type PointBuyCurve,
-} from '@rules-engine/foundation/point-buy-snapshot';
+  calculateAbilityBudgetSnapshot,
+  deriveAbilityBudgetRules,
+  type AbilityBudgetRules,
+} from '@rules-engine/foundation/ability-budget';
 import {
   evaluateOriginSelection,
   getAllowedSubraces,
@@ -50,18 +50,23 @@ export interface FoundationSummaryView {
 }
 
 /**
- * Phase 12.6 (D-06) — per-race point-buy curve resolution.
+ * Phase 17 (ATTR-02) — per-race point-buy curve resolution.
  *
- * Returns null when raceId is null OR when the snapshot lacks an entry for
- * this race. Null routes through calculateAbilityBudgetSnapshot's null branch
- * (ATTR-01 R3), which emits rule:point-buy-missing. AttributesBoard reads
- * this selector directly to drive the fail-closed callout.
+ * Reads `compiledRaceCatalog.races[].abilitiesPointBuyNumber` (sourced from
+ * `racialtypes.2da:AbilitiesPointBuyNumber` at extract time per Plan 17-01)
+ * and composes with `NWN1_POINT_BUY_COST_TABLE` via `deriveAbilityBudgetRules`.
+ * Returns null when raceId is null OR unknown OR the race's
+ * `abilitiesPointBuyNumber` is null. Null routes through
+ * `calculateAbilityBudgetSnapshot`'s null branch (Phase 12.6 D-05),
+ * which emits rule:point-buy-missing.
  */
 export function selectAbilityBudgetRulesForRace(
   raceId: CanonicalId | null,
-): PointBuyCurve | null {
+): AbilityBudgetRules | null {
   if (!raceId) return null;
-  return PUERTA_POINT_BUY_SNAPSHOT[raceId] ?? null;
+  const race = compiledRaceCatalog.races.find((r) => r.id === raceId);
+  if (!race) return null;
+  return deriveAbilityBudgetRules(race);
 }
 
 function findAlignment(alignmentId: CanonicalId | null) {

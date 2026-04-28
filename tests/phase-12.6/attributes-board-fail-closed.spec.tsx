@@ -4,16 +4,22 @@
  *
  * Plan 02 validated the fail-closed UI against an empty snapshot where every
  * race fell through the null branch automatically. Plan 06 populated the
- * snapshot with 45 per-race entries — so now every race in the catalog has
- * a curve and `selectAbilityBudgetRulesForRace(raceId)` returns a non-null
- * result. The invariant this spec enforces is still "no snapshot entry ⇒
- * fail-closed"; we manufacture the no-snapshot-entry condition by deleting
- * `race:human` from PUERTA_POINT_BUY_SNAPSHOT inside beforeEach and restoring
- * it after each test. This is the symmetric inverse of the Plan 02 seed
- * pattern used by three pre-12.6 suites (tests/phase-03/summary-status,
- * tests/phase-03/attribute-budget, tests/phase-10/attributes-advance) which
- * INSERT `race:human` to restore the nominal path. Vitest's default per-file
- * module isolation guarantees the mutation does not leak to sibling files.
+ * snapshot with 45 per-race entries — so every race in the catalog has a
+ * non-null curve.
+ *
+ * Phase 17 Wave 2 (ATTR-02) — seed migration: pre-Wave-2 the spec deleted
+ * `race:human` from `PUERTA_POINT_BUY_SNAPSHOT` to manufacture the
+ * no-snapshot-entry condition. Post-Wave-2 the selector reads
+ * `compiledRaceCatalog`, so the snapshot mutation became a no-op. Migration
+ * (per Phase 17 PATTERNS.md): swap to an unknown raceId
+ * (`race:does-not-exist`) — the rewired selector's second null branch
+ * (`if (!race) return null`) covers this and routes through
+ * `calculateAbilityBudgetSnapshot`'s null branch (Phase 12.6 D-05) which
+ * still emits rule:point-buy-missing. The em-dash fallback in
+ * `attributes-board.tsx` raceLabel resolution preserves the visible callout
+ * text (Spanish prefix + em-dash suffix). Plan 17-02 advances 1 of 6 spec
+ * migrations Wave 3 originally owned; Wave 3 still owns the remaining 5
+ * + snapshot module/JSON/dossier deletion atomically.
  */
 
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
@@ -25,10 +31,6 @@ import { useCharacterFoundationStore } from '@planner/features/character-foundat
 import { usePlannerShellStore } from '@planner/state/planner-shell';
 import type { ProgressionLevel } from '@planner/features/level-progression/progression-fixture';
 import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
-import {
-  PUERTA_POINT_BUY_SNAPSHOT,
-  type PointBuyCurve,
-} from '@rules-engine/foundation/point-buy-snapshot';
 
 function resetStores(): void {
   useCharacterFoundationStore.getState().resetFoundation();
@@ -41,32 +43,25 @@ function resetStores(): void {
   });
 }
 
-describe('Phase 12.6 — AttributesBoard fail-closed (SPEC R3, Plan 02 invariant preserved under Plan 06 populated snapshot)', () => {
-  // Capture the populated race:human entry so we can restore it after each
-  // test. Deleting the key manufactures the no-snapshot-entry condition the
-  // fail-closed branch needs; afterEach re-inserts it so downstream specs
-  // (including coverage + per-race under the same vitest worker) see an
-  // intact snapshot.
-  let savedHumanCurve: PointBuyCurve | undefined;
+describe('Phase 12.6 — AttributesBoard fail-closed (SPEC R3, Plan 02 invariant preserved under Plan 06 populated snapshot, Phase 17 W2 seed migrated)', () => {
+  // Phase 17 W2 — `race:does-not-exist` is not in compiledRaceCatalog, so the
+  // rewired selectAbilityBudgetRulesForRace returns null via the second null
+  // branch (`if (!race) return null`). This manufactures the same fail-closed
+  // condition the pre-Wave-2 snapshot-key-deletion produced.
+  const UNKNOWN_RACE_ID = 'race:does-not-exist' as CanonicalId;
 
   beforeEach(() => {
     cleanup();
     document.body.innerHTML = '';
     resetStores();
-    savedHumanCurve = PUERTA_POINT_BUY_SNAPSHOT['race:human' as CanonicalId];
-    delete (PUERTA_POINT_BUY_SNAPSHOT as Record<string, unknown>)['race:human'];
   });
 
   afterEach(() => {
     cleanup();
-    if (savedHumanCurve !== undefined) {
-      (PUERTA_POINT_BUY_SNAPSHOT as Record<string, unknown>)['race:human'] =
-        savedHumanCurve;
-    }
   });
 
-  it('race with no snapshot entry renders [data-testid="point-buy-missing-callout"] with Spanish copy', () => {
-    useCharacterFoundationStore.getState().setRace('race:human' as CanonicalId);
+  it('unknown race (not in catalog) renders [data-testid="point-buy-missing-callout"] with Spanish copy', () => {
+    useCharacterFoundationStore.getState().setRace(UNKNOWN_RACE_ID);
     render(createElement(AttributesBoard));
 
     const callout = screen.getByTestId('point-buy-missing-callout');
@@ -75,7 +70,7 @@ describe('Phase 12.6 — AttributesBoard fail-closed (SPEC R3, Plan 02 invariant
   });
 
   it('all 6 [aria-label^="Aumentar"] buttons carry disabled attribute when fail-closed', () => {
-    useCharacterFoundationStore.getState().setRace('race:human' as CanonicalId);
+    useCharacterFoundationStore.getState().setRace(UNKNOWN_RACE_ID);
     render(createElement(AttributesBoard));
 
     const incrementButtons = document.querySelectorAll(
@@ -88,7 +83,7 @@ describe('Phase 12.6 — AttributesBoard fail-closed (SPEC R3, Plan 02 invariant
   });
 
   it('all 6 [aria-label^="Reducir"] buttons carry disabled attribute when fail-closed (Pitfall 7)', () => {
-    useCharacterFoundationStore.getState().setRace('race:human' as CanonicalId);
+    useCharacterFoundationStore.getState().setRace(UNKNOWN_RACE_ID);
     render(createElement(AttributesBoard));
 
     const decrementButtons = document.querySelectorAll(
@@ -101,23 +96,26 @@ describe('Phase 12.6 — AttributesBoard fail-closed (SPEC R3, Plan 02 invariant
   });
 
   it('.attributes-editor__summary (budget dl) is not rendered when fail-closed', () => {
-    useCharacterFoundationStore.getState().setRace('race:human' as CanonicalId);
+    useCharacterFoundationStore.getState().setRace(UNKNOWN_RACE_ID);
     render(createElement(AttributesBoard));
 
     expect(document.querySelector('.attributes-editor__summary')).toBe(null);
   });
 
-  it('callout includes the race label in the Spanish template', () => {
-    useCharacterFoundationStore.getState().setRace('race:human' as CanonicalId);
+  it('callout includes the em-dash race-label fallback for unknown raceId in the Spanish template', () => {
+    useCharacterFoundationStore.getState().setRace(UNKNOWN_RACE_ID);
     render(createElement(AttributesBoard));
 
     const callout = screen.getByTestId('point-buy-missing-callout');
-    // Template: `Curva punto-compra no disponible para ${raceLabel}`
-    // raceLabel resolves through compiledRaceCatalog.races.find(...).label
-    // so we assert the PREFIX + the PRESENCE of a label suffix (≥ 1 char).
+    // Template: `Curva punto-compra no disponible para ${raceLabel}`.
+    // For UNKNOWN_RACE_ID, compiledRaceCatalog.races.find returns undefined,
+    // so the AttributesBoard raceLabel falls back to '—' (em-dash). PRE-W2
+    // this asserted a non-empty real label suffix; POST-W2 it asserts the
+    // em-dash fallback because the seed mechanism no longer mutates the
+    // catalog (only the snapshot, which the selector no longer consults).
     const text = callout.textContent ?? '';
     expect(text.startsWith('Curva punto-compra no disponible para ')).toBe(true);
-    expect(text.length).toBeGreaterThan('Curva punto-compra no disponible para '.length);
+    expect(text).toContain('—');
   });
 
   it('null race (no race selected) still renders fail-closed callout with em-dash fallback', () => {

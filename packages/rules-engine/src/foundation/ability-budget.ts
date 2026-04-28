@@ -106,7 +106,7 @@ export const NWN1_POINT_BUY_COST_TABLE = {
  * Mirrors Phase 16-02 B-01 architectural decision.
  */
 export function deriveAbilityBudgetRules(
-  race: { abilitiesPointBuyNumber: number | null | undefined },
+  race: { abilitiesPointBuyNumber?: number | null | undefined },
   costTable: {
     minimum: number;
     maximum: number;
