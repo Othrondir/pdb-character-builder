@@ -5,9 +5,10 @@ import { resolveValidationOutcome } from '../contracts/validation-outcome';
 // consumed by any function in this module. It lived on the planner-side
 // fixture's `AttributeRules` type (foundation-fixture.ts:45) and was read
 // by `createBaseAttributes` in the store. Removing it from the rules-engine
-// interface lets `PointBuyCurve` (which has no baseScore) satisfy this
-// contract structurally, preserving the plan's "per-race selector threads
-// the snapshot output into the existing helpers" boundary.
+// interface keeps the per-race curve (composed via `deriveAbilityBudgetRules`
+// from `compiledRaceCatalog` + `NWN1_POINT_BUY_COST_TABLE`) structurally
+// compatible with this contract — Phase 17 (ATTR-02) closed the per-race
+// pipeline; the legacy hand-authored snapshot module retired in 17-03.
 export interface AbilityBudgetRules {
   budget: number;
   costByScore: Record<string, number>;
@@ -72,10 +73,10 @@ export function canIncrementAttribute(
  * Phase 17 (ATTR-02 D-02) — NWN1 hardcoded engine point-buy cost step.
  *
  * Source-of-truth: NWN1 EE engine binary (not 2DA-driven). User-confirmed
- * 2026-04-20 in-game verification. See git history of
- * `packages/rules-engine/src/foundation/data/puerta-point-buy.md § "Plan 06
- * Source Resolution"` (deleted in Phase 17 Wave 3; commit `bf55129` and
- * earlier 12.6 commits preserve the provenance text).
+ * 2026-04-20 in-game verification. The provenance dossier (deleted in
+ * Phase 17 Wave 3) lives in git history at commit `bf55129` and earlier
+ * 12.6 commits — accessible via `git log --follow --all` on the deleted
+ * dossier path under `packages/rules-engine/src/foundation/data/`.
  *
  * Bands: 1:1 from 8→14 (6 pts), 2:1 from 14→16 (4 pts), 3:1 from 16→18 (6 pts).
  * Total 8→18 = 16 cost.

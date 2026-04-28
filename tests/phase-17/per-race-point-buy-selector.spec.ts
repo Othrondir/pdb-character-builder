@@ -49,8 +49,8 @@ describe('Phase 17 — SC#4 reframe: per-race point-buy pipeline coverage', () =
   });
 
   it('every race in compiledRaceCatalog produces a non-null selector result (coverage migrated from deleted snapshot-coverage spec)', () => {
-    // Replaces the deleted tests/phase-12.6/point-buy-snapshot-coverage.spec.ts
-    // coverage assertion in Plan 17-03. Same invariant; new source.
+    // Replaces the legacy snapshot-coverage spec (deleted in Plan 17-03)
+    // — same coverage invariant, new source-of-truth.
     const uniqueIds = [
       ...new Set(compiledRaceCatalog.races.map((r) => r.id)),
     ] as CanonicalId[];

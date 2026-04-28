@@ -24,11 +24,11 @@ import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
  *    truthful sourced data. This is documented as `it.todo` with a
  *    future-work pin; it is NOT a silent scope reduction.
  *
- * Phase 17 D-04 migration: this spec previously imported
- * `PUERTA_POINT_BUY_SNAPSHOT` from the now-retired snapshot module and
- * looked up curves via `PUERTA_POINT_BUY_SNAPSHOT[raceId]`. Post-Phase-17
- * the source-of-truth is `selectAbilityBudgetRulesForRace(raceId)` which
- * reads `compiledRaceCatalog` and composes the rules via
+ * Phase 17 D-04 migration: this spec previously imported the legacy
+ * hand-authored snapshot dictionary from the now-retired snapshot module
+ * and looked up curves via dict access. Post-Phase-17 the source-of-truth
+ * is `selectAbilityBudgetRulesForRace(raceId)` which reads
+ * `compiledRaceCatalog` and composes the rules via
  * `deriveAbilityBudgetRules(race, NWN1_POINT_BUY_COST_TABLE)`. Behavior
  * pinned by this spec is unchanged — only the data source moved.
  */
@@ -135,8 +135,8 @@ describe('Phase 12.6 — per-race variance note (SPEC R2+R4, Plan 06 variance-ga
     // curve shapes; the client-extracted 2DA from Phase 05.1 shows uniform
     // AbilitiesPointBuyNumber=30 and NWN1's cost curve is engine-hardcoded,
     // so uniformity IS the truthful state. Phase 17 migrated this source
-    // from PUERTA_POINT_BUY_SNAPSHOT dict to the selector pipeline; the
-    // sourced-uniformity finding survives the migration verbatim.
+    // from the legacy hand-authored snapshot dict to the selector pipeline;
+    // the sourced-uniformity finding survives the migration verbatim.
     const elfRules = selectAbilityBudgetRulesForRace('race:elf' as CanonicalId);
     const dwarfRules = selectAbilityBudgetRulesForRace('race:dwarf' as CanonicalId);
     expect(elfRules).not.toBeNull();

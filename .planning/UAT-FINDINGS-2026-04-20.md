@@ -69,6 +69,12 @@ Session immediately after Phase 12.4 closed functionally (9/9 plans). User dicta
 - `packages/data-extractor/` + Puerta snapshot — source data
 - `compiled-races.ts` — add `pointBuyCurve` field (schema change)
 
+**CLOSED-BY:** Phase 17 (per-race-point-buy)
+
+**Disposition:** User claim of per-race variance was contradicted by user's own 2026-04-20 in-game verification + racialtypes.2da extraction; Phase 17 ships the engineering deliverable (extractor pipeline) on the truthful uniform curve.
+
+**Evidence pointer:** `packages/rules-engine/src/foundation/data/puerta-point-buy.md § "Plan 06 Source Resolution"` (deleted in Phase 17 closeout commit; preserved via git history at commit `bf55129` and earlier 12.6 commits — accessible via `git log --follow --all -- packages/rules-engine/src/foundation/data/puerta-point-buy.md`).
+
 ### A2 — Race ability modifiers not folded into base attributes
 
 **User quote:** *"no aplicamos los bonificadores que se especifican en la descripción de laraza"*
