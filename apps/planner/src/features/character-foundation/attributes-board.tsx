@@ -4,6 +4,7 @@ import { DetailPanel } from '@planner/components/ui/detail-panel';
 import { NwnButton } from '@planner/components/ui/nwn-button';
 import { ActionBar } from '@planner/components/ui/action-bar';
 import { usePlannerShellStore } from '@planner/state/planner-shell';
+import { useLevelProgressionStore } from '@planner/features/level-progression/store';
 import { compiledRaceCatalog } from '@planner/data/compiled-races';
 import { canIncrementAttribute } from '@rules-engine/foundation/ability-budget';
 import { abilityModifier } from '@rules-engine/foundation';
@@ -16,6 +17,7 @@ import {
   selectAttributeBudgetSnapshot,
   selectFoundationValidation,
 } from './selectors';
+import { computeFinalAttributeTotals } from './final-attributes';
 import { useCharacterFoundationStore } from './store';
 
 const ATTRIBUTE_LABELS: Record<AttributeKey, string> = {
@@ -52,6 +54,7 @@ export function AttributesBoard() {
   const setActiveLevelSubStep = usePlannerShellStore(
     (state) => state.setActiveLevelSubStep,
   );
+  const progressionLevels = useLevelProgressionStore((state) => state.levels);
 
   // Phase 12.6 (D-06, D-07) — per-race point-buy curve resolution. Null →
   // the fail-closed branch in calculateAbilityBudgetSnapshot emits
@@ -76,6 +79,11 @@ export function AttributesBoard() {
   // calculation when the curve is missing.
   const { costByScore, maximum, minimum } =
     attributeRules ?? FAIL_CLOSED_CURVE_FALLBACK;
+  const finalAttributes = computeFinalAttributeTotals(
+    foundationState.baseAttributes,
+    foundationState.racialModifiers,
+    progressionLevels,
+  );
 
   const canAdvance = attributeBudget.status === 'legal';
 
@@ -114,12 +122,7 @@ export function AttributesBoard() {
         ) : null}
         {ATTRIBUTE_KEYS.map((key) => {
           const baseValue = foundationState.baseAttributes[key];
-          // UAT-2026-04-20 A2 — fold racial ability adjustments into the
-          // visible total. `racialModifiers` is populated by the store lookup
-          // against `compiledRaceCatalog.races[*].abilityAdjustments` (Phase
-          // 12.2-02) and stays null until the user picks a race.
-          const racialDelta = foundationState.racialModifiers?.[key] ?? 0;
-          const totalValue = baseValue + racialDelta;
+          const totalValue = finalAttributes[key];
           // UAT-2026-04-20 — show D&D ability modifier alongside the
           // score. Phase 14-05: routed through the canonical
           // `abilityModifier` helper from `@rules-engine/foundation` so

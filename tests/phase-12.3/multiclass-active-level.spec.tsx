@@ -28,10 +28,13 @@ import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { createElement } from 'react';
 import { beforeEach, describe, expect, it } from 'vitest';
 
+import { LevelSubSteps } from '@planner/components/shell/level-sub-steps';
 import { BuildProgressionBoard } from '@planner/features/level-progression/build-progression-board';
 import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
+import { useFeatStore } from '@planner/features/feats/store';
 import { useLevelProgressionStore } from '@planner/features/level-progression/store';
 import { selectActiveLevelSheet } from '@planner/features/level-progression/selectors';
+import { useSkillStore } from '@planner/features/skills/store';
 import { usePlannerShellStore } from '@planner/state/planner-shell';
 import type { ProgressionLevel } from '@planner/features/level-progression/progression-fixture';
 import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
@@ -42,6 +45,8 @@ describe('Phase 12.3-02 — multiclass active-level switching (UAT B2 + B8 + B9)
     document.body.innerHTML = '';
     useLevelProgressionStore.getState().resetProgression();
     useCharacterFoundationStore.getState().resetFoundation();
+    useFeatStore.getState().resetFeatSelections();
+    useSkillStore.getState().resetSkillAllocations();
     usePlannerShellStore.setState({
       activeOriginStep: null,
       activeLevelSubStep: 'class',
@@ -77,7 +82,7 @@ describe('Phase 12.3-02 — multiclass active-level switching (UAT B2 + B8 + B9)
       seedAllRailLevelsUnlocked();
     });
 
-    it('clicking level 2 row updates progression.activeLevel AND shell.expandedLevel', () => {
+    it('clicking level 2 row updates progression/skills/feats activeLevel AND shell.expandedLevel', () => {
       render(createElement(BuildProgressionBoard));
       const level2Button = document.querySelector(
         '[data-level-row][data-level="2"] button',
@@ -89,6 +94,8 @@ describe('Phase 12.3-02 — multiclass active-level switching (UAT B2 + B8 + B9)
       });
 
       expect(useLevelProgressionStore.getState().activeLevel).toBe(2);
+      expect(useSkillStore.getState().activeLevel).toBe(2);
+      expect(useFeatStore.getState().activeLevel).toBe(2);
       expect(usePlannerShellStore.getState().expandedLevel).toBe(2);
     });
 
@@ -122,12 +129,18 @@ describe('Phase 12.3-02 — multiclass active-level switching (UAT B2 + B8 + B9)
 
       clickRow(2);
       expect(useLevelProgressionStore.getState().activeLevel).toBe(2);
+      expect(useSkillStore.getState().activeLevel).toBe(2);
+      expect(useFeatStore.getState().activeLevel).toBe(2);
 
       clickRow(7);
       expect(useLevelProgressionStore.getState().activeLevel).toBe(7);
+      expect(useSkillStore.getState().activeLevel).toBe(7);
+      expect(useFeatStore.getState().activeLevel).toBe(7);
 
       clickRow(1);
       expect(useLevelProgressionStore.getState().activeLevel).toBe(1);
+      expect(useSkillStore.getState().activeLevel).toBe(1);
+      expect(useFeatStore.getState().activeLevel).toBe(1);
     });
   });
 
@@ -244,6 +257,32 @@ describe('Phase 12.3-02 — multiclass active-level switching (UAT B2 + B8 + B9)
       );
       expect(sheetAtL1.level).toBe(1);
       expect(sheetAtL1.classId).toBe('class:fighter');
+    });
+  });
+
+  describe('Suite E — sub-step clicks keep stores aligned to the expanded level', () => {
+    it('clicking Dotes on expanded L13 syncs progression, skills, feats, and shell sub-step', () => {
+      usePlannerShellStore.setState({
+        activeOriginStep: null,
+        activeLevelSubStep: 'class',
+        activeView: 'creation',
+        expandedLevel: 13 as ProgressionLevel,
+      });
+      useLevelProgressionStore.getState().setActiveLevel(1 as ProgressionLevel);
+      useSkillStore.getState().setActiveLevel(1 as ProgressionLevel);
+      useFeatStore.getState().setActiveLevel(1 as ProgressionLevel);
+
+      render(createElement(LevelSubSteps, { level: 13 as ProgressionLevel }));
+
+      act(() => {
+        fireEvent.click(screen.getByRole('button', { name: 'Dotes' }));
+      });
+
+      expect(useLevelProgressionStore.getState().activeLevel).toBe(13);
+      expect(useSkillStore.getState().activeLevel).toBe(13);
+      expect(useFeatStore.getState().activeLevel).toBe(13);
+      expect(usePlannerShellStore.getState().activeLevelSubStep).toBe('feats');
+      expect(usePlannerShellStore.getState().expandedLevel).toBe(13);
     });
   });
 });

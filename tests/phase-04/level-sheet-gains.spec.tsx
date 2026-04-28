@@ -61,8 +61,35 @@ describe('phase 04 level sheet gains', () => {
 
     // Phase 12.1-01: per-class gainTable content is not yet emitted by the
     // extractor (tracked in 12.1-CONTEXT.md <deferred>). The ability-increase
-    // hook is driven by phase04ClassFixture.abilityIncreaseLevels (still [4,
-    // 8, 12, 16, 20]) — that is the invariant this test should lock.
+    // hook is driven by phase04ClassFixture.abilityIncreaseLevels ([4, 8, 12,
+    // 16, 20]) — that is the invariant this test should lock.
+    const sheet = selectActiveLevelSheet(
+      useLevelProgressionStore.getState(),
+      useCharacterFoundationStore.getState(),
+    );
+    expect(sheet.abilityIncreaseAvailable).toBe(true);
+  });
+
+  it('also exposes the ability increase at level 20', () => {
+    primeFoundation();
+
+    act(() => {
+      const progressionStore = useLevelProgressionStore.getState();
+      for (let level = 1; level <= 19; level += 1) {
+        progressionStore.setLevelClassId(level as any, 'class:fighter');
+      }
+      progressionStore.setActiveLevel(20);
+      usePlannerShellStore.setState({ expandedLevel: 20 });
+    });
+
+    render(createElement(PlannerShellFrame));
+
+    const guerreroRow = document.querySelector(
+      '[data-class-id="class:fighter"]',
+    ) as HTMLButtonElement | null;
+    expect(guerreroRow).not.toBeNull();
+    fireEvent.click(guerreroRow!);
+
     const sheet = selectActiveLevelSheet(
       useLevelProgressionStore.getState(),
       useCharacterFoundationStore.getState(),

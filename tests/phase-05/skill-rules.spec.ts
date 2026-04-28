@@ -124,4 +124,36 @@ describe('phase 05 skill rules', () => {
       ),
     ).toBe(true);
   });
+
+  it('carries forward up to 4 unspent skill points to the next legal level', () => {
+    const evaluation = evaluateSkillSnapshot({
+      catalog: compiledSkillCatalog,
+      levels: [
+        createLevel(1, {
+          classId: 'class:fighter',
+          intelligenceModifier: -1,
+          skillPointsBase: 2,
+        }),
+        createLevel(2, {
+          allocations: [{ rank: 5, skillId: 'skill:trepar' }],
+          classId: 'class:fighter',
+          intelligenceModifier: -1,
+          skillPointsBase: 2,
+        }),
+      ],
+    });
+
+    expect(evaluation.levels[0]).toMatchObject({
+      availablePoints: 4,
+      remainingPoints: 4,
+      spentPoints: 0,
+      status: 'legal',
+    });
+    expect(evaluation.levels[1]).toMatchObject({
+      availablePoints: 5,
+      remainingPoints: 0,
+      spentPoints: 5,
+      status: 'legal',
+    });
+  });
 });

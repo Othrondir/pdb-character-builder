@@ -1795,8 +1795,24 @@ a {
   margin: 0;
 }
 
-.feat-picker__list > li {
+.feat-picker__item {
   list-style: none;
+  min-width: 0;
+}
+
+.feat-picker__item--family {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.feat-picker__item--family-expanded > .feat-picker__row--expanded {
+  border-bottom-color: transparent;
+}
+
+.feat-picker__item--family-expanded > .feat-family-expander {
+  border-top: 0;
+  margin-top: -1px;
 }
 
 .feat-picker__partition {
@@ -2028,6 +2044,10 @@ a {
   padding: 0.25rem 0.5rem;
   border-bottom: 1px solid var(--color-gold-faded);
   text-align: left;
+}
+.resumen-table__edit-button {
+  min-width: 0;
+  width: 100%;
 }
 
 /* ===== Phase 12.9: Resumen UX Pass (R1/R2/R3/R4) ===== */
@@ -2374,8 +2394,13 @@ a {
  * rendered directly below the row inside the <li>.
  */
 .feat-picker__row--family {
-  /* Base row styling inherited; nothing else changes yet. Future polish
-   * could add a caret/chevron to signal expandability. */
+  gap: var(--space-sm);
+}
+.feat-picker__row--family .feat-picker__pill--family {
+  align-self: flex-start;
+}
+.feat-picker__row--expanded {
+  border-color: var(--color-selection-border);
 }
 .feat-picker__pill--family {
   /* Reuses .feat-picker__pill border/padding; non-blocked color variant. */
@@ -2385,8 +2410,12 @@ a {
 .feat-family-expander {
   background: var(--color-panel);
   border: 1px solid var(--color-panel-edge);
-  margin: var(--space-xs) 0 var(--space-sm) 0;
-  padding: var(--space-sm) var(--space-md);
+  box-sizing: border-box;
+  display: block;
+  margin: 0 0 var(--space-sm) 0;
+  min-inline-size: 0;
+  padding: var(--space-sm) var(--space-md) var(--space-md);
+  width: 100%;
 }
 .feat-family-expander:focus-visible {
   outline: 2px solid var(--color-gold);
@@ -2402,28 +2431,38 @@ a {
   text-transform: uppercase;
 }
 .feat-family-expander__options {
+  border-top: 1px solid color-mix(in srgb, var(--color-panel-edge) 80%, transparent);
   display: flex;
   flex-direction: column;
   gap: var(--space-xs);
   max-height: 320px;
   overflow-y: auto;
+  padding-top: var(--space-sm);
 }
 .feat-family-expander__option {
-  align-items: center;
+  align-items: flex-start;
+  background: color-mix(in srgb, var(--color-panel) 78%, black);
+  border: 1px solid color-mix(in srgb, var(--color-panel-edge) 72%, transparent);
   color: var(--color-text);
   cursor: pointer;
   display: flex;
   font-family: var(--font-body);
   font-size: 14px;
-  gap: var(--space-sm);
-  padding: var(--space-xs) 0;
+  gap: var(--space-md);
+  line-height: 1.45;
+  padding: var(--space-sm);
 }
 .feat-family-expander__option--blocked {
+  border-color: var(--color-blocked);
   cursor: not-allowed;
   opacity: 0.55;
 }
+.feat-family-expander__option input {
+  margin: 2px 0 0 0;
+}
 .feat-family-expander__option-label {
   flex: 1;
+  min-width: 0;
 }
 
 /* ── Phase 12.4-09 — LevelEditorActionBar sticky footer (SPEC R2 / D-06) ─── */

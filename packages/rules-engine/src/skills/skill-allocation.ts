@@ -7,6 +7,7 @@ import type {
   SkillCatalog,
   SkillRestrictionOverride,
 } from '@data-extractor/contracts/skill-catalog';
+import { getSkillPointBudget, getSkillPointCarryover } from './skill-budget';
 
 export type SkillEvaluationStatus = 'blocked' | 'illegal' | 'legal' | 'pending';
 export type SkillCostType = 'class' | 'cross-class';
@@ -20,6 +21,7 @@ export interface SkillAllocationEntry {
 export interface SkillLevelInput {
   allocations: SkillAllocationEntry[];
   armorCategory?: ArmorCategory;
+  bonusSkillPointsPerLevel?: number;
   classId: CanonicalId | null;
   intelligenceModifier: number;
   level: number;
@@ -28,6 +30,7 @@ export interface SkillLevelInput {
 
 export interface EvaluateSkillLevelInput {
   catalog: SkillCatalog;
+  carriedPoints?: number;
   cumulativeRanks: Partial<Record<CanonicalId, number>>;
   level: SkillLevelInput;
 }
@@ -108,10 +111,14 @@ function createIllegalIssue(affectedIds: CanonicalId[]) {
   });
 }
 
-function getAvailablePoints(level: SkillLevelInput) {
-  const base = Math.max(1, level.skillPointsBase + level.intelligenceModifier);
-
-  return level.level === 1 ? base * 4 : base;
+function getAvailablePoints(level: SkillLevelInput, carriedPoints = 0) {
+  return getSkillPointBudget({
+    bonusSkillPointsPerLevel: level.bonusSkillPointsPerLevel,
+    carriedPoints,
+    intelligenceModifier: level.intelligenceModifier,
+    level: level.level,
+    skillPointsBase: level.skillPointsBase,
+  });
 }
 
 function getCostType(skillId: CanonicalId, classId: CanonicalId, catalog: SkillCatalog) {
@@ -283,7 +290,10 @@ export function evaluateSkillLevel(
     (total, allocation) => total + allocation.spentPoints,
     0,
   );
-  const availablePoints = getAvailablePoints(input.level);
+  const availablePoints = getAvailablePoints(
+    input.level,
+    getSkillPointCarryover(input.carriedPoints ?? 0),
+  );
   const issues = allocations.flatMap((allocation) => allocation.issues);
 
   if (spentPoints > availablePoints) {
@@ -309,9 +319,14 @@ export function evaluateSkillSnapshot(
   input: EvaluateSkillSnapshotInput,
 ): EvaluatedSkillSnapshot {
   const cumulativeRanks: Partial<Record<CanonicalId, number>> = {};
+  let previousRemainingPoints = 0;
+  let previousStatus: SkillEvaluationStatus = 'pending';
   const levels = input.levels.map((level) => {
+    const carriedPoints =
+      previousStatus === 'legal' ? getSkillPointCarryover(previousRemainingPoints) : 0;
     const evaluatedLevel = evaluateSkillLevel({
       catalog: input.catalog,
+      carriedPoints,
       cumulativeRanks,
       level,
     });
@@ -320,6 +335,9 @@ export function evaluateSkillSnapshot(
       cumulativeRanks[allocation.skillId] =
         (cumulativeRanks[allocation.skillId] ?? 0) + allocation.rank;
     }
+
+    previousRemainingPoints = evaluatedLevel.remainingPoints;
+    previousStatus = evaluatedLevel.status;
 
     return evaluatedLevel;
   });

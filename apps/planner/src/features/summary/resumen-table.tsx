@@ -1,8 +1,10 @@
+import { NwnButton } from '@planner/components/ui/nwn-button';
 import { shellCopyEs } from '@planner/lib/copy/es';
 import type { ResumenViewModel } from './resumen-selectors';
 
 interface ResumenTableProps {
   model: ResumenViewModel;
+  onEditLevel: (level: ResumenViewModel['progression'][number]['level']) => void;
 }
 
 /**
@@ -22,7 +24,7 @@ interface ResumenTableProps {
  * All derived-stat cells render `copy.notAvailable` ('—') when the rules-engine helper is
  * unavailable. NEVER substitute `0` (SHAR-01 carry-over).
  */
-export function ResumenTable({ model }: ResumenTableProps) {
+export function ResumenTable({ model, onEditLevel }: ResumenTableProps) {
   const copy = shellCopyEs.resumen;
   const dash = copy.notAvailable;
 
@@ -61,6 +63,7 @@ export function ResumenTable({ model }: ResumenTableProps) {
               <th scope="col">{copy.columnLabels.will}</th>
               <th scope="col">{copy.columnLabels.generalFeat}</th>
               <th scope="col">{copy.columnLabels.classFeat}</th>
+              <th scope="col">{copy.columnLabels.edit}</th>
             </tr>
           </thead>
           <tbody>
@@ -74,6 +77,16 @@ export function ResumenTable({ model }: ResumenTableProps) {
                 <td>{lv.cumulativeWill === null ? dash : lv.cumulativeWill}</td>
                 <td>{lv.generalFeatLabel ?? dash}</td>
                 <td>{lv.classFeatLabel ?? dash}</td>
+                <td>
+                  <NwnButton
+                    aria-label={copy.actions.editLevelTemplate.replace('{N}', String(lv.level))}
+                    className="resumen-table__edit-button"
+                    onClick={() => onEditLevel(lv.level)}
+                    variant="secondary"
+                  >
+                    {copy.actions.editLevelTemplate.replace('{N}', String(lv.level))}
+                  </NwnButton>
+                </td>
               </tr>
             ))}
           </tbody>

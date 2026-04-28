@@ -320,6 +320,28 @@ describe('Phase 12.4-03 — per-level-budget selector (SPEC R3)', () => {
     });
   });
 
+  describe('Skill carryover (F5)', () => {
+    it('L2 Guerrero INT 8 receives +4 skill points when L1 leaves 4 unspent', () => {
+      const build = buildSnapshot({
+        abilityScores: { int: 8 },
+        classByLevel: { 1: 'class:fighter', 2: 'class:fighter' },
+        skillPointCarryoverBeforeLevel: (level) => (level === 2 ? 4 : 0),
+      });
+      const budget = computePerLevelBudget(build, 2, classInput, featInput, raceInput);
+      expect(budget.skillPoints).toEqual({ budget: 5, spent: 0, remaining: 5 });
+    });
+
+    it('carryover is capped at 4 even when the caller passes a higher value', () => {
+      const build = buildSnapshot({
+        raceId: 'race:human',
+        classByLevel: { 1: 'class:fighter', 2: 'class:fighter' },
+        skillPointCarryoverBeforeLevel: (level) => (level === 2 ? 8 : 0),
+      });
+      const budget = computePerLevelBudget(build, 2, classInput, featInput, raceInput);
+      expect(budget.skillPoints.budget).toBe(7);
+    });
+  });
+
   describe('Empty / null guards', () => {
     it('classByLevel[N] null → featSlots.total 0, skillPoints.budget 0', () => {
       const build = buildSnapshot({ classByLevel: { 1: null } });

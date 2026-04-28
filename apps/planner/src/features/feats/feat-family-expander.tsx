@@ -1,6 +1,7 @@
 import { useEffect, useRef, type KeyboardEvent as ReactKeyboardEvent } from 'react';
 
 import { shellCopyEs } from '@planner/lib/copy/es';
+import { extractFeatFamilyTargetLabel } from './family-labels';
 import type { FeatFamilyView } from './selectors';
 
 /**
@@ -77,7 +78,7 @@ export function FeatFamilyExpander({
                 }}
               />
               <span className="feat-family-expander__option-label">
-                {target.label}
+                {extractFeatFamilyTargetLabel(family.label, target.label)}
               </span>
               {target.blockedReason?.pillLabel ? (
                 <span className="feat-picker__pill">

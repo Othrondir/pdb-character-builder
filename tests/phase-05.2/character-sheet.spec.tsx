@@ -5,11 +5,13 @@ import { createElement } from 'react';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { CharacterSheet } from '@planner/components/shell/character-sheet';
 import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
+import { useLevelProgressionStore } from '@planner/features/level-progression/store';
 import { usePlannerShellStore } from '@planner/state/planner-shell';
 
 describe('phase 05.2 character sheet', () => {
   beforeEach(() => {
     useCharacterFoundationStore.getState().resetFoundation();
+    useLevelProgressionStore.getState().resetProgression();
     usePlannerShellStore.setState({ characterSheetTab: 'stats' });
   });
 
@@ -106,5 +108,18 @@ describe('phase 05.2 character sheet', () => {
     // Click feats tab
     fireEvent.click(screen.getByRole('tab', { name: 'Dotes' }));
     expect(screen.getByText('0 dotes')).toBeInTheDocument();
+  });
+
+  it('applies level-up ability increases to the visible stat totals', () => {
+    const foundation = useCharacterFoundationStore.getState();
+    foundation.setRace('race:human' as any);
+    foundation.setBaseAttribute('str', 16);
+    useLevelProgressionStore.getState().setLevelAbilityIncrease(4 as any, 'str');
+
+    render(createElement(CharacterSheet));
+
+    const fuerzaCell = screen.getByText('Fuerza').closest('div');
+    expect(fuerzaCell?.querySelector('.stat-value')?.textContent).toBe('17');
+    expect(fuerzaCell?.querySelector('.stat-mod')?.textContent).toBe('(+3)');
   });
 });

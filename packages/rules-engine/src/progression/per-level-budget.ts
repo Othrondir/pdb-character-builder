@@ -4,6 +4,7 @@ import {
   HUMAN_BONUS_FEAT_AT_L1,
   HUMAN_SKILL_POINT_PER_LEVEL,
 } from './race-constants';
+import { getSkillPointBudget } from '../skills/skill-budget';
 
 /**
  * Minimal structural catalog inputs. Rules-engine stays framework-agnostic
@@ -121,6 +122,8 @@ export interface BuildSnapshot {
   intAbilityIncreasesBeforeLevel: (level: number) => number;
   /** Feats the user has picked at the given level (excludes auto-grants). */
   chosenFeatIdsAtLevel: (level: number) => string[];
+  /** Carryover that legally enters the given level (0..4). */
+  skillPointCarryoverBeforeLevel?: (level: number) => number;
   /** Skill points already spent at the given level (sum across skills). */
   spentSkillPointsAtLevel: (level: number) => number;
 }
@@ -226,11 +229,15 @@ export function computePerLevelBudget(
     (build.abilityScores.int + build.intAbilityIncreasesBeforeLevel(level) - 10) / 2,
   );
   const classSkillBase = classRow?.skillPointsPerLevel ?? 2;
-  const base = Math.max(1, classSkillBase + intMod);
   const humanSkillBonus =
     build.raceId === HUMAN_RACE_ID ? HUMAN_SKILL_POINT_PER_LEVEL : 0;
-  const skillBudget =
-    (level === 1 ? base * 4 : base) + humanSkillBonus * (level === 1 ? 4 : 1);
+  const skillBudget = getSkillPointBudget({
+    bonusSkillPointsPerLevel: humanSkillBonus,
+    carriedPoints: build.skillPointCarryoverBeforeLevel?.(level) ?? 0,
+    intelligenceModifier: intMod,
+    level,
+    skillPointsBase: classSkillBase,
+  });
 
   const spent = build.spentSkillPointsAtLevel(level);
 

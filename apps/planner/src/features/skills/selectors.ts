@@ -1,9 +1,7 @@
 import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
 import type { ValidationOutcome } from '@rules-engine/contracts/validation-outcome';
-import { abilityModifier } from '@rules-engine/foundation';
 import {
   evaluateSkillSnapshot,
-  type ArmorCategory,
   type EvaluatedSkillAllocation,
   type EvaluatedSkillLevel,
   type SkillCostType,
@@ -16,6 +14,7 @@ import {
   type SkillStatsPenalty,
   type SkillStatsView,
 } from '@rules-engine/skills/skill-derived-stats';
+import { getSkillPointCarryover } from '@rules-engine/skills/skill-budget';
 import { revalidateSkillSnapshotAfterChange } from '@rules-engine/skills/skill-revalidation';
 import type { SkillBudgetSnapshot } from '@rules-engine/skills/skill-budget';
 
@@ -25,32 +24,10 @@ import type { CharacterFoundationStoreState } from '@planner/features/character-
 import { getPhase04ClassRecord } from '@planner/features/level-progression/class-fixture';
 import type { ProgressionLevel } from '@planner/features/level-progression/progression-fixture';
 import type { LevelProgressionStoreState } from '@planner/features/level-progression/store';
-import { compiledClassCatalog } from '@planner/data/compiled-classes';
 
 import { compiledSkillCatalog } from './compiled-skill-catalog';
-import type { SkillLevelRecord, SkillStoreState } from './store';
-
-// UAT-2026-04-20 P3 — skill-points-per-level per class now come straight
-// from the compiled catalog (`compiledClassCatalog.classes[*].skillPointsPerLevel`)
-// so Puerta custom bases like Brujo / Espadachin / Artífice / Alma Predilecta
-// stay correct without a hand-maintained map.
-const HUMAN_RACE_ID = 'race:human';
-const HUMAN_SKILL_POINT_PER_LEVEL = 1;
-
-// Legacy hand-maintained fallback — superseded by the compiled catalog.
-const CLASS_SKILL_POINTS: Partial<Record<CanonicalId, number>> = {
-  'class:bard': 6,
-  'class:cleric': 2,
-  'class:druid': 4,
-  'class:fighter': 2,
-  'class:monk': 4,
-  'class:paladin': 2,
-  'class:ranger': 4,
-  'class:rogue': 8,
-  'class:shadowdancer': 6,
-  'class:weapon-master': 2,
-  'class:wizard': 2,
-};
+import { createSkillLevelInputs } from './skill-inputs';
+import type { SkillStoreState } from './store';
 
 const CATEGORY_LABELS: Record<string, string> = {
   athletic: 'Atletismo y movilidad',
@@ -168,6 +145,7 @@ export interface SkillSheetGroupView {
 
 export interface ActiveSkillSheetView {
   availablePoints: number;
+  carriedPoints: number;
   classId: CanonicalId | null;
   classLabel: string | null;
   emptyMessage: string;
@@ -187,85 +165,6 @@ export interface SkillBoardView {
   emptyStateBody: string | null;
   rail: SkillRailEntryView[];
   summaryStrip: SkillSummaryStripView;
-}
-
-function getSkillPointsBase(classId: CanonicalId | null) {
-  if (!classId) {
-    return 0;
-  }
-  // UAT-2026-04-20 P3 — prefer the compiled catalog (covers every class the
-  // extractor emits). Fall back to the legacy hand-authored map for
-  // fixture-only tests that bypass compiledClassCatalog.
-  const compiled = compiledClassCatalog.classes.find((c) => c.id === classId);
-  if (compiled?.skillPointsPerLevel !== undefined) {
-    return compiled.skillPointsPerLevel;
-  }
-  return CLASS_SKILL_POINTS[classId] ?? 2;
-}
-
-function getArmorCategory(
-  _progressionState: LevelProgressionStoreState,
-  _level: ProgressionLevel,
-): ArmorCategory {
-  return null;
-}
-
-function getIntelligenceModifier(
-  foundationState: CharacterFoundationStoreState,
-  progressionState: LevelProgressionStoreState,
-  level: ProgressionLevel,
-) {
-  const baseIntelligence = foundationState.baseAttributes.int;
-  // UAT-2026-04-20 P3 — fold racial INT adjustment into the modifier so
-  // skill points track the same total attribute AttributesBoard shows
-  // (A2). Elfo does not touch INT; Puerta custom races may (extractor
-  // catalog is the source of truth). Phase 14-05 — delegated to the
-  // canonical `abilityModifier` helper from `@rules-engine/foundation`.
-  const racialInt = foundationState.racialModifiers?.int ?? 0;
-  const intelligenceIncreases = progressionState.levels.filter(
-    (record) => record.level <= level && record.abilityIncrease === 'int',
-  ).length;
-
-  return abilityModifier(baseIntelligence + racialInt + intelligenceIncreases);
-}
-
-function createSkillLevelInput(
-  skillRecord: SkillLevelRecord,
-  progressionState: LevelProgressionStoreState,
-  foundationState: CharacterFoundationStoreState,
-): SkillLevelInput {
-  const progressionRecord =
-    progressionState.levels.find((record) => record.level === skillRecord.level) ?? null;
-
-  // UAT-2026-04-20 P3 — Humano +1 skill-point/level (×4 at L1) folds in via
-  // skillPointsBase so the rules-engine getAvailablePoints formula
-  // (base × (L1 ? 4 : 1)) produces the canonical total.
-  const humanBonus =
-    foundationState.raceId === HUMAN_RACE_ID ? HUMAN_SKILL_POINT_PER_LEVEL : 0;
-
-  return {
-    allocations: skillRecord.allocations,
-    armorCategory: getArmorCategory(progressionState, skillRecord.level),
-    classId: progressionRecord?.classId ?? null,
-    intelligenceModifier: getIntelligenceModifier(
-      foundationState,
-      progressionState,
-      skillRecord.level,
-    ),
-    level: skillRecord.level,
-    skillPointsBase:
-      getSkillPointsBase(progressionRecord?.classId ?? null) + humanBonus,
-  };
-}
-
-function createSkillLevelInputs(
-  skillState: SkillStoreState,
-  progressionState: LevelProgressionStoreState,
-  foundationState: CharacterFoundationStoreState,
-) {
-  return skillState.levels.map((level) =>
-    createSkillLevelInput(level, progressionState, foundationState),
-  );
 }
 
 function createIssueText(
@@ -551,6 +450,11 @@ export function selectActiveSkillSheetView(
   const activeInput = skillInputs[activeIndex];
   const activeProgression =
     progressionState.levels.find((entry) => entry.level === skillState.activeLevel) ?? null;
+  const previousLevel = activeIndex > 0 ? evaluation.levels[activeIndex - 1] ?? null : null;
+  const carriedPoints =
+    previousLevel?.status === 'legal'
+      ? getSkillPointCarryover(previousLevel.remainingPoints)
+      : 0;
   const classLabel = getPhase04ClassRecord(activeProgression?.classId ?? null)?.label ?? null;
   const rows = activeLevel && activeInput ? buildActiveSkillRows(activeLevel, activeInput) : [];
   // Phase 12.4-05 — R4 Habilidades split (SPEC R4 / CONTEXT D-09).
@@ -568,6 +472,7 @@ export function selectActiveSkillSheetView(
 
   return {
     availablePoints: activeLevel?.availablePoints ?? 0,
+    carriedPoints,
     classId: activeProgression?.classId ?? null,
     classLabel,
     emptyMessage: selectOriginReadyForAbilities(foundationState)
@@ -766,10 +671,8 @@ export function selectSkillSummary(
     (total, level) => total + (evaluation.levels[level - 1]?.spentPoints ?? 0),
     0,
   );
-  const remainingPoints = relevantLevels.reduce(
-    (total, level) => total + (evaluation.levels[level - 1]?.remainingPoints ?? 0),
-    0,
-  );
+  const remainingPoints =
+    evaluation.levels[highestConfiguredLevel - 1]?.remainingPoints ?? 0;
   const hasIllegal = relevantLevels.some(
     (level) => (revalidated[level - 1]?.status ?? evaluation.levels[level - 1]?.status) === 'illegal',
   );

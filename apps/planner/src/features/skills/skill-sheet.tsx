@@ -179,6 +179,10 @@ export function SkillSheet({ scrollerRef }: SkillSheetProps = {}) {
           <dd>{activeSheet.availablePoints}</dd>
         </div>
         <div>
+          <dt>{shellCopyEs.skills.carriedPointsLabel}</dt>
+          <dd>{activeSheet.carriedPoints}</dd>
+        </div>
+        <div>
           <dt>{shellCopyEs.skills.spentPointsLabel}</dt>
           <dd>{activeSheet.spentPoints}</dd>
         </div>

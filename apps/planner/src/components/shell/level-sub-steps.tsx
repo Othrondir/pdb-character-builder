@@ -7,6 +7,7 @@ import {
   isDotesLevelComplete,
   isHabilidadesLevelComplete,
 } from '@planner/features/level-progression/selectors';
+import { openPlannerLevel } from '@planner/features/level-progression/navigation';
 import { useLevelProgressionStore } from '@planner/features/level-progression/store';
 import { useSkillStore } from '@planner/features/skills/store';
 import { usePlannerShellStore } from '@planner/state/planner-shell';
@@ -31,7 +32,6 @@ interface LevelSubStepsProps {
  */
 export function LevelSubSteps({ level }: LevelSubStepsProps) {
   const activeLevelSubStep = usePlannerShellStore((state) => state.activeLevelSubStep);
-  const setActiveLevelSubStep = usePlannerShellStore((state) => state.setActiveLevelSubStep);
   const progressionState = useLevelProgressionStore();
   const foundationState = useCharacterFoundationStore();
   const featState = useFeatStore();
@@ -75,7 +75,7 @@ export function LevelSubSteps({ level }: LevelSubStepsProps) {
           disabled={false}
           key={subStep.id}
           label={subStep.label}
-          onClick={() => setActiveLevelSubStep(subStep.id)}
+          onClick={() => openPlannerLevel(level, subStep.id)}
           status={resolveStatus(subStep.id)}
         />
       ))}

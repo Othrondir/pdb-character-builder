@@ -5,6 +5,7 @@ import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 
 import { AttributesBoard } from '@planner/features/character-foundation/attributes-board';
 import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
+import { useLevelProgressionStore } from '@planner/features/level-progression/store';
 import { usePlannerShellStore } from '@planner/state/planner-shell';
 import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
 
@@ -27,6 +28,7 @@ describe('FLOW-01 attributes->level1 advance (Phase 10 regression)', () => {
   beforeEach(() => {
     document.body.innerHTML = '';
     useCharacterFoundationStore.getState().resetFoundation();
+    useLevelProgressionStore.getState().resetProgression();
     usePlannerShellStore.setState({
       activeOriginStep: 'attributes',
       activeLevelSubStep: null,
@@ -71,5 +73,17 @@ describe('FLOW-01 attributes->level1 advance (Phase 10 regression)', () => {
     const shell = usePlannerShellStore.getState();
     expect(shell.expandedLevel).toBe(1);
     expect(shell.activeLevelSubStep).toBe('class');
+  });
+
+  it('shows progression ability increases in the visible attribute total', () => {
+    const foundation = useCharacterFoundationStore.getState();
+    foundation.setRace('race:human' as CanonicalId);
+    foundation.setAlignment('alignment:lawful-good' as CanonicalId);
+    foundation.setBaseAttribute('str', 16);
+    useLevelProgressionStore.getState().setLevelAbilityIncrease(4 as any, 'str');
+
+    render(createElement(AttributesBoard));
+
+    expect(screen.getByLabelText('Total de Fuerza')).toHaveTextContent('17');
   });
 });

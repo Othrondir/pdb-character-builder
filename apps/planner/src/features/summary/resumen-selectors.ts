@@ -7,6 +7,7 @@ import { compiledRaceCatalog } from '@planner/data/compiled-races';
 import { compiledSkillCatalog } from '@planner/data/compiled-skills';
 import { compiledFeatCatalog } from '@planner/data/compiled-feats';
 import { phase03FoundationFixture } from '@planner/features/character-foundation/foundation-fixture';
+import { computeFinalAttributeTotals } from '@planner/features/character-foundation/final-attributes';
 import { formatDatasetLabel } from '@planner/data/ruleset-version';
 import { shellCopyEs } from '@planner/lib/copy/es';
 import {
@@ -154,21 +155,11 @@ export function useResumenViewModel(): ResumenViewModel {
   // Inline ability-total reconstruction (Phase 12.9-01 / D-08): ResumenViewModel no
   // longer exposes attributes[], but skill rows still need a per-key total to compute
   // the ability modifier. Recompute locally from base + racial + level-up deltas.
-  const abilityTotalByKey = new Map<AttributeKey, number>();
-  const racialAdj = compiledRaceCatalog.races.find((r) => r.id === foundation.raceId)
-    ?.abilityAdjustments as Record<AttributeKey, number> | undefined;
-  const levelUpAdj: Record<AttributeKey, number> = {
-    str: 0, dex: 0, con: 0, int: 0, wis: 0, cha: 0,
-  };
-  for (const rec of progression.levels) {
-    if (rec.abilityIncrease) levelUpAdj[rec.abilityIncrease] += 1;
-  }
-  for (const key of ['str', 'dex', 'con', 'int', 'wis', 'cha'] as AttributeKey[]) {
-    abilityTotalByKey.set(
-      key,
-      foundation.baseAttributes[key] + (racialAdj?.[key] ?? 0) + levelUpAdj[key],
-    );
-  }
+  const abilityTotalByKey = computeFinalAttributeTotals(
+    foundation.baseAttributes,
+    foundation.racialModifiers,
+    progression.levels,
+  );
 
   const rankByskillId = new Map<string, number>();
   for (const lvSkill of skills.levels) {
@@ -182,7 +173,7 @@ export function useResumenViewModel(): ResumenViewModel {
     .sort((a, b) => a.label.localeCompare(b.label))
     .map((skill) => {
       const ranks = rankByskillId.get(skill.id) ?? 0;
-      const abilityScore = abilityTotalByKey.get(skill.abilityKey as AttributeKey) ?? 10;
+      const abilityScore = abilityTotalByKey[skill.abilityKey as AttributeKey] ?? 10;
       const abilityMod = abilityModifier(abilityScore);
       return {
         skillId: skill.id,

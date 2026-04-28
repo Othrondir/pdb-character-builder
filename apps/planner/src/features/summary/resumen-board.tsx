@@ -6,6 +6,7 @@ import { VersionMismatchDialog } from '@planner/components/ui/version-mismatch-d
 import { shellCopyEs } from '@planner/lib/copy/es';
 import { formatDatasetLabel } from '@planner/data/ruleset-version';
 import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
+import { openPlannerLevel } from '@planner/features/level-progression/navigation';
 import { useResumenViewModel } from './resumen-selectors';
 import { ResumenTable } from './resumen-table';
 import { SaveSlotDialog, LoadSlotDialog } from './save-slot-dialog';
@@ -184,14 +185,17 @@ export function ResumenBoard() {
         />
       </NwnFrame>
 
-      {isProjectable ? (
-        <ResumenTable model={model} />
-      ) : (
+      {!isProjectable ? (
         <NwnFrame className="resumen-board__empty-state">
           <h3>{copy.emptyState.heading}</h3>
           <p>{copy.emptyState.body}</p>
         </NwnFrame>
-      )}
+      ) : null}
+
+      <ResumenTable
+        model={model}
+        onEditLevel={(level) => openPlannerLevel(level, 'class')}
+      />
 
       <SaveSlotDialog open={saveOpen} onClose={() => setSaveOpen(false)} />
       <LoadSlotDialog open={loadOpen} onClose={() => setLoadOpen(false)} />

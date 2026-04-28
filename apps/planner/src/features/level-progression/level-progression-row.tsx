@@ -38,6 +38,7 @@ import { shellCopyEs } from '@planner/lib/copy/es';
 
 import { AbilityIncreaseControl } from './ability-increase-control';
 import { ClassPicker } from './class-picker';
+import { openPlannerLevel } from './navigation';
 import {
   selectActiveLevelSheetView,
   selectLevelCompletionState,
@@ -63,10 +64,6 @@ export function LevelProgressionRow({ level }: Props) {
   const foundationState = useCharacterFoundationStore();
   const featState = useFeatStore();
   const skillState = useSkillStore();
-
-  const setActiveLevel = useLevelProgressionStore((s) => s.setActiveLevel);
-  const setExpandedLevel = usePlannerShellStore((s) => s.setExpandedLevel);
-  const setActiveLevelSubStep = usePlannerShellStore((s) => s.setActiveLevelSubStep);
 
   const legality = selectLevelLegality(
     progressionState,
@@ -117,12 +114,7 @@ export function LevelProgressionRow({ level }: Props) {
 
   function handleClick() {
     if (isLocked) return;
-    // Atomic dispatch — 12.4-09 invariant. Sub-step FIRST so the shell
-    // store's `activeLevelSubStep ?? 'class'` fallback inside
-    // setExpandedLevel does not overwrite our explicit 'class' choice.
-    setActiveLevelSubStep('class');
-    setActiveLevel(level);
-    setExpandedLevel(level);
+    openPlannerLevel(level, 'class');
   }
 
   const className = [

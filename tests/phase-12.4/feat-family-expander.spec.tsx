@@ -209,6 +209,23 @@ describe('Phase 12.4-08 — feat-family fold + inline expander (SPEC R7)', () =>
       expect(radios.length).toBeGreaterThan(10);
     });
 
+    it('B4b: expander options show only the target label, not the full family label again', () => {
+      setupL1HumanoGuerrero();
+      render(createElement(FeatBoard));
+
+      const skillFocusFamilyRow = document.querySelector<HTMLButtonElement>(
+        'button[data-family-id="feat:skill-focus"]',
+      );
+      expect(skillFocusFamilyRow).not.toBeNull();
+      fireEvent.click(skillFocusFamilyRow!);
+
+      const firstOptionLabel = document.querySelector<HTMLElement>(
+        '.feat-family-expander__option-label',
+      );
+      expect(firstOptionLabel).not.toBeNull();
+      expect(firstOptionLabel!.textContent).not.toMatch(/Soltura con una habilidad/i);
+    });
+
     it('B5: selecting a radio persists a target-qualified feat id via the store', () => {
       setupL1HumanoGuerrero();
       render(createElement(FeatBoard));

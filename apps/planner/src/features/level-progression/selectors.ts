@@ -14,6 +14,11 @@ import {
   type RaceCatalogInput,
 } from '@rules-engine/progression/per-level-budget';
 import { revalidateProgressionAfterLevelChange } from '@rules-engine/progression/progression-revalidation';
+import { evaluateSkillSnapshot } from '@rules-engine/skills/skill-allocation';
+import {
+  getRequiredSkillPointAdjustment,
+  getSkillPointCarryover,
+} from '@rules-engine/skills/skill-budget';
 
 import { shellCopyEs } from '@planner/lib/copy/es';
 import {
@@ -29,10 +34,12 @@ import type { CharacterFoundationStoreState } from '@planner/features/character-
 import { compiledClassCatalog } from '@planner/data/compiled-classes';
 import { compiledFeatCatalog } from '@planner/data/compiled-feats';
 import { compiledRaceCatalog } from '@planner/data/compiled-races';
+import { compiledSkillCatalog } from '@planner/features/skills/compiled-skill-catalog';
 import {
   getChosenFeatIds,
   type FeatStoreState,
 } from '@planner/features/feats/store';
+import { createSkillLevelInputs } from '@planner/features/skills/skill-inputs';
 import type { SkillStoreState } from '@planner/features/skills/store';
 
 import {
@@ -395,10 +402,36 @@ function buildSnapshotFromStores(
     classByLevel[record.level] = record.classId;
   }
 
+  const skillInputs = createSkillLevelInputs(
+    skillState,
+    progressionState,
+    foundationState,
+  );
+  const skillEvaluation = evaluateSkillSnapshot({
+    catalog: compiledSkillCatalog,
+    levels: skillInputs,
+  });
+  const spentSkillPointsByLevel = new Map(
+    skillEvaluation.levels.map((level) => [level.level, level.spentPoints] as const),
+  );
+  const carryoverByLevel = new Map<number, number>();
+
+  skillEvaluation.levels.forEach((level, index) => {
+    const previousLevel = index > 0 ? skillEvaluation.levels[index - 1] ?? null : null;
+    carryoverByLevel.set(
+      level.level,
+      previousLevel?.status === 'legal'
+        ? getSkillPointCarryover(previousLevel.remainingPoints)
+        : 0,
+    );
+  });
+
   return {
     raceId: foundationState.raceId,
     classByLevel,
-    abilityScores: { int: foundationState.baseAttributes.int },
+    abilityScores: {
+      int: foundationState.baseAttributes.int + (foundationState.racialModifiers?.int ?? 0),
+    },
     intAbilityIncreasesBeforeLevel: (lvl) =>
       progressionState.levels.filter(
         (r) => r.level < lvl && r.abilityIncrease === 'int',
@@ -407,11 +440,8 @@ function buildSnapshotFromStores(
       const featRecord = featState.levels.find((r) => r.level === lvl);
       return getChosenFeatIds(featRecord);
     },
-    spentSkillPointsAtLevel: (lvl) => {
-      const skillRecord = skillState.levels.find((r) => r.level === lvl);
-      if (!skillRecord) return 0;
-      return skillRecord.allocations.reduce((sum, a) => sum + a.rank, 0);
-    },
+    skillPointCarryoverBeforeLevel: (lvl) => carryoverByLevel.get(lvl) ?? 0,
+    spentSkillPointsAtLevel: (lvl) => spentSkillPointsByLevel.get(lvl) ?? 0,
   };
 }
 
@@ -429,9 +459,9 @@ export function isClaseLevelComplete(
 
 /**
  * Habilidades sub-step ✓ predicate (SPEC R6).
- * True iff skillPoints.budget > 0 AND the user has spent every point.
- * If budget === 0 (e.g. no class picked yet), returns false — an empty
- * budget is neutral, not complete.
+ * True iff skillPoints.budget > 0 AND the remaining points sit inside the
+ * legal carryover window (0..4). If budget === 0 (e.g. no class picked yet),
+ * returns false — an empty budget is neutral, not complete.
  */
 export function isHabilidadesLevelComplete(
   progressionState: LevelProgressionStoreState,
@@ -454,7 +484,7 @@ export function isHabilidadesLevelComplete(
     RACE_CATALOG_INPUT,
   );
   if (budget.skillPoints.budget === 0) return false;
-  return budget.skillPoints.remaining === 0;
+  return getRequiredSkillPointAdjustment(budget.skillPoints.remaining) === 0;
 }
 
 /**
@@ -537,9 +567,11 @@ export function selectLevelCompletionState(
     RACE_CATALOG_INPUT,
   );
   const featDeficit = Math.max(0, budget.featSlots.total - budget.featSlots.chosen);
-  const skillDeficit = Math.max(0, budget.skillPoints.budget - budget.skillPoints.spent);
+  const skillDeficit = getRequiredSkillPointAdjustment(budget.skillPoints.remaining);
+  const classId =
+    progressionState.levels.find((record) => record.level === level)?.classId ?? null;
   const isComplete =
-    featDeficit === 0 && skillDeficit === 0 && budget.featSlots.total > 0;
+    classId !== null && featDeficit === 0 && skillDeficit === 0;
 
   // Scan-surface totals (additive — see interface doc).
   const featSlots = {
@@ -550,8 +582,6 @@ export function selectLevelCompletionState(
     spent: budget.skillPoints.spent,
     budget: budget.skillPoints.budget,
   };
-  const classId =
-    progressionState.levels.find((record) => record.level === level)?.classId ?? null;
   const classLabel =
     classId === null
       ? null

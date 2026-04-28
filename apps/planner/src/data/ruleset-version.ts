@@ -16,7 +16,7 @@ import { compiledClassCatalog } from '@planner/data/compiled-classes';
  *   drift from the actual data bundled into the runtime. Do NOT hardcode a literal here.
  */
 export const PLANNER_VERSION = '1.0.0' as const;
-export const RULESET_VERSION = '1.0.0' as const;
+export const RULESET_VERSION = '1.0.1' as const;
 export const BUILD_ENCODING_VERSION = 2 as const;
 export const CURRENT_DATASET_ID: string = compiledClassCatalog.datasetId;
 

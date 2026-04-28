@@ -33,6 +33,50 @@ export interface SkillBudgetSnapshot {
   skills: Record<string, SkillBudgetSkillEntry>;
 }
 
+export interface SkillPointBudgetInput {
+  bonusSkillPointsPerLevel?: number;
+  carriedPoints?: number;
+  intelligenceModifier: number;
+  level: number;
+  skillPointsBase: number;
+}
+
+export const SKILL_POINT_CARRYOVER_CAP = 4;
+
+export function getSkillPointCarryover(remainingPoints: number): number {
+  if (!Number.isFinite(remainingPoints)) {
+    return 0;
+  }
+
+  return Math.min(SKILL_POINT_CARRYOVER_CAP, Math.max(0, remainingPoints));
+}
+
+export function getRequiredSkillPointAdjustment(remainingPoints: number): number {
+  if (!Number.isFinite(remainingPoints)) {
+    return 0;
+  }
+
+  if (remainingPoints < 0) {
+    return Math.abs(remainingPoints);
+  }
+
+  return Math.max(0, remainingPoints - SKILL_POINT_CARRYOVER_CAP);
+}
+
+export function getSkillPointBaseBudget(input: SkillPointBudgetInput): number {
+  const bonusSkillPointsPerLevel = input.bonusSkillPointsPerLevel ?? 0;
+  const base = Math.max(1, input.skillPointsBase + input.intelligenceModifier);
+
+  return (
+    (input.level === 1 ? base * 4 : base)
+    + bonusSkillPointsPerLevel * (input.level === 1 ? 4 : 1)
+  );
+}
+
+export function getSkillPointBudget(input: SkillPointBudgetInput): number {
+  return getSkillPointBaseBudget(input) + getSkillPointCarryover(input.carriedPoints ?? 0);
+}
+
 /**
  * Phase 12.7-02 (D-05) — cost delta of raising `skillId`'s rank by 1
  * given the per-level snapshot. Returns null when at/above
@@ -41,9 +85,9 @@ export interface SkillBudgetSnapshot {
  *
  * `level` is currently unused (cost is derived from the snapshot's
  * `costPerRank` which the planner-side adapter already resolves from
- * `class` vs `cross-class` at the active level). The param is reserved
- * for future per-level cost rules such as Puerta skill-point carryover
- * (F5 — deferred to Phase 12.8).
+ * `class` vs `cross-class` at the active level). Carryover changes the
+ * total budget upstream via `pointsAvailable`; per-row increment cost
+ * remains unchanged.
  *
  * Framework-agnostic: no React, no store reads. Safe to call from
  * selectors, tests, and UI.
@@ -53,7 +97,7 @@ export function nextIncrementCost(
   level: number,
   snapshot: SkillBudgetSnapshot,
 ): number | null {
-  void level; // reserved for F5 carryover rules (Phase 12.8)
+  void level;
   const skill = snapshot.skills[skillId];
   if (skill === undefined) return null;
   if (skill.currentRank >= skill.maxAssignableRank) return null;

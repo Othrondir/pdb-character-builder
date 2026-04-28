@@ -20,6 +20,7 @@ export const shellCopyEs = {
       will: 'Vol.',
       generalFeat: 'Dote general',
       classFeat: 'Dote de clase',
+      edit: 'Editar',
       skill: 'Habilidad',
       ranks: 'Rangos',
       abilityMod: 'Mod. atr.',
@@ -33,6 +34,7 @@ export const shellCopyEs = {
       export: 'Exportar JSON',
       import: 'Importar JSON',
       share: 'Compartir',
+      editLevelTemplate: 'Editar nivel {N}',
     },
     loadingState: 'Cargando slots…',
     noSlotsMessage: 'No hay builds guardadas todavía.',
@@ -241,6 +243,7 @@ export const shellCopyEs = {
   },
   skills: {
     availablePointsLabel: 'Puntos disponibles',
+    carriedPointsLabel: 'Puntos guardados',
     capLabel: 'Tope',
     classLabel: 'Clase',
     classSkillLabel: 'Clase',

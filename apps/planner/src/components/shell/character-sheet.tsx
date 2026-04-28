@@ -1,13 +1,13 @@
 import { NwnFrame } from '@planner/components/ui/nwn-frame';
 import { SheetTabs } from './sheet-tabs';
 import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
+import { computeFinalAttributeTotals } from '@planner/features/character-foundation/final-attributes';
 import { useLevelProgressionStore } from '@planner/features/level-progression/store';
 import {
   selectAttributeBudgetSnapshot,
   selectFoundationSummary,
 } from '@planner/features/character-foundation/selectors';
 import { selectProgressionSummary } from '@planner/features/level-progression/selectors';
-import { applyRaceModifiers } from '@rules-engine/foundation/apply-race-modifiers';
 import { abilityModifier } from '@rules-engine/foundation';
 import { computeHitPoints } from '@rules-engine/progression/compute-hit-points';
 import { compiledClassCatalog } from '@planner/data/compiled-classes';
@@ -50,9 +50,10 @@ function StatsPanel() {
   const progressionState = useLevelProgressionStore();
   const budgetSnapshot = selectAttributeBudgetSnapshot(foundationState);
   const progressionSummary = selectProgressionSummary(progressionState, foundationState);
-  const finalAttributes = applyRaceModifiers(
+  const finalAttributes = computeFinalAttributeTotals(
     foundationState.baseAttributes,
     foundationState.racialModifiers,
+    progressionState.levels,
   );
   const conModifier = abilityModifier(finalAttributes.con);
   const hitPoints = computeHitPoints(

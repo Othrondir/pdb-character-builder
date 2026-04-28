@@ -6,10 +6,11 @@
  * Contract locked by this spec (RED-first, per CONTEXT.md D-08):
  *   1. Fresh L1 Humano+Guerrero: label is `Faltan 3 dotes que asignar en este nivel`, disabled.
  *      (Budget total=3 via computePerLevelBudget — Humano L1 general + classBonus + raceBonus.)
- *   2. L1 non-Humano Guerrero with all 2 feat slots chosen but 0 skill points spent:
- *      label is `Faltan 8 puntos de habilidad por gastar`, disabled
- *      (Budget=8 for non-Humano Guerrero INT 10: (2+0)*4=8 at L1.)
- *   3. L1 non-Humano Guerrero with 2/2 feats + 8/8 skills: label is `Continuar al nivel 2`, enabled.
+ *   2. L1 Humano+Guerrero with all 3 feat slots chosen but 0 skill points spent:
+ *      label is `Faltan 4 puntos de habilidad por gastar`, disabled
+ *      (Budget=8 at L1 INT 8; 4 are bankable, 4 still must be spent.)
+ *   3. L1 non-Humano Guerrero with 2/2 feats + 0/4 skills: label is `Continuar al nivel 2`, enabled.
+ *   4. L1 non-Humano Guerrero with 2/2 feats + 4/4 skills: label is `Continuar al nivel 2`, enabled.
  *   4. Clicking enabled button dispatches atomically:
  *        useLevelProgressionStore.activeLevel → 2
  *        usePlannerShellStore.expandedLevel   → 2
@@ -133,19 +134,25 @@ describe('Phase 12.4-09 — LevelEditorActionBar (SPEC R2)', () => {
       expect(button).toBeDisabled();
     });
 
-    it('A2: L1 Elfo+Guerrero with all feats chosen, 0 skills — label `Faltan 4 puntos de habilidad por gastar`, disabled (deficit priority feat→skill)', () => {
-      // Elfo INT base 8 (foundation-fixture baseScore=8) → mod=-1 → max(1, 2-1)=1
-      // base; L1 ×4 = 4 skill points. Locks priority: feat deficit cleared first,
-      // then skill deficit copy surfaces.
-      setupL1ElfoGuerrero();
-      fillL1ElfoGuerreroFeats();
+    it('A2: L1 Humano+Guerrero with all feats chosen, 0 skills — label `Faltan 4 puntos de habilidad por gastar`, disabled', () => {
+      setupL1HumanoGuerrero();
+      fillL1HumanoGuerreroFeats();
       render(createElement(LevelEditorActionBar));
       const button = screen.getByRole('button');
       expect(button.textContent).toMatch(/Faltan 4 puntos de habilidad por gastar/);
       expect(button).toBeDisabled();
     });
 
-    it('A3: L1 Elfo+Guerrero with 2/2 feats + 4/4 skills — label `Continuar al nivel 2`, enabled', () => {
+    it('A3: L1 Elfo+Guerrero with 2/2 feats + 0/4 skills — label `Continuar al nivel 2`, enabled via carryover', () => {
+      setupL1ElfoGuerrero();
+      fillL1ElfoGuerreroFeats();
+      render(createElement(LevelEditorActionBar));
+      const button = screen.getByRole('button');
+      expect(button.textContent).toMatch(/Continuar al nivel 2/);
+      expect(button).not.toBeDisabled();
+    });
+
+    it('A4: L1 Elfo+Guerrero with 2/2 feats + 4/4 skills — label `Continuar al nivel 2`, enabled', () => {
       setupL1ElfoGuerrero();
       fillL1ElfoGuerreroFeats();
       fillL1ElfoGuerreroSkills();
@@ -155,7 +162,7 @@ describe('Phase 12.4-09 — LevelEditorActionBar (SPEC R2)', () => {
       expect(button).not.toBeDisabled();
     });
 
-    it('A4: L1 Humano+Guerrero with 3/3 feats + 8/8 skills — label `Continuar al nivel 2`, enabled', () => {
+    it('A5: L1 Humano+Guerrero with 3/3 feats + 8/8 skills — label `Continuar al nivel 2`, enabled', () => {
       setupL1HumanoGuerrero();
       fillL1HumanoGuerreroFeats();
       useSkillStore
@@ -243,9 +250,10 @@ describe('Phase 12.4-09 — LevelEditorActionBar (SPEC R2)', () => {
     });
 
     it('D2: when skill deficit === 1 → singular label `Falta 1 punto de habilidad por gastar`', () => {
-      // L1 Elfo+Guerrero: 2/2 feats filled + 3/4 skill points spent → deficit=1.
-      setupL1ElfoGuerrero();
-      fillL1ElfoGuerreroFeats();
+      // L1 Humano+Guerrero: 3/3 feats filled + 3/8 skill points spent → 5 remain.
+      // Four are bankable, so the actionable deficit is exactly 1.
+      setupL1HumanoGuerrero();
+      fillL1HumanoGuerreroFeats();
       useSkillStore
         .getState()
         .setSkillRank(1 as ProgressionLevel, 'skill:trepar' as CanonicalId, 3);

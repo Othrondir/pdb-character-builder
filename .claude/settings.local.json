@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git stash *)",
+      "Bash(git checkout *)",
+      "Bash(corepack pnpm *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(node -e \"const { abilityModifier } = require\\('./packages/rules-engine/dist/foundation/ability-modifier.js'\\); console.log\\('10:', abilityModifier\\(10\\), '18:', abilityModifier\\(18\\), '8:', abilityModifier\\(8\\)\\);\")",
+      "Skill(gsd-complete-milestone)",
+      "Skill(gsd-new-milestone)",
+      "Bash(node scripts/patch-compiled-feats-family.mjs)",
+      "Bash(grep -cE \"parameterizedFeatFamily.*\\\\\\\\{\" apps/planner/src/data/compiled-feats.ts)",
+      "Bash(python *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5173)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:4173)",
+      "Bash(pnpm *)",
+      "PowerShell(pnpm *)",
+      "PowerShell(Get-Command *)",
+      "PowerShell(corepack *)",
+      "PowerShell(npx --yes vite --version 2>&1 | Out-String)",
+      "Skill(gsd-code-review)",
+      "Bash(git -C .claude/worktrees/agent-a954060b4dd2faf5f diff --stat HEAD)",
+      "Bash(git -C .claude/worktrees/agent-a954060b4dd2faf5f diff --cached --stat)",
+      "Bash(git -C *)"
+    ]
+  }
+}

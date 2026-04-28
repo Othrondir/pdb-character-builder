@@ -32,6 +32,10 @@ vi.mock('@planner/features/persistence', () => ({
 
 import { ResumenBoard } from '@planner/features/summary/resumen-board';
 import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
+import { useFeatStore } from '@planner/features/feats/store';
+import { useLevelProgressionStore } from '@planner/features/level-progression/store';
+import { usePlannerShellStore } from '@planner/state/planner-shell';
+import { useSkillStore } from '@planner/features/skills/store';
 
 let currentModel: ResumenViewModel;
 
@@ -46,7 +50,7 @@ const DEFAULT_MODEL: ResumenViewModel = {
   // Phase 12.9-01 / D-08 deleted ResumenViewModel.attributes; this fixture tracks.
   progression: Array.from({ length: 16 }, (_, i) => ({
     level: (i + 1) as 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16,
-    classLabel: null,
+    classLabel: i === 3 ? 'Guerrero' : null,
     cumulativeBab: null,
     cumulativeFort: null,
     cumulativeRef: null,
@@ -73,6 +77,9 @@ describe('ResumenBoard', () => {
     cleanup();
     vi.clearAllMocks();
     useCharacterFoundationStore.getState().resetFoundation();
+    useLevelProgressionStore.getState().resetProgression();
+    useSkillStore.getState().resetSkillAllocations();
+    useFeatStore.getState().resetFeatSelections();
   });
 
   it('renders 2 framed blocks labelled via aria-labelledby (Phase 12.9-02 / D-03: identity block collapsed into compact header)', () => {
@@ -123,6 +130,30 @@ describe('ResumenBoard', () => {
     // Cargar/Importar stay enabled — they HYDRATE stores, so build-incompleteness
     // is precisely the state they exist to recover from.
     expect(screen.getByRole('button', { name: copy.load })).toBeEnabled();
+  });
+
+  it('keeps the progression table visible even when the build is not projectable', () => {
+    useCharacterFoundationStore.getState().resetFoundation();
+
+    render(createElement(ResumenBoard));
+
+    expect(screen.getByText(shellCopyEs.resumen.emptyState.heading)).toBeInTheDocument();
+    expect(
+      document.querySelector('[aria-labelledby="resumen-progression-heading"]'),
+    ).toBeInTheDocument();
+  });
+
+  it('opens the clicked progression level back in Construccion', () => {
+    render(createElement(ResumenBoard));
+
+    screen.getByRole('button', { name: 'Editar nivel 4' }).click();
+
+    expect(usePlannerShellStore.getState().activeView).toBe('creation');
+    expect(usePlannerShellStore.getState().activeLevelSubStep).toBe('class');
+    expect(usePlannerShellStore.getState().expandedLevel).toBe(4);
+    expect(useLevelProgressionStore.getState().activeLevel).toBe(4);
+    expect(useSkillStore.getState().activeLevel).toBe(4);
+    expect(useFeatStore.getState().activeLevel).toBe(4);
   });
 
   it('renders em-dash (NOT "0") for every derived-stat cell when helpers are missing', () => {

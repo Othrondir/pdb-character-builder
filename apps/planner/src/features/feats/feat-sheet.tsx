@@ -6,6 +6,7 @@ import {
 } from '@rules-engine/contracts/canonical-id';
 import { useFeatStore } from './store';
 import { FeatFamilyExpander } from './feat-family-expander';
+import { extractFeatFamilyTargetLabel } from './family-labels';
 import type {
   FeatBoardView,
   FeatOptionView,
@@ -103,7 +104,7 @@ function FeatPickerList({
   return (
     <ul className="feat-picker__list" role="listbox">
       {options.map((option) => (
-        <li key={option.featId}>
+        <li className="feat-picker__item" key={option.featId}>
           <FeatPickerRow
             focused={option.featId === focusedFeatId}
             onFocus={onFocus}
@@ -164,7 +165,12 @@ function FeatFamilyRow({
     >
       <span className="feat-picker__label">{family.label}</span>
       {family.selectedTarget ? (
-        <em className="feat-picker__reason">{family.selectedTarget.label}</em>
+        <em className="feat-picker__reason">
+          {extractFeatFamilyTargetLabel(
+            family.label,
+            family.selectedTarget.label,
+          )}
+        </em>
       ) : null}
       <span className="feat-picker__pill feat-picker__pill--family">
         {pillLabel}
@@ -200,7 +206,7 @@ function FeatEntryList({
       {entries.map((entry) => {
         if (entry.kind === 'feat') {
           return (
-            <li key={entry.option.featId}>
+            <li className="feat-picker__item" key={entry.option.featId}>
               <FeatPickerRow
                 focused={entry.option.featId === focusedFeatId}
                 onFocus={onFocus}
@@ -213,7 +219,12 @@ function FeatEntryList({
         const family = entry.family;
         const expanded = expandedFamilyId === family.groupKey;
         return (
-          <li key={family.groupKey}>
+          <li
+            className={`feat-picker__item feat-picker__item--family${
+              expanded ? ' feat-picker__item--family-expanded' : ''
+            }`}
+            key={family.groupKey}
+          >
             <FeatFamilyRow
               family={family}
               expanded={expanded}

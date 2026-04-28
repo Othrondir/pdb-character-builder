@@ -65,6 +65,26 @@ function setupHumanoClerigoL1() {
   }));
 }
 
+function setupElfoGuerreroL2WithCarryover() {
+  useCharacterFoundationStore.getState().setRace('race:elf' as CanonicalId);
+  useLevelProgressionStore
+    .getState()
+    .setLevelClassId(1 as ProgressionLevel, 'class:fighter' as CanonicalId);
+  useLevelProgressionStore
+    .getState()
+    .setLevelClassId(2 as ProgressionLevel, 'class:fighter' as CanonicalId);
+  useLevelProgressionStore.getState().setActiveLevel(2 as ProgressionLevel);
+  useSkillStore.getState().setActiveLevel(2 as ProgressionLevel);
+  usePlannerShellStore.setState((prev) => ({
+    ...prev,
+    activeOriginStep: null,
+    activeLevelSubStep: 'skills',
+    activeView: 'creation',
+    expandedLevel: 2 as ProgressionLevel,
+    mobileNavOpen: false,
+  }));
+}
+
 /**
  * Spend N ranks on Clérigo class skills (costPerRank=1). Cleric class
  * skills from compiled-skills.ts include skill:concentracion,
@@ -200,5 +220,20 @@ describe('Phase 12.7-02 — skill + button disabled gate integration (F4 R2)', (
     rerender(createElement(SkillSheet));
 
     expect(container.textContent).not.toContain('supera los límites permitidos');
+  });
+
+  it('Suite B4: level 2 summary shows carried points from the previous legal level', () => {
+    setupElfoGuerreroL2WithCarryover();
+
+    const { container } = render(createElement(SkillSheet));
+
+    const summaryValues = Array.from(
+      container.querySelectorAll<HTMLDivElement>('.skill-sheet__summary-grid > div'),
+    ).map((entry) => entry.textContent?.replace(/\s+/g, ' ').trim() ?? '');
+
+    expect(summaryValues[0]).toContain('Puntos disponibles');
+    expect(summaryValues[0]).toContain('5');
+    expect(summaryValues[1]).toContain('Puntos guardados');
+    expect(summaryValues[1]).toContain('4');
   });
 });

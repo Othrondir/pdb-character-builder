@@ -306,7 +306,7 @@ function projectCompiledClasses(catalog: ClassCatalog): PlannerClassRecord[] {
 }
 
 export const phase04ClassFixture: Phase04ClassFixture = {
-  abilityIncreaseLevels: [4, 8, 12, 16],
+  abilityIncreaseLevels: [4, 8, 12, 16, 20],
   classes: projectCompiledClasses(compiledClassCatalog),
 };
 
