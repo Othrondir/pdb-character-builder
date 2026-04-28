@@ -8,6 +8,7 @@ const RACE_SIZES = ['small', 'medium', 'large'] as const;
 
 export const compiledRaceSchema = z.object({
   abilityAdjustments: z.record(z.enum(ABILITY_KEYS), z.number().int()),
+  abilitiesPointBuyNumber: z.number().int().nonnegative().nullable().optional(),
   description: z.string(),
   favoredClass: z.string().regex(canonicalIdRegex).nullable(),
   id: z.string().regex(/^race:[A-Za-z0-9._-]+$/),
