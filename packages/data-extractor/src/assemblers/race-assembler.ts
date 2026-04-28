@@ -162,8 +162,26 @@ export function assembleRaceCatalog(
       }
     }
 
+    // Phase 17 (ATTR-02 D-01) — AbilitiesPointBuyNumber column read.
+    // parseTwoDa already coerces '****' → null (two-da-parser.ts:131),
+    // so test `!= null`, not `!== '****'`.
+    // Use `>= 0` not `> 0`: 0 is a valid budget (means "no points to spend").
+    const abilitiesPointBuyRaw = row.AbilitiesPointBuyNumber;
+    let abilitiesPointBuyNumber: number | null = null;
+    if (abilitiesPointBuyRaw != null) {
+      const parsed = parseInt(abilitiesPointBuyRaw, 10);
+      if (Number.isFinite(parsed) && parsed >= 0) {
+        abilitiesPointBuyNumber = parsed;
+      } else {
+        warnings.push(
+          `Race row ${rowIndex} (${label}): invalid AbilitiesPointBuyNumber '${abilitiesPointBuyRaw}'`,
+        );
+      }
+    }
+
     races.push({
       abilityAdjustments,
+      abilitiesPointBuyNumber,
       description: resolvedDesc,
       favoredClass,
       id,
