@@ -7,19 +7,18 @@
  * snapshot with 45 per-race entries — so every race in the catalog has a
  * non-null curve.
  *
- * Phase 17 Wave 2 (ATTR-02) — seed migration: pre-Wave-2 the spec deleted
- * `race:human` from `PUERTA_POINT_BUY_SNAPSHOT` to manufacture the
- * no-snapshot-entry condition. Post-Wave-2 the selector reads
- * `compiledRaceCatalog`, so the snapshot mutation became a no-op. Migration
- * (per Phase 17 PATTERNS.md): swap to an unknown raceId
- * (`race:does-not-exist`) — the rewired selector's second null branch
- * (`if (!race) return null`) covers this and routes through
- * `calculateAbilityBudgetSnapshot`'s null branch (Phase 12.6 D-05) which
- * still emits rule:point-buy-missing. The em-dash fallback in
- * `attributes-board.tsx` raceLabel resolution preserves the visible callout
- * text (Spanish prefix + em-dash suffix). Plan 17-02 advances 1 of 6 spec
- * migrations Wave 3 originally owned; Wave 3 still owns the remaining 5
- * + snapshot module/JSON/dossier deletion atomically.
+ * Phase 17 Wave 2 (ATTR-02) — seed migration: pre-Wave-2 the spec mutated
+ * the legacy hand-authored snapshot module to manufacture the
+ * no-data-entry condition. Post-Wave-2 the selector reads
+ * `compiledRaceCatalog`, so that mutation became a no-op. Migration (per
+ * Phase 17 PATTERNS.md): swap to an unknown raceId (`race:does-not-exist`)
+ * — the rewired selector's second null branch (`if (!race) return null`)
+ * covers this and routes through `calculateAbilityBudgetSnapshot`'s null
+ * branch (Phase 12.6 D-05) which still emits rule:point-buy-missing. The
+ * em-dash fallback in `attributes-board.tsx` raceLabel resolution preserves
+ * the visible callout text (Spanish prefix + em-dash suffix). Phase 17
+ * Wave 3 retired the snapshot module + JSON + provenance dossier + barrel
+ * export atomically.
  */
 
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
