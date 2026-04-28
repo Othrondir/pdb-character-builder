@@ -8,7 +8,7 @@ import { resolveValidationOutcome } from '../contracts/validation-outcome';
 // interface lets `PointBuyCurve` (which has no baseScore) satisfy this
 // contract structurally, preserving the plan's "per-race selector threads
 // the snapshot output into the existing helpers" boundary.
-interface AbilityBudgetRules {
+export interface AbilityBudgetRules {
   budget: number;
   costByScore: Record<string, number>;
   maximum: number;
@@ -66,6 +66,60 @@ export function canIncrementAttribute(
   const nextCost = nextIncrementCost(currentValue, costByScore, maximum);
   if (nextCost === null) return false;
   return remainingPoints - nextCost >= 0;
+}
+
+/**
+ * Phase 17 (ATTR-02 D-02) — NWN1 hardcoded engine point-buy cost step.
+ *
+ * Source-of-truth: NWN1 EE engine binary (not 2DA-driven). User-confirmed
+ * 2026-04-20 in-game verification. See git history of
+ * `packages/rules-engine/src/foundation/data/puerta-point-buy.md § "Plan 06
+ * Source Resolution"` (deleted in Phase 17 Wave 3; commit `bf55129` and
+ * earlier 12.6 commits preserve the provenance text).
+ *
+ * Bands: 1:1 from 8→14 (6 pts), 2:1 from 14→16 (4 pts), 3:1 from 16→18 (6 pts).
+ * Total 8→18 = 16 cost.
+ */
+export const NWN1_POINT_BUY_COST_TABLE = {
+  minimum: 8,
+  maximum: 18,
+  costByScore: {
+    '8': 0, '9': 1, '10': 2, '11': 3, '12': 4, '13': 5,
+    '14': 6, '15': 8, '16': 10, '17': 13, '18': 16,
+  },
+} as const satisfies {
+  minimum: number;
+  maximum: number;
+  costByScore: Record<string, number>;
+};
+
+/**
+ * Phase 17 (ATTR-02 D-02a) — compose race + cost-table → AbilityBudgetRules
+ * or null. Pure, framework-agnostic. Selector composes the call.
+ *
+ * Returns null when race.abilitiesPointBuyNumber is null/undefined,
+ * preserving Phase 12.6 D-05 fail-closed contract for rule:point-buy-missing
+ * via calculateAbilityBudgetSnapshot's null branch.
+ *
+ * Input type is structural — does NOT import CompiledRace from
+ * @data-extractor. Selector at planner edge enforces type compatibility.
+ * Mirrors Phase 16-02 B-01 architectural decision.
+ */
+export function deriveAbilityBudgetRules(
+  race: { abilitiesPointBuyNumber: number | null | undefined },
+  costTable: {
+    minimum: number;
+    maximum: number;
+    costByScore: Record<string, number>;
+  } = NWN1_POINT_BUY_COST_TABLE,
+): AbilityBudgetRules | null {
+  if (race.abilitiesPointBuyNumber == null) return null;
+  return {
+    budget: race.abilitiesPointBuyNumber,
+    minimum: costTable.minimum,
+    maximum: costTable.maximum,
+    costByScore: costTable.costByScore,
+  };
 }
 
 export function calculateAbilityBudgetSnapshot(
