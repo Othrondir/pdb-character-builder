@@ -15,7 +15,7 @@
 
 ### Atributos (point-buy enrichment)
 
-- [ ] **ATTR-02**: El planner consume curvas de coste point-buy diferenciadas por raza desde el extractor (Puerta snapshot override o 2DA enrichment) en lugar de la curva uniforme actual (cierra UAT-2026-04-20 A1).
+- [x] **ATTR-02**: El planner consume curvas de coste point-buy diferenciadas por raza desde el extractor (Puerta snapshot override o 2DA enrichment) en lugar de la curva uniforme actual (cierra UAT-2026-04-20 A1). _(Phase 17 done 2026-04-28 — Wave 1 `ed45edf` extractor surface + Wave 2 `4e24102` rules-engine helper + selector rewire + Wave 3 `b1539fd` atomic snapshot retirement. SC#4 reframed via 17-02 D-03 to schema-shape coverage — extractor currently emits uniform `AbilitiesPointBuyNumber=30` across 45 races; per-race differentiation arrives via future enrichment, but the wiring contract is locked.)_
 
 ### Quick-Task Triage
 
@@ -46,7 +46,7 @@
 |--------|-------|--------|
 | FEAT-05 | 16 | Done (16-01 extractor + 16-02 consumer + 16-03 regression lock) |
 | FEAT-06 | 16 | Done (16-02 race-bonus surface + 16-03 D-05 round-trip lock) |
-| ATTR-02 | 17 | Not started |
+| ATTR-02 | 17 | Done (17-01 extractor + 17-02 helper + selector rewire + 17-03 atomic snapshot retirement) |
 | TASK-01 | 18 | Not started |
 | TASK-02 | 18 | Not started |
 | TASK-03 | 18 | Not started |

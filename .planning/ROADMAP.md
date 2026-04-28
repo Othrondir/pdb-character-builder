@@ -45,7 +45,7 @@ Full phase detail: `.planning/milestones/v1.0-ROADMAP.md`.
 ### 🚧 v1.1 Tech-Debt Closure — In Progress
 
 - [x] Phase 16: Feat Engine Completion (GAP) — FEAT-05 bonus-feat schedules from `cls_bfeat_*.2da` extraction + FEAT-06 Humano L1 extra slot (store capacity 2→3). _Done 2026-04-26 — 3/3 plans (16-01 `1ad9a36`, 16-02 `f090ed2`, 16-03 `0830364`)._
-- [~] Phase 17: Per-Race Point-Buy (GAP) — ATTR-02 curvas de coste point-buy diferenciadas por raza desde extractor. EXECUTION COMPLETE; awaits `/gsd-verify-work 17`. _Wave 1 (17-01) DONE 2026-04-28 — extractor surface ships `abilitiesPointBuyNumber` field on `compiledRaceSchema` + race-assembler emission + regenerated `compiled-races.ts` (45 entries × 30 budget) with race:halfelf2 dedup hygiene. Commits `9d393ae` (test RED) + `ed45edf` (feat regen GREEN). Wave 2 (17-02) DONE 2026-04-28 — rules-engine `NWN1_POINT_BUY_COST_TABLE` + `deriveAbilityBudgetRules` helper + `AbilityBudgetRules` `export interface` promotion + `selectAbilityBudgetRulesForRace` rewired to compiledRaceCatalog. Commits `b368509` (helper RED) + `f048c9f` (helper GREEN) + `74e76cb` (selector RED) + `4e24102` (selector GREEN). Wave 3 (17-03) DONE 2026-04-28 — atomic snapshot retirement (4 file deletions: `point-buy-snapshot.ts` + `puerta-point-buy.json` + `puerta-point-buy.md` + `point-buy-snapshot-coverage.spec.ts`) + foundation barrel cleaned (5 exports, was 6) + 4 dependent specs migrated off legacy import + UAT-FINDINGS-2026-04-20 §A1 closed with verbatim D-05 disposition footer + git-history evidence pointer. Commits `bed5239` (test phase-12.6 migration) + `b4fdac0` (test pre-12.6 seeder migration) + `b1539fd` (refactor atomic retirement). Full grep sweep `PUERTA_POINT_BUY_SNAPSHOT|PointBuyCurve|point-buy-snapshot|puerta-point-buy` across `apps/ packages/ tests/` → ZERO MATCHES. ATTR-02 12/12 V-ids + 4/4 SCs GREEN._
+- [x] Phase 17: Per-Race Point-Buy (GAP) — ATTR-02 curvas de coste point-buy diferenciadas por raza desde extractor. _Done 2026-04-28 — 3/3 plans (17-01 `ed45edf`, 17-02 `4e24102`, 17-03 `b1539fd`); verifier PASSED 4/4 SCs + 12/12 V-ids. SC#4 reframed via 17-02 D-03 to schema-shape coverage._
 - [ ] Phase 18: Quick-Task Triage (GAP) — TASK-01/02/03 triage de q1m bruja dotes + qzv auto-dotes + r5j scroll progresión.
 - [ ] Phase 19: Test Infra (GAP) — INFRA-01 `@playwright/test` install + Phase 12.4-09 R9 e2e migrada del fallback RTL.
 
@@ -106,6 +106,6 @@ Full phase detail: `.planning/milestones/v1.0-ROADMAP.md`.
 | Milestone | Phases | Plans | Status | Shipped |
 |-----------|--------|-------|--------|---------|
 | v1.0 MVP | 27 | 99/99 | ✅ Shipped | 2026-04-26 |
-| v1.1 Tech-Debt Closure | 4 | 0 | 🚧 Planning | — |
+| v1.1 Tech-Debt Closure | 4 | 6/12 | 🚧 In Progress | — |
 
 **v1.1 Phase Order:** 16 → 17 → 18 → 19 (numbering continues from v1.0).
