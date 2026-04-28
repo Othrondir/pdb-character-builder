@@ -7,33 +7,15 @@ import { AttributesBoard } from '@planner/features/character-foundation/attribut
 import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
 import { usePlannerShellStore } from '@planner/state/planner-shell';
 import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
-import { PUERTA_POINT_BUY_SNAPSHOT } from '@rules-engine/foundation/point-buy-snapshot';
 
-// Phase 12.6 (Rule 3 auto-fix) — Plan 02 swaps the runtime path from the
-// uniform foundation-fixture curve to the per-race snapshot
-// (PUERTA_POINT_BUY_SNAPSHOT). The snapshot is intentionally empty in
-// Wave 1 to exercise fail-closed. This pre-12.6 suite tests the LEGAL
-// path, so we seed the `race:human` entry with the pre-12.6 uniform curve
-// (preserving the contract the test was written to cover) and clean up
-// in afterEach so neighbouring suites see an untouched snapshot.
-const PRE_12_6_UNIFORM_CURVE = {
-  budget: 30,
-  minimum: 8,
-  maximum: 18,
-  costByScore: {
-    '8': 0,
-    '9': 1,
-    '10': 2,
-    '11': 3,
-    '12': 4,
-    '13': 5,
-    '14': 6,
-    '15': 8,
-    '16': 10,
-    '17': 13,
-    '18': 16,
-  },
-} as const;
+// Phase 17 (ATTR-02 D-04 migration): pre-Phase-17 this suite seeded the
+// retired hand-authored snapshot module with a uniform NWN1 curve for
+// `race:human` because the runtime path used the snapshot. Post-Phase-17
+// the runtime path reads `compiledRaceCatalog` directly (extractor-sourced
+// `abilitiesPointBuyNumber: 30`) and composes the curve via
+// `deriveAbilityBudgetRules` with the canonical `NWN1_POINT_BUY_COST_TABLE`.
+// The seed mechanism is no longer required — the catalog ships the
+// legal-path curve natively.
 
 // Phase 10 FLOW-01 regression: pins that AttributesBoard exposes an in-pane
 // "Aceptar" affordance wired to setExpandedLevel(1) + setActiveLevelSubStep('class')
@@ -50,14 +32,10 @@ describe('FLOW-01 attributes->level1 advance (Phase 10 regression)', () => {
       activeLevelSubStep: null,
       expandedLevel: null,
     });
-    // Seed the snapshot so race:human has a curve for this legal-path suite.
-    (PUERTA_POINT_BUY_SNAPSHOT as Record<string, unknown>)['race:human'] =
-      PRE_12_6_UNIFORM_CURVE;
   });
 
   afterEach(() => {
     cleanup();
-    delete (PUERTA_POINT_BUY_SNAPSHOT as Record<string, unknown>)['race:human'];
   });
 
   it('renders an "Aceptar" button', () => {
