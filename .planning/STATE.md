@@ -4,14 +4,14 @@ milestone: v1.1
 milestone_name: Tech-Debt Closure — In Progress
 status: executing
 stopped_at: "**Phase 15 EXECUTION COMPLETE** — A11y + Modal Polish (3/3 plans merged sequentially on master across 2 waves). Closes Phase 06 WR-01 + Phase 07.1 WR-02/03/04 + Phase 12.8 WR-01/02 (full v1.0-MILESTONE-AUDIT.md tech_debt cluster RETIRED). gsd-sdk on this Windows machine has no `query` subcommand → orchestrator fell back to sequential inline execution per `<runtime_compatibility>`; gsd-executor agents ran one at a time on master without worktree isolation. Pre-execute housekeeping: stashed `apps/planner/src/features/skills/skill-sheet.tsx` + `vitest.config.ts` prep edits (stash superseded by 15-01/15-02 implementations and dropped after verifier PASS); pre-existing wave-2 merge stash from a prior session preserved at stash@{0}. Wave 1 sequential: 15-01 (commits 5c48a94 hooks+polyfill, c550143 drawer+4-dialog wiring, f39333b docs) added `useFocusTrap` + `useBodyScrollLock` under `apps/planner/src/lib/a11y/`; jsdom 29 polyfill rewritten as full reimplementation (jsdom ships HTMLDialogElement.prototype.showModal/close as undefined); `id="planner-stepper-drawer"` dropped from mobile-nav drawer wrapper (collided with canonical stepper sidebar in planner-shell-frame.tsx:19). 15-02 (commits d375bb8 feat, 727ac69 docs) replaced `document.querySelector` in feat-sheet.tsx + skill-sheet.tsx with parent-owned `scrollerRef` threaded through SelectionScreen.contentRef + feat-board + skill-board; canonicalIdRegex.test guards added at feat-sheet handlers. Wave 2 sequential: 15-03 (commits 61ee3c5 feat, adf0c6b docs) rolled out useShallow slice-as-input pattern to feat-board.tsx + feat-detail-panel.tsx + feat-sheet-tab.tsx; CONTEXT D-06 reconciled in-place (feat-search.tsx absent post-Phase-06 refactor, rollout shrunk 4→3 files). Verifier verdict: PASS 5/5 — 27 phase-15 specs green across 7 spec files, phase 07.1/12.7/12.8 regression all green, `corepack pnpm typecheck` exit 0, D-NO-CSS / D-NO-COPY / D-NO-DEPS git diff bcbe969..HEAD all empty. 2 pre-existing class-picker-prestige-reachability baseline failures isolated via `git stash` + rerun on bcbe969 (NOT counted against phase 15 — Phase 13 drift). Verification report at `.planning/phases/15-a11y-modal-polish/15-VERIFICATION.md`. Stash housekeeping: pre-execute stash dropped (superseded); pre-existing stash@{0} (wave-2 merge stash from earlier session) preserved untouched. Resume options: `/gsd-audit-milestone v1.0` (close milestone), `/gsd-ship` (PR + cross-AI review), `/gsd-next` (advance routing)."
-last_updated: "2026-04-26T17:51:25.412Z"
-last_activity: 2026-04-26 -- Phase 17 planning complete
+last_updated: "2026-04-28T10:14:00.000Z"
+last_activity: 2026-04-28 -- Phase 17-01 (Wave 1) complete — extractor surface for per-race point-buy
 progress:
   total_phases: 4
   completed_phases: 1
-  total_plans: 6
-  completed_plans: 3
-  percent: 50
+  total_plans: 9
+  completed_plans: 4
+  percent: 44
 ---
 
 # Project State
@@ -21,13 +21,13 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-30)
 
 **Core value:** A player can build a Puerta de Baldur character from level 1 to 16 with strict server-valid validation and share that exact build reliably.
-**Current focus:** Phase 16 — Feat Engine Completion (GAP) — PHASE COMPLETE 2026-04-26 (3/3 plans merged: 16-01 extractor `1ad9a36`, 16-02 race-aware consumer + UI `f090ed2`, 16-03 D-05 round-trip regression lock `0830364`). Next phase per ROADMAP: Phase 17 — Per-Race Point-Buy.
+**Current focus:** Phase 17 — Per-Race Point-Buy (ATTR-02). Wave 1 (17-01) COMPLETE 2026-04-28 — extractor surface (`abilitiesPointBuyNumber` field on `compiledRaceSchema` + race-assembler emission + regenerated `compiled-races.ts` with race:halfelf2 dedup hygiene). Snapshot module preserved for Wave 2 consumer. Wave 2 (17-02) scope: `NWN1_POINT_BUY_COST_TABLE` + `deriveAbilityBudgetRules` helper + selector swap + retire snapshot module. Wave 3 (17-03) scope: atomic spec migration (5 specs) + delete snapshot artifacts + UAT-2026-04-20 §A1 closure.
 
 ## Current Position
 
-Phase: 16 (feat-engine-completion) — PHASE COMPLETE (3/3 plans merged across waves 1-2-3)
-Plan: 3 of 3 complete (16-01 done 2026-04-26 via 1b46bc0/ee47fc5/1ad9a36; 16-02 done 2026-04-26 via df9e9f7/c917391/75578ea/7475bfb/f090ed2; 16-03 done 2026-04-26 via 0830364)
-Status: Ready to execute
+Phase: 17 (per-race-point-buy) — Wave 1 COMPLETE; 1 of 3 plans done
+Plan: 17-01 done 2026-04-28 via `9d393ae` (test RED gate) + `ed45edf` (feat regen GREEN gate); 17-02 + 17-03 pending
+Status: Ready to execute Wave 2 (17-02-PLAN.md)
 
 - B1 attributes overspend gate (nextIncrementCost + canIncrementAttribute, 12.3-01)
 - B2+B8+B9 multiclass active-level wiring (LevelRail dispatch, 12.3-02)
@@ -37,9 +37,11 @@ Status: Ready to execute
 - B5 description paragraph CSS (white-space: pre-wrap, 12.3-06)
 
 499/499 tests green. In-browser UAT confirmed (Enano+Guerrero L1+PÃ­caro L2): rail 1Guerrero/2PÃ­caro, header NIVEL 2, PG 20, slot prompts rendered, description paragraph breaks visible. Milestone v1.0 UNBLOCKED.
-Last activity: 2026-04-26 -- Phase 17 planning complete
 
-Progress: [â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆ] 100%
+**Phase 17 Wave 1 verification (2026-04-28):** `tests/phase-17/per-race-point-buy-extractor.spec.ts` 7/7 GREEN; `tests/phase-12.6 + tests/phase-12.8` 209/209 (1 todo) — dedup invariants intact post-halfelf2 excision; `corepack pnpm exec tsc -p tsconfig.base.json --noEmit` exit 0; only `compiled-races.ts` ships in commit (sibling catalogs + extraction-report.txt reverted to baseline per Phase 16-01 atomic-extract scoping pattern). Pre-existing 2-failure baseline in `tests/phase-12.4/class-picker-prestige-reachability.spec.tsx` reproduced via stash-and-rerun on pre-Phase-17 tree — unchanged from STATE.md line-6 documentation, NOT counted against Phase 17.
+Last activity: 2026-04-28 -- Phase 17-01 (Wave 1) complete
+
+Progress: [â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆ] 100% (v1.0 milestone) / Phase 17 Wave 1 of 3 done
 
 ## Performance Metrics
 
@@ -97,6 +99,7 @@ Progress: [â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–�
 | Phase 15 P02 | 28m | 1 task (TDD GREEN against 2 pre-authored RED specs + canonicalIdRegex guards + 12.7 fixture-only harness update) | 8 files (5 source + 2 new specs + 1 fixture-only test) |
 | Phase 16 P01 | 13m | 3 tasks | 3 files (1 created + 2 modified) + 1 regenerated artifact |
 | Phase 16 P02 | 15m | 5 tasks (RED specs + race-aware refactor + 5 fixture migrations + UI surface + PIT-01 reconciliation) | 16 files (3 created + 13 modified) |
+| Phase 17 P01 | 12m | 2 tasks (RED gate spec + GREEN regen + halfelf2 dedup hygiene) | 4 files (1 created spec + 2 modified extractor + 1 regenerated artifact) |
 
 ## Accumulated Context
 
@@ -189,6 +192,7 @@ Recent decisions affecting current work:
 - [Phase 15-01]: Native `<dialog>` surfaces (4 of them) trust browser top-layer focus-trap â€” useFocusTrap is for non-`<dialog>` aria-modal surfaces ONLY (currently just the mobile-nav drawer). Future custom modals reuse the hook by attaching the ref to the trap container.
 - [Phase 15-01]: jsdom 29 ships HTMLDialogElement WITHOUT showModal/close on the prototype (Object.getOwnPropertyDescriptor returns undefined). Phase-15 polyfill at tests/phase-15/setup.ts is a complete reimplementation (toggles open attribute; records/restores activeElement); guarded by `typeof HTMLDialogElement !== 'undefined'` so non-jsdom suites no-op. Loaded via vitest test.setupFiles for global coverage. Test-only â€” never ships to production.
 - [Phase 15-01]: Drawer wrapper in mobile-nav-toggle.tsx carries role=dialog + aria-modal=true but does NOT carry id="planner-stepper-drawer" (the canonical id is owned by the stepper sidebar in planner-shell-frame.tsx:19, which the toggle's aria-controls already targets). Adding the id to both elements produced a duplicate-id collision that broke phase-07.1 querySelector ordering; Rule 1 fix dropped the id from the mobile-nav wrapper. Trap mechanism doesn't need the id â€” it uses the React ref to scope focusable lookups.
+- [Phase 17-01]: Wave 1 ships extractor surface only â€” `compiledRaceSchema.abilitiesPointBuyNumber: z.number().int().nonnegative().nullable().optional()` additive optional nullable (D-01/D-06 mirror Phase 16-01 bonusFeatSchedule posture, no schemaVersion bump). race-assembler.ts uses favoredClass guard idiom (parseInt + Number.isFinite + `>= 0`; 0 is a valid budget); parseTwoDa coerces `'****' â†’ null` upstream so guard tests `!= null`. Snapshot module + JSON + provenance dossier preserved untouched (point-buy-snapshot.ts, data/puerta-point-buy.{json,md}); Wave 3 retires them atomically with spec migration. Sibling regenerated catalogs + extraction-report.txt reverted to baseline (Phase 16-01 atomic-extract scoping precedent). race:halfelf2 dedup applied in-band per D-07 via line-walking node script (regex approach burned by lazy-quantifier expanding across 13 entries; line-walking on `    {` / `    },` boundaries is durable across CRLF / long-line content).
 
 ### Pending Todos
 
