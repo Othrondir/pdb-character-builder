@@ -45,7 +45,7 @@ Full phase detail: `.planning/milestones/v1.0-ROADMAP.md`.
 ### 🚧 v1.1 Tech-Debt Closure — In Progress
 
 - [x] Phase 16: Feat Engine Completion (GAP) — FEAT-05 bonus-feat schedules from `cls_bfeat_*.2da` extraction + FEAT-06 Humano L1 extra slot (store capacity 2→3). _Done 2026-04-26 — 3/3 plans (16-01 `1ad9a36`, 16-02 `f090ed2`, 16-03 `0830364`)._
-- [~] Phase 17: Per-Race Point-Buy (GAP) — ATTR-02 curvas de coste point-buy diferenciadas por raza desde extractor. _Wave 1 (17-01) DONE 2026-04-28 — extractor surface ships `abilitiesPointBuyNumber` field on `compiledRaceSchema` + race-assembler emission + regenerated `compiled-races.ts` (45 entries × 30 budget) with race:halfelf2 dedup hygiene. Commits `9d393ae` (test RED) + `ed45edf` (feat regen GREEN). Wave 2 (17-02) + Wave 3 (17-03) outstanding._
+- [~] Phase 17: Per-Race Point-Buy (GAP) — ATTR-02 curvas de coste point-buy diferenciadas por raza desde extractor. _Wave 1 (17-01) DONE 2026-04-28 — extractor surface ships `abilitiesPointBuyNumber` field on `compiledRaceSchema` + race-assembler emission + regenerated `compiled-races.ts` (45 entries × 30 budget) with race:halfelf2 dedup hygiene. Commits `9d393ae` (test RED) + `ed45edf` (feat regen GREEN). Wave 2 (17-02) DONE 2026-04-28 — rules-engine `NWN1_POINT_BUY_COST_TABLE` + `deriveAbilityBudgetRules` helper + `AbilityBudgetRules` `export interface` promotion + `selectAbilityBudgetRulesForRace` rewired to compiledRaceCatalog. Commits `b368509` (helper RED) + `f048c9f` (helper GREEN) + `74e76cb` (selector RED) + `4e24102` (selector GREEN). Wave 3 (17-03) outstanding — atomic snapshot retirement + 4 spec migrations + UAT closure._
 - [ ] Phase 18: Quick-Task Triage (GAP) — TASK-01/02/03 triage de q1m bruja dotes + qzv auto-dotes + r5j scroll progresión.
 - [ ] Phase 19: Test Infra (GAP) — INFRA-01 `@playwright/test` install + Phase 12.4-09 R9 e2e migrada del fallback RTL.
 
@@ -76,7 +76,7 @@ Full phase detail: `.planning/milestones/v1.0-ROADMAP.md`.
 4. Specs cubren al menos 3 razas con curvas distintas + regression sobre razas no-enriched (curva legacy preservada).
 **Plans:** 3 plans
 - [x] 17-01-PLAN.md — Extractor: schema field extension + race-assembler 2DA read + atomic regen + race:halfelf2 dedup hygiene + Wave 1 RED-gate spec. _Done 2026-04-28 — `9d393ae` + `ed45edf`._
-- [ ] 17-02-PLAN.md — Rules-engine + selector: NWN1_POINT_BUY_COST_TABLE + deriveAbilityBudgetRules helper + AbilityBudgetRules export promotion + selectAbilityBudgetRulesForRace rewire + Wave 2 helper + selector RED-gate specs (SC#4 D-03 reframe).
+- [x] 17-02-PLAN.md — Rules-engine + selector: NWN1_POINT_BUY_COST_TABLE + deriveAbilityBudgetRules helper + AbilityBudgetRules export promotion + selectAbilityBudgetRulesForRace rewire + Wave 2 helper + selector RED-gate specs (SC#4 D-03 reframe). _Done 2026-04-28 — `b368509` (helper RED) + `f048c9f` (helper GREEN) + `74e76cb` (selector RED) + `4e24102` (selector GREEN). 1 spec migration brought forward from Wave 3 (Rule 3 deviation: phase-12.6 attributes-board-fail-closed seed mechanism)._
 - [ ] 17-03-PLAN.md — Atomic snapshot retirement: 5 importer specs migrated + point-buy-snapshot-coverage spec deleted + snapshot module + JSON + provenance dossier deleted + foundation barrel cleaned + UAT-FINDINGS-2026-04-20 §A1 closeout footer.
 
 ### Phase 18: Quick-Task Triage (GAP)
