@@ -40,7 +40,7 @@ export const shellCopyEs = {
     noSlotsMessage: 'No hay builds guardadas todavía.',
     emptyState: {
       heading: 'Todavía no hay ficha que mostrar',
-      body: 'Elige raza y alineamiento en Construcción para ver la ficha completa de tu personaje. Mientras tanto puedes cargar una build guardada o importar un JSON.',
+      body: 'Elige raza y alineamiento en Construcción para ver la ficha completa de tu personaje. Mientras tanto puedes importar un JSON.',
     },
   },
   persistence: {
@@ -69,7 +69,7 @@ export const shellCopyEs = {
       'No se pudo cargar la build "{name}": archivo dañado o de una versión incompatible. Usa Importar JSON con un archivo válido.',
     privateModeUnavailable: 'Guardado local no disponible en este modo del navegador.',
     incompleteBuild:
-      'Completa raza y alineamiento antes de guardar, exportar o compartir la build.',
+      'Completa raza y alineamiento antes de exportar o compartir la build.',
     versionMismatch: {
       title: 'Versión incompatible',
       body: 'Esta build usa una versión de reglas o dataset distinta a la que usa este planner. No se puede cargar con exactitud — las reglas pueden haber cambiado y la build dejaría de ser legal.',

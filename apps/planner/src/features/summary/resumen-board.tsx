@@ -9,7 +9,6 @@ import { useCharacterFoundationStore } from '@planner/features/character-foundat
 import { openPlannerLevel } from '@planner/features/level-progression/navigation';
 import { useResumenViewModel } from './resumen-selectors';
 import { ResumenTable } from './resumen-table';
-import { SaveSlotDialog, LoadSlotDialog } from './save-slot-dialog';
 import {
   buildShareUrl,
   diffRuleset,
@@ -28,8 +27,8 @@ import { pushToast } from '@planner/components/ui/toast';
 
 /**
  * Top-level Resumen screen (Phase 08 D-02 / D-03).
- * Renders: dataset-label header + action bar (Guardar / Cargar / Exportar / Importar /
- * Compartir [disabled]) + ResumenTable + Save/Load dialogs + hidden file input.
+ * Renders: dataset-label header + action bar (Exportar / Importar /
+ * Compartir [disabled]) + ResumenTable + hidden file input.
  *
  * Compartir is wired in Plan 08-02.
  */
@@ -40,8 +39,6 @@ export function ResumenBoard() {
   const raceId = useCharacterFoundationStore((s) => s.raceId);
   const alignmentId = useCharacterFoundationStore((s) => s.alignmentId);
   const isProjectable = raceId !== null && alignmentId !== null;
-  const [saveOpen, setSaveOpen] = useState(false);
-  const [loadOpen, setLoadOpen] = useState(false);
   const [pendingImport, setPendingImport] = useState<
     { doc: BuildDocument; diff: RulesetDiff } | null
   >(null);
@@ -144,20 +141,9 @@ export function ResumenBoard() {
       <NwnFrame className="resumen-board__actions">
         <NwnButton
           disabled={!isProjectable}
-          onClick={() => setSaveOpen(true)}
-          title={isProjectable ? undefined : shellCopyEs.persistence.incompleteBuild}
-          variant="primary"
-        >
-          {copy.actions.save}
-        </NwnButton>
-        <NwnButton onClick={() => setLoadOpen(true)} variant="secondary">
-          {copy.actions.load}
-        </NwnButton>
-        <NwnButton
-          disabled={!isProjectable}
           onClick={onExport}
           title={isProjectable ? undefined : shellCopyEs.persistence.incompleteBuild}
-          variant="secondary"
+          variant="primary"
         >
           {copy.actions.export}
         </NwnButton>
@@ -197,8 +183,6 @@ export function ResumenBoard() {
         onEditLevel={(level) => openPlannerLevel(level, 'class')}
       />
 
-      <SaveSlotDialog open={saveOpen} onClose={() => setSaveOpen(false)} />
-      <LoadSlotDialog open={loadOpen} onClose={() => setLoadOpen(false)} />
       {pendingImport && (
         <VersionMismatchDialog
           open

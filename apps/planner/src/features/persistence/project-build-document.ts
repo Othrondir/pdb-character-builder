@@ -31,7 +31,7 @@ export class IncompleteBuildError extends Error {
   constructor(missingFields: IncompleteBuildField[]) {
     super(
       `Build is incomplete: missing ${missingFields.join(', ')}. ` +
-        `Pick a race and alignment before saving, exporting, or sharing.`,
+        `Pick a race and alignment before exporting or sharing.`,
     );
     this.name = 'IncompleteBuildError';
     this.missingFields = missingFields;
@@ -41,7 +41,7 @@ export class IncompleteBuildError extends Error {
 /**
  * Pure predicate: returns `true` when `projectBuildDocument()` can succeed against
  * the current live store state. Used by the Resumen action bar to disable
- * Guardar / Exportar / Compartir when the build is not projectable — preventing the
+ * Exportar / Compartir when the build is not projectable — preventing the
  * error surface rather than just handling it.
  */
 export function isBuildProjectable(): boolean {

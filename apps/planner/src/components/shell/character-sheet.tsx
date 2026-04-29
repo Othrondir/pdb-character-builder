@@ -1,23 +1,16 @@
 import { NwnFrame } from '@planner/components/ui/nwn-frame';
-import { SheetTabs } from './sheet-tabs';
 import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
 import { computeFinalAttributeTotals } from '@planner/features/character-foundation/final-attributes';
 import { useLevelProgressionStore } from '@planner/features/level-progression/store';
-import {
-  selectAttributeBudgetSnapshot,
-  selectFoundationSummary,
-} from '@planner/features/character-foundation/selectors';
-import { selectProgressionSummary } from '@planner/features/level-progression/selectors';
 import { abilityModifier } from '@rules-engine/foundation';
 import { computeHitPoints } from '@rules-engine/progression/compute-hit-points';
 import { compiledClassCatalog } from '@planner/data/compiled-classes';
-import { usePlannerShellStore } from '@planner/state/planner-shell';
 import { shellCopyEs } from '@planner/lib/copy/es';
 import {
   ATTRIBUTE_KEYS,
   type AttributeKey,
 } from '@planner/features/character-foundation/foundation-fixture';
-import { FeatSheetTab } from '@planner/features/feats/feat-sheet-tab';
+import { computeTotalBab } from '@rules-engine/feats/bab-calculator';
 
 const ATTRIBUTE_LABELS: Record<AttributeKey, string> = {
   str: 'Fuerza',
@@ -32,6 +25,7 @@ const DERIVED_STAT_LABELS = {
   ac: 'CA',
   hp: 'PG',
   bab: 'BAB',
+  attacksPerRound: 'Ataques/asalto',
   fortitude: 'Fortaleza',
   reflex: 'Reflejos',
   will: 'Voluntad',
@@ -45,11 +39,37 @@ function formatModifier(mod: number): string {
   return mod >= 0 ? `(+${mod})` : `(${mod})`;
 }
 
+function formatSigned(value: number): string {
+  return value >= 0 ? `+${value}` : String(value);
+}
+
+function buildClassLevels(
+  levels: ReturnType<typeof useLevelProgressionStore.getState>['levels'],
+): Record<string, number> {
+  const classLevels: Record<string, number> = {};
+
+  for (const level of levels) {
+    if (!level.classId) {
+      continue;
+    }
+    classLevels[level.classId] = (classLevels[level.classId] ?? 0) + 1;
+  }
+
+  return classLevels;
+}
+
+function formatAttackSequence(bab: number): string {
+  const attacks = [bab];
+  for (let attack = bab - 5; attack >= 1; attack -= 5) {
+    attacks.push(attack);
+  }
+
+  return attacks.map(formatSigned).join(' / ');
+}
+
 function StatsPanel() {
   const foundationState = useCharacterFoundationStore();
   const progressionState = useLevelProgressionStore();
-  const budgetSnapshot = selectAttributeBudgetSnapshot(foundationState);
-  const progressionSummary = selectProgressionSummary(progressionState, foundationState);
   const finalAttributes = computeFinalAttributeTotals(
     foundationState.baseAttributes,
     foundationState.racialModifiers,
@@ -62,9 +82,16 @@ function StatsPanel() {
     conModifier,
   );
   const hitPointsDisplay = hitPoints > 0 ? String(hitPoints) : '--';
+  const classLevels = buildClassLevels(progressionState.levels);
+  const hasAnyClass = Object.keys(classLevels).length > 0;
+  const bab = hasAnyClass
+    ? computeTotalBab(classLevels, compiledClassCatalog)
+    : null;
+  const babDisplay = bab === null ? '--' : formatSigned(bab);
+  const attacksDisplay = bab === null ? '--' : formatAttackSequence(bab);
 
   return (
-    <div role="tabpanel" id="sheet-panel-stats" aria-labelledby="sheet-tab-stats">
+    <div>
       <div className="character-sheet__portrait" />
 
       <dl className="character-sheet__stat-grid">
@@ -92,7 +119,11 @@ function StatsPanel() {
         </div>
         <div>
           <dt>{DERIVED_STAT_LABELS.bab}</dt>
-          <dd>{progressionSummary.highestConfiguredLevel > 0 ? progressionSummary.highestConfiguredLevel : '--'}</dd>
+          <dd>{babDisplay}</dd>
+        </div>
+        <div>
+          <dt>{DERIVED_STAT_LABELS.attacksPerRound}</dt>
+          <dd>{attacksDisplay}</dd>
         </div>
         <div>
           <dt>{DERIVED_STAT_LABELS.fortitude}</dt>
@@ -111,14 +142,6 @@ function StatsPanel() {
   );
 }
 
-function SkillsPanel() {
-  return (
-    <div role="tabpanel" id="sheet-panel-skills" aria-labelledby="sheet-tab-skills">
-      <p>Habilidades del personaje</p>
-    </div>
-  );
-}
-
 function EmptyState() {
   return (
     <div className="character-sheet__empty">
@@ -129,7 +152,6 @@ function EmptyState() {
 }
 
 export function CharacterSheet() {
-  const activeTab = usePlannerShellStore((state) => state.characterSheetTab);
   const foundationState = useCharacterFoundationStore();
   const hasRace = foundationState.raceId !== null;
 
@@ -138,17 +160,8 @@ export function CharacterSheet() {
       <div className="character-sheet__title-bar">
         <h2>{shellCopyEs.stepper.characterSheetHeading}</h2>
       </div>
-      <SheetTabs />
       <div className="character-sheet__content">
-        {hasRace ? (
-          <>
-            {activeTab === 'stats' && <StatsPanel />}
-            {activeTab === 'skills' && <SkillsPanel />}
-            {activeTab === 'feats' && <FeatSheetTab />}
-          </>
-        ) : (
-          <EmptyState />
-        )}
+        {hasRace ? <StatsPanel /> : <EmptyState />}
       </div>
     </NwnFrame>
   );

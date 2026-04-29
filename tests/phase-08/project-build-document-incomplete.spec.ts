@@ -18,7 +18,7 @@ import {
  * Contract locked by this spec (see .planning/debug/resolved/guardar-slot-zoderror.md):
  *   - When the build is not projectable (raceId or alignmentId is null), the projection
  *     MUST throw a typed IncompleteBuildError listing the missing fields, NOT a Zod error.
- *   - isBuildProjectable() is the pure predicate used by the UI to gate the Guardar /
+ *   - isBuildProjectable() is the pure predicate used by the UI to gate the
  *     Exportar / Compartir buttons.
  *
  * Preserves D-07 / SHAR-05: schema stays strict; the projection boundary never emits

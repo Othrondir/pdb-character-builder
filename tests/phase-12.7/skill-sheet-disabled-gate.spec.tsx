@@ -85,6 +85,29 @@ function setupElfoGuerreroL2WithCarryover() {
   }));
 }
 
+function setupRogueL2WithPriorSkillRanks() {
+  useCharacterFoundationStore.getState().setRace('race:human' as CanonicalId);
+  useLevelProgressionStore
+    .getState()
+    .setLevelClassId(1 as ProgressionLevel, 'class:rogue' as CanonicalId);
+  useLevelProgressionStore
+    .getState()
+    .setLevelClassId(2 as ProgressionLevel, 'class:rogue' as CanonicalId);
+  useLevelProgressionStore.getState().setActiveLevel(2 as ProgressionLevel);
+  useSkillStore
+    .getState()
+    .setSkillRank(1 as ProgressionLevel, 'skill:esconderse' as CanonicalId, 4);
+  useSkillStore.getState().setActiveLevel(2 as ProgressionLevel);
+  usePlannerShellStore.setState((prev) => ({
+    ...prev,
+    activeOriginStep: null,
+    activeLevelSubStep: 'skills',
+    activeView: 'creation',
+    expandedLevel: 2 as ProgressionLevel,
+    mobileNavOpen: false,
+  }));
+}
+
 /**
  * Spend N ranks on Clérigo class skills (costPerRank=1). Cleric class
  * skills from compiled-skills.ts include skill:concentracion,
@@ -235,5 +258,23 @@ describe('Phase 12.7-02 — skill + button disabled gate integration (F4 R2)', (
     expect(summaryValues[0]).toContain('5');
     expect(summaryValues[1]).toContain('Puntos guardados');
     expect(summaryValues[1]).toContain('4');
+  });
+
+  it('Suite B5: level 2 rows show prior ranks before the user presses +', () => {
+    setupRogueL2WithPriorSkillRanks();
+
+    const { container } = render(createElement(SkillSheet));
+
+    const row = Array.from(
+      container.querySelectorAll<HTMLElement>('.skill-sheet__row'),
+    ).find((entry) => entry.textContent?.includes('Esconderse'));
+    expect(row).toBeDefined();
+
+    expect(
+      row!.querySelector<HTMLInputElement>('input[type="number"]')?.value,
+    ).toBe('0');
+    expect(
+      row!.querySelector<HTMLElement>('.skill-sheet__total-value')?.textContent,
+    ).toBe('4');
   });
 });

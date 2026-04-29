@@ -9,7 +9,10 @@ import {
   evaluateFeatPrerequisites,
   type BuildStateAtLevel,
 } from './feat-prerequisite';
-import { isManualFeatSelectionBlocked } from './feat-eligibility';
+import {
+  determineFeatSlots,
+  isManualFeatSelectionBlocked,
+} from './feat-eligibility';
 
 export type FeatEvaluationStatus = 'legal' | 'illegal' | 'blocked' | 'pending';
 
@@ -103,6 +106,30 @@ export function revalidateFeatSnapshotAfterChange(input: {
     // Evaluate each selected feat's prerequisites
     const issues: ValidationOutcome[] = [];
     let hasIllegal = false;
+    const activeClassId = levelInput.buildState.activeClassIdAtLevel;
+    const activeClass =
+      input.classCatalog.classes.find((c) => c.id === activeClassId) ?? null;
+    const featSlots = determineFeatSlots(
+      levelInput.buildState,
+      input.featCatalog.classFeatLists,
+      activeClass,
+    );
+    const classFeatCapacity = featSlots.classBonusFeatSlot ? 1 : 0;
+    const generalFeatCapacity =
+      (featSlots.generalFeatSlot ? 1 : 0) +
+      (featSlots.raceBonusFeatSlot ? 1 : 0);
+
+    if (levelInput.classFeatIds.length > classFeatCapacity) {
+      hasIllegal = true;
+      issues.push(createIllegalIssue(levelInput.classFeatIds));
+    }
+
+    if (levelInput.generalFeatIds.length > generalFeatCapacity) {
+      hasIllegal = true;
+      issues.push(
+        createIllegalIssue(levelInput.generalFeatIds.slice(generalFeatCapacity)),
+      );
+    }
 
     for (const classFeatId of levelInput.classFeatIds) {
       if (isManualFeatSelectionBlocked(classFeatId)) {

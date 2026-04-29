@@ -26,9 +26,7 @@ describe('planner shell structure', () => {
     expect(levelSubSteps.map((s) => s.id)).toEqual([
       'class', 'skills', 'feats',
     ]);
-    expect(sheetTabs.map((s) => s.id)).toEqual([
-      'stats', 'skills', 'feats',
-    ]);
+    expect(sheetTabs.map((s) => s.id)).toEqual(['stats']);
   });
 
   it('renders the shell frame with stepper and character sheet', () => {

@@ -33,8 +33,6 @@ export const levelSubSteps: readonly LevelSubStepDefinition[] = [
 
 export const sheetTabs: readonly SheetTabDefinition[] = [
   { id: 'stats', label: shellCopyEs.stepper.sheetTabs.stats },
-  { id: 'skills', label: shellCopyEs.stepper.sheetTabs.skills },
-  { id: 'feats', label: shellCopyEs.stepper.sheetTabs.feats },
 ] as const;
 
 // UAT-2026-04-20 P6 — level range extended to 1..20.

@@ -52,6 +52,16 @@ const STATUS_LABELS = {
   pending: shellCopyEs.progression.statuses.pending,
 } as const;
 
+type PrestigeRequirementStatus = 'met' | 'pending' | 'unmet';
+
+interface PrestigeRequirementView {
+  key: string;
+  label: string;
+  status: PrestigeRequirementStatus;
+  statusLabel: 'Cumple' | 'Falta' | 'Pendiente' | 'Bloquea';
+  valueLabel: string | null;
+}
+
 // Boundary adapter — translate the planner's class-fixture record into the
 // minimal `ClassPrereqInput` the rules-engine helper expects. Keeps the gate
 // framework-agnostic (no @data-extractor, no CompiledClass imports).
@@ -68,6 +78,223 @@ function toClassPrereqInput(option: ClassOptionView): ClassPrereqInput {
     isBase,
     ...(decodedPrereqs ? { decodedPrereqs } : {}),
   };
+}
+
+function requirementLabel(
+  status: PrestigeRequirementStatus,
+  unmetLabel: PrestigeRequirementView['statusLabel'] = 'Falta',
+): PrestigeRequirementView['statusLabel'] {
+  if (status === 'met') return 'Cumple';
+  if (status === 'pending') return 'Pendiente';
+  return unmetLabel;
+}
+
+function addRequirement(
+  requirements: PrestigeRequirementView[],
+  input: {
+    key: string;
+    label: string;
+    met: boolean;
+    unmetLabel?: PrestigeRequirementView['statusLabel'];
+    valueLabel?: string | null;
+  },
+) {
+  const status: PrestigeRequirementStatus = input.met ? 'met' : 'unmet';
+  requirements.push({
+    key: input.key,
+    label: input.label,
+    status,
+    statusLabel: requirementLabel(status, input.unmetLabel),
+    valueLabel: input.valueLabel ?? null,
+  });
+}
+
+function babLabel(amount: number): string {
+  return `Requiere BAB ≥ ${amount}`;
+}
+
+function skillRankLabel(amount: number, skillName: string): string {
+  return amount === 1
+    ? `Requiere 1 rango de ${skillName}`
+    : `Requiere ${amount} rangos de ${skillName}`;
+}
+
+function featLabel(featName: string): string {
+  return `Requiere dote: ${featName}`;
+}
+
+function classLevelLabel(amount: number, className: string): string {
+  return amount === 1
+    ? `Requiere 1 nivel de ${className}`
+    : `Requiere ${amount} niveles de ${className}`;
+}
+
+function arcaneSpellLevelLabel(amount: number): string {
+  return amount === 1
+    ? 'Requiere lanzar 1 nivel de conjuro arcano'
+    : `Requiere lanzar conjuros arcanos de nivel ${amount}`;
+}
+
+function spellLevelLabel(amount: number): string {
+  return amount === 1
+    ? 'Requiere lanzar 1 nivel de conjuro'
+    : `Requiere lanzar conjuros de nivel ${amount}`;
+}
+
+function anyFeatGroupLabel(featNames: string[]): string {
+  if (featNames.length === 0) return 'Requiere al menos una dote del grupo';
+  if (featNames.length === 1) return featLabel(featNames[0] ?? '');
+  return `Requiere una de estas dotes: ${featNames.join(', ')}`;
+}
+
+function anyRaceLabel(raceNames: string[]): string {
+  if (raceNames.length === 0) return 'Requiere una raza específica';
+  return `Requiere raza: ${raceNames.join(' o ')}`;
+}
+
+function anyClassLevelLabel(
+  entries: ReadonlyArray<{ className: string; amount: number }>,
+): string {
+  if (entries.length === 0) return 'Requiere niveles en una clase';
+  const parts = entries.map((entry) =>
+    entry.amount === 1
+      ? `1 nivel de ${entry.className}`
+      : `${entry.amount} niveles de ${entry.className}`,
+  );
+  return `Requiere ${parts.join(' o ')}`;
+}
+
+function buildPrestigeRequirementViews(
+  classRow: ClassPrereqInput,
+  gateBuildState: PrestigeGateBuildState,
+): PrestigeRequirementView[] {
+  if (classRow.isBase) {
+    return [];
+  }
+
+  const prereqs = classRow.decodedPrereqs;
+  if (!prereqs) {
+    return [
+      {
+        key: `${classRow.id}:unvetted`,
+        label: 'Requisitos en revisión',
+        status: 'pending',
+        statusLabel: 'Pendiente',
+        valueLabel: null,
+      },
+    ];
+  }
+
+  const requirements: PrestigeRequirementView[] = [];
+
+  if (prereqs.minBab !== undefined) {
+    addRequirement(requirements, {
+      key: `${classRow.id}:bab`,
+      label: babLabel(prereqs.minBab),
+      met: gateBuildState.bab >= prereqs.minBab,
+      valueLabel: `${gateBuildState.bab}/${prereqs.minBab}`,
+    });
+  }
+
+  for (const req of prereqs.minSkillRanks ?? []) {
+    const current = gateBuildState.skillRanks[req.skillId] ?? 0;
+    addRequirement(requirements, {
+      key: `${classRow.id}:skill:${req.skillId}`,
+      label: skillRankLabel(req.amount, req.skillName),
+      met: current >= req.amount,
+      valueLabel: `${current}/${req.amount}`,
+    });
+  }
+
+  for (const req of prereqs.requiredFeats ?? []) {
+    addRequirement(requirements, {
+      key: `${classRow.id}:feat:${req.featId}`,
+      label: featLabel(req.featName),
+      met: gateBuildState.featIds.has(req.featId),
+      valueLabel: null,
+    });
+  }
+
+  if (prereqs.minClassLevel) {
+    const current = gateBuildState.classLevels[prereqs.minClassLevel.classId] ?? 0;
+    addRequirement(requirements, {
+      key: `${classRow.id}:class:${prereqs.minClassLevel.classId}`,
+      label: classLevelLabel(
+        prereqs.minClassLevel.amount,
+        prereqs.minClassLevel.className,
+      ),
+      met: current >= prereqs.minClassLevel.amount,
+      valueLabel: `${current}/${prereqs.minClassLevel.amount}`,
+    });
+  }
+
+  if (prereqs.minArcaneSpellLevel !== undefined) {
+    addRequirement(requirements, {
+      key: `${classRow.id}:arcane-spell`,
+      label: arcaneSpellLevelLabel(prereqs.minArcaneSpellLevel),
+      met: gateBuildState.highestArcaneSpellLevel >= prereqs.minArcaneSpellLevel,
+      valueLabel: `${gateBuildState.highestArcaneSpellLevel}/${prereqs.minArcaneSpellLevel}`,
+    });
+  }
+
+  if (prereqs.minSpellLevel !== undefined) {
+    requirements.push({
+      key: `${classRow.id}:spell`,
+      label: spellLevelLabel(prereqs.minSpellLevel),
+      status: 'unmet',
+      statusLabel: 'Falta',
+      valueLabel: null,
+    });
+  }
+
+  for (const excluded of prereqs.excludedClassIds ?? []) {
+    const current = gateBuildState.classLevels[excluded.classId] ?? 0;
+    addRequirement(requirements, {
+      key: `${classRow.id}:excluded:${excluded.classId}`,
+      label: `Incompatible con ${excluded.className}`,
+      met: current <= 0,
+      unmetLabel: 'Bloquea',
+      valueLabel: null,
+    });
+  }
+
+  prereqs.requiredAnyFeatGroups?.forEach((group, index) => {
+    const featNames = group.map((feat) => feat.featName);
+    addRequirement(requirements, {
+      key: `${classRow.id}:any-feat:${index}`,
+      label: anyFeatGroupLabel(featNames),
+      met: group.some((feat) => gateBuildState.featIds.has(feat.featId)),
+      valueLabel: null,
+    });
+  });
+
+  if (prereqs.requiredAnyRaceIds !== undefined && prereqs.requiredAnyRaceIds.length > 0) {
+    addRequirement(requirements, {
+      key: `${classRow.id}:race`,
+      label: anyRaceLabel(prereqs.requiredAnyRaceIds.map((race) => race.raceName)),
+      met: prereqs.requiredAnyRaceIds.some(
+        (race) => race.raceId === gateBuildState.raceId,
+      ),
+      valueLabel: null,
+    });
+  }
+
+  if (
+    prereqs.requiredAnyClassLevels !== undefined &&
+    prereqs.requiredAnyClassLevels.length > 0
+  ) {
+    addRequirement(requirements, {
+      key: `${classRow.id}:any-class`,
+      label: anyClassLevelLabel(prereqs.requiredAnyClassLevels),
+      met: prereqs.requiredAnyClassLevels.some(
+        (entry) =>
+          (gateBuildState.classLevels[entry.classId] ?? 0) >= entry.amount,
+      ),
+      valueLabel: null,
+    });
+  }
+
+  return requirements;
 }
 
 interface ClassPickerProps {
@@ -182,21 +409,16 @@ function ClassPickerRow({
     enriched: classRow.decodedPrereqs !== undefined,
   });
 
-  // Gate 2 — multiclass legality (CLAS-03 bridge). If the underlying selector
-  // marks this option blocked via evaluateMulticlassLegality, the row MUST be
+  // Gate 2 — class legality (CLAS-03 bridge + strict validation). If the
+  // underlying selector marks this option blocked or illegal, the row MUST be
   // aria-disabled regardless of the prestige gate verdict.
-  const multiclassBlocked = option.status === 'blocked';
+  const validationBlocked =
+    option.status === 'blocked' || option.status === 'illegal';
 
-  const disabled = multiclassBlocked || !gateResult.reachable;
-  // UAT-2026-04-24 E1 — suppress the generic "Disponible a partir del nivel 2"
-  // copy at L1. The row still renders disabled (blocked state wins), but the
-  // redundant reason line is dropped — users seeing the prestige section at L1
-  // know it unlocks at L2 from context. Real-prereq blockers at L2+ still surface.
-  const firstBlocker = gateResult.blockers[0];
-  const prestigeReasonLabel =
-    isPrestige && firstBlocker && firstBlocker.kind !== 'l1'
-      ? firstBlocker.label
-      : null;
+  const disabled = validationBlocked || !gateResult.reachable;
+  const prestigeRequirements = isPrestige
+    ? buildPrestigeRequirementViews(classRow, gateBuildState)
+    : [];
 
   const rowClass = [
     'class-picker__row',
@@ -220,8 +442,33 @@ function ClassPickerRow({
         type="button"
       >
         <span className="class-picker__label">{option.label}</span>
-        {prestigeReasonLabel ? (
-          <em className="class-picker__reason">{prestigeReasonLabel}</em>
+        {prestigeRequirements.length > 0 ? (
+          <span
+            aria-label="Requisitos"
+            className="class-picker__requirements"
+            role="list"
+          >
+            {prestigeRequirements.map((requirement) => (
+              <span
+                className={`class-picker__requirement is-${requirement.status}`}
+                data-requirement-status={requirement.status}
+                key={requirement.key}
+                role="listitem"
+              >
+                <span className="class-picker__requirement-status">
+                  {requirement.statusLabel}
+                </span>
+                <span className="class-picker__requirement-label">
+                  {requirement.label}
+                </span>
+                {requirement.valueLabel ? (
+                  <span className="class-picker__requirement-value">
+                    {requirement.valueLabel}
+                  </span>
+                ) : null}
+              </span>
+            ))}
+          </span>
         ) : null}
       </button>
     </li>

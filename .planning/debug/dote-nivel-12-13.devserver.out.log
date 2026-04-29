@@ -1,0 +1,26 @@
+
+> @nwn1-character-builder/planner@ dev C:\Users\pzhly\RiderProjects\pdb-character-builder\apps\planner
+> vite "--host" "127.0.0.1"
+
+
+  [32m[1mVITE[22m v8.0.3[39m  [2mready in [0m[1m153[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://127.0.0.1:[1m5173[22m/[39m
+[2m[32m  ➜[39m[22m[2m  press [22m[1mh + enter[22m[2m to show help[22m
+[2m11:26:41[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/shell/character-sheet.tsx, /src/components/shell/level-sub-steps.tsx, /src/features/level-progression/level-editor-action-bar.tsx, /src/features/level-progression/level-progression-row.tsx, /src/features/level-progression/class-picker.tsx, /src/features/skills/skill-board.tsx, /src/features/skills/skill-sheet.tsx[22m
+[2m11:26:49[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/features/level-progression/class-picker.tsx[22m
+[2m11:31:05[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/shell/character-sheet.tsx, /src/components/shell/level-sub-steps.tsx, /src/features/level-progression/level-editor-action-bar.tsx, /src/features/level-progression/level-progression-row.tsx, /src/features/level-progression/class-picker.tsx, /src/features/skills/skill-board.tsx, /src/features/skills/skill-sheet.tsx[22m
+[2m11:31:11[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/features/level-progression/class-picker.tsx[22m
+[2m11:38:41[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/features/skills/skill-board.tsx, /src/features/skills/skill-sheet.tsx[22m
+[2m11:46:23[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/shell/character-sheet.tsx, /src/components/shell/level-sub-steps.tsx, /src/features/level-progression/level-editor-action-bar.tsx, /src/features/level-progression/level-progression-row.tsx, /src/features/level-progression/class-picker.tsx, /src/features/skills/skill-board.tsx, /src/features/skills/skill-sheet.tsx[22m
+[2m11:46:29[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/shell/character-sheet.tsx, /src/components/shell/level-sub-steps.tsx, /src/features/level-progression/level-editor-action-bar.tsx, /src/features/level-progression/level-progression-row.tsx, /src/features/level-progression/class-picker.tsx, /src/features/skills/skill-board.tsx, /src/features/skills/skill-sheet.tsx[22m
+[2m11:51:52[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/features/level-progression/class-picker.tsx[22m
+[2m11:52:07[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/features/level-progression/class-picker.tsx[22m
+[2m11:52:20[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles/app.css[22m
+[2m11:57:26[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/styles/app.css[22m
+[2m11:59:40[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/shell/character-sheet.tsx[22m
+[2m11:59:48[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/shell/character-sheet.tsx[22m
+[2m11:59:52[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/shell/creation-stepper.tsx, /src/components/shell/sheet-tabs.tsx, /src/components/shell/level-sub-steps.tsx[22m
+[2m12:02:11[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/features/summary/resumen-board.tsx[22m
+[2m12:02:17[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/shell/planner-shell-frame.tsx, /src/features/persistence/share-entry.tsx, /src/components/shell/mobile-nav-toggle.tsx, /src/components/shell/center-content.tsx, /src/components/ui/version-mismatch-dialog.tsx, /src/components/shell/character-sheet.tsx, /src/components/shell/creation-stepper.tsx, /src/features/level-progression/build-progression-board.tsx, /src/features/skills/skill-board.tsx, /src/features/character-foundation/origin-board.tsx, /src/features/summary/resumen-board.tsx, /src/features/character-foundation/attributes-board.tsx, /src/features/feats/feat-board.tsx, /src/components/shell/level-sub-steps.tsx, /src/features/level-progression/level-editor-action-bar.tsx, /src/features/level-progression/level-progression-row.tsx, /src/features/level-progression/class-picker.tsx, /src/features/skills/skill-sheet.tsx, /src/features/feats/feat-sheet-tab.tsx, /src/components/shell/sheet-tabs.tsx, /src/features/summary/save-slot-dialog.tsx, /src/features/feats/feat-summary-card.tsx, /src/features/feats/feat-detail-panel.tsx, /src/features/feats/feat-sheet.tsx, /src/features/summary/resumen-table.tsx, /src/features/feats/feat-family-expander.tsx[22m
+[2m12:03:14[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/features/persistence/share-entry.tsx, /src/features/summary/resumen-board.tsx, /src/features/summary/save-slot-dialog.tsx[22m

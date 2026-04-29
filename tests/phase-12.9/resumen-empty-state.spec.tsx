@@ -46,15 +46,15 @@ describe('Phase 12.9 — Resumen empty-state (SPEC R4)', () => {
   });
   afterEach(() => cleanup());
 
-  it('R4: pre-race renders 1 empty-state frame and 0 progression/skill tables', () => {
+  it('R4: pre-race renders 1 empty-state frame and keeps progression/skill tables visible', () => {
     const { container } = render(createElement(ResumenBoard));
     expect(
       container.querySelectorAll('.resumen-board__empty-state').length,
     ).toBe(1);
     expect(
       container.querySelectorAll('.resumen-table__progression').length,
-    ).toBe(0);
-    expect(container.querySelectorAll('.resumen-table__skills').length).toBe(0);
+    ).toBe(1);
+    expect(container.querySelectorAll('.resumen-table__skills').length).toBe(1);
   });
 
   it('R4: post-race + alignment, empty-state disappears and ResumenTable mounts', () => {
@@ -79,20 +79,25 @@ describe('Phase 12.9 — Resumen empty-state (SPEC R4)', () => {
     );
   });
 
-  it('R4: Cargar + Importar buttons remain clickable in empty state (R5 carry-over)', () => {
+  it('R4: only Importar remains clickable in empty state (R5 carry-over)', () => {
     const { container } = render(createElement(ResumenBoard));
-    // Cargar (onClick={() => setLoadOpen(true)}) and Importar (onClick={() =>
-    // fileInputRef.current?.click()}) have no `disabled` attribute even when
-    // !isProjectable — only Guardar / Exportar / Compartir gate.
+    // Importar hydrates stores and has no `disabled` attribute even when
+    // !isProjectable. Exportar / Compartir still gate on projectability.
     const enabled = container.querySelectorAll<HTMLButtonElement>(
       '.resumen-board__actions button:not([disabled])',
     );
-    expect(enabled.length).toBeGreaterThanOrEqual(2);
-    // Disabled triad (Guardar / Exportar / Compartir) still present with
-    // incompleteBuild tooltip.
+    expect(Array.from(enabled).map((button) => button.textContent)).toEqual([
+      shellCopyEs.resumen.actions.import,
+    ]);
+    expect(container.textContent).not.toContain(shellCopyEs.resumen.actions.save);
+    expect(container.textContent).not.toContain(shellCopyEs.resumen.actions.load);
+    // Disabled pair (Exportar / Compartir) still present with incompleteBuild tooltip.
     const disabled = container.querySelectorAll<HTMLButtonElement>(
       '.resumen-board__actions button[disabled]',
     );
-    expect(disabled.length).toBeGreaterThanOrEqual(3);
+    expect(Array.from(disabled).map((button) => button.textContent)).toEqual([
+      shellCopyEs.resumen.actions.export,
+      shellCopyEs.resumen.actions.share,
+    ]);
   });
 });

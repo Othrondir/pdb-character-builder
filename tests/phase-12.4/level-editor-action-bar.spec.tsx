@@ -188,6 +188,8 @@ describe('Phase 12.4-09 — LevelEditorActionBar (SPEC R2)', () => {
       fireEvent.click(screen.getByRole('button'));
 
       expect(useLevelProgressionStore.getState().activeLevel).toBe(2);
+      expect(useSkillStore.getState().activeLevel).toBe(2);
+      expect(useFeatStore.getState().activeLevel).toBe(2);
       expect(usePlannerShellStore.getState().expandedLevel).toBe(2);
       expect(usePlannerShellStore.getState().activeLevelSubStep).toBe('class');
     });

@@ -376,6 +376,7 @@ export function selectSkillSummaryStrip(
 function buildActiveSkillRows(
   evaluatedLevel: EvaluatedSkillLevel,
   levelInput: SkillLevelInput,
+  priorRanks: Partial<Record<CanonicalId, number>>,
 ): Array<SkillSheetRowView & { category: string }> {
   return compiledSkillCatalog.skills
     .map((skill) => {
@@ -388,7 +389,7 @@ function buildActiveSkillRows(
         (skill.defaultClassIds.includes(levelInput.classId ?? '')
           ? 'class'
           : 'cross-class');
-      const priorRank = allocation ? allocation.resultingRank - allocation.rank : 0;
+      const priorRank = priorRanks[skill.id as CanonicalId] ?? 0;
       const cap =
         allocation?.cap ??
         (costType === 'class'
@@ -432,6 +433,23 @@ function buildActiveSkillRows(
     .sort((left, right) => left.label.localeCompare(right.label));
 }
 
+function getPriorSkillRanks(
+  skillInputs: SkillLevelInput[],
+  activeIndex: number,
+): Partial<Record<CanonicalId, number>> {
+  const priorRanks: Partial<Record<CanonicalId, number>> = {};
+  const priorInputs = skillInputs.slice(0, Math.max(0, activeIndex));
+
+  for (const levelInput of priorInputs) {
+    for (const allocation of levelInput.allocations) {
+      priorRanks[allocation.skillId] =
+        (priorRanks[allocation.skillId] ?? 0) + allocation.rank;
+    }
+  }
+
+  return priorRanks;
+}
+
 export function selectActiveSkillSheetView(
   skillState: SkillStoreState,
   progressionState: LevelProgressionStoreState,
@@ -456,7 +474,11 @@ export function selectActiveSkillSheetView(
       ? getSkillPointCarryover(previousLevel.remainingPoints)
       : 0;
   const classLabel = getPhase04ClassRecord(activeProgression?.classId ?? null)?.label ?? null;
-  const rows = activeLevel && activeInput ? buildActiveSkillRows(activeLevel, activeInput) : [];
+  const priorRanks = getPriorSkillRanks(skillInputs, activeIndex);
+  const rows =
+    activeLevel && activeInput
+      ? buildActiveSkillRows(activeLevel, activeInput, priorRanks)
+      : [];
   // Phase 12.4-05 — R4 Habilidades split (SPEC R4 / CONTEXT D-09).
   // Bucket rows by `costType` (class | cross-class) instead of category so
   // skill-sheet.tsx can render two headered sections with cost-per-rank copy.

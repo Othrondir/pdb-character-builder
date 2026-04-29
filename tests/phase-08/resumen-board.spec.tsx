@@ -102,21 +102,19 @@ describe('ResumenBoard', () => {
     ).toBeInTheDocument();
   });
 
-  it('renders the 5 action buttons (Compartir enabled after 08-02 Task 3)', () => {
+  it('renders only Exportar JSON, Importar JSON, and Compartir actions', () => {
     render(createElement(ResumenBoard));
     const copy = shellCopyEs.resumen.actions;
-    expect(screen.getByRole('button', { name: copy.save })).toBeEnabled();
-    expect(screen.getByRole('button', { name: copy.load })).toBeEnabled();
+    expect(screen.queryByRole('button', { name: copy.save })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: copy.load })).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: copy.export })).toBeEnabled();
-    // Two buttons match the importar name (the button and the hidden file input's aria-label).
-    const importerButtons = screen.getAllByRole('button', { name: copy.import });
-    expect(importerButtons.length).toBeGreaterThanOrEqual(1);
+    expect(screen.getByRole('button', { name: copy.import })).toBeEnabled();
     // Compartir is live in Plan 08-02 Task 3 — encodes + copies / falls back to JSON.
     const share = screen.getByRole('button', { name: copy.share });
     expect(share).toBeEnabled();
   });
 
-  it('disables Guardar/Exportar/Compartir when the build is not projectable (Phase 08 Task 4 UAT regression)', () => {
+  it('disables Exportar/Compartir when the build is not projectable (Phase 08 Task 4 UAT regression)', () => {
     // Remove the projectable seed from beforeEach — simulates the UAT flow of
     // opening Resumen before picking a race or alignment. The raw ZodError the
     // old code threw from projectBuildDocument must NEVER reach the user; we
@@ -124,12 +122,13 @@ describe('ResumenBoard', () => {
     useCharacterFoundationStore.getState().resetFoundation();
     render(createElement(ResumenBoard));
     const copy = shellCopyEs.resumen.actions;
-    expect(screen.getByRole('button', { name: copy.save })).toBeDisabled();
+    expect(screen.queryByRole('button', { name: copy.save })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: copy.load })).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: copy.export })).toBeDisabled();
     expect(screen.getByRole('button', { name: copy.share })).toBeDisabled();
-    // Cargar/Importar stay enabled — they HYDRATE stores, so build-incompleteness
-    // is precisely the state they exist to recover from.
-    expect(screen.getByRole('button', { name: copy.load })).toBeEnabled();
+    // Importar stays enabled — it hydrates stores, so build-incompleteness is
+    // precisely the state it exists to recover from.
+    expect(screen.getByRole('button', { name: copy.import })).toBeEnabled();
   });
 
   it('keeps the progression table visible even when the build is not projectable', () => {

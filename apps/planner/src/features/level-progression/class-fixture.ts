@@ -6,6 +6,8 @@ import type {
 
 import { compiledClassCatalog } from '@planner/data/compiled-classes';
 
+import { PRESTIGE_PREREQ_OVERRIDES } from './prestige-prereq-data';
+
 export type PlannerAbilityKey = 'cha' | 'con' | 'dex' | 'int' | 'str' | 'wis';
 export type PlannerClassKind = 'base' | 'prestige';
 
@@ -74,50 +76,78 @@ interface ClassServerRuleOverlay {
 }
 
 /**
- * Phase 12.2-03 (D-04) — decode the NWN hex alignment mask from a
- * CompiledClass.prerequisiteColumns.AlignRestrict entry. Returns the allowed
- * CanonicalId alignment list, or undefined when no gate applies.
+ * Phase 12.2-03 (D-04), corrected by debug-2026-04-29 — decode the NWN
+ * class alignment restriction fields from classes.2da.
  *
- * Hex-bit convention (NWN Aurora 2DA):
- *   0x001 = LG, 0x002 = LN, 0x004 = LE,
- *   0x008 = NG, 0x010 = TN, 0x020 = NE,
- *   0x040 = CG, 0x080 = CN, 0x100 = CE.
+ * `AlignRestrict` is a component mask, not a 9-alignment mask:
+ *   0x01 = neutral on the selected axis, 0x02 = lawful, 0x04 = chaotic,
+ *   0x08 = good, 0x10 = evil.
  *
- * `InvertRestrict === '1'` inverts the mask: the listed alignments are
- * FORBIDDEN; the allowed set is the complement over the 9-alignment
- * universe. `0x00` with or without inversion emits no gate.
+ * `AlignRstrctType` selects which axes the mask applies to:
+ *   0x01 = law/chaos, 0x02 = good/evil, 0x03 = both.
+ *
+ * Without inversion, matching components are forbidden. With
+ * `InvertRestrict === '1'`, matching components are the only ones allowed.
+ * `0x00` with or without inversion emits no gate.
  */
-const ALIGNMENT_BITS: ReadonlyArray<readonly [number, CanonicalId]> = [
-  [0x001, 'alignment:lawful-good' as CanonicalId],
-  [0x002, 'alignment:lawful-neutral' as CanonicalId],
-  [0x004, 'alignment:lawful-evil' as CanonicalId],
-  [0x008, 'alignment:neutral-good' as CanonicalId],
-  [0x010, 'alignment:true-neutral' as CanonicalId],
-  [0x020, 'alignment:neutral-evil' as CanonicalId],
-  [0x040, 'alignment:chaotic-good' as CanonicalId],
-  [0x080, 'alignment:chaotic-neutral' as CanonicalId],
-  [0x100, 'alignment:chaotic-evil' as CanonicalId],
+const ALIGNMENTS: ReadonlyArray<
+  readonly [
+    CanonicalId,
+    'lawful' | 'neutral' | 'chaotic',
+    'good' | 'neutral' | 'evil',
+  ]
+> = [
+  ['alignment:lawful-good' as CanonicalId, 'lawful', 'good'],
+  ['alignment:lawful-neutral' as CanonicalId, 'lawful', 'neutral'],
+  ['alignment:lawful-evil' as CanonicalId, 'lawful', 'evil'],
+  ['alignment:neutral-good' as CanonicalId, 'neutral', 'good'],
+  ['alignment:true-neutral' as CanonicalId, 'neutral', 'neutral'],
+  ['alignment:neutral-evil' as CanonicalId, 'neutral', 'evil'],
+  ['alignment:chaotic-good' as CanonicalId, 'chaotic', 'good'],
+  ['alignment:chaotic-neutral' as CanonicalId, 'chaotic', 'neutral'],
+  ['alignment:chaotic-evil' as CanonicalId, 'chaotic', 'evil'],
 ];
+
+function getLawChaosBit(axis: 'lawful' | 'neutral' | 'chaotic'): number {
+  if (axis === 'lawful') return 0x02;
+  if (axis === 'chaotic') return 0x04;
+  return 0x01;
+}
+
+function getGoodEvilBit(axis: 'good' | 'neutral' | 'evil'): number {
+  if (axis === 'good') return 0x08;
+  if (axis === 'evil') return 0x10;
+  return 0x01;
+}
 
 export function decodeAlignRestrict(
   mask: string | null,
+  restrictionType: string | null,
   inverted: string | null,
 ): CanonicalId[] | undefined {
   if (!mask) return undefined;
   const parsed = Number.parseInt(mask, 16);
   if (!Number.isFinite(parsed) || parsed === 0) return undefined;
 
+  const parsedType = Number.parseInt(restrictionType ?? '0x00', 16);
+  if (!Number.isFinite(parsedType) || parsedType === 0) return undefined;
+
+  const checksLawChaos = (parsedType & 0x01) !== 0;
+  const checksGoodEvil = (parsedType & 0x02) !== 0;
   const allowed: CanonicalId[] = [];
-  const forbidden: CanonicalId[] = [];
-  for (const [bit, id] of ALIGNMENT_BITS) {
-    if ((parsed & bit) !== 0) {
+  for (const [id, lawChaosAxis, goodEvilAxis] of ALIGNMENTS) {
+    const matchesLawChaos =
+      checksLawChaos && (parsed & getLawChaosBit(lawChaosAxis)) !== 0;
+    const matchesGoodEvil =
+      checksGoodEvil && (parsed & getGoodEvilBit(goodEvilAxis)) !== 0;
+    const matchesRestriction = matchesLawChaos || matchesGoodEvil;
+
+    if (inverted === '1' ? matchesRestriction : !matchesRestriction) {
       allowed.push(id);
-    } else {
-      forbidden.push(id);
     }
   }
 
-  return inverted === '1' ? forbidden : allowed;
+  return allowed.length === ALIGNMENTS.length ? undefined : allowed;
 }
 
 export function decodePrerequisiteMaxLevel(value: string | null): number | null {
@@ -231,6 +261,7 @@ function projectCompiledClass(compiled: CompiledClass): PlannerClassRecord {
   // Decode alignment gate from prerequisiteColumns.
   const decodedAlignmentIds = decodeAlignRestrict(
     compiled.prerequisiteColumns.AlignRestrict ?? null,
+    compiled.prerequisiteColumns.AlignRstrctType ?? null,
     compiled.prerequisiteColumns.InvertRestrict ?? null,
   );
 
@@ -244,9 +275,13 @@ function projectCompiledClass(compiled: CompiledClass): PlannerClassRecord {
 
   // Deferred-label union — fail closed when metadata is ambiguous.
   const deferredRequirementLabels: string[] = [];
-  if (!isBase) {
+  const hasPlannerPrestigeOverride = compiled.id in PRESTIGE_PREREQ_OVERRIDES;
+  if (!isBase && !hasPlannerPrestigeOverride) {
     deferredRequirementLabels.push(DEFERRED_LABEL_PRESTIGE);
-  } else if (!BASE_CLASS_ALLOWLIST.includes(compiled.id as CanonicalId)) {
+  } else if (
+    isBase &&
+    !BASE_CLASS_ALLOWLIST.includes(compiled.id as CanonicalId)
+  ) {
     deferredRequirementLabels.push(DEFERRED_LABEL_UNVETTED_BASE);
   }
 

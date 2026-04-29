@@ -106,13 +106,13 @@ describe('phase 06 feat revalidation', () => {
           }),
           generalFeatIds: ['feat:ataquepoderoso'],
         }),
-        // Level 5: a feat with no real prerequisites that should become blocked
+        // Level 6: a feat with no real prerequisites that should become blocked
         // by the inherited break from level 3
-        createLevel(5, {
+        createLevel(6, {
           buildState: createBuildState({
             abilityScores: { str: 13, dex: 10, con: 10, int: 10, wis: 10, cha: 10 },
-            characterLevel: 5,
-            classLevels: { 'class:fighter': 5 },
+            characterLevel: 6,
+            classLevels: { 'class:fighter': 6 },
             selectedFeatIds: new Set(['feat:alertness', 'feat:ataquepoderoso']),
           }),
           generalFeatIds: ['feat:ironwill'],
@@ -132,7 +132,7 @@ describe('phase 06 feat revalidation', () => {
       inheritedFromLevel: null,
     });
     expect(revalidated[2]).toMatchObject({
-      level: 5,
+      level: 6,
       status: 'blocked',
       inheritedFromLevel: 3,
     });

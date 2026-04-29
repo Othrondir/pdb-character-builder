@@ -7,10 +7,10 @@
  *   - Two `<section>` blocks ('Clases básicas' + 'Clases de prestigio')
  *     with `aria-labelledby` wired to each `<h3>`.
  *   - All BASE_CLASS_ALLOWLIST ids inside the base section.
- *   - At L1, every prestige row has `aria-disabled="true"` and renders the
- *     inline italic reason copy "Disponible a partir del nivel 2".
- *   - CLAS-03 regression: rows with `status === 'blocked'` from
- *     `evaluateMulticlassLegality` render `aria-disabled="true"`.
+ *   - At L1, every prestige row has `aria-disabled="true"` without the
+ *     suppressed L1 reason copy.
+ *   - CLAS-03 regression: rows with `status === 'blocked'` or `illegal` from
+ *     the class-option selector render `aria-disabled="true"`.
  *     Prevents silent regression if selector refactor breaks the
  *     status → aria wiring.
  */
@@ -29,11 +29,11 @@ import { BASE_CLASS_ALLOWLIST } from '@planner/features/level-progression/class-
 import type { ProgressionLevel } from '@planner/features/level-progression/progression-fixture';
 import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
 
-function setupL1Humano(): void {
+function setupL1Humano(
+  alignmentId: CanonicalId = 'alignment:true-neutral' as CanonicalId,
+): void {
   useCharacterFoundationStore.getState().setRace('race:human' as CanonicalId);
-  useCharacterFoundationStore
-    .getState()
-    .setAlignment('alignment:true-neutral' as CanonicalId);
+  useCharacterFoundationStore.getState().setAlignment(alignmentId);
   useLevelProgressionStore.getState().setActiveLevel(1 as ProgressionLevel);
 }
 
@@ -93,6 +93,15 @@ describe('Phase 12.4-06 — ClassPicker grouping + prestige gate (SPEC R1 / CLAS
       const row = baseSection!.querySelector(`[data-class-id="${classId}"]`);
       expect(row, `Expected ${classId} inside base section`).not.toBeNull();
     }
+  });
+
+  it('CLAS-03: illegal base-class rows render aria-disabled="true"', () => {
+    setupL1Humano('alignment:lawful-good' as CanonicalId);
+    render(createElement(ClassPicker));
+
+    const row = document.querySelector('[data-class-id="class:paladin-oscuro"]');
+    expect(row, 'Paladin Oscuro row must exist in base section').not.toBeNull();
+    expect(row?.getAttribute('aria-disabled')).toBe('true');
   });
 
   it('at L1, every prestige row is disabled with no reason line (UAT-2026-04-24 E1)', () => {

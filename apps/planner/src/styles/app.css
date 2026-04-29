@@ -2253,20 +2253,70 @@ a {
 .class-picker__row--blocked {
   border-color: var(--color-blocked);
   cursor: not-allowed;
-  opacity: 0.55;
+  opacity: 1;
 }
 .class-picker__row--active {
   background: var(--color-selection);
   border-color: var(--color-selection-border);
+}
+.class-picker__row--blocked .class-picker__label {
+  color: var(--color-text-muted);
 }
 .class-picker__reason {
   color: var(--color-text-muted);
   font-size: 14px;
   font-style: italic;
   margin-top: var(--space-xs);
-  /* Defeat cascade per UI-SPEC.md contrast mitigation — reason copy must
-     stay legible when the row itself is 0.55 opacity. */
-  opacity: 1;
+}
+.class-picker__requirements {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin-top: var(--space-xs);
+  width: 100%;
+}
+.class-picker__requirement {
+  align-items: start;
+  border-left: 2px solid var(--color-panel-edge);
+  display: grid;
+  font-size: 12px;
+  gap: var(--space-xs);
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  line-height: 1.25;
+  padding: 4px 6px;
+  width: 100%;
+}
+.class-picker__requirement.is-met {
+  background: rgba(54, 106, 63, 0.18);
+  border-left-color: #6fa36e;
+  color: #d2e6c6;
+}
+.class-picker__requirement.is-unmet {
+  background: rgba(122, 31, 31, 0.22);
+  border-left-color: var(--color-destructive);
+  color: var(--color-text);
+}
+.class-picker__requirement.is-pending {
+  background: rgba(200, 168, 78, 0.10);
+  border-left-color: var(--color-blocked);
+  color: var(--color-text-muted);
+}
+.class-picker__requirement-status {
+  border: 1px solid currentColor;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  padding: 1px 5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.class-picker__requirement-label {
+  overflow-wrap: anywhere;
+}
+.class-picker__requirement-value {
+  color: var(--color-text-muted);
+  font-variant-numeric: lining-nums tabular-nums;
+  white-space: nowrap;
 }
 .class-picker__row:focus-visible {
   outline: 2px solid var(--color-gold);

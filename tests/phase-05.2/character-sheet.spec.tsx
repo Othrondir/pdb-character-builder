@@ -2,11 +2,13 @@
 
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { createElement } from 'react';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
 import { CharacterSheet } from '@planner/components/shell/character-sheet';
 import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
 import { useLevelProgressionStore } from '@planner/features/level-progression/store';
 import { usePlannerShellStore } from '@planner/state/planner-shell';
+import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
+import type { ProgressionLevel } from '@planner/features/level-progression/progression-fixture';
 
 describe('phase 05.2 character sheet', () => {
   beforeEach(() => {
@@ -35,31 +37,19 @@ describe('phase 05.2 character sheet', () => {
     expect(titleBar?.textContent).toContain('Hoja de personaje');
   });
 
-  it('renders a tablist with aria-label "Hoja de personaje"', () => {
+  it('does not render the obsolete sheet tablist', () => {
     render(createElement(CharacterSheet));
 
-    const tablist = screen.getByRole('tablist', { name: 'Hoja de personaje' });
-    expect(tablist).toBeInTheDocument();
+    expect(
+      screen.queryByRole('tablist', { name: 'Hoja de personaje' }),
+    ).not.toBeInTheDocument();
   });
 
-  it('renders 3 tabs with correct labels', () => {
+  it('does not render Habilidades or Dotes tabs in the right sheet', () => {
     render(createElement(CharacterSheet));
 
-    const tabs = screen.getAllByRole('tab');
-    expect(tabs).toHaveLength(3);
-    expect(tabs[0]).toHaveTextContent('Estadisticas');
-    expect(tabs[1]).toHaveTextContent('Habilidades');
-    expect(tabs[2]).toHaveTextContent('Dotes');
-  });
-
-  it('marks the active tab with aria-selected="true"', () => {
-    render(createElement(CharacterSheet));
-
-    const statsTab = screen.getByRole('tab', { name: 'Estadisticas' });
-    expect(statsTab).toHaveAttribute('aria-selected', 'true');
-
-    const skillsTab = screen.getByRole('tab', { name: 'Habilidades' });
-    expect(skillsTab).toHaveAttribute('aria-selected', 'false');
+    expect(screen.queryByRole('tab', { name: 'Habilidades' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('tab', { name: 'Dotes' })).not.toBeInTheDocument();
   });
 
   it('shows empty state when no race is selected', () => {
@@ -93,21 +83,14 @@ describe('phase 05.2 character sheet', () => {
     expect(statValues.length).toBe(6);
   });
 
-  it('switches tab content when clicking a different tab', () => {
+  it('always renders stats content even if the shell has a stale sheet tab', () => {
     useCharacterFoundationStore.getState().setRace('race:human' as any);
+    usePlannerShellStore.setState({ characterSheetTab: 'skills' });
 
     render(createElement(CharacterSheet));
 
-    // Initially shows stats panel
     expect(screen.getByText('Fuerza')).toBeInTheDocument();
-
-    // Click skills tab
-    fireEvent.click(screen.getByRole('tab', { name: 'Habilidades' }));
-    expect(screen.getByText('Habilidades del personaje')).toBeInTheDocument();
-
-    // Click feats tab
-    fireEvent.click(screen.getByRole('tab', { name: 'Dotes' }));
-    expect(screen.getByText('0 dotes')).toBeInTheDocument();
+    expect(screen.queryByText('Habilidades del personaje')).not.toBeInTheDocument();
   });
 
   it('applies level-up ability increases to the visible stat totals', () => {
@@ -121,5 +104,25 @@ describe('phase 05.2 character sheet', () => {
     const fuerzaCell = screen.getByText('Fuerza').closest('div');
     expect(fuerzaCell?.querySelector('.stat-value')?.textContent).toBe('17');
     expect(fuerzaCell?.querySelector('.stat-mod')?.textContent).toBe('(+3)');
+  });
+
+  it('shows real BAB and iterative attacks per round under BAB', () => {
+    useCharacterFoundationStore.getState().setRace('race:human' as any);
+    for (let level = 1; level <= 6; level += 1) {
+      useLevelProgressionStore
+        .getState()
+        .setLevelClassId(
+          level as ProgressionLevel,
+          'class:fighter' as CanonicalId,
+        );
+    }
+
+    render(createElement(CharacterSheet));
+
+    const babCell = screen.getByText('BAB').closest('div');
+    const attacksCell = screen.getByText('Ataques/asalto').closest('div');
+
+    expect(babCell?.querySelector('dd')?.textContent).toBe('+6');
+    expect(attacksCell?.querySelector('dd')?.textContent).toBe('+6 / +1');
   });
 });

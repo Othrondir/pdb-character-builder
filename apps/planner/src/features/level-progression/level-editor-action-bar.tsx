@@ -35,6 +35,7 @@ import {
   PROGRESSION_LEVEL_CAP,
   type ProgressionLevel,
 } from './progression-fixture';
+import { syncPlannerLevel } from './navigation';
 import { computeAdvanceLabel, selectLevelCompletionState } from './selectors';
 import { useLevelProgressionStore } from './store';
 
@@ -43,7 +44,6 @@ export function LevelEditorActionBar() {
   const foundationState = useCharacterFoundationStore();
   const featState = useFeatStore();
   const skillState = useSkillStore();
-  const setActiveLevel = useLevelProgressionStore((s) => s.setActiveLevel);
   const setExpandedLevel = usePlannerShellStore((s) => s.setExpandedLevel);
   const setActiveLevelSubStep = usePlannerShellStore(
     (s) => s.setActiveLevelSubStep,
@@ -70,7 +70,7 @@ export function LevelEditorActionBar() {
     // `activeLevelSubStep ?? 'class'` fallback inside setExpandedLevel
     // never overwrites our explicit 'class' choice.
     setActiveLevelSubStep('class');
-    setActiveLevel(nextLevel);
+    syncPlannerLevel(nextLevel);
     setExpandedLevel(nextLevel);
   }
 
