@@ -23,7 +23,7 @@ Funcionalmente, la web está pensada para acompañar la creación de una ficha p
    - Reparto de atributos iniciales.
 
 2. **Progresión por niveles**
-   - Edición de la build del nivel 1 al 16.
+   - Edición de la build del nivel 1 al 20.
    - Selección de clase por nivel.
    - Selección de habilidades por nivel.
    - Selección de dotes por nivel.
@@ -58,7 +58,9 @@ La web no parsea assets crudos del juego en el navegador. En runtime solo consum
 
 ## Estado actual
 
-El proyecto sigue en desarrollo, pero la base funcional ya está orientada a:
+El proyecto sigue en desarrollo, existen muchos errores.
+
+El objetivo es:
 
 - construir personajes por niveles,
 - validar restricciones importantes del servidor,
