@@ -374,6 +374,7 @@ export function selectProgressionSummary(
  */
 const CLASS_CATALOG_INPUT: ClassCatalogInput = {
   classes: compiledClassCatalog.classes.map((c) => ({
+    bonusFeatSchedule: c.bonusFeatSchedule,
     id: c.id,
     skillPointsPerLevel: c.skillPointsPerLevel,
   })),

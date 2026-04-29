@@ -18,10 +18,9 @@ import type { CompiledClass } from '@data-extractor/contracts/class-catalog';
  *  - Mediano Fortecor L1 Guerrero — race-bonus true (D-06 expansion).
  *  - Elfo L1 Guerrero — race-bonus false (regression lock for non-allowlist races).
  *  - Humano L2 Guerrero — race-bonus false (only at characterLevel === 1).
- *  - Humano L1 Mago — 3 slots all true (Plan 16-01 wizard schedule includes 1).
- *    NOTE: extractor surfaces `[4,9,14,19]` for class:wizard (Puerta canon), so
- *    L1 wizard does NOT receive a class-bonus slot under D-01 precedence. The
- *    test asserts the actual extractor disposition, not vanilla NWN1 conjecture.
+ *  - Humano L1 Mago — race + general only. Extractor surfaces `[4,9,14,19]`
+ *    for class:wizard (Puerta canon), so L1 wizard does NOT receive a
+ *    class-bonus slot under D-01 precedence.
  *  - D-01 precedence: stub `compiledClass.bonusFeatSchedule = [4]` overrides
  *    LEGACY_CLASS_BONUS_FEAT_SCHEDULES['class:fighter'] at classLevelInClass=1.
  */

@@ -22,6 +22,7 @@ import { compiledRaceCatalog } from '@planner/data/compiled-races';
  */
 const classInput: ClassCatalogInput = {
   classes: compiledClassCatalog.classes.map((c) => ({
+    bonusFeatSchedule: c.bonusFeatSchedule,
     id: c.id,
     skillPointsPerLevel: c.skillPointsPerLevel,
   })),

@@ -1142,6 +1142,7 @@ export function selectFeatBoardView(
     activeLevel,
     {
       classes: compiledClassCatalog.classes.map((c) => ({
+        bonusFeatSchedule: c.bonusFeatSchedule,
         id: c.id,
         skillPointsPerLevel: c.skillPointsPerLevel,
       })),

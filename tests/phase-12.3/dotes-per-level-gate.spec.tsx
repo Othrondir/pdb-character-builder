@@ -56,6 +56,29 @@ function setupL1Guerrero(): void {
     .setLevelClassId(1 as ProgressionLevel, 'class:fighter' as CanonicalId);
 }
 
+function setupGoliatBarbaroGuerreroSplit(): void {
+  const foundation = useCharacterFoundationStore.getState();
+  foundation.setRace('race:goliat' as CanonicalId);
+  foundation.setAlignment('alignment:chaotic-good' as CanonicalId);
+
+  const progression = useLevelProgressionStore.getState();
+  const classesByLevel: Record<number, CanonicalId> = {
+    1: 'class:barbarian' as CanonicalId,
+    2: 'class:fighter' as CanonicalId,
+    3: 'class:fighter' as CanonicalId,
+    4: 'class:barbarian' as CanonicalId,
+    5: 'class:barbarian' as CanonicalId,
+    7: 'class:barbarian' as CanonicalId,
+    8: 'class:fighter' as CanonicalId,
+    9: 'class:barbarian' as CanonicalId,
+    10: 'class:fighter' as CanonicalId,
+  };
+
+  for (const [level, classId] of Object.entries(classesByLevel)) {
+    progression.setLevelClassId(Number(level) as ProgressionLevel, classId);
+  }
+}
+
 function snapshotBoardView() {
   return selectFeatBoardView(
     useFeatStore.getState(),
@@ -225,6 +248,35 @@ describe('Phase 12.3-03 — per-level Dotes gate + slot prompt (UAT B3 + B4)', (
       } else {
         expect(view.activeSheet.slotPrompt).toBeNull();
       }
+    });
+
+    it('Goliat Bárbaro/Guerrero import: L10 Guerrero 4 does not invent a Puerta-invalid bonus feat slot', () => {
+      setupGoliatBarbaroGuerreroSplit();
+      activateLevel(10 as ProgressionLevel);
+
+      const view = snapshotBoardView();
+
+      expect(view.activeSheet.level).toBe(10);
+      expect(view.activeSheet.classId).toBe('class:fighter');
+      expect(view.activeSheet.hasClassBonusSlot).toBe(false);
+      expect(view.activeSheet.hasGeneralSlot).toBe(false);
+      expect(view.activeSheet.slotPrompt).toBeNull();
+      expect(view.counters.slots).toBe(0);
+      expect(view.slotStatuses).toEqual([]);
+    });
+
+    it('Goliat Bárbaro/Guerrero import: L8 Guerrero 3 keeps the valid Puerta bonus feat slot', () => {
+      setupGoliatBarbaroGuerreroSplit();
+      activateLevel(8 as ProgressionLevel);
+
+      const view = snapshotBoardView();
+
+      expect(view.activeSheet.level).toBe(8);
+      expect(view.activeSheet.classId).toBe('class:fighter');
+      expect(view.activeSheet.hasClassBonusSlot).toBe(true);
+      expect(view.counters.slots).toBe(1);
+      expect(view.slotStatuses).toHaveLength(1);
+      expect(view.slotStatuses[0]?.slot).toBe('class-bonus');
     });
   });
 

@@ -4,7 +4,6 @@ import type {
 } from '@data-extractor/contracts/feat-catalog';
 import type {
   ClassCatalog,
-  CompiledClass,
 } from '@data-extractor/contracts/class-catalog';
 import type { CanonicalId } from '../contracts/canonical-id';
 import { RACE_L1_BONUS_FEATS } from '../progression/race-constants';
@@ -30,6 +29,10 @@ export interface FeatSlotsAtLevel {
 }
 
 export type FeatSlotType = 'class-bonus' | 'general';
+
+export interface ClassBonusScheduleInput {
+  bonusFeatSchedule?: readonly number[] | null;
+}
 
 export interface EligibleFeatSet {
   /** Feats eligible for the class bonus slot */
@@ -122,7 +125,7 @@ const LEGACY_CLASS_BONUS_FEAT_SCHEDULES: Record<string, number[]> = {
 export function determineFeatSlots(
   buildState: BuildStateAtLevel,
   classFeatLists: FeatCatalog['classFeatLists'],
-  compiledClass?: CompiledClass | null,
+  compiledClass?: ClassBonusScheduleInput | null,
 ): FeatSlotsAtLevel {
   const characterLevel = buildState.characterLevel;
   const classId = buildState.activeClassIdAtLevel ?? null;

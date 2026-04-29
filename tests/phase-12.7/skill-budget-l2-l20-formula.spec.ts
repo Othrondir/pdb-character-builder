@@ -63,6 +63,7 @@ const LEVELS = Array.from({ length: 19 }, (_, i) => i + 2); // 2..20
 describe('Phase 12.7-04 — L2..L20 skill budget formula verification (R6 verify-only)', () => {
   const classInput: ClassCatalogInput = {
     classes: compiledClassCatalog.classes.map((c) => ({
+      bonusFeatSchedule: c.bonusFeatSchedule,
       id: c.id,
       skillPointsPerLevel: c.skillPointsPerLevel,
     })),

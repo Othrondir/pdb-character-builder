@@ -1,8 +1,8 @@
 import { determineFeatSlots } from '../feats/feat-eligibility';
 import {
   HUMAN_RACE_ID,
-  HUMAN_BONUS_FEAT_AT_L1,
   HUMAN_SKILL_POINT_PER_LEVEL,
+  RACE_L1_BONUS_FEATS,
 } from './race-constants';
 import { getSkillPointBudget } from '../skills/skill-budget';
 
@@ -20,6 +20,7 @@ import { getSkillPointBudget } from '../skills/skill-budget';
 /** Structural class-catalog shape the selector reads. */
 export interface ClassCatalogInput {
   classes: ReadonlyArray<{
+    bonusFeatSchedule?: readonly number[] | null;
     id: string;
     skillPointsPerLevel: number;
   }>;
@@ -187,14 +188,9 @@ export function computePerLevelBudget(
   // `readonly`, so we cast at the call-site to preserve rules-engine framework
   // purity (no extractor-package import at this module level).
   //
-  // Phase 16-02 (Pattern S7 + architectural decision B-01 option a):
-  // we OMIT the `compiledClass` arg here. `per-level-budget.ts` lives inside
-  // `packages/rules-engine/`; importing `compiledClassCatalog` would break
-  // the framework-agnostic boundary. Engine-internal budget math falls
-  // through to `LEGACY_CLASS_BONUS_FEAT_SCHEDULES`. Cadence parity with the
-  // extractor's Puerta-canon `bonusFeatSchedule` is reconciled at the
-  // Phase 12.4-03 fixture layer (PIT-01 — Plan 16-02 owns that update),
-  // not at this engine-internal call site.
+  // Caller-side adapters can pass the extractor-derived Puerta schedule
+  // structurally through classCatalog. When omitted, determineFeatSlots keeps
+  // its legacy fallback for tests/consumers that have not been enriched.
   const slots = determineFeatSlots(
     {
       abilityScores: {},
@@ -208,14 +204,15 @@ export function computePerLevelBudget(
       activeClassIdAtLevel: classId,
     },
     featCatalog.classFeatLists as unknown as Parameters<typeof determineFeatSlots>[1],
-    // compiledClass omitted — Pattern S7: rules-engine package must not import
-    // compiledClassCatalog. Legacy fallback wins for engine-internal budget math.
+    classRow,
   );
 
   const general = slots.generalFeatSlot ? 1 : 0;
   const classBonus = slots.classBonusFeatSlot ? 1 : 0;
   const raceBonus =
-    build.raceId === HUMAN_RACE_ID && level === 1 ? HUMAN_BONUS_FEAT_AT_L1 : 0;
+    build.raceId != null && RACE_L1_BONUS_FEATS.has(build.raceId) && level === 1
+      ? 1
+      : 0;
   const total = general + classBonus + raceBonus;
 
   const chosen = build.chosenFeatIdsAtLevel(level).length;

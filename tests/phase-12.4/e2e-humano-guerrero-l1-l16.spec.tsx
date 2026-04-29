@@ -213,11 +213,14 @@ describe('Phase 12.4-09 — E2E (RTL fallback): Elfo+Guerrero advance bar L1 →
     // bar can resolve enabled (same shape used in A3 unit test). The click
     // fires the atomic dispatch to move activeLevel to 16.
     useLevelProgressionStore.getState().setActiveLevel(15 as ProgressionLevel);
-    // L15 Guerrero: generalFeatSlot only (classBonus schedule is 1/2/4/6/...,
-    // not L15); total=1.
+    // L15 Guerrero under Puerta: generalFeatSlot + classBonusFeatSlot
+    // (odd fighter class levels); total=2.
     useFeatStore
       .getState()
       .setGeneralFeat(15 as ProgressionLevel, 'feat:alertness' as CanonicalId);
+    useFeatStore
+      .getState()
+      .setClassFeat(15 as ProgressionLevel, 'feat:weapfochalb' as CanonicalId);
     // L15 Elfo+Guerrero SP budget = base(max(1, 2+int_mod)) + humanoBonus(0)
     // = 1 with INT base 8; fill that one rank on a class skill.
     useSkillStore
