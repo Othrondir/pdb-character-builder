@@ -333,11 +333,13 @@ export function computeBuildStateAtLevel(
     }
   }
 
-  // 5. Selected feats: all feats from levels strictly BEFORE current level (Pitfall 2)
+  // 5. Selected feats: all feats through the current level. A level can expose
+  // multiple slots, so a feat picked in one slot must unlock dependent feats in
+  // the remaining slots at that same level (e.g. Ataque poderoso -> Hendedura).
   const selectedFeatIds = new Set<string>();
 
   for (const featLevel of featState.levels) {
-    if (featLevel.level < level) {
+    if (featLevel.level <= level) {
       for (const featId of getChosenFeatIds(featLevel)) {
         selectedFeatIds.add(featId);
       }

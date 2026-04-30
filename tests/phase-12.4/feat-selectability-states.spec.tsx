@@ -273,6 +273,30 @@ describe('Phase 12.4-07 — Dotes selectability states (SPEC R5)', () => {
       expect(classCard!.textContent).toMatch(/Carrera/);
       expect(generalCard!.textContent).toMatch(/Ahora/);
     });
+
+    it('A6: class-slot prerequisite chosen at the same level unlocks the general-slot dependent feat', () => {
+      setupL1Guerrero();
+      useCharacterFoundationStore.getState().setBaseAttribute('str', 13);
+      useFeatStore
+        .getState()
+        .setClassFeat(
+          1 as ProgressionLevel,
+          'feat:ataquepoderoso' as CanonicalId,
+        );
+
+      render(createElement(FeatBoard));
+
+      const generalSection = document.querySelector<HTMLElement>(
+        '[data-slot-section="general"]',
+      );
+      expect(generalSection).not.toBeNull();
+      const cleaveRow = generalSection!.querySelector<HTMLElement>(
+        '[data-feat-id="feat:cleave"]',
+      );
+      expect(cleaveRow).not.toBeNull();
+      expect(cleaveRow!.getAttribute('aria-disabled')).toBe('false');
+      expect(cleaveRow!.textContent).not.toMatch(/Ataque poderoso.*no tomada/i);
+    });
   });
 
   // ------------------------------------------------------------------
