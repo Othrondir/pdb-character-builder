@@ -535,6 +535,7 @@ export function isDotesLevelComplete(
 
 export interface LevelCompletionState {
   level: ProgressionLevel;
+  abilityDeficit: number;
   featDeficit: number;
   skillDeficit: number;
   isComplete: boolean;
@@ -569,10 +570,21 @@ export function selectLevelCompletionState(
   );
   const featDeficit = Math.max(0, budget.featSlots.total - budget.featSlots.chosen);
   const skillDeficit = getRequiredSkillPointAdjustment(budget.skillPoints.remaining);
-  const classId =
-    progressionState.levels.find((record) => record.level === level)?.classId ?? null;
+  const levelRecord =
+    progressionState.levels.find((record) => record.level === level) ?? null;
+  const classId = levelRecord?.classId ?? null;
+  const abilityIncrease = levelRecord?.abilityIncrease ?? null;
+  const abilityDeficit =
+    classId !== null &&
+    phase04ClassFixture.abilityIncreaseLevels.includes(level) &&
+    abilityIncrease === null
+      ? 1
+      : 0;
   const isComplete =
-    classId !== null && featDeficit === 0 && skillDeficit === 0;
+    classId !== null &&
+    featDeficit === 0 &&
+    skillDeficit === 0 &&
+    abilityDeficit === 0;
 
   // Scan-surface totals (additive — see interface doc).
   const featSlots = {
@@ -590,6 +602,7 @@ export function selectLevelCompletionState(
 
   return {
     level,
+    abilityDeficit,
     featDeficit,
     skillDeficit,
     isComplete,
@@ -659,6 +672,9 @@ export function computeAdvanceLabel(
         ? copy.deficitSkillsSingular
         : copy.deficitSkillsPluralTemplate.replace('{N}', String(state.skillDeficit));
     return { label, disabled: true };
+  }
+  if (state.abilityDeficit > 0) {
+    return { label: copy.deficitAbility, disabled: true };
   }
   return {
     label: copy.continueTemplate.replace('{N}', String(state.level + 1)),

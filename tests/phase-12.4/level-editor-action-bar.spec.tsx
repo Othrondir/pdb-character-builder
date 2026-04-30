@@ -107,6 +107,20 @@ function fillL1ElfoGuerreroSkills(): void {
   useSkillStore.getState().setSkillRank(1 as ProgressionLevel, 'skill:trepar' as CanonicalId, 4);
 }
 
+/** L4 Elfo+Guerrero with all non-ability gates satisfied. */
+function setupL4ElfoGuerreroReadyForAbility(): void {
+  useCharacterFoundationStore.getState().setRace('race:elf' as CanonicalId);
+  useCharacterFoundationStore.getState().setAlignment('alignment:true-neutral' as CanonicalId);
+  for (let level = 1 as ProgressionLevel; level <= 4; level += 1) {
+    useLevelProgressionStore
+      .getState()
+      .setLevelClassId(level as ProgressionLevel, 'class:fighter' as CanonicalId);
+  }
+  useLevelProgressionStore.getState().setActiveLevel(4 as ProgressionLevel);
+  useFeatStore.getState().setClassFeat(4 as ProgressionLevel, 'feat:carrera' as CanonicalId);
+  useSkillStore.getState().setSkillRank(4 as ProgressionLevel, 'skill:trepar' as CanonicalId, 1);
+}
+
 // --------------------------------------------------------------------------
 // Suite
 // --------------------------------------------------------------------------
@@ -171,6 +185,25 @@ describe('Phase 12.4-09 — LevelEditorActionBar (SPEC R2)', () => {
       render(createElement(LevelEditorActionBar));
       const button = screen.getByRole('button');
       expect(button.textContent).toMatch(/Continuar al nivel 2/);
+      expect(button).not.toBeDisabled();
+    });
+
+    it('A6: L4 with feat + skill gates complete but no ability increase — label asks for characteristic, disabled', () => {
+      setupL4ElfoGuerreroReadyForAbility();
+      render(createElement(LevelEditorActionBar));
+      const button = screen.getByRole('button');
+      expect(button.textContent).toMatch(/Asigna el aumento de característica de este nivel/);
+      expect(button).toBeDisabled();
+    });
+
+    it('A7: L4 with ability increase assigned — label `Continuar al nivel 5`, enabled', () => {
+      setupL4ElfoGuerreroReadyForAbility();
+      useLevelProgressionStore
+        .getState()
+        .setLevelAbilityIncrease(4 as ProgressionLevel, 'str');
+      render(createElement(LevelEditorActionBar));
+      const button = screen.getByRole('button');
+      expect(button.textContent).toMatch(/Continuar al nivel 5/);
       expect(button).not.toBeDisabled();
     });
   });

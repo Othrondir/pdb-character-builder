@@ -212,6 +212,7 @@ export const shellCopyEs = {
     // computeAdvanceLabel (feat deficit > skill deficit > enabled continue). Plural-aware.
     advanceButton: {
       continueTemplate: 'Continuar al nivel {N}',
+      deficitAbility: 'Asigna el aumento de característica de este nivel',
       deficitFeatsSingular: 'Falta 1 dote que asignar en este nivel',
       deficitFeatsPluralTemplate: 'Faltan {N} dotes que asignar en este nivel',
       deficitSkillsSingular: 'Falta 1 punto de habilidad por gastar',
