@@ -38,9 +38,9 @@ function load2da(
 /**
  * Parse a class's bonus-feat schedule from cls_bfeat_<resref>.2da.
  *
- * The cls_bfeat_*.2da tables are single-column (Bonus, value '0' or '1');
- * row index = class level. Row 0 is metadata sentinel (PIT-02). v1 scope
- * caps at L20 (PROG-04 R5); epic rows >20 are ignored silently.
+ * The cls_bfeat_*.2da tables are single-column (Bonus, value '0' or '1').
+ * NWN class-level tables are zero-based: row 0 = class level 1. v1 scope
+ * caps at L20 (PROG-04 R5); epic rows >19 are ignored silently.
  *
  * @returns Sorted ascending array of class levels granting a bonus feat,
  *   or `null` when `bonusFeatsTableRef` is absent / table not found.
@@ -63,10 +63,10 @@ function parseBonusFeatSchedule(
   }
   const schedule: number[] = [];
   for (const [rowIndex, row] of table.rows) {
-    // PIT-02: row 0 is metadata sentinel; class levels start at 1.
-    // v1 scope caps at L20 (PROG-04 R5); ignore epic rows silently.
-    if (row.Bonus === '1' && rowIndex >= 1 && rowIndex <= 20) {
-      schedule.push(rowIndex);
+    const classLevel = rowIndex + 1;
+    // NWN class-level 2DAs are zero-based; ignore epic rows silently.
+    if (row.Bonus === '1' && classLevel >= 1 && classLevel <= 20) {
+      schedule.push(classLevel);
     }
   }
   // Map iteration order is insertion order (numeric rows ascending in 2DA),

@@ -95,14 +95,14 @@ const GENERAL_FEAT_LEVELS = [1, 3, 6, 9, 12, 15];
  * Puerta-canon disposition: legacy map is NOT consulted.
  */
 const LEGACY_CLASS_BONUS_FEAT_SCHEDULES: Record<string, number[]> = {
-  'class:fighter': [1, 2, 4, 6, 8, 10, 12, 14, 16],
+  'class:fighter': [1, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20],
   'class:swashbuckler': [1, 2, 5, 9, 13],
-  'class:caballero-arcano': [1, 3, 5, 7, 9, 11, 13, 15],
+  'class:caballero-arcano': [1, 14, 18],
   // Phase 12.4-03 (OQ-3) — extended after RED fixture surfaced missing cadence.
   // NWN1 EE canon sourced from cls_feat_wiz.2da / cls_feat_monk.2da / cls_feat_rog.2da:
-  'class:wizard': [1, 5, 10, 15],
+  'class:wizard': [5, 10, 15, 20],
   'class:monk': [1, 2, 6],
-  'class:rogue': [10, 13, 16],
+  'class:rogue': [10, 13, 16, 19],
 };
 
 /**

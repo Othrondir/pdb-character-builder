@@ -105,50 +105,51 @@ describe('Phase 12.4-03 — per-level-budget selector (SPEC R3)', () => {
       expect(budget.skillPoints.budget).toBe(8);
     });
 
-    it('L2 Guerrero non-human: no feat slot under Puerta odd-level cadence, budget 2', () => {
+    it('L2 Guerrero non-human: classBonus only, budget 2', () => {
       const build = buildSnapshot({
         classByLevel: { 1: 'class:fighter', 2: 'class:fighter' },
       });
       const budget = computePerLevelBudget(build, 2, classInput, featInput, raceInput);
       expect(budget.featSlots).toMatchObject({
         general: 0,
-        classBonus: 0,
+        classBonus: 1,
         raceBonus: 0,
-        total: 0,
+        total: 1,
       });
       expect(budget.skillPoints.budget).toBe(2);
     });
 
-    it('L3 Guerrero: general + classBonus under Puerta odd-level cadence', () => {
+    it('L3 Guerrero: general only', () => {
       const build = buildSnapshot({
         classByLevel: sameClassRun('class:fighter', 3),
       });
       const budget = computePerLevelBudget(build, 3, classInput, featInput, raceInput);
       expect(budget.featSlots).toMatchObject({
         general: 1,
-        classBonus: 1,
-        total: 2,
+        classBonus: 0,
+        total: 1,
       });
     });
 
-    it('L4 Guerrero: no feat slot under Puerta odd-level cadence', () => {
+    it('L4 Guerrero: classBonus only', () => {
       const build = buildSnapshot({
         classByLevel: sameClassRun('class:fighter', 4),
       });
       const budget = computePerLevelBudget(build, 4, classInput, featInput, raceInput);
       expect(budget.featSlots).toMatchObject({
         general: 0,
-        classBonus: 0,
-        total: 0,
+        classBonus: 1,
+        total: 1,
       });
     });
 
-    it('L16 Guerrero: no feat slot under Puerta odd-level cadence', () => {
+    it('L16 Guerrero: classBonus only', () => {
       const build = buildSnapshot({
         classByLevel: sameClassRun('class:fighter', 16),
       });
       const budget = computePerLevelBudget(build, 16, classInput, featInput, raceInput);
-      expect(budget.featSlots.total).toBe(0);
+      expect(budget.featSlots.total).toBe(1);
+      expect(budget.featSlots.classBonus).toBe(1);
     });
   });
 
@@ -163,25 +164,35 @@ describe('Phase 12.4-03 — per-level-budget selector (SPEC R3)', () => {
       expect(budget.skillPoints.budget).toBe(16);
     });
 
-    it('L4: classBonus only under Puerta wizard cadence, skillPoints 4', () => {
+    it('L4: no feat slot under wizard cadence, skillPoints 4', () => {
       const build = buildSnapshot({
         abilityScores: { int: 14 },
         classByLevel: sameClassRun('class:wizard', 4),
       });
       const budget = computePerLevelBudget(build, 4, classInput, featInput, raceInput);
-      expect(budget.featSlots.classBonus).toBe(1);
+      expect(budget.featSlots.classBonus).toBe(0);
       expect(budget.skillPoints.budget).toBe(4);
     });
 
-    it('L15: general only under Puerta wizard cadence', () => {
+    it('L5: classBonus only under wizard cadence', () => {
+      const build = buildSnapshot({
+        abilityScores: { int: 14 },
+        classByLevel: sameClassRun('class:wizard', 5),
+      });
+      const budget = computePerLevelBudget(build, 5, classInput, featInput, raceInput);
+      expect(budget.featSlots.classBonus).toBe(1);
+      expect(budget.featSlots.general).toBe(0);
+    });
+
+    it('L15: general + classBonus under wizard cadence', () => {
       const build = buildSnapshot({
         abilityScores: { int: 14 },
         classByLevel: sameClassRun('class:wizard', 15),
       });
       const budget = computePerLevelBudget(build, 15, classInput, featInput, raceInput);
-      expect(budget.featSlots.total).toBe(1);
+      expect(budget.featSlots.total).toBe(2);
       expect(budget.featSlots.general).toBe(1);
-      expect(budget.featSlots.classBonus).toBe(0);
+      expect(budget.featSlots.classBonus).toBe(1);
     });
   });
 
@@ -218,30 +229,30 @@ describe('Phase 12.4-03 — per-level-budget selector (SPEC R3)', () => {
       expect(budget.skillPoints.budget).toBe(11);
     });
 
-    it('L9 Pícaro: classBonus feat pick under Puerta cadence', () => {
+    it('L10 Pícaro: classBonus feat pick under Puerta cadence', () => {
       const build = buildSnapshot({
         abilityScores: { int: 14 },
-        classByLevel: sameClassRun('class:rogue', 9),
+        classByLevel: sameClassRun('class:rogue', 10),
       });
-      const budget = computePerLevelBudget(build, 9, classInput, featInput, raceInput);
+      const budget = computePerLevelBudget(build, 10, classInput, featInput, raceInput);
       expect(budget.featSlots.classBonus).toBe(1);
     });
 
-    it('L12 Pícaro: classBonus feat pick under Puerta cadence', () => {
+    it('L13 Pícaro: classBonus feat pick under Puerta cadence', () => {
       const build = buildSnapshot({
         abilityScores: { int: 14 },
-        classByLevel: sameClassRun('class:rogue', 12),
+        classByLevel: sameClassRun('class:rogue', 13),
       });
-      const budget = computePerLevelBudget(build, 12, classInput, featInput, raceInput);
+      const budget = computePerLevelBudget(build, 13, classInput, featInput, raceInput);
       expect(budget.featSlots.classBonus).toBe(1);
     });
 
-    it('L15 Pícaro: classBonus feat pick under Puerta cadence', () => {
+    it('L16 Pícaro: classBonus feat pick under Puerta cadence', () => {
       const build = buildSnapshot({
         abilityScores: { int: 14 },
-        classByLevel: sameClassRun('class:rogue', 15),
+        classByLevel: sameClassRun('class:rogue', 16),
       });
-      const budget = computePerLevelBudget(build, 15, classInput, featInput, raceInput);
+      const budget = computePerLevelBudget(build, 16, classInput, featInput, raceInput);
       expect(budget.featSlots.classBonus).toBe(1);
     });
   });

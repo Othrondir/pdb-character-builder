@@ -18,7 +18,7 @@ import type { CompiledClass } from '@data-extractor/contracts/class-catalog';
  *  - Mediano Fortecor L1 Guerrero — race-bonus true (D-06 expansion).
  *  - Elfo L1 Guerrero — race-bonus false (regression lock for non-allowlist races).
  *  - Humano L2 Guerrero — race-bonus false (only at characterLevel === 1).
- *  - Humano L1 Mago — race + general only. Extractor surfaces `[4,9,14,19]`
+ *  - Humano L1 Mago — race + general only. Extractor surfaces `[5,10,15,20]`
  *    for class:wizard (Puerta canon), so L1 wizard does NOT receive a
  *    class-bonus slot under D-01 precedence.
  *  - D-01 precedence: stub `compiledClass.bonusFeatSchedule = [4]` overrides
@@ -96,7 +96,7 @@ describe('Phase 16-02 — race-aware determineFeatSlots (FEAT-05 + FEAT-06, D-01
       compiledFeatCatalog.classFeatLists,
       wizard,
     );
-    // Extractor cadence for wizard is [4,9,14,19] (Plan 16-01 PIT-01 dossier),
+    // Extractor cadence for wizard is [5,10,15,20] (Plan 16-01 PIT-01 dossier),
     // so L1 wizard does NOT receive a class-bonus slot under D-01 precedence.
     expect(slots.classBonusFeatSlot).toBe(false);
     expect(slots.generalFeatSlot).toBe(true);
