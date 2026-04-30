@@ -323,6 +323,7 @@ export const shellCopyEs = {
     sheetTabInvalid: '{count} invalidas',
     autoGrantedLabel: 'Automatica',
     slotPromptClassAvailable: 'Dote de clase disponible.',
+    slotPromptRaceBonusAvailable: 'Dote racial disponible.',
     slotPromptGeneralAvailable: 'Dote general disponible.',
     slotPromptGeneralAvailablePluralTemplate: '{N} dotes generales disponibles.',
     generalFeatBonusStepTitleTemplate: 'Dote general {N}',

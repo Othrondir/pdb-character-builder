@@ -911,8 +911,13 @@ function getClassLevelInClass(
  * are already filled — nothing to prompt about.
  */
 function computeSlotPrompt(
-  featSlots: { classBonusFeatSlot: boolean; generalFeatSlot: boolean },
+  featSlots: {
+    classBonusFeatSlot: boolean;
+    generalFeatSlot: boolean;
+    raceBonusFeatSlot: boolean;
+  },
   selectedClassFeatId: CanonicalId | null,
+  raceBonusFeatId: CanonicalId | null,
   selectedGeneralFeatIds: CanonicalId[],
   generalSlotCount: number,
 ): string | null {
@@ -920,6 +925,10 @@ function computeSlotPrompt(
 
   if (featSlots.classBonusFeatSlot && selectedClassFeatId === null) {
     parts.push(shellCopyEs.feats.slotPromptClassAvailable);
+  }
+
+  if (featSlots.raceBonusFeatSlot && raceBonusFeatId === null) {
+    parts.push(shellCopyEs.feats.slotPromptRaceBonusAvailable);
   }
 
   const remainingGeneralSlots = Math.max(
@@ -1253,7 +1262,9 @@ export function selectFeatBoardView(
     if (!inClassBonusPool && !inGeneralPool) continue;
 
     const isChosenAtLevel =
-      selectedClassFeatId === featId || selectedGeneralFeatIds.includes(featId);
+      selectedClassFeatId === featId ||
+      raceBonusFeatId === featId ||
+      selectedGeneralFeatIds.includes(featId);
     const { rowState, blockedReason } = resolveFeatRowState({
       feat,
       buildState,
@@ -1269,7 +1280,9 @@ export function selectFeatBoardView(
       label: feat.label,
       prereqSummary: buildPrereqSummary(feat.id, buildState),
       selected:
-        featId === selectedClassFeatId || selectedGeneralFeatIds.includes(featId),
+        featId === selectedClassFeatId ||
+        featId === raceBonusFeatId ||
+        selectedGeneralFeatIds.includes(featId),
       rowState,
       blockedReason,
       isChosenAtLevel,
@@ -1297,6 +1310,7 @@ export function selectFeatBoardView(
     slotPrompt: computeSlotPrompt(
       featSlots,
       selectedClassFeatId,
+      raceBonusFeatId,
       selectedGeneralFeatIds,
       generalSlotCount,
     ),

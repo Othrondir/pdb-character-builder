@@ -304,14 +304,14 @@ export function FeatSheet({
       // — do NOT reintroduce a frame-defer wrapper around scrollIntoView.
       const root = scrollerRef?.current ?? null;
       if (root !== null) {
-        const generalSection = root.querySelector<HTMLElement>(
-          '[data-slot-section="general"]',
-        );
-        if (generalSection !== null) {
+        const nextSection =
+          root.querySelector<HTMLElement>('.feat-sheet__group--current') ??
+          root.querySelector<HTMLElement>('[data-slot-section="general"]');
+        if (nextSection !== null) {
           const firstRow =
-            generalSection.querySelector<HTMLElement>('button.feat-picker__row') ??
-            generalSection;
-          firstRow.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+            nextSection.querySelector<HTMLElement>('button.feat-picker__row') ??
+            nextSection;
+          firstRow.scrollIntoView?.({ block: 'nearest', behavior: 'smooth' });
         }
       }
     }
@@ -333,6 +333,20 @@ export function FeatSheet({
     // unsafe CanonicalId cast hits the dispatch below.
     if (!canonicalIdRegex.test(featId)) return;
     setClassFeat(activeLevel, featId as CanonicalId);
+  };
+
+  const handleSelectRaceBonusFeat = (featId: string) => {
+    onFocusFeat(featId);
+    if (!canonicalIdRegex.test(featId)) return;
+
+    const currentRaceBonusFeatId =
+      currentRecord?.bonusGeneralFeatIds[0] ?? null;
+    if (currentRaceBonusFeatId === featId) {
+      clearGeneralFeat(activeLevel, 1);
+      return;
+    }
+
+    setGeneralFeat(activeLevel, featId as CanonicalId, 1);
   };
 
   const handleSelectGeneralFeat = (featId: string) => {
@@ -372,7 +386,10 @@ export function FeatSheet({
     boardView.generalEntries.length > 0;
 
   const classSlotStatus = resolveSlotStatus('class-bonus');
+  const raceBonusSlotStatus = resolveSlotStatus('race-bonus');
   const generalSlotStatus = resolveSlotStatus('general');
+  const showRaceBonusSection =
+    raceBonusSlotStatus !== null && boardView.generalEntries.length > 0;
   const generalSelectionCount = boardView.activeSheet.selectedGeneralFeatIds.length;
   const generalSectionNote =
     boardView.activeSheet.generalSlotCount > 1
@@ -457,6 +474,29 @@ export function FeatSheet({
             </p>
           ) : null}
           {renderSplitEntries(boardView.classBonusEntries, handleSelectClassFeat)}
+        </section>
+      ) : null}
+      {showRaceBonusSection ? (
+        <section
+          className={`feat-sheet__group${
+            raceBonusSlotStatus?.state === 'current'
+              ? ' feat-sheet__group--current'
+              : ''
+          }`}
+          data-slot-section="race-bonus"
+        >
+          <div className="feat-board__section-header">
+            <h3 className="feat-board__section-heading">
+              {raceBonusSlotStatus.label}
+            </h3>
+            <span className="feat-board__section-pill">
+              {raceBonusSlotStatus.stateLabel}
+            </span>
+          </div>
+          <p className="feat-board__section-note">
+            {raceBonusSlotStatus.valueLabel}
+          </p>
+          {renderSplitEntries(boardView.generalEntries, handleSelectRaceBonusFeat)}
         </section>
       ) : null}
       {showGeneralSection ? (

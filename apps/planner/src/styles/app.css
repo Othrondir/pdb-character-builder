@@ -1550,7 +1550,7 @@ a {
 .feat-board__slot-strip {
   display: grid;
   gap: var(--space-sm);
-  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9.5rem), 1fr));
 }
 
 .feat-board__slot-card {

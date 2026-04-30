@@ -586,5 +586,14 @@ describe('Phase 12.4-07 — Dotes selectability states (SPEC R5)', () => {
         /\.feat-picker__header[^}]*\{[^}]*tabular-nums/,
       );
     });
+
+    it('D5: feat slot cards keep a real minimum width before wrapping', () => {
+      expect(appCss).toMatch(
+        /\.feat-board__slot-strip\s*\{[^}]*grid-template-columns\s*:\s*repeat\(auto-fit,\s*minmax\(min\(100%,\s*9\.5rem\),\s*1fr\)\)/,
+      );
+      expect(appCss).not.toMatch(
+        /\.feat-board__slot-strip\s*\{[^}]*grid-template-columns\s*:\s*repeat\(auto-fit,\s*minmax\(0,\s*1fr\)\)/,
+      );
+    });
   });
 });

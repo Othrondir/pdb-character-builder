@@ -13,7 +13,7 @@
  */
 
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { createElement } from 'react';
 
 import { FeatBoard } from '@planner/features/feats/feat-board';
@@ -113,6 +113,48 @@ describe('Phase 16-02 — Dote racial section (FEAT-06, D-04 + D-06)', () => {
     expect(
       document.querySelector('[data-slot-card="general-0"]'),
     ).not.toBeNull();
+  });
+
+  it('Humano L1 Guerrero renders three selectable slot sections: class, race, general', () => {
+    setupL1HumanoGuerrero();
+    render(createElement(FeatBoard));
+    expect(
+      Array.from(document.querySelectorAll('[data-slot-section]')).map((node) =>
+        node.getAttribute('data-slot-section'),
+      ),
+    ).toEqual(['class-bonus', 'race-bonus', 'general']);
+    expect(
+      document.querySelector('[data-slot-section="race-bonus"]')?.textContent,
+    ).toMatch(/Dote racial: Humano/);
+  });
+
+  it('Humano L1 Guerrero can fill class, race-bonus, and general slots from the UI', () => {
+    setupL1HumanoGuerrero();
+    render(createElement(FeatBoard));
+
+    const classRow = document.querySelector<HTMLElement>(
+      '[data-slot-section="class-bonus"] [data-feat-id="feat:carrera"]',
+    );
+    expect(classRow).not.toBeNull();
+    fireEvent.click(classRow!);
+
+    const raceRow = document.querySelector<HTMLElement>(
+      '[data-slot-section="race-bonus"] [data-feat-id="feat:alertness"]',
+    );
+    expect(raceRow).not.toBeNull();
+    fireEvent.click(raceRow!);
+
+    const generalRow = document.querySelector<HTMLElement>(
+      '[data-slot-section="general"] [data-feat-id="feat:ironwill"]',
+    );
+    expect(generalRow).not.toBeNull();
+    fireEvent.click(generalRow!);
+
+    const levelOneFeats = useFeatStore.getState().levels[0]!;
+    expect(levelOneFeats.classFeatId).toBe('feat:carrera');
+    expect(levelOneFeats.bonusGeneralFeatIds[0]).toBe('feat:alertness');
+    expect(levelOneFeats.generalFeatId).toBe('feat:ironwill');
+    expect(screen.getByText(/Dotes del nivel 1:\s*3\/3/)).toBeInTheDocument();
   });
 
   it('Humano L1 Guerrero with all three feats selected → counter 3/3, race-bonus chip in DOM', () => {
