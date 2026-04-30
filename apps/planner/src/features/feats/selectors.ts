@@ -11,6 +11,7 @@ import {
 import {
   determineFeatSlots,
   getAutoGrantedFeatIdsThroughClassLevel,
+  isManualClassBonusFeatEntry,
   isManualFeatSelectionBlocked,
   isSelectableRestrictedGeneralFeat,
 } from '@rules-engine/feats/feat-eligibility';
@@ -1175,7 +1176,7 @@ export function selectFeatBoardView(
   const generalListZeroFeatIds = new Set<string>();
   if (compiledFeatCatalog.classFeatLists[classId]) {
     for (const entry of compiledFeatCatalog.classFeatLists[classId]) {
-      if ((entry.list === 1 || entry.list === 2) && entry.onMenu) {
+      if (isManualClassBonusFeatEntry(entry)) {
         classBonusFeatIds.add(entry.featId);
       }
       if (entry.list === 0 && entry.onMenu) {

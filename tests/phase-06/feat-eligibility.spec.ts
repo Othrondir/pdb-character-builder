@@ -138,6 +138,22 @@ describe('phase 06 feat slot determination', () => {
       expect(slots.classBonusFeatSlot).toBe(false);
     }
   });
+
+  it('treats list=2 OnMenu=false rows as manual class choices, not auto-grants', () => {
+    const slots = determineFeatSlots(
+      createBuildState({
+        characterLevel: 8,
+        classLevels: { 'class:weaponmaster': 1 },
+        activeClassIdAtLevel: 'class:weaponmaster',
+      }),
+      compiledFeatCatalog.classFeatLists,
+    );
+
+    expect(slots.classBonusFeatSlot).toBe(true);
+    expect(slots.autoGrantedFeatIds).not.toContain(
+      'feat:feat-weapon-of-choice-longsword',
+    );
+  });
 });
 
 describe('phase 06 feat eligibility filtering', () => {
@@ -254,6 +270,27 @@ describe('phase 06 feat eligibility filtering', () => {
     );
 
     expect(powerAttack).toBeDefined();
+  });
+
+  it('includes fighter weapon specialization class feats even when source OnMenu is false', () => {
+    const result = getEligibleFeats(
+      createBuildState({
+        abilityScores: { str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 10 },
+        bab: 4,
+        characterLevel: 4,
+        classLevels: { 'class:fighter': 4 },
+        selectedFeatIds: new Set(['feat:weapfoclsw']),
+        activeClassIdAtLevel: 'class:fighter',
+      }),
+      'class:fighter',
+      4,
+      compiledFeatCatalog,
+      compiledClassCatalog,
+    );
+
+    expect(
+      result.classBonusFeats.some((f) => f.id === 'feat:weapspelsw'),
+    ).toBe(true);
   });
 
   it('excludes Arma de aliento from manual selectable pools', () => {

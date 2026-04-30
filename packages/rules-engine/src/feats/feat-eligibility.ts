@@ -1,4 +1,5 @@
 import type {
+  ClassFeatEntry,
   CompiledFeat,
   FeatCatalog,
 } from '@data-extractor/contracts/feat-catalog';
@@ -78,6 +79,10 @@ export function isSelectableRestrictedGeneralFeat(
   return RESTRICTED_GENERAL_FEAT_ALLOWLIST[classId]?.has(featId) ?? false;
 }
 
+export function isManualClassBonusFeatEntry(entry: ClassFeatEntry): boolean {
+  return entry.list === 1 || entry.list === 2;
+}
+
 /** General feat levels: character levels 1, 3, 6, 9, 12, 15 */
 const GENERAL_FEAT_LEVELS = [1, 3, 6, 9, 12, 15];
 
@@ -111,7 +116,7 @@ const LEGACY_CLASS_BONUS_FEAT_SCHEDULES: Record<string, number[]> = {
  * Auto-granted feats (list=3 with grantedOnLevel) are collected.
  * General feat slot is available at character levels 1, 3, 6, 9, 12, 15.
  * Class bonus feat slot is detected from classFeatLists entries where
- * list=1/2 with grantedOnLevel matching classLevelInClass and onMenu=true,
+ * list=1/2 with grantedOnLevel matching classLevelInClass,
  * OR from `compiledClass.bonusFeatSchedule` (D-01 primary) with
  * `LEGACY_CLASS_BONUS_FEAT_SCHEDULES` as fallback (D-01 secondary).
  *
@@ -143,20 +148,11 @@ export function determineFeatSlots(
         autoGrantedFeatIds.push(entry.featId);
       }
 
-      // Auto-granted silently: list=1/2 with grantedOnLevel matching and onMenu=false
+      // Class bonus feat slot: list=1/2 with grantedOnLevel matching.
+      // `OnMenu` is radial/menu metadata in NWN data, not builder visibility.
       if (
-        (entry.list === 1 || entry.list === 2) &&
-        entry.grantedOnLevel === classLevelInClass &&
-        entry.onMenu === false
-      ) {
-        autoGrantedFeatIds.push(entry.featId);
-      }
-
-      // Class bonus feat slot: list=1/2 with grantedOnLevel matching and onMenu=true
-      if (
-        (entry.list === 1 || entry.list === 2) &&
-        entry.grantedOnLevel === classLevelInClass &&
-        entry.onMenu === true
+        isManualClassBonusFeatEntry(entry) &&
+        entry.grantedOnLevel === classLevelInClass
       ) {
         classBonusFeatSlot = true;
       }
@@ -214,11 +210,6 @@ export function getAutoGrantedFeatIdsThroughClassLevel(
 
     if (entry.list === 3) {
       autoGrantedFeatIds.add(entry.featId);
-      continue;
-    }
-
-    if ((entry.list === 1 || entry.list === 2) && entry.onMenu === false) {
-      autoGrantedFeatIds.add(entry.featId);
     }
   }
 
@@ -252,7 +243,7 @@ export function getEligibleFeats(
 
   if (classId && featCatalog.classFeatLists[classId]) {
     for (const entry of featCatalog.classFeatLists[classId]) {
-      if ((entry.list === 1 || entry.list === 2) && entry.onMenu) {
+      if (isManualClassBonusFeatEntry(entry)) {
         classBonusFeatIds.add(entry.featId);
       }
     }

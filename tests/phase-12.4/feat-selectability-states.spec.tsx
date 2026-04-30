@@ -142,6 +142,27 @@ function setupL3Guerrero(): void {
   useFeatStore.getState().setActiveLevel(3 as ProgressionLevel);
 }
 
+function setupL4GuerreroWithLongswordFocus(): void {
+  useCharacterFoundationStore
+    .getState()
+    .setRace('race:elf' as CanonicalId);
+  useCharacterFoundationStore
+    .getState()
+    .setAlignment('alignment:lawful-good' as CanonicalId);
+  for (const level of [1, 2, 3, 4] as ProgressionLevel[]) {
+    useLevelProgressionStore
+      .getState()
+      .setLevelClassId(level, 'class:fighter' as CanonicalId);
+  }
+  useFeatStore
+    .getState()
+    .setGeneralFeat(3 as ProgressionLevel, 'feat:weapfoclsw' as CanonicalId);
+  useLevelProgressionStore
+    .getState()
+    .setActiveLevel(4 as ProgressionLevel);
+  useFeatStore.getState().setActiveLevel(4 as ProgressionLevel);
+}
+
 function setupL6Brujo(): void {
   useCharacterFoundationStore
     .getState()
@@ -296,6 +317,22 @@ describe('Phase 12.4-07 — Dotes selectability states (SPEC R5)', () => {
       expect(cleaveRow).not.toBeNull();
       expect(cleaveRow!.getAttribute('aria-disabled')).toBe('false');
       expect(cleaveRow!.textContent).not.toMatch(/Ataque poderoso.*no tomada/i);
+    });
+
+    it('A7: Guerrero L4 with prior Soltura shows Especialización en armas in class bonus pool', () => {
+      setupL4GuerreroWithLongswordFocus();
+      render(createElement(FeatBoard));
+
+      const classSection = document.querySelector<HTMLElement>(
+        '[data-slot-section="class-bonus"]',
+      );
+      expect(classSection).not.toBeNull();
+      const weaponSpecFamily = classSection!.querySelector<HTMLElement>(
+        'button[data-family-id="feat:weapon-specialization"]',
+      );
+      expect(weaponSpecFamily).not.toBeNull();
+      expect(weaponSpecFamily!.getAttribute('aria-disabled')).toBe('false');
+      expect(weaponSpecFamily!.textContent).toMatch(/Especializaci[oó]n en armas?/);
     });
   });
 
