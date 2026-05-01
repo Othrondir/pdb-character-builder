@@ -96,6 +96,21 @@ function setupElfoThroughL6() {
   }));
 }
 
+function setupElfoReadyForL4Ability() {
+  useCharacterFoundationStore.getState().setRace('race:elf' as CanonicalId);
+  for (let lvl = 1; lvl <= 3; lvl++) {
+    useLevelProgressionStore
+      .getState()
+      .setLevelClassId(lvl as ProgressionLevel, 'class:fighter' as CanonicalId);
+  }
+  useLevelProgressionStore.getState().setActiveLevel(4 as ProgressionLevel);
+  usePlannerShellStore.setState((prev) => ({
+    ...prev,
+    activeLevelSubStep: 'class',
+    expandedLevel: 4 as ProgressionLevel,
+  }));
+}
+
 // L1 Elfo+Guerrero fully legal: class picked + 2/2 feats + 4/4 skill ranks.
 // Mirrors tests/phase-12.4/level-editor-action-bar.spec.tsx `setupL1ElfoGuerrero`
 // + `fillL1ElfoGuerreroFeats` + `fillL1ElfoGuerreroSkills`. Used by C3b to
@@ -419,6 +434,26 @@ describe('Phase 12.6 P5 — 20-row scan surface (Plan 03 Suites A+B)', () => {
     expect(l8Button).not.toBeNull();
     expect(l8Button?.getAttribute('aria-disabled')).toBe('true');
     expect(l8Button?.disabled).toBe(true);
+  });
+
+  it('C5: L4 shows the ability-increase assignment before the class picker', () => {
+    setupElfoReadyForL4Ability();
+    render(createElement(BuildProgressionBoard));
+
+    const expanded = document.querySelector(
+      '[data-testid="level-row-4-expanded"]',
+    );
+    const abilitySection = expanded?.querySelector('.level-sheet__ability');
+    const classPicker = expanded?.querySelector('.class-picker');
+
+    expect(expanded).not.toBeNull();
+    expect(abilitySection).not.toBeNull();
+    expect(classPicker).not.toBeNull();
+
+    const directChildren = Array.from(expanded?.children ?? []);
+    expect(directChildren.indexOf(abilitySection as Element)).toBeLessThan(
+      directChildren.indexOf(classPicker as Element),
+    );
   });
 
   // ----------------------------------------------------------------

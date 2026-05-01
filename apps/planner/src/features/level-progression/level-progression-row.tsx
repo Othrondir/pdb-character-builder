@@ -174,6 +174,19 @@ export function LevelProgressionRow({ level }: Props) {
             </p>
           </div>
 
+          {activeSheet.abilityIncreaseAvailable ? (
+            <section className="level-sheet__ability">
+              <h3>{shellCopyEs.progression.abilityHeading}</h3>
+              <p className="detail-panel__body">
+                {shellCopyEs.progression.abilityHelper}
+              </p>
+              <AbilityIncreaseControl
+                level={activeSheet.level as ProgressionLevel}
+                value={selectedAbility}
+              />
+            </section>
+          ) : null}
+
           <ClassPicker />
 
           {activeSheet.repairMessage ? (
@@ -224,19 +237,6 @@ export function LevelProgressionRow({ level }: Props) {
               <p>{activeSheet.placeholderBody}</p>
             </div>
           )}
-
-          {activeSheet.abilityIncreaseAvailable ? (
-            <section className="level-sheet__ability">
-              <h3>{shellCopyEs.progression.abilityHeading}</h3>
-              <p className="detail-panel__body">
-                {shellCopyEs.progression.abilityHelper}
-              </p>
-              <AbilityIncreaseControl
-                level={activeSheet.level as ProgressionLevel}
-                value={selectedAbility}
-              />
-            </section>
-          ) : null}
         </div>
       )}
     </li>
