@@ -27,10 +27,11 @@
  *     requirements will surface as 'Requiere dote: ...' blockers — correct.
  *
  *   - L9 with 8 levels of Guerrero (no arcane at all) MUST surface the exact
- *     'Requiere conjuros arcanos de nivel 5' blocker label from the gate's
+ *     'Requiere lanzar conjuros arcanos de nivel 5' blocker label from the gate's
  *     arcaneSpellLabel(5), confirming enriched=true path is active.
  *
- *   - L1 regression: every prestige row still shows the L1 branch copy.
+ *   - L1 regression: every prestige row remains disabled; detailed prereq
+ *     rows may render, but no prestige row is selectable.
  *
  *   - Fail-closed intact: a prestige class WITHOUT an override in
  *     PRESTIGE_PREREQ_OVERRIDES still falls through to 'Requisitos en revisión'.
@@ -106,29 +107,30 @@ describe('Quick-260422-g7s — ClassPicker prestige reachability cabled to build
     // highestArcaneSpellLevel(fighter@8) = 0 ⇒ arcane-spell blocker fires with
     // exact copy from arcaneSpellLabel(5). If this assertion passes we KNOW
     // the gate ran branch 4 (decoded) successfully.
-    expect(row?.textContent ?? '').toMatch(/Requiere conjuros arcanos de nivel 5/);
+    expect(row?.textContent ?? '').toMatch(
+      /Requiere lanzar conjuros arcanos de nivel 5/,
+    );
   });
 
-  it('L1 regresión: toda clase de prestigio sigue con copy de rama 2 (no L1)', () => {
+  it('L1 regresión: toda clase de prestigio sigue deshabilitada', () => {
     setupL1Humano();
     render(createElement(ClassPicker));
 
-    const prestigeRows = document.querySelectorAll(
-      '.class-picker__list [data-class-id^="class:"]',
-    );
-    // Filter to prestige-section rows: they are the ones inside the second
-    // list and carry the L1 blocker copy. Easiest check: at L1, the Caballero
-    // Arcano row must carry the 'Clase de prestigio: no disponible en nivel 1'
-    // copy verbatim (branch 2 short-circuits before branches 3/4).
+    const prestigeSection = document
+      .getElementById('class-picker__prestige')
+      ?.closest('section');
+    const prestigeRows =
+      prestigeSection?.querySelectorAll('[data-class-id^="class:"]') ?? [];
     const caballeroRow = document.querySelector(
       '[data-class-id="class:caballero-arcano"]',
     );
     expect(caballeroRow, 'Caballero Arcano row must exist at L1').not.toBeNull();
-    expect(caballeroRow?.textContent ?? '').toMatch(
-      /Clase de prestigio: no disponible en nivel 1; revisa sus requisitos/,
-    );
+    expect(caballeroRow?.getAttribute('aria-disabled')).toBe('true');
     // Sanity: there is more than one prestige row rendered.
     expect(prestigeRows.length).toBeGreaterThan(1);
+    for (const row of Array.from(prestigeRows)) {
+      expect(row.getAttribute('aria-disabled')).toBe('true');
+    }
   });
 
   it('L9 con Guerrero 8 niveles: prestige SIN override sigue cayendo a "Requisitos en revisión"', () => {

@@ -16,6 +16,7 @@ interface MulticlassClassRecord {
   exceptionOverrides?: ExceptionOverrideRecord[];
   exclusiveClassIds?: CanonicalId[];
   id: CanonicalId;
+  kind?: 'base' | 'prestige';
   minimumClassCommitment?: number;
 }
 
@@ -122,6 +123,18 @@ export function evaluateMulticlassLegality(
 ): MulticlassLegalityResult {
   const issues: ValidationOutcome[] = [];
   const priorLevels = getPriorLevels(input.levels, input.level);
+
+  if (input.classRecord.kind === 'prestige' && input.level === 1) {
+    issues.push(
+      resolveValidationOutcome({
+        affectedIds: [input.classRecord.id],
+        hasConflict: false,
+        hasMissingEvidence: false,
+        passesRule: false,
+        ruleKnown: true,
+      }),
+    );
+  }
 
   for (const deferredLabel of input.classRecord.deferredRequirementLabels) {
     void deferredLabel;

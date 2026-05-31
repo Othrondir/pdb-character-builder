@@ -22,8 +22,8 @@ describe('ruleset-version', () => {
     expect(RULESET_VERSION).toMatch(/^\d+\.\d+\.\d+$/);
   });
 
-  it('BUILD_ENCODING_VERSION is literal 1', () => {
-    expect(BUILD_ENCODING_VERSION).toBe(1);
+  it('BUILD_ENCODING_VERSION is literal 2', () => {
+    expect(BUILD_ENCODING_VERSION).toBe(2);
   });
 
   it('formatDatasetLabel returns a human-readable one-liner', () => {

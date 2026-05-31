@@ -358,6 +358,7 @@ export const shellCopyEs = {
       prereqClassLevelPluralTemplate: 'Requiere {N} niveles de {className}',
       prereqFortSaveTemplate: 'Requiere Fortaleza ≥ {N}',
       prereqCharacterLevelTemplate: 'Requiere nivel de personaje ≥ {N}',
+      prereqSpellLevelTemplate: 'Requiere lanzar conjuros de nivel {N}',
       prereqMaxCharacterLevelTemplate: 'Disponible solo hasta nivel {N}',
       prereqOrFeatsTemplate: 'Requiere una de: {featNames}',
       prereqGeneric: 'Requisitos no cumplidos',

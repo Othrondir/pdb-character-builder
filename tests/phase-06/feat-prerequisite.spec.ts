@@ -338,4 +338,44 @@ describe('phase 06 feat prerequisite evaluator', () => {
     expect(levelCheckL4).toMatchObject({ met: false, required: '5' });
     expect(levelCheckL5).toMatchObject({ met: true, required: '5' });
   });
+
+  it('requires first-level spellcasting for basic spell focus feats', () => {
+    const feat = findFeat('feat:spellfocusabj');
+
+    const fighterResult = evaluateFeatPrerequisites(
+      feat,
+      createBuildState({
+        abilityScores: { str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 11 },
+        characterLevel: 3,
+        classLevels: { 'class:fighter': 3 },
+        activeClassIdAtLevel: 'class:fighter',
+      }),
+      compiledFeatCatalog,
+      compiledClassCatalog,
+    );
+
+    const sorcererResult = evaluateFeatPrerequisites(
+      feat,
+      createBuildState({
+        abilityScores: { str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 11 },
+        characterLevel: 3,
+        classLevels: { 'class:sorcerer': 3 },
+        activeClassIdAtLevel: 'class:sorcerer',
+      }),
+      compiledFeatCatalog,
+      compiledClassCatalog,
+    );
+
+    const spellCheck = fighterResult.checks.find(
+      (c) => c.type === 'spell-level',
+    );
+
+    expect(spellCheck).toMatchObject({
+      met: false,
+      required: '1',
+      current: '0',
+    });
+    expect(fighterResult.met).toBe(false);
+    expect(sorcererResult.met).toBe(true);
+  });
 });

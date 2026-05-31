@@ -67,6 +67,25 @@ function setupL1HumanoGuerrero(): void {
     .setClassFeat(1 as ProgressionLevel, 'feat:carrera' as CanonicalId);
 }
 
+function setupHechiceroLevel3(): void {
+  useCharacterFoundationStore
+    .getState()
+    .setRace('race:human' as CanonicalId);
+  useCharacterFoundationStore
+    .getState()
+    .setAlignment('alignment:chaotic-good' as CanonicalId);
+  useCharacterFoundationStore.getState().setBaseAttribute('cha', 11);
+  for (const level of [1, 2, 3] as const) {
+    useLevelProgressionStore
+      .getState()
+      .setLevelClassId(level as ProgressionLevel, 'class:sorcerer' as CanonicalId);
+  }
+  useLevelProgressionStore
+    .getState()
+    .setActiveLevel(3 as ProgressionLevel);
+  useFeatStore.getState().setActiveLevel(3 as ProgressionLevel);
+}
+
 // --------------------------------------------------------------------------
 // Suite
 // --------------------------------------------------------------------------
@@ -158,7 +177,7 @@ describe('Phase 12.4-08 — feat-family fold + inline expander (SPEC R7)', () =>
       // (no trailing "(X)" — the folded family row).
       const candidates = Array.from(
         document.querySelectorAll<HTMLElement>(
-          'button[data-family-id="feat:skill-focus"]',
+          'section[data-slot-section="general"] button[data-family-id="feat:skill-focus"]',
         ),
       );
       expect(candidates.length).toBe(1);
@@ -168,7 +187,7 @@ describe('Phase 12.4-08 — feat-family fold + inline expander (SPEC R7)', () =>
       setupL1HumanoGuerrero();
       render(createElement(FeatBoard));
       const familyRow = document.querySelector<HTMLElement>(
-        'button[data-family-id="feat:skill-focus"]',
+        'section[data-slot-section="general"] button[data-family-id="feat:skill-focus"]',
       );
       expect(familyRow).not.toBeNull();
       // UAT-2026-04-24 E9 — pill copy moved from "{N} objetivos" to
@@ -181,7 +200,7 @@ describe('Phase 12.4-08 — feat-family fold + inline expander (SPEC R7)', () =>
       setupL1HumanoGuerrero();
       render(createElement(FeatBoard));
       const familyRow = document.querySelector<HTMLElement>(
-        'button[data-family-id="feat:skill-focus"]',
+        'section[data-slot-section="general"] button[data-family-id="feat:skill-focus"]',
       );
       expect(familyRow).not.toBeNull();
       fireEvent.click(familyRow!);
@@ -200,7 +219,7 @@ describe('Phase 12.4-08 — feat-family fold + inline expander (SPEC R7)', () =>
       render(createElement(FeatBoard));
       fireEvent.click(
         document.querySelector<HTMLElement>(
-          'button[data-family-id="feat:skill-focus"]',
+          'section[data-slot-section="general"] button[data-family-id="feat:skill-focus"]',
         )!,
       );
       const radios = document.querySelectorAll<HTMLInputElement>(
@@ -214,7 +233,7 @@ describe('Phase 12.4-08 — feat-family fold + inline expander (SPEC R7)', () =>
       render(createElement(FeatBoard));
 
       const skillFocusFamilyRow = document.querySelector<HTMLButtonElement>(
-        'button[data-family-id="feat:skill-focus"]',
+        'section[data-slot-section="general"] button[data-family-id="feat:skill-focus"]',
       );
       expect(skillFocusFamilyRow).not.toBeNull();
       fireEvent.click(skillFocusFamilyRow!);
@@ -231,14 +250,17 @@ describe('Phase 12.4-08 — feat-family fold + inline expander (SPEC R7)', () =>
       render(createElement(FeatBoard));
       fireEvent.click(
         document.querySelector<HTMLElement>(
-          'button[data-family-id="feat:skill-focus"]',
+          'section[data-slot-section="general"] button[data-family-id="feat:skill-focus"]',
         )!,
       );
-      const firstRadio = document.querySelector<HTMLInputElement>(
-        'fieldset.feat-family-expander input[type="radio"]',
-      );
+      const firstRadio = Array.from(
+        document.querySelectorAll<HTMLInputElement>(
+          'fieldset.feat-family-expander input[type="radio"]',
+        ),
+      ).find((radio) => !radio.disabled);
       expect(firstRadio).not.toBeNull();
       fireEvent.click(firstRadio!);
+      fireEvent.change(firstRadio!, { target: { checked: true } });
 
       const featsAtL1 = useFeatStore
         .getState()
@@ -247,6 +269,7 @@ describe('Phase 12.4-08 — feat-family fold + inline expander (SPEC R7)', () =>
       const chosenIds = [
         featsAtL1!.classFeatId,
         featsAtL1!.generalFeatId,
+        ...featsAtL1!.bonusGeneralFeatIds,
       ].filter(Boolean) as string[];
       const hasSkillFocusTarget = chosenIds.some((id) =>
         id.startsWith('feat:skillfocus'),
@@ -259,7 +282,7 @@ describe('Phase 12.4-08 — feat-family fold + inline expander (SPEC R7)', () =>
       render(createElement(FeatBoard));
       fireEvent.click(
         document.querySelector<HTMLElement>(
-          'button[data-family-id="feat:skill-focus"]',
+          'section[data-slot-section="general"] button[data-family-id="feat:skill-focus"]',
         )!,
       );
       const fieldsetOpen = document.querySelector('fieldset.feat-family-expander');
@@ -270,6 +293,18 @@ describe('Phase 12.4-08 — feat-family fold + inline expander (SPEC R7)', () =>
       expect(
         document.querySelector('fieldset.feat-family-expander'),
       ).toBeNull();
+    });
+
+    it('B7: Hechicero N3 muestra Soltura con una escuela de magia en dotes generales', () => {
+      setupHechiceroLevel3();
+      render(createElement(FeatBoard));
+
+      const spellFocusFamilyRow = document.querySelector<HTMLButtonElement>(
+        'section[data-slot-section="general"] button[data-family-id="feat:spell-focus"]',
+      );
+
+      expect(spellFocusFamilyRow).not.toBeNull();
+      expect(spellFocusFamilyRow).toHaveAttribute('aria-disabled', 'false');
     });
   });
 });

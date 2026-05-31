@@ -53,6 +53,8 @@ const LEVEL_ONE_ONLY_PREREQ_PATTERN =
   /prerrequisito:\s*esta\s+dote\s+solo\s+se\s+puede\s+escoger\s+a\s+(?:1\s*\.?\s*er\.?|primer)\s+nivel/i;
 const SPELLCASTER_LEVEL_PREREQ_PATTERN =
   /prerrequisito:\s*lanzador\s+de\s+conjuros\s+de\s+nivel\s+(\d+)\+/i;
+const FIRST_LEVEL_SPELL_PREREQ_PATTERN =
+  /prerrequisito:\s*(?:aptitud|capacidad)\s+para\s+lanzar\s+conjuros\s+de\s+(?:primer|1\s*\.?\s*er\.?)\s+nivel/i;
 
 function hasLevelOneOnlyPrereqText(description: string): boolean {
   return LEVEL_ONE_ONLY_PREREQ_PATTERN.test(description);
@@ -66,6 +68,10 @@ function parseSpellcasterLevelPrereq(description: string): number | null {
 
   const level = parseInt(match[1] ?? '', 10);
   return Number.isFinite(level) ? level : null;
+}
+
+function parseMinSpellLevelPrereq(description: string): number | null {
+  return FIRST_LEVEL_SPELL_PREREQ_PATTERN.test(description) ? 1 : null;
 }
 
 // ---------------------------------------------------------------------------
@@ -385,6 +391,11 @@ export function assembleFeatCatalog(
       if (derivedSpellcasterLevel != null && derivedSpellcasterLevel > 0) {
         prerequisites.minLevel = derivedSpellcasterLevel;
       }
+    }
+
+    const minSpellLevel = parseMinSpellLevelPrereq(resolvedDesc);
+    if (minSpellLevel != null && minSpellLevel > 0) {
+      prerequisites.minSpellLevel = minSpellLevel;
     }
 
     const maxLevel = parseIntOrNull(row.MaxLevel);

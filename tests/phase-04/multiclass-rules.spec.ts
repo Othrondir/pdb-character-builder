@@ -44,11 +44,11 @@ describe('phase 04 multiclass rules', () => {
     expect(evaluation.appliedOverrides).toContain(
       'puerta.shadowdancer-rogue-bridge',
     );
-    expect(evaluation.summaryStatus).toBe('blocked');
+    expect(evaluation.summaryStatus).toBe('legal');
     expect(evaluation.issues.some((issue) => issue.status === 'illegal')).toBe(false);
   });
 
-  it('keeps deferred prestige requirements blocked rather than legal', () => {
+  it('keeps prestige classes illegal at level 1', () => {
     const evaluation = evaluateMulticlassLegality({
       classRecord: getClassRecord('class:shadowdancer'),
       classes: phase04ClassFixture.classes,
@@ -56,6 +56,6 @@ describe('phase 04 multiclass rules', () => {
       levels: [{ classId: 'class:shadowdancer', level: 1 }],
     });
 
-    expect(evaluation.summaryStatus).toBe('blocked');
+    expect(evaluation.summaryStatus).toBe('illegal');
   });
 });

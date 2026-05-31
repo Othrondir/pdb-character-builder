@@ -47,6 +47,7 @@ export interface PrerequisiteCheck {
     | 'skill'
     | 'level'
     | 'class-level'
+    | 'spell-level'
     | 'fort-save'
     | 'or-feats'
     | 'max-level'
@@ -88,6 +89,30 @@ const FEAT_PREREQUISITE_OVERRIDES: Record<string, Partial<FeatPrerequisites>> = 
   'feat:feat-craft-wand': {
     minLevel: 5,
   },
+  'feat:spellfocusabj': {
+    minSpellLevel: 1,
+  },
+  'feat:spellfocuscon': {
+    minSpellLevel: 1,
+  },
+  'feat:spellfocusdiv': {
+    minSpellLevel: 1,
+  },
+  'feat:spellfocusenc': {
+    minSpellLevel: 1,
+  },
+  'feat:spellfocusevo': {
+    minSpellLevel: 1,
+  },
+  'feat:spellfocusill': {
+    minSpellLevel: 1,
+  },
+  'feat:spellfocusnec': {
+    minSpellLevel: 1,
+  },
+  'feat:spellfocustra': {
+    minSpellLevel: 1,
+  },
 };
 
 function getEffectiveFeatPrerequisites(feat: CompiledFeat): FeatPrerequisites {
@@ -95,6 +120,56 @@ function getEffectiveFeatPrerequisites(feat: CompiledFeat): FeatPrerequisites {
     ...feat.prerequisites,
     ...(FEAT_PREREQUISITE_OVERRIDES[feat.id] ?? {}),
   };
+}
+
+const FIRST_LEVEL_SPELL_CLASS_LEVEL_BY_GAIN_TABLE: Record<string, number> = {
+  CLS_SPGN_ASASIN: 2,
+  CLS_SPGN_BARD: 2,
+  CLS_SPGN_CLER: 1,
+  CLS_SPGN_DRU: 1,
+  CLS_SPGN_ING: 1,
+  CLS_SPGN_PAL: 4,
+  CLS_SPGN_PALA: 4,
+  CLS_SPGN_PALO: 4,
+  CLS_SPGN_PALV: 4,
+  CLS_SPGN_RANG: 4,
+  CLS_SPGN_SORC: 1,
+  CLS_SPGN_WIZ: 1,
+};
+
+function getHighestSpellLevel(
+  buildState: BuildStateAtLevel,
+  classCatalog: ClassCatalog,
+): number {
+  let highest = 0;
+
+  for (const classRow of classCatalog.classes) {
+    if (!classRow.spellCaster || !classRow.spellGainTableRef) {
+      continue;
+    }
+
+    const classLevel = buildState.classLevels[classRow.id] ?? 0;
+    const firstSpellClassLevel =
+      FIRST_LEVEL_SPELL_CLASS_LEVEL_BY_GAIN_TABLE[
+        classRow.spellGainTableRef.toUpperCase()
+      ] ?? 1;
+
+    if (classLevel < firstSpellClassLevel) {
+      continue;
+    }
+
+    const requiredAbilityScore = 11;
+    const primaryAbility = classRow.primaryAbility;
+    const abilityScore = primaryAbility
+      ? buildState.abilityScores[primaryAbility] ?? 0
+      : requiredAbilityScore;
+
+    if (abilityScore >= requiredAbilityScore) {
+      highest = Math.max(highest, 1);
+    }
+  }
+
+  return highest;
 }
 
 /**
@@ -241,6 +316,21 @@ export function evaluateFeatPrerequisites(
       met: currentClassLevel >= requiredLevel,
       required: String(requiredLevel),
       current: String(currentClassLevel),
+    });
+  }
+
+  // Minimum spell level check. This currently supports the level-1 spellcasting
+  // gate used by baseline spell-focus feats; higher spell-level checks fail
+  // closed until a compiled spell-gain table is wired into the runtime.
+  if (prereqs.minSpellLevel != null && prereqs.minSpellLevel > 0) {
+    const currentSpellLevel = getHighestSpellLevel(buildState, classCatalog);
+
+    checks.push({
+      type: 'spell-level',
+      label: 'Nivel de conjuro',
+      met: currentSpellLevel >= prereqs.minSpellLevel,
+      required: String(prereqs.minSpellLevel),
+      current: String(currentSpellLevel),
     });
   }
 

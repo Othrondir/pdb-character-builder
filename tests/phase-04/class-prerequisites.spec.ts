@@ -75,9 +75,17 @@ describe('phase 04 class prerequisites', () => {
     expect(evaluation.summaryStatus).toBe('illegal');
   });
 
-  it('keeps shadowdancer blocked while deferred requirements are pending', () => {
+  it('keeps class records blocked while deferred requirements are pending', () => {
     const evaluation = evaluateClassEntry({
-      classRecord: getClassRecord('class:shadowdancer'),
+      classRecord: {
+        deferredRequirementLabels: [
+          'Pendiente de dotes o habilidades de fases posteriores.',
+        ],
+        id: 'class:shadowdancer',
+        implementedRequirements: {},
+        kind: 'prestige',
+        label: 'Danzarín sombrío',
+      },
       foundation: {
         alignmentId: 'alignment:neutral-good',
         baseAttributes: {

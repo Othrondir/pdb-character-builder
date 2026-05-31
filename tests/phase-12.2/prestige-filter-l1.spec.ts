@@ -4,6 +4,7 @@ import {
   collectVisibleClassOptions,
   evaluateClassEntry,
 } from '@rules-engine/progression/class-entry-rules';
+import { evaluateMulticlassLegality } from '@rules-engine/progression/multiclass-rules';
 import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
 import {
   decodeAlignRestrict,
@@ -29,8 +30,9 @@ import { compiledClassCatalog } from '@planner/data/compiled-classes';
  *  (1) Clérigo (`class:cleric`) legal at L1 with Legal Bueno Humano.
  *  (2) Puerta custom base classes stay in the base roster via allowlist.
  *  (3) Guerrero stays legal (guards against over-gating).
- *  (4) Shadowdancer stays blocked with the 12.1-01 deferred label
- *      (preserves prior contract — prestige path unchanged).
+ *  (4) Shadowdancer has decoded prestige prereqs now, so it no longer carries
+ *      the old deferred label; the level-1 prestige gate lives in multiclass
+ *      legality / ClassPicker reachability.
  *  (5) `decodeAlignRestrict` handles NWN class component masks plus
  *      `AlignRstrctType`, including evil-only Paladin Oscuro.
  *  (6) `CLASS_SERVER_RULE_OVERLAY` wins over decoded values per-field
@@ -139,14 +141,23 @@ describe('Phase 12.2-03 — prestige filter + AlignRestrict decoder at L1', () =
       expect(fighter?.status).toBe('legal');
     });
 
-    it('shadowdancer still blocked with deferred label (preserves 12.1-01 contract)', () => {
+    it('shadowdancer no longer carries the old deferred label, but is still non-legal at L1', () => {
       const sd = byId.get('class:shadowdancer' as CanonicalId);
-      expect(sd?.status).toBe('blocked');
+      expect(sd?.status).toBe('legal');
 
       const record = getPhase04ClassRecord('class:shadowdancer' as CanonicalId);
-      expect(record?.deferredRequirementLabels).toContain(
+      expect(record?.deferredRequirementLabels).not.toContain(
         'Pendiente de dotes o habilidades de fases posteriores.',
       );
+      expect(record).not.toBeNull();
+
+      const multiclassEvaluation = evaluateMulticlassLegality({
+        classRecord: record!,
+        classes: phase04ClassFixture.classes,
+        level: 1,
+        levels: [{ classId: 'class:shadowdancer' as CanonicalId, level: 1 }],
+      });
+      expect(multiclassEvaluation.summaryStatus).not.toBe('legal');
     });
   });
 

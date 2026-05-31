@@ -64,6 +64,10 @@ const RESTRICTED_GENERAL_FEAT_ALLOWLIST: Record<string, Set<string>> = {
   ]),
 };
 
+const CLASS_SCOPED_GENERAL_FEAT_FAMILIES = new Set<string>([
+  'feat:spell-focus',
+]);
+
 export function isManualFeatSelectionBlocked(featId: string): boolean {
   return MANUAL_SELECTION_BLOCKED_FEAT_IDS.has(featId);
 }
@@ -77,6 +81,32 @@ export function isSelectableRestrictedGeneralFeat(
   }
 
   return RESTRICTED_GENERAL_FEAT_ALLOWLIST[classId]?.has(featId) ?? false;
+}
+
+export function isSelectableClassScopedGeneralFeat(
+  classId: CanonicalId | null,
+  feat: CompiledFeat,
+  classFeatLists: FeatCatalog['classFeatLists'],
+): boolean {
+  if (!classId) {
+    return false;
+  }
+
+  if (isSelectableRestrictedGeneralFeat(classId, feat.id)) {
+    return true;
+  }
+
+  const familyId = feat.parameterizedFeatFamily?.canonicalId ?? null;
+  if (
+    familyId == null ||
+    !CLASS_SCOPED_GENERAL_FEAT_FAMILIES.has(familyId)
+  ) {
+    return false;
+  }
+
+  return classFeatLists[classId]?.some(
+    (entry) => entry.featId === feat.id && isManualClassBonusFeatEntry(entry),
+  ) ?? false;
 }
 
 export function isManualClassBonusFeatEntry(entry: ClassFeatEntry): boolean {
@@ -295,7 +325,11 @@ export function getEligibleFeats(
 
       if (
         hasGeneralEntry ||
-        isSelectableRestrictedGeneralFeat(classId, feat.id)
+        isSelectableClassScopedGeneralFeat(
+          classId,
+          feat,
+          featCatalog.classFeatLists,
+        )
       ) {
         generalFeats.push(feat);
       }

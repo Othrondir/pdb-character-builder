@@ -191,11 +191,9 @@ describe('Phase 12.3-03 — per-level Dotes gate + slot prompt (UAT B3 + B4)', (
       expect(view.activeSheet.slotPrompt).toMatch(/dote general disponible/i);
     });
 
-    it('L1 Guerrero with class slot + general slot filled → slotPrompt is null (race-bonus tracked separately)', () => {
-      // Plan 16-02 (D-04): race-bonus is its own slot card, not part of the
-      // slotPrompt aggregate. With the single general slot filled at Humano
-      // L1, slotPrompt no longer reports a pending bonus general slot — the
-      // race-bonus slot strip card surfaces its own status instead.
+    it('L1 Guerrero with class slot + general slot filled → slotPrompt keeps the pending race-bonus slot', () => {
+      // Plan 16-02 (D-04): race-bonus is its own slot card, and the prompt
+      // still lists any unfilled slot at the active level.
       setupL1Guerrero();
       activateLevel(1 as ProgressionLevel);
 
@@ -214,9 +212,11 @@ describe('Phase 12.3-03 — per-level Dotes gate + slot prompt (UAT B3 + B4)', (
 
       const view = snapshotBoardView();
 
-      // Class slot filled + 1/1 general slot filled → no remaining slots
-      // tracked by slotPrompt. (Race-bonus slot card carries its own state.)
-      expect(view.activeSheet.slotPrompt).toBeNull();
+      // Class slot filled + 1/1 general slot filled, but Humano L1 still has
+      // an unfilled race-bonus slot.
+      expect(view.activeSheet.slotPrompt).toBe(
+        shellCopyEs.feats.slotPromptRaceBonusAvailable,
+      );
     });
   });
 
@@ -250,7 +250,7 @@ describe('Phase 12.3-03 — per-level Dotes gate + slot prompt (UAT B3 + B4)', (
       }
     });
 
-    it('Goliat Bárbaro/Guerrero import: L10 Guerrero 4 does not invent a Puerta-invalid bonus feat slot', () => {
+    it('Goliat Bárbaro/Guerrero import: L10 Guerrero 4 grants the class-level 4 bonus feat slot', () => {
       setupGoliatBarbaroGuerreroSplit();
       activateLevel(10 as ProgressionLevel);
 
@@ -258,14 +258,15 @@ describe('Phase 12.3-03 — per-level Dotes gate + slot prompt (UAT B3 + B4)', (
 
       expect(view.activeSheet.level).toBe(10);
       expect(view.activeSheet.classId).toBe('class:fighter');
-      expect(view.activeSheet.hasClassBonusSlot).toBe(false);
+      expect(view.activeSheet.hasClassBonusSlot).toBe(true);
       expect(view.activeSheet.hasGeneralSlot).toBe(false);
-      expect(view.activeSheet.slotPrompt).toBeNull();
-      expect(view.counters.slots).toBe(0);
-      expect(view.slotStatuses).toEqual([]);
+      expect(view.activeSheet.slotPrompt).toMatch(/dote de clase disponible/i);
+      expect(view.counters.slots).toBe(1);
+      expect(view.slotStatuses).toHaveLength(1);
+      expect(view.slotStatuses[0]?.slot).toBe('class-bonus');
     });
 
-    it('Goliat Bárbaro/Guerrero import: L8 Guerrero 3 keeps the valid Puerta bonus feat slot', () => {
+    it('Goliat Bárbaro/Guerrero import: L8 Guerrero 3 does not grant a class bonus feat slot', () => {
       setupGoliatBarbaroGuerreroSplit();
       activateLevel(8 as ProgressionLevel);
 
@@ -273,10 +274,9 @@ describe('Phase 12.3-03 — per-level Dotes gate + slot prompt (UAT B3 + B4)', (
 
       expect(view.activeSheet.level).toBe(8);
       expect(view.activeSheet.classId).toBe('class:fighter');
-      expect(view.activeSheet.hasClassBonusSlot).toBe(true);
-      expect(view.counters.slots).toBe(1);
-      expect(view.slotStatuses).toHaveLength(1);
-      expect(view.slotStatuses[0]?.slot).toBe('class-bonus');
+      expect(view.activeSheet.hasClassBonusSlot).toBe(false);
+      expect(view.counters.slots).toBe(0);
+      expect(view.slotStatuses).toEqual([]);
     });
   });
 

@@ -9,7 +9,7 @@
  * R1 scroll-free rendering verified manually via live MCP Chrome UAT per D-10;
  * jsdom cannot measure layout. The assertions below lock the structural
  * invariants that make the scroll-free claim achievable at the browser layer:
- * the BEM modifier that triggers `grid-column: 1 / -1`, the 8-column thead
+ * the BEM modifier that triggers `grid-column: 1 / -1`, the 9-column thead
  * contract that governs the measured width, and the 20-row tbody contract
  * that governs the measured height.
  */
@@ -56,21 +56,21 @@ describe('Phase 12.9 — Progresion full-width breakout (SPEC R1, structural)', 
     ).not.toBeNull();
   });
 
-  it('R1: Progresion <th> count === 8 (thead column contract)', () => {
+  it('R1: Progresion <th> count === 9 (thead column contract)', () => {
     setupElfoNeutralGuerreroL1();
     const { container } = render(createElement(ResumenBoard));
     const ths = container.querySelectorAll(
       '.resumen-table__progression thead th',
     );
-    expect(ths.length).toBe(8);
+    expect(ths.length).toBe(9);
   });
 
-  it('R1 structural: Progresion block carries .resumen-table__block--progresion modifier and renders 8 <th> columns at 20 <tr> rows', () => {
+  it('R1 structural: Progresion block carries .resumen-table__block--progresion modifier and renders 9 <th> columns at 20 <tr> rows', () => {
     // R1 scroll-free rendering verified manually via live MCP Chrome UAT per D-10;
     // jsdom cannot measure layout. This block locks the three structural
     // invariants the scroll-free claim depends on (and which jsdom CAN measure):
     //   1. BEM modifier presence (triggers `grid-column: 1 / -1` at the CSS layer).
-    //   2. 8 <th scope=col> in thead (column count that drives measured width).
+    //   2. 9 <th scope=col> in thead (column count that drives measured width).
     //   3. 20 <tr> in tbody (row count for full 1..20 progression — locked fixture).
     setupElfoNeutralGuerreroL1();
     const { container } = render(createElement(ResumenBoard));
@@ -81,7 +81,7 @@ describe('Phase 12.9 — Progresion full-width breakout (SPEC R1, structural)', 
     expect(progression).not.toBeNull();
 
     const headerThs = progression!.querySelectorAll('thead th');
-    expect(headerThs.length).toBe(8);
+    expect(headerThs.length).toBe(9);
 
     const bodyTrs = progression!.querySelectorAll('tbody tr');
     expect(bodyTrs.length).toBe(20);

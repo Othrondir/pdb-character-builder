@@ -420,4 +420,23 @@ describe('phase 06 feat eligibility filtering', () => {
       resultL6.generalFeats.some((f) => f.id === 'feat:feat-craft-wand'),
     ).toBe(true);
   });
+
+  it('includes basic spell focus variants in Sorcerer level-3 general feats', () => {
+    const result = getEligibleFeats(
+      createBuildState({
+        abilityScores: { str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 11 },
+        characterLevel: 3,
+        classLevels: { 'class:sorcerer': 3 },
+        activeClassIdAtLevel: 'class:sorcerer',
+      }),
+      'class:sorcerer',
+      3,
+      compiledFeatCatalog,
+      compiledClassCatalog,
+    );
+
+    expect(
+      result.generalFeats.some((f) => f.id === 'feat:spellfocusabj'),
+    ).toBe(true);
+  });
 });

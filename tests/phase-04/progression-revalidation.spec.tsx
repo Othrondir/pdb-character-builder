@@ -1,9 +1,7 @@
 // @vitest-environment jsdom
 
-import { createElement } from 'react';
-import { act, fireEvent, render } from '@testing-library/react';
+import { act } from '@testing-library/react';
 import { beforeEach, describe, expect, it } from 'vitest';
-import { PlannerShellFrame } from '@planner/components/shell/planner-shell-frame';
 import { usePlannerShellStore } from '@planner/state/planner-shell';
 import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
 import { useLevelProgressionStore } from '@planner/features/level-progression/store';
@@ -54,23 +52,15 @@ describe('phase 04 progression revalidation', () => {
       progressionStore.setLevelClassId(4, 'class:fighter');
     });
 
-    render(createElement(PlannerShellFrame));
-
-    // Click the L2 row to activate + expand it, then pick Guerrero
-    // (class:fighter) inside the newly mounted ClassPicker. The legacy
-    // single-click-on-radio path is now two atomic actions: row click
-    // (expands the slot) + class pick inside the expanded slot.
-    const level2Row = document.querySelector(
-      '[data-level-row][data-level=\"2\"] button',
-    ) as HTMLButtonElement | null;
-    expect(level2Row).not.toBeNull();
-    fireEvent.click(level2Row as HTMLButtonElement);
-
-    const guerreroRow = document.querySelector(
-      '[data-class-id=\"class:fighter\"]',
-    ) as HTMLButtonElement | null;
-    expect(guerreroRow).not.toBeNull();
-    fireEvent.click(guerreroRow!);
+    // This spec locks the rules-engine revalidation contract. The row-picker
+    // interaction is covered by the 12.6 scan tests, so mutate the store
+    // directly here and assert that downstream levels preserve their classes
+    // while inheriting the repair state from the broken L2 transition.
+    act(() => {
+      useLevelProgressionStore
+        .getState()
+        .setLevelClassId(2, 'class:fighter');
+    });
 
     // Verify downstream levels are marked as non-legal in the rail selector
     // (selectLevelRail is still the legality oracle; only its consumer
@@ -81,6 +71,7 @@ describe('phase 04 progression revalidation', () => {
     );
     const level3Entry = rail.find((entry) => entry.level === 3);
     const level4Entry = rail.find((entry) => entry.level === 4);
+    expect(rail.find((entry) => entry.level === 2)?.status).toBe('illegal');
     expect(level3Entry?.status).not.toBe('legal');
     expect(level4Entry?.status).not.toBe('legal');
 

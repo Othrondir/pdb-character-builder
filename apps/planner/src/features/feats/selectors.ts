@@ -13,7 +13,7 @@ import {
   getAutoGrantedFeatIdsThroughClassLevel,
   isManualClassBonusFeatEntry,
   isManualFeatSelectionBlocked,
-  isSelectableRestrictedGeneralFeat,
+  isSelectableClassScopedGeneralFeat,
 } from '@rules-engine/feats/feat-eligibility';
 import {
   revalidateFeatSnapshotAfterChange,
@@ -550,6 +550,10 @@ function formatBlockedReason(check: PrerequisiteCheck): string {
 
   if (check.type === 'level') {
     return tpl.prereqCharacterLevelTemplate.replace('{N}', check.required);
+  }
+
+  if (check.type === 'spell-level') {
+    return tpl.prereqSpellLevelTemplate.replace('{N}', check.required);
   }
 
   if (check.type === 'max-level') {
@@ -1259,7 +1263,11 @@ export function selectFeatBoardView(
     const inGeneralPool =
       feat.allClassesCanUse ||
       generalListZeroFeatIds.has(featId) ||
-      isSelectableRestrictedGeneralFeat(classId, featId);
+      isSelectableClassScopedGeneralFeat(
+        classId,
+        feat,
+        compiledFeatCatalog.classFeatLists,
+      );
     if (!inClassBonusPool && !inGeneralPool) continue;
 
     const isChosenAtLevel =

@@ -11,7 +11,7 @@ interface ResumenTableProps {
  * Phase 12.9: Compact ficha layout.
  *
  *   1. Compact identity header  ({name} · {race}{subrace?} · {alignment} · <span>{dataset}</span>)
- *   2. Progresión block         (20-row × 8-col table, full-width via --progresion modifier)
+ *   2. Progresión block         (20-row × 9-col table, full-width via --progresion modifier)
  *   3. Habilidades block        (39-row × 4-col table, full-width via --habilidades modifier)
  *
  * Identity was collapsed from the prior definition-list + attribute table surfaces (R2/D-03) because
@@ -44,7 +44,7 @@ export function ResumenTable({ model, onEditLevel }: ResumenTableProps) {
         </span>
       </header>
 
-      {/* Block 1: Progresión (20 rows × 8 cols — full-width via BEM modifier) */}
+      {/* Block 1: Progresión (20 rows × 9 cols — full-width via BEM modifier) */}
       <section
         className="resumen-table__block resumen-table__block--progresion nwn-frame"
         aria-labelledby="resumen-progression-heading"

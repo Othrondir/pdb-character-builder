@@ -120,11 +120,9 @@ describe('phase 04 level sheet gains', () => {
     );
     const shadowdancer = sheet.classOptions.find((c) => c.label === 'Danzarín sombrío');
     expect(shadowdancer).toBeDefined();
-    // Shadowdancer is a prestige class — at L1 it is blocked by the prestige
-    // gate (reachableAtLevelN returns reachable=false with the
-    // "Disponible a partir del nivel 2" blocker). Selector's own `status`
-    // may report 'legal' for prestige options; the DOM aria-disabled
-    // assertion above is the contract that matters for user-visible state.
-    expect(['blocked', 'legal']).toContain(shadowdancer?.status);
+    // Shadowdancer is a prestige class: the selector marks L1 prestige entry
+    // as illegal, and the DOM assertion above verifies the user-visible row
+    // remains disabled.
+    expect(shadowdancer?.status).toBe('illegal');
   });
 });
