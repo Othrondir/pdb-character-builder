@@ -154,6 +154,54 @@ describe('phase 06 feat slot determination', () => {
       'feat:feat-weapon-of-choice-longsword',
     );
   });
+
+  it('grants MDA its weapon choice at class level 1 but no empty class slot at class level 2', () => {
+    const weaponMaster = compiledClassCatalog.classes.find(
+      (c) => c.id === 'class:weaponmaster',
+    )!;
+    const level1 = determineFeatSlots(
+      createBuildState({
+        characterLevel: 7,
+        classLevels: { 'class:weaponmaster': 1 },
+        activeClassIdAtLevel: 'class:weaponmaster',
+      }),
+      compiledFeatCatalog.classFeatLists,
+      weaponMaster,
+    );
+    const level2 = determineFeatSlots(
+      createBuildState({
+        characterLevel: 8,
+        classLevels: { 'class:weaponmaster': 2 },
+        activeClassIdAtLevel: 'class:weaponmaster',
+      }),
+      compiledFeatCatalog.classFeatLists,
+      weaponMaster,
+    );
+
+    expect(level1.classBonusFeatSlot).toBe(true);
+    expect(level1.autoGrantedFeatIds).toContain('feat:feat-ki-damage');
+    expect(level2.classBonusFeatSlot).toBe(false);
+  });
+
+  it('does not invent pre-epic class bonus feat slots for Espadachín', () => {
+    const swashbuckler = compiledClassCatalog.classes.find(
+      (c) => c.id === 'class:swashbuckler',
+    )!;
+
+    for (let classLevel = 1; classLevel <= 16; classLevel++) {
+      const slots = determineFeatSlots(
+        createBuildState({
+          characterLevel: classLevel,
+          classLevels: { 'class:swashbuckler': classLevel },
+          activeClassIdAtLevel: 'class:swashbuckler',
+        }),
+        compiledFeatCatalog.classFeatLists,
+        swashbuckler,
+      );
+
+      expect(slots.classBonusFeatSlot, `Espadachín ${classLevel}`).toBe(false);
+    }
+  });
 });
 
 describe('phase 06 feat eligibility filtering', () => {
@@ -173,6 +221,27 @@ describe('phase 06 feat eligibility filtering', () => {
     const alertness = result.generalFeats.find((f) => f.id === 'feat:alertness');
 
     expect(alertness).toBeDefined();
+  });
+
+  it('includes Combate con dos armas in level-1 general feats despite passive list=0/list=1 source rows', () => {
+    for (const classId of ['class:barbarian', 'class:warlock'] as const) {
+      const result = getEligibleFeats(
+        createBuildState({
+          characterLevel: 1,
+          classLevels: { [classId]: 1 },
+          activeClassIdAtLevel: classId,
+        }),
+        classId,
+        1,
+        compiledFeatCatalog,
+        compiledClassCatalog,
+      );
+
+      expect(
+        result.generalFeats.some((f) => f.id === 'feat:twoweap'),
+        classId,
+      ).toBe(true);
+    }
   });
 
   it('excludes feats when prerequisites are not met', () => {
@@ -211,6 +280,28 @@ describe('phase 06 feat eligibility filtering', () => {
     const cleave = result.generalFeats.find((f) => f.id === 'feat:cleave');
 
     expect(cleave).toBeDefined();
+  });
+
+  it('offers the matching MDA weapon choice when the corresponding weapon focus is owned', () => {
+    const result = getEligibleFeats(
+      createBuildState({
+        bab: 6,
+        characterLevel: 7,
+        classLevels: { 'class:fighter': 6, 'class:weaponmaster': 1 },
+        selectedFeatIds: new Set(['feat:weapfoclsw']),
+        activeClassIdAtLevel: 'class:weaponmaster',
+      }),
+      'class:weaponmaster',
+      1,
+      compiledFeatCatalog,
+      compiledClassCatalog,
+    );
+
+    expect(
+      result.classBonusFeats.some(
+        (feat) => feat.id === 'feat:feat-weapon-of-choice-longsword',
+      ),
+    ).toBe(true);
   });
 
   it('excludes already-selected feats from eligible list', () => {

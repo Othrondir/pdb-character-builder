@@ -113,14 +113,33 @@ export function isManualClassBonusFeatEntry(entry: ClassFeatEntry): boolean {
   return entry.list === 1 || entry.list === 2;
 }
 
+/**
+ * Puerta/NWN data occasionally encodes a true general feat as a passive
+ * `onMenu=false` row, or even as `list=1` for a subset of classes.
+ */
+const GENERAL_FEAT_ENTRY_ALLOWLIST = new Set<string>(['feat:twoweap']);
+
+export function isSelectableGeneralFeatEntry(
+  entry: ClassFeatEntry,
+): boolean {
+  return (
+    (entry.list === 0 && entry.onMenu) ||
+    (entry.grantedOnLevel == null &&
+      GENERAL_FEAT_ENTRY_ALLOWLIST.has(entry.featId))
+  );
+}
+
 /** General feat levels: character levels 1, 3, 6, 9, 12, 15 */
 const GENERAL_FEAT_LEVELS = [1, 3, 6, 9, 12, 15];
 
 /**
  * Legacy fallback bonus-feat schedules (D-01 fallback role). Plan 16-01 landed
  * extractor-derived `bonusFeatSchedule` on every class; this map remains as a
- * per-class fallback for any class the extractor doesn't surface (currently
- * `class:swashbuckler` — `cls_bfeat_swash` is missing from nwsync).
+ * per-class fallback for consumers that do not pass an extracted schedule.
+ *
+ * Espadachín is intentionally absent. Its class features are auto-granted
+ * through list=3 entries, and its missing `cls_bfeat_swash` must not invent
+ * pre-epic manual feat slots.
  *
  * Lookup precedence (Plan 16-02 D-01):
  *   compiledClass.bonusFeatSchedule ?? LEGACY_CLASS_BONUS_FEAT_SCHEDULES[classId] ?? null
@@ -131,7 +150,6 @@ const GENERAL_FEAT_LEVELS = [1, 3, 6, 9, 12, 15];
  */
 const LEGACY_CLASS_BONUS_FEAT_SCHEDULES: Record<string, number[]> = {
   'class:fighter': [1, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20],
-  'class:swashbuckler': [1, 2, 5, 9, 13],
   'class:caballero-arcano': [1, 14, 18],
   // Phase 12.4-03 (OQ-3) — extended after RED fixture surfaced missing cadence.
   // NWN1 EE canon sourced from cls_feat_wiz.2da / cls_feat_monk.2da / cls_feat_rog.2da:
@@ -315,12 +333,14 @@ export function getEligibleFeats(
       classBonusFeats.push(feat);
     }
 
-    // General feats: those with allClassesCanUse or in class list=0
+    // General feats: globally available feats or selectable class-list entries
     if (feat.allClassesCanUse) {
       generalFeats.push(feat);
     } else if (classId && featCatalog.classFeatLists[classId]) {
       const hasGeneralEntry = featCatalog.classFeatLists[classId].some(
-        (entry) => entry.featId === feat.id && entry.list === 0 && entry.onMenu,
+        (entry) =>
+          entry.featId === feat.id &&
+          isSelectableGeneralFeatEntry(entry),
       );
 
       if (

@@ -14,6 +14,7 @@ import {
   isManualClassBonusFeatEntry,
   isManualFeatSelectionBlocked,
   isSelectableClassScopedGeneralFeat,
+  isSelectableGeneralFeatEntry,
 } from '@rules-engine/feats/feat-eligibility';
 import {
   revalidateFeatSnapshotAfterChange,
@@ -1177,14 +1178,14 @@ export function selectFeatBoardView(
   // AND listed as class-bonus for Guerrero); they get rendered in both
   // sections but the row state + chosen flag are shared.
   const classBonusFeatIds = new Set<string>();
-  const generalListZeroFeatIds = new Set<string>();
+  const selectableGeneralFeatIds = new Set<string>();
   if (compiledFeatCatalog.classFeatLists[classId]) {
     for (const entry of compiledFeatCatalog.classFeatLists[classId]) {
       if (isManualClassBonusFeatEntry(entry)) {
         classBonusFeatIds.add(entry.featId);
       }
-      if (entry.list === 0 && entry.onMenu) {
-        generalListZeroFeatIds.add(entry.featId);
+      if (isSelectableGeneralFeatEntry(entry)) {
+        selectableGeneralFeatIds.add(entry.featId);
       }
     }
   }
@@ -1262,7 +1263,7 @@ export function selectFeatBoardView(
     const inClassBonusPool = classBonusFeatIds.has(featId);
     const inGeneralPool =
       feat.allClassesCanUse ||
-      generalListZeroFeatIds.has(featId) ||
+      selectableGeneralFeatIds.has(featId) ||
       isSelectableClassScopedGeneralFeat(
         classId,
         feat,

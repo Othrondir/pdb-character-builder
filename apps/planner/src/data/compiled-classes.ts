@@ -513,10 +513,10 @@ export const compiledClassCatalog: ClassCatalog = classCatalogSchema.parse({
     {
       "attackBonusProgression": "high",
       "bonusFeatSchedule": [
-        2,
-        14,
-        17,
-        20
+        1,
+        13,
+        16,
+        19
       ],
       "description": "(CLASE DE PRESTIGIO)\nPara el maestro de armas, la perfección está en el dominio de un arma cuerpo a cuerpo. Busca la comunión del cuerpo y el arma, para hacerlos uno y, así, usar el arma con naturalidad, de manera instintiva, como si fuera una extremidad.\n\n- Dado de Golpe: d10.\n- Competencias: Un maestro de armas no gana ninguna competencia adicional con arma o armadura.\n- Puntos de habilidad: 2 + modificador de Int.\n\nREQUISITOS:\n\nAtaque base: +5\nDotes: Ataque de torbellino, Ataque elástico, Esquiva, Movilidad, Pericia en combate y Soltura con un arma (cuerpo a cuerpo con tu arma elegida).\nHabilidades: Intimidar (4 rangos).\n\nAPTITUDES:\n\nNivel\n1: Arma escogida - Una vez haya elegido el arma, en adelante todas las aptitudes especiales del maestro de armas solo funcionarán mientras vaya equipado con un arma de ese tipo.\n  Daño Ki - Inflige el daño máximo una vez al día por nivel.\n5: Multiplicador incrementado - Añade un x1 al multiplicador de daño crítico del arma (por ejemplo, un x2 se convierte en un x3, un x3 en un x4, etc.).\n  Soltura con arma superior - Añade un +1 a los ataques con el arma escogida.\n7: Crítico Ki - Añade un +2 al rango de amenaza del arma escogida.",
       "featTableRef": "CLS_FEAT_WM",

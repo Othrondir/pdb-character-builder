@@ -319,6 +319,23 @@ describe('Phase 12.4-07 — Dotes selectability states (SPEC R5)', () => {
       expect(cleaveRow!.textContent).not.toMatch(/Ataque poderoso.*no tomada/i);
     });
 
+    it('A6b: L1 Brujo shows Combate con dos armas in the general slot despite its list=1 onMenu=false source row', () => {
+      setupL1Brujo();
+
+      render(createElement(FeatBoard));
+
+      const generalSection = document.querySelector<HTMLElement>(
+        '[data-slot-section="general"]',
+      );
+      expect(generalSection).not.toBeNull();
+      const twoWeaponRow = generalSection!.querySelector<HTMLElement>(
+        '[data-feat-id="feat:twoweap"]',
+      );
+      expect(twoWeaponRow).not.toBeNull();
+      expect(twoWeaponRow!.getAttribute('aria-disabled')).toBe('false');
+      expect(twoWeaponRow!.textContent).toMatch(/Combate con dos armas/);
+    });
+
     it('A7: Guerrero L4 with prior Soltura shows Especialización en armas in class bonus pool', () => {
       setupL4GuerreroWithLongswordFocus();
       render(createElement(FeatBoard));

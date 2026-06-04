@@ -39,8 +39,9 @@ function load2da(
  * Parse a class's bonus-feat schedule from cls_bfeat_<resref>.2da.
  *
  * The cls_bfeat_*.2da tables are single-column (Bonus, value '0' or '1').
- * NWN class-level tables are zero-based: row 0 = class level 1. v1 scope
- * caps at L20 (PROG-04 R5); epic rows >19 are ignored silently.
+ * Base-game tables are usually zero-based (row 0 = class level 1), while
+ * several Puerta/custom tables are one-based (row 1 = class level 1). v1
+ * scope caps at L20 (PROG-04 R5).
  *
  * @returns Sorted ascending array of class levels granting a bonus feat,
  *   or `null` when `bonusFeatsTableRef` is absent / table not found.
@@ -62,9 +63,10 @@ function parseBonusFeatSchedule(
     return null;
   }
   const schedule: number[] = [];
+  const isZeroBased = table.rows.has(0);
   for (const [rowIndex, row] of table.rows) {
-    const classLevel = rowIndex + 1;
-    // NWN class-level 2DAs are zero-based; ignore epic rows silently.
+    const classLevel = isZeroBased ? rowIndex + 1 : rowIndex;
+    // Ignore epic rows silently.
     if (row.Bonus === '1' && classLevel >= 1 && classLevel <= 20) {
       schedule.push(classLevel);
     }

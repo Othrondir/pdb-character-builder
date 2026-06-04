@@ -115,6 +115,27 @@ SkillLabel	SkillIndex	ClassSkill
 2	Lore	2	1
 `;
 
+const ZERO_BASED_BONUS_FEATS_2DA = `2DA V2.0
+
+Bonus
+0	1
+1	1
+2	0
+3	1
+19	1
+`;
+
+const ONE_BASED_BONUS_FEATS_2DA = `2DA V2.0
+
+Bonus
+1	1
+2	0
+13	1
+16	1
+19	1
+20	0
+`;
+
 const MINIMAL_RACIALTYPES_2DA = `2DA V2.0
 
 Label	Abrev	Name	ConverName	ConverNameLower	NamePlural	Description	Icon	Appearance	StrAdjust	DexAdjust	IntAdjust	ChaAdjust	WisAdjust	ConAdjust	Endurance	Favored	FeatsTable	Biography	PlayerRace	Constant
@@ -216,6 +237,22 @@ describe('assembleClassCatalog (unit)', () => {
     expect(wizard.attackBonusProgression).toBe('low');
     expect(wizard.spellCaster).toBe(true);
     expect(wizard.spellGainTableRef).toBe('CLS_SPGN_WIZ');
+  });
+
+  it('maps zero-based and one-based bonus-feat tables to their real class levels', () => {
+    const reader = mockNwsyncReader({
+      classes: MINIMAL_CLASSES_2DA,
+      cls_bfeat_fight: ZERO_BASED_BONUS_FEATS_2DA,
+      cls_bfeat_shadow: ONE_BASED_BONUS_FEATS_2DA,
+    });
+    const baseReader = mockBaseGameReader();
+
+    const result = assembleClassCatalog(reader, baseReader, resolver, TEST_DATASET_ID);
+    const fighter = result.catalog.classes.find((c) => c.id === 'class:fighter')!;
+    const shadow = result.catalog.classes.find((c) => c.id === 'class:shadowdancer')!;
+
+    expect(fighter.bonusFeatSchedule).toEqual([1, 2, 4, 20]);
+    expect(shadow.bonusFeatSchedule).toEqual([1, 13, 16, 19]);
   });
 
   it('passes Zod schema validation', () => {

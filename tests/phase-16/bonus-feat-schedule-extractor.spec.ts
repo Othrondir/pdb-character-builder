@@ -15,6 +15,15 @@ describe('Phase 16-01 — extractor surfaces bonusFeatSchedule on CompiledClass 
     expect(fighter!.bonusFeatSchedule).toEqual([1, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20]);
   });
 
+  it('class:weaponmaster keeps its one-based table at MDA levels 1, 13, 16 and 19', () => {
+    const weaponMaster = compiledClassCatalog.classes.find(
+      (c) => c.id === 'class:weaponmaster',
+    );
+
+    expect(weaponMaster).toBeDefined();
+    expect(weaponMaster!.bonusFeatSchedule).toEqual([1, 13, 16, 19]);
+  });
+
   it('at least one class in the catalog has bonusFeatSchedule === null (BonusFeatsTable=****)', () => {
     const someClassWithNullSchedule = compiledClassCatalog.classes.some(
       (c) => c.bonusFeatSchedule === null,
@@ -22,7 +31,7 @@ describe('Phase 16-01 — extractor surfaces bonusFeatSchedule on CompiledClass 
     expect(someClassWithNullSchedule).toBe(true);
   });
 
-  it('every non-null bonusFeatSchedule is sorted ascending and entries fall in [1, 20] (zero-based row mapping)', () => {
+  it('every non-null bonusFeatSchedule is sorted ascending and entries fall in [1, 20] (mixed-index row mapping)', () => {
     for (const cls of compiledClassCatalog.classes) {
       if (cls.bonusFeatSchedule === null || cls.bonusFeatSchedule === undefined) continue;
       for (const lvl of cls.bonusFeatSchedule) {
@@ -61,8 +70,8 @@ describe('Phase 16-01 — extractor surfaces bonusFeatSchedule on CompiledClass 
  * | class:monk                | [1,2,6]                                  | [] (cls_bfeat_monk all zeros — Puerta dropped vanilla bonus feats) |
  * | class:rogue               | [10,13,16,19]                            | [10,13,16,19]                 |
  *
- * Runtime fallback: Swashbuckler null falls back to the legacy map. Monk empty
- * array is authoritative and does not fall back.
+ * Runtime disposition: Swashbuckler null does not invent pre-epic manual
+ * choices. Monk empty array is authoritative and does not fall back.
  */
 describe('Phase 16-01 — cadence dossier (PIT-01: extractor cadence diverges from LEGACY map)', () => {
   it("class:fighter — extractor surfaces non-empty schedule (Puerta canon)", () => {
@@ -74,14 +83,14 @@ describe('Phase 16-01 — cadence dossier (PIT-01: extractor cadence diverges fr
     expect(cls!.bonusFeatSchedule!.length).toBeGreaterThan(0);
   });
 
-  it("class:swashbuckler — extractor disposition is null (cls_bfeat_swash MISSING from nwsync; legacy fallback owns this class)", () => {
+  it("class:swashbuckler — extractor disposition is null (runtime must not invent a pre-epic schedule)", () => {
     const cls = compiledClassCatalog.classes.find((c) => c.id === 'class:swashbuckler');
     expect(cls).toBeDefined();
     // PIT-01 dossier pin: nwsync ships classes.2da row 58 with
     // BonusFeatsTable=CLS_BFEAT_SWASH but the resref itself is absent
     // from the manifest. Extractor emits null per parseBonusFeatSchedule
-    // fail-soft contract — Plan 16-02 must keep legacy fallback for this
-    // class id.
+    // fail-soft contract; runtime handles its class features through the
+    // explicit list=3 grants instead of a guessed manual-pick cadence.
     expect(cls!.bonusFeatSchedule).toBeNull();
   });
 
