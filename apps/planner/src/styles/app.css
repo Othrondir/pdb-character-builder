@@ -2420,6 +2420,12 @@ a {
   outline: 2px solid var(--color-gold);
   outline-offset: 2px;
 }
+.feat-picker__empty {
+  color: var(--color-text-muted);
+  font-size: 13px;
+  margin: 0;
+  padding: 0 var(--space-sm);
+}
 .feat-summary-card {
   padding: var(--space-lg);
 }

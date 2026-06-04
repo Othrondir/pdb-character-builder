@@ -15,6 +15,88 @@ import type {
   FeatSlotKind,
 } from './selectors';
 
+const MIN_SEARCH_LENGTH = 3;
+
+function normalizeFeatSearch(value: string): string {
+  return value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim();
+}
+
+function resolveEntriesRowState(entries: FeatOptionView[]) {
+  if (entries.some((entry) => entry.rowState === 'selectable')) {
+    return {
+      rowState: 'selectable' as const,
+      blockedReason: null,
+    };
+  }
+
+  const picked =
+    entries.find((entry) => entry.rowState === 'blocked-prereq') ??
+    entries.find((entry) => entry.rowState === 'blocked-budget') ??
+    entries.find((entry) => entry.rowState === 'blocked-already-taken') ??
+    entries[0];
+
+  return {
+    rowState: picked.rowState,
+    blockedReason: picked.blockedReason,
+  };
+}
+
+function filterFeatEntries(
+  entries: FeatListEntry[],
+  normalizedQuery: string,
+): FeatListEntry[] {
+  if (normalizedQuery.length < MIN_SEARCH_LENGTH) {
+    return entries;
+  }
+
+  return entries.reduce<FeatListEntry[]>((filtered, entry) => {
+    if (entry.kind === 'feat') {
+      if (normalizeFeatSearch(entry.option.label).includes(normalizedQuery)) {
+        filtered.push(entry);
+      }
+
+      return filtered;
+    }
+
+    const familyMatches = normalizeFeatSearch(entry.family.label).includes(
+      normalizedQuery,
+    );
+    const matchedTargets = familyMatches
+      ? entry.family.targets
+      : entry.family.targets.filter((target) =>
+          normalizeFeatSearch(target.label).includes(normalizedQuery),
+        );
+
+    if (matchedTargets.length === 0) {
+      return filtered;
+    }
+
+    const { rowState, blockedReason } = resolveEntriesRowState(matchedTargets);
+    filtered.push({
+      kind: 'family',
+      family: {
+        ...entry.family,
+        rowState,
+        blockedReason,
+        targets: matchedTargets,
+        selectedTarget:
+          entry.family.selectedTarget &&
+          matchedTargets.some(
+            (target) => target.featId === entry.family.selectedTarget?.featId,
+          )
+            ? entry.family.selectedTarget
+            : null,
+      },
+    });
+
+    return filtered;
+  }, []);
+}
+
 interface FeatSheetProps {
   boardView: FeatBoardView;
   focusedFeatId: string | null;
@@ -253,6 +335,7 @@ export function FeatSheet({
   // Phase 12.4-08 — which folded family row is currently expanded. Only one
   // expander open at a time; clicking an already-open family closes it.
   const [expandedFamilyId, setExpandedFamilyId] = useState<string | null>(null);
+  const [searchValue, setSearchValue] = useState('');
 
   const setClassFeat = useFeatStore((s) => s.setClassFeat);
   const setGeneralFeat = useFeatStore((s) => s.setGeneralFeat);
@@ -397,6 +480,19 @@ export function FeatSheet({
           .replace('{chosen}', String(generalSelectionCount))
           .replace('{slots}', String(boardView.activeSheet.generalSlotCount))
       : generalSlotStatus?.valueLabel ?? null;
+  const normalizedQuery = normalizeFeatSearch(searchValue);
+  const filteredClassBonusEntries = filterFeatEntries(
+    boardView.classBonusEntries,
+    normalizedQuery,
+  );
+  const filteredGeneralEntries = filterFeatEntries(
+    boardView.generalEntries,
+    normalizedQuery,
+  );
+  const filteredRaceBonusEntries = filterFeatEntries(
+    boardView.generalEntries,
+    normalizedQuery,
+  );
 
   const isEntrySelectable = (entry: FeatListEntry) =>
     entry.kind === 'feat'
@@ -409,6 +505,9 @@ export function FeatSheet({
   ) => {
     const available = entries.filter(isEntrySelectable);
     const unavailable = entries.filter((e) => !isEntrySelectable(e));
+    if (available.length === 0 && unavailable.length === 0) {
+      return <p className="feat-picker__empty">{shellCopyEs.feats.noSearchResults}</p>;
+    }
     return (
       <>
         {available.length > 0 ? (
@@ -449,6 +548,25 @@ export function FeatSheet({
 
   return (
     <aside className="planner-panel planner-panel--inner feat-sheet">
+      <div className="feat-board__search">
+        <input
+          aria-label={shellCopyEs.feats.searchAriaLabel}
+          onChange={(event) => setSearchValue(event.target.value)}
+          placeholder={shellCopyEs.feats.searchPlaceholder}
+          type="search"
+          value={searchValue}
+        />
+        {searchValue.length > 0 ? (
+          <button
+            aria-label={shellCopyEs.feats.searchClearLabel}
+            className="feat-board__search-clear"
+            onClick={() => setSearchValue('')}
+            type="button"
+          >
+            {shellCopyEs.feats.searchClearActionLabel}
+          </button>
+        ) : null}
+      </div>
       {showClassSection ? (
         <section
           className={`feat-sheet__group${
@@ -473,7 +591,7 @@ export function FeatSheet({
               {classSlotStatus.valueLabel}
             </p>
           ) : null}
-          {renderSplitEntries(boardView.classBonusEntries, handleSelectClassFeat)}
+          {renderSplitEntries(filteredClassBonusEntries, handleSelectClassFeat)}
         </section>
       ) : null}
       {showRaceBonusSection ? (
@@ -496,7 +614,7 @@ export function FeatSheet({
           <p className="feat-board__section-note">
             {raceBonusSlotStatus.valueLabel}
           </p>
-          {renderSplitEntries(boardView.generalEntries, handleSelectRaceBonusFeat)}
+          {renderSplitEntries(filteredRaceBonusEntries, handleSelectRaceBonusFeat)}
         </section>
       ) : null}
       {showGeneralSection ? (
@@ -523,7 +641,7 @@ export function FeatSheet({
               {generalSectionNote}
             </p>
           ) : null}
-          {renderSplitEntries(boardView.generalEntries, handleSelectGeneralFeat)}
+          {renderSplitEntries(filteredGeneralEntries, handleSelectGeneralFeat)}
         </section>
       ) : null}
     </aside>
