@@ -314,6 +314,7 @@ export const shellCopyEs = {
     removeFeatBody: 'Quitar {featName} invalidara {dependentFeatName} en el nivel {level}. Continuar?',
     removeFeatConfirm: 'Quitar dote',
     removeFeatCancel: 'Cancelar',
+    removeActionLabel: 'Quitar',
     searchAriaLabel: 'Buscar dotes por nombre',
     searchPlaceholder: 'Buscar dotes...',
     searchClearActionLabel: 'Limpiar',

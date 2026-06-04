@@ -124,11 +124,13 @@ function FeatPickerRow({
   focused,
   onSelect,
   onFocus,
+  onRemove,
 }: {
   option: FeatOptionView;
   focused: boolean;
   onSelect: (featId: string) => void;
   onFocus: (featId: string) => void;
+  onRemove: (featId: string) => void;
 }) {
   const blocked = option.rowState !== 'selectable';
   const className = [
@@ -150,25 +152,38 @@ function FeatPickerRow({
   };
 
   return (
-    <button
-      aria-disabled={blocked ? 'true' : 'false'}
-      className={className}
-      data-feat-id={option.featId}
-      onClick={handleClick}
-      type="button"
-    >
-      <span className="feat-picker__label">{option.label}</span>
-      {option.blockedReason?.reasonLabel ? (
-        <em className="feat-picker__reason">
-          {option.blockedReason.reasonLabel}
-        </em>
+    <div className="feat-picker__row-shell">
+      <button
+        aria-disabled={blocked ? 'true' : 'false'}
+        className={className}
+        data-feat-id={option.featId}
+        onClick={handleClick}
+        type="button"
+      >
+        <span className="feat-picker__label">{option.label}</span>
+        {option.blockedReason?.reasonLabel ? (
+          <em className="feat-picker__reason">
+            {option.blockedReason.reasonLabel}
+          </em>
+        ) : null}
+        {option.blockedReason?.pillLabel ? (
+          <span className="feat-picker__pill">
+            {option.blockedReason.pillLabel}
+          </span>
+        ) : null}
+      </button>
+      {option.isChosenAtLevel ? (
+        <button
+          aria-label={`${shellCopyEs.feats.removeActionLabel}: ${option.label}`}
+          className="feat-picker__remove-action"
+          data-remove-feat-id={option.featId}
+          onClick={() => onRemove(option.featId)}
+          type="button"
+        >
+          {shellCopyEs.feats.removeActionLabel}
+        </button>
       ) : null}
-      {option.blockedReason?.pillLabel ? (
-        <span className="feat-picker__pill">
-          {option.blockedReason.pillLabel}
-        </span>
-      ) : null}
-    </button>
+    </div>
   );
 }
 
@@ -177,11 +192,13 @@ function FeatPickerList({
   focusedFeatId,
   onSelect,
   onFocus,
+  onRemove,
 }: {
   options: FeatOptionView[];
   focusedFeatId: string | null;
   onSelect: (featId: string) => void;
   onFocus: (featId: string) => void;
+  onRemove: (featId: string) => void;
 }) {
   return (
     <ul className="feat-picker__list" role="listbox">
@@ -190,6 +207,7 @@ function FeatPickerList({
           <FeatPickerRow
             focused={option.featId === focusedFeatId}
             onFocus={onFocus}
+            onRemove={onRemove}
             onSelect={onSelect}
             option={option}
           />
@@ -208,10 +226,12 @@ function FeatFamilyRow({
   family,
   expanded,
   onToggle,
+  onRemove,
 }: {
   family: FeatFamilyView;
   expanded: boolean;
   onToggle: (groupKey: string) => void;
+  onRemove: (featId: string) => void;
 }) {
   const blocked = family.rowState !== 'selectable';
   const hasSelection = family.selectedTarget !== null;
@@ -237,27 +257,40 @@ function FeatFamilyRow({
         );
 
   return (
-    <button
-      aria-disabled={blocked ? 'true' : 'false'}
-      aria-expanded={expanded ? 'true' : 'false'}
-      className={className}
-      data-family-id={family.groupKey}
-      onClick={() => onToggle(family.groupKey)}
-      type="button"
-    >
-      <span className="feat-picker__label">{family.label}</span>
+    <div className="feat-picker__row-shell">
+      <button
+        aria-disabled={blocked ? 'true' : 'false'}
+        aria-expanded={expanded ? 'true' : 'false'}
+        className={className}
+        data-family-id={family.groupKey}
+        onClick={() => onToggle(family.groupKey)}
+        type="button"
+      >
+        <span className="feat-picker__label">{family.label}</span>
+        {family.selectedTarget ? (
+          <em className="feat-picker__reason">
+            {extractFeatFamilyTargetLabel(
+              family.label,
+              family.selectedTarget.label,
+            )}
+          </em>
+        ) : null}
+        <span className="feat-picker__pill feat-picker__pill--family">
+          {pillLabel}
+        </span>
+      </button>
       {family.selectedTarget ? (
-        <em className="feat-picker__reason">
-          {extractFeatFamilyTargetLabel(
-            family.label,
-            family.selectedTarget.label,
-          )}
-        </em>
+        <button
+          aria-label={`${shellCopyEs.feats.removeActionLabel}: ${family.selectedTarget.label}`}
+          className="feat-picker__remove-action"
+          data-remove-feat-id={family.selectedTarget.featId}
+          onClick={() => onRemove(family.selectedTarget!.featId)}
+          type="button"
+        >
+          {shellCopyEs.feats.removeActionLabel}
+        </button>
       ) : null}
-      <span className="feat-picker__pill feat-picker__pill--family">
-        {pillLabel}
-      </span>
-    </button>
+    </div>
   );
 }
 
@@ -274,6 +307,7 @@ function FeatEntryList({
   onSelectTarget,
   onSelect,
   onFocus,
+  onRemove,
 }: {
   entries: FeatListEntry[];
   focusedFeatId: string | null;
@@ -282,6 +316,7 @@ function FeatEntryList({
   onSelectTarget: (featId: string) => void;
   onSelect: (featId: string) => void;
   onFocus: (featId: string) => void;
+  onRemove: (featId: string) => void;
 }) {
   return (
     <ul className="feat-picker__list" role="listbox">
@@ -292,6 +327,7 @@ function FeatEntryList({
               <FeatPickerRow
                 focused={entry.option.featId === focusedFeatId}
                 onFocus={onFocus}
+                onRemove={onRemove}
                 onSelect={onSelect}
                 option={entry.option}
               />
@@ -310,6 +346,7 @@ function FeatEntryList({
             <FeatFamilyRow
               family={family}
               expanded={expanded}
+              onRemove={onRemove}
               onToggle={onToggleFamily}
             />
             {expanded ? (
@@ -520,6 +557,7 @@ export function FeatSheet({
               expandedFamilyId={expandedFamilyId}
               focusedFeatId={focusedFeatId}
               onFocus={handleFocusFeat}
+              onRemove={onSelect}
               onSelect={onSelect}
               onSelectTarget={onSelect}
               onToggleFamily={handleToggleFamily}
@@ -536,6 +574,7 @@ export function FeatSheet({
               expandedFamilyId={expandedFamilyId}
               focusedFeatId={focusedFeatId}
               onFocus={handleFocusFeat}
+              onRemove={onSelect}
               onSelect={onSelect}
               onSelectTarget={onSelect}
               onToggleFamily={handleToggleFamily}
