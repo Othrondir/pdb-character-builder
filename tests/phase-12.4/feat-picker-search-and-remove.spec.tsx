@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { createElement } from 'react';
 
 import { compiledFeatCatalog } from '@planner/data/compiled-feats';
@@ -50,9 +50,17 @@ function setupL1HumanoGuerreroConClaseElegida(): void {
     .setClassFeat(1 as ProgressionLevel, 'feat:carrera' as CanonicalId);
 }
 
+function moveToL2(classId: CanonicalId): void {
+  useLevelProgressionStore
+    .getState()
+    .setLevelClassId(2 as ProgressionLevel, classId);
+  useLevelProgressionStore.getState().setActiveLevel(2 as ProgressionLevel);
+  useFeatStore.getState().setActiveLevel(2 as ProgressionLevel);
+}
+
 function getSearchInput(): HTMLInputElement {
   return screen.getByRole('searchbox', {
-    name: /Buscar dotes por nombre/i,
+    name: /Buscar dotes por nombre, mínimo 3 caracteres/i,
   });
 }
 
@@ -64,7 +72,7 @@ describe('Quick task 260604-p8q — feat picker search and remove affordances', 
     setupL1Guerrero();
     render(createElement(FeatBoard));
 
-    expect(getSearchInput()).toBeInTheDocument();
+    expect(getSearchInput()).toHaveAttribute('minlength', '3');
   });
 
   it('keeps the full list for 0-2 character queries and filters from 3 onward', () => {
@@ -108,6 +116,25 @@ describe('Quick task 260604-p8q — feat picker search and remove affordances', 
 
     expect(searchInput).toHaveValue('');
     expect(document.querySelector('[data-feat-id="feat:carrera"]')).not.toBeNull();
+  });
+
+  it('resets the search when the active level changes', () => {
+    setupL1Guerrero();
+    render(createElement(FeatBoard));
+
+    fireEvent.change(getSearchInput(), { target: { value: 'esq' } });
+    act(() => moveToL2('class:fighter' as CanonicalId));
+
+    expect(getSearchInput()).toHaveValue('');
+  });
+
+  it('hides the search when the active level has no feat slot to choose', () => {
+    setupL1Guerrero();
+    render(createElement(FeatBoard));
+
+    act(() => moveToL2('class:barbarian' as CanonicalId));
+
+    expect(screen.queryByRole('searchbox')).toBeNull();
   });
 
   it('shows an explicit Quitar action on selected simple rows', () => {

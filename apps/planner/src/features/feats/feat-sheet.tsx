@@ -386,6 +386,11 @@ export function FeatSheet({
 
   const activeLevel = boardView.activeSheet.level;
 
+  useEffect(() => {
+    setSearchValue('');
+    setExpandedFamilyId(null);
+  }, [activeLevel]);
+
   // UAT-2026-04-20 P4 — toggle semantics. Clicking a feat that is already
   // the active-level's class-bonus (or general) pick RELEASES the slot
   // instead of re-setting the same id. Second click = un-select.
@@ -510,6 +515,8 @@ export function FeatSheet({
   const generalSlotStatus = resolveSlotStatus('general');
   const showRaceBonusSection =
     raceBonusSlotStatus !== null && boardView.generalEntries.length > 0;
+  const showSearch =
+    showClassSection || showRaceBonusSection || showGeneralSection;
   const generalSelectionCount = boardView.activeSheet.selectedGeneralFeatIds.length;
   const generalSectionNote =
     boardView.activeSheet.generalSlotCount > 1
@@ -587,25 +594,28 @@ export function FeatSheet({
 
   return (
     <aside className="planner-panel planner-panel--inner feat-sheet">
-      <div className="feat-board__search">
-        <input
-          aria-label={shellCopyEs.feats.searchAriaLabel}
-          onChange={(event) => setSearchValue(event.target.value)}
-          placeholder={shellCopyEs.feats.searchPlaceholder}
-          type="search"
-          value={searchValue}
-        />
-        {searchValue.length > 0 ? (
-          <button
-            aria-label={shellCopyEs.feats.searchClearLabel}
-            className="feat-board__search-clear"
-            onClick={() => setSearchValue('')}
-            type="button"
-          >
-            {shellCopyEs.feats.searchClearActionLabel}
-          </button>
-        ) : null}
-      </div>
+      {showSearch ? (
+        <div className="feat-board__search">
+          <input
+            aria-label={shellCopyEs.feats.searchAriaLabel}
+            minLength={MIN_SEARCH_LENGTH}
+            onChange={(event) => setSearchValue(event.target.value)}
+            placeholder={shellCopyEs.feats.searchPlaceholder}
+            type="search"
+            value={searchValue}
+          />
+          {searchValue.length > 0 ? (
+            <button
+              aria-label={shellCopyEs.feats.searchClearLabel}
+              className="feat-board__search-clear"
+              onClick={() => setSearchValue('')}
+              type="button"
+            >
+              {shellCopyEs.feats.searchClearActionLabel}
+            </button>
+          ) : null}
+        </div>
+      ) : null}
       {showClassSection ? (
         <section
           className={`feat-sheet__group${

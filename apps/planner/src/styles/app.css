@@ -1653,6 +1653,7 @@ a {
   font-size: 14px;
   min-height: 40px;
   padding: var(--space-xs) var(--space-sm);
+  padding-right: calc(var(--space-sm) * 2 + 56px);
   width: 100%;
 }
 
@@ -1802,6 +1803,7 @@ a {
 
 .feat-picker__row-shell {
   position: relative;
+  width: 100%;
 }
 
 .feat-picker__item--family {
@@ -2371,7 +2373,6 @@ a {
   display: flex;
   flex-direction: column;
   padding: var(--space-sm) var(--space-md);
-  padding-right: calc(var(--space-md) * 2 + 72px);
   text-align: left;
   width: 100%;
 }
@@ -2383,6 +2384,7 @@ a {
 .feat-picker__row--chosen {
   background: var(--color-selection);
   border: 1px solid var(--color-selection-border);
+  padding-right: calc(var(--space-md) * 2 + 72px);
 }
 .feat-picker__row--focused {
   /* Subtle active marker when the row is the detail-panel focus target. */
