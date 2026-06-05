@@ -13,6 +13,7 @@ import {
   type BuildStateAtLevel,
   type PrerequisiteCheckResult,
 } from './feat-prerequisite';
+import { expandFeatIdsWithImplications } from './feat-implications';
 
 export interface FeatSlotsAtLevel {
   /** Whether this level grants a class bonus feat pick */
@@ -111,6 +112,18 @@ export function isSelectableClassScopedGeneralFeat(
 
 export function isManualClassBonusFeatEntry(entry: ClassFeatEntry): boolean {
   return entry.list === 1 || entry.list === 2;
+}
+
+export function isImplicitClassBonusFeatForClass(
+  classId: CanonicalId | null,
+  classLevelInClass: number,
+  feat: CompiledFeat,
+): boolean {
+  return (
+    classId === 'class:almapredilecta' &&
+    classLevelInClass === 3 &&
+    feat.parameterizedFeatFamily?.canonicalId === 'feat:weapon-focus'
+  );
 }
 
 /**
@@ -280,6 +293,13 @@ export function getEligibleFeats(
 ): EligibleFeatSet {
   const classBonusFeats: CompiledFeat[] = [];
   const generalFeats: CompiledFeat[] = [];
+  const selectedFeatIds = expandFeatIdsWithImplications(
+    buildState.selectedFeatIds,
+  );
+  const effectiveBuildState: BuildStateAtLevel = {
+    ...buildState,
+    selectedFeatIds,
+  };
   const currentClassAutoGrantedFeatIds = getAutoGrantedFeatIdsThroughClassLevel(
     classId,
     classLevelInClass,
@@ -307,7 +327,7 @@ export function getEligibleFeats(
     }
 
     // Skip already-selected feats
-    if (buildState.selectedFeatIds.has(feat.id)) {
+    if (selectedFeatIds.has(feat.id)) {
       continue;
     }
 
@@ -319,7 +339,7 @@ export function getEligibleFeats(
     // Check prerequisites
     const result = evaluateFeatPrerequisites(
       feat,
-      buildState,
+      effectiveBuildState,
       featCatalog,
       classCatalog,
     );
@@ -329,7 +349,10 @@ export function getEligibleFeats(
     }
 
     // Classify into class bonus or general
-    if (classBonusFeatIds.has(feat.id)) {
+    if (
+      classBonusFeatIds.has(feat.id) ||
+      isImplicitClassBonusFeatForClass(classId, classLevelInClass, feat)
+    ) {
       classBonusFeats.push(feat);
     }
 

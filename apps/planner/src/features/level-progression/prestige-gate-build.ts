@@ -1,6 +1,7 @@
 import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
 import { computeTotalBab } from '@rules-engine/feats/bab-calculator';
 import { determineFeatSlots } from '@rules-engine/feats/feat-eligibility';
+import { expandFeatIdsWithImplications } from '@rules-engine/feats/feat-implications';
 
 import { compiledClassCatalog } from '@planner/data/compiled-classes';
 import { compiledFeatCatalog } from '@planner/data/compiled-feats';
@@ -279,7 +280,7 @@ function buildPriorFeatIds(
     }
   }
 
-  return featIds;
+  return expandFeatIdsWithImplications(featIds);
 }
 
 function buildPriorSkillRanks(

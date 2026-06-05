@@ -4,6 +4,7 @@ import type {
   FeatPrerequisites,
 } from '@data-extractor/contracts/feat-catalog';
 import type { ClassCatalog } from '@data-extractor/contracts/class-catalog';
+import { expandFeatIdsWithImplications } from './feat-implications';
 import { getClassLabel } from './get-class-label';
 
 /**
@@ -21,7 +22,7 @@ export interface BuildStateAtLevel {
   classLevels: Record<string, number>;
   /** Fortitude saving throw total */
   fortitudeSave: number;
-  /** All feats selected/auto-granted at levels <= current-1 */
+  /** All feats selected/auto-granted at levels <= current */
   selectedFeatIds: Set<string>;
   /** skillId -> cumulative ranks at this level */
   skillRanks: Record<string, number>;
@@ -188,6 +189,9 @@ export function evaluateFeatPrerequisites(
 ): PrerequisiteCheckResult {
   const checks: PrerequisiteCheck[] = [];
   const prereqs = getEffectiveFeatPrerequisites(feat);
+  const selectedFeatIds = expandFeatIdsWithImplications(
+    buildState.selectedFeatIds,
+  );
 
   // Ability score checks
   for (const [prereqKey, abilityKey] of Object.entries(ABILITY_PREREQ_MAP)) {
@@ -220,7 +224,7 @@ export function evaluateFeatPrerequisites(
   // Required feat 1 (AND)
   if (prereqs.requiredFeat1 != null) {
     const reqFeat = featCatalog.feats.find((f) => f.id === prereqs.requiredFeat1);
-    const met = buildState.selectedFeatIds.has(prereqs.requiredFeat1);
+    const met = selectedFeatIds.has(prereqs.requiredFeat1);
 
     checks.push({
       type: 'feat',
@@ -234,7 +238,7 @@ export function evaluateFeatPrerequisites(
   // Required feat 2 (AND)
   if (prereqs.requiredFeat2 != null) {
     const reqFeat = featCatalog.feats.find((f) => f.id === prereqs.requiredFeat2);
-    const met = buildState.selectedFeatIds.has(prereqs.requiredFeat2);
+    const met = selectedFeatIds.has(prereqs.requiredFeat2);
 
     checks.push({
       type: 'feat',
@@ -248,7 +252,7 @@ export function evaluateFeatPrerequisites(
   // OR-required feats
   if (prereqs.orReqFeats && prereqs.orReqFeats.length > 0) {
     const anyMet = prereqs.orReqFeats.some((id) =>
-      buildState.selectedFeatIds.has(id),
+      selectedFeatIds.has(id),
     );
     const labels = prereqs.orReqFeats.map((id) => {
       const f = featCatalog.feats.find((ff) => ff.id === id);

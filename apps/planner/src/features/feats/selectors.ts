@@ -11,11 +11,13 @@ import {
 import {
   determineFeatSlots,
   getAutoGrantedFeatIdsThroughClassLevel,
+  isImplicitClassBonusFeatForClass,
   isManualClassBonusFeatEntry,
   isManualFeatSelectionBlocked,
   isSelectableClassScopedGeneralFeat,
   isSelectableGeneralFeatEntry,
 } from '@rules-engine/feats/feat-eligibility';
+import { expandFeatIdsWithImplications } from '@rules-engine/feats/feat-implications';
 import {
   revalidateFeatSnapshotAfterChange,
   type FeatEvaluationStatus,
@@ -385,6 +387,10 @@ export function computeBuildStateAtLevel(
     }
   }
 
+  for (const impliedFeatId of expandFeatIdsWithImplications(selectedFeatIds)) {
+    selectedFeatIds.add(impliedFeatId);
+  }
+
   // 6. Fortitude save
   const fortitudeSave = computeFortSave(classLevels, compiledClassCatalog);
 
@@ -581,7 +587,7 @@ function findAlreadyTakenAtLevel(
 ): number | null {
   for (const record of featState.levels) {
     if (record.level === activeLevel) continue;
-    if (getChosenFeatIds(record).includes(featId as CanonicalId)) {
+    if (expandFeatIdsWithImplications(getChosenFeatIds(record)).has(featId)) {
       return record.level;
     }
   }
@@ -1260,7 +1266,9 @@ export function selectFeatBoardView(
     if (isPuertaAdminLabel(feat.label)) continue;
     const featId = feat.id as CanonicalId;
 
-    const inClassBonusPool = classBonusFeatIds.has(featId);
+    const inClassBonusPool =
+      classBonusFeatIds.has(featId) ||
+      isImplicitClassBonusFeatForClass(classId, classLevelInClass, feat);
     const inGeneralPool =
       feat.allClassesCanUse ||
       selectableGeneralFeatIds.has(featId) ||
