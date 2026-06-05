@@ -34,13 +34,9 @@ describe('projectBuildDocument', () => {
   });
 
   it('projects identity fields from the foundation store', () => {
-    // Phase 12.1-02: foundation-fixture now projects the compiled-extractor
-    // race catalog which emits `subraces: []` today (extractor gap parked
-    // in 12.1-CONTEXT.md deferred). The store's subraceMatchesRace gate
-    // rejects IDs not present in the fixture, so hand-picking
-    // 'subrace:moon-elf' no longer persists. Drop the subrace assertion —
-    // the identity-projection contract (race/alignment/deity) stays locked;
-    // subrace projection is covered once extractor emits children.
+    // The runtime catalog currently carries curated human subraces only.
+    // This Elfo fixture intentionally has no matching subrace selection, so
+    // the identity-projection contract stays focused on race/alignment/deity.
     const foundation = useCharacterFoundationStore.getState();
     foundation.setRace('race:elf');
     foundation.setAlignment('alignment:neutral-good');

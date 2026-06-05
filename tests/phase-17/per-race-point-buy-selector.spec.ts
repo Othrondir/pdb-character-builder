@@ -18,8 +18,7 @@ import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
  * client-side dataset is sourced-uniform (racialtypes.2da AbilitiesPointBuyNumber=30
  * + NWN1 hardcoded engine cost step). Coverage spec asserts pipeline
  * correctness, not value variance. Future server-script overrides re-open
- * this via tests/phase-12.6 spec's it.todo (preserved by D-04 atomic
- * migration in Plan 17-03).
+ * this by replacing the explicit uniformity assertion in the Phase 12.6 spec.
  */
 describe('Phase 17 — SC#4 reframe: per-race point-buy pipeline coverage', () => {
   it('≥3 races resolve to non-null AbilityBudgetRules via selectAbilityBudgetRulesForRace', () => {

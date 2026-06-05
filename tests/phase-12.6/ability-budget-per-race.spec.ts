@@ -21,8 +21,8 @@ import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
  *    `AbilitiesPointBuyNumber=30` and the NWN1 cost curve is hardcoded
  *    engine behavior. Therefore "different races produce different
  *    remainingPoints on identical base" is NOT currently achievable with
- *    truthful sourced data. This is documented as `it.todo` with a
- *    future-work pin; it is NOT a silent scope reduction.
+ *    truthful sourced data. This is locked as an explicit uniformity
+ *    assertion so the suite does not carry a permanent `todo`.
  *
  * Phase 17 D-04 migration: this spec previously imported the legacy
  * hand-authored snapshot dictionary from the now-retired snapshot module
@@ -157,7 +157,26 @@ describe('Phase 12.6 — per-race variance note (SPEC R2+R4, Plan 06 variance-ga
     expect(elfRules!.budget).toBe(dwarfRules!.budget);
   });
 
-  it.todo(
-    'per-race deltas: Elfo vs Enano produce different remainingPoints — BLOCKED on server-script override evidence (racialtypes.2da client extraction shows uniform AbilitiesPointBuyNumber=30; NWN1 cost curve is engine-hardcoded; future Phase that captures server-side overrides can reopen this)',
-  );
+  it('does not assert Elfo/Enano point-buy variance until a sourced server override exists', () => {
+    const elfRules = selectAbilityBudgetRulesForRace('race:elf' as CanonicalId);
+    const dwarfRules = selectAbilityBudgetRulesForRace('race:dwarf' as CanonicalId);
+    expect(elfRules).not.toBeNull();
+    expect(dwarfRules).not.toBeNull();
+
+    const base = { str: 10, dex: 14, con: 10, int: 10, wis: 10, cha: 10 };
+    const elfSnap = calculateAbilityBudgetSnapshot({
+      attributeRules: elfRules,
+      baseAttributes: base,
+      originReady: true,
+    });
+    const dwarfSnap = calculateAbilityBudgetSnapshot({
+      attributeRules: dwarfRules,
+      baseAttributes: base,
+      originReady: true,
+    });
+
+    expect(elfRules!.budget).toBe(30);
+    expect(dwarfRules!.budget).toBe(30);
+    expect(elfSnap.remainingPoints).toBe(dwarfSnap.remainingPoints);
+  });
 });

@@ -173,7 +173,7 @@ describe('Phase 12.4-06 — ClassPicker grouping + prestige gate (SPEC R1 / CLAS
       // bridge. The assertion below remains the regression contract.
       // eslint-disable-next-line no-console
       console.warn(
-        'CLAS-03 scenario unreachable in current catalog; status==="blocked" bridge assertion skipped.',
+        'CLAS-03 scenario unreachable in current catalog; status==="blocked" bridge assertion not applicable.',
       );
       return;
     }

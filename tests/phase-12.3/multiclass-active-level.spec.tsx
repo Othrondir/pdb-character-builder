@@ -19,8 +19,7 @@
  * Suites:
  *   A — Row click dispatch contract: BOTH stores must update.
  *   B — Per-level class persistence without L1 overwrite (B2 lock).
- *   C — Board title binds to live activeLevel (B8 ripple — superseded
- *       by Plan 03 static heading; `describe.skip`).
+ *   C — Board title stays on the static 1-20 progression heading.
  *   D — selectActiveLevelSheet follows activeLevel (B9 contract).
  */
 
@@ -201,23 +200,15 @@ describe('Phase 12.3-02 — multiclass active-level switching (UAT B2 + B8 + B9)
   });
 
   // ------------------------------------------------------------------
-  // Suite C — board title binds to live activeLevel (B8 ripple)
+  // Suite C — board title uses the static 1-20 progression heading
   // ------------------------------------------------------------------
-  // Phase 12.6-03 (PROG-04 R5) superseded the single-level title binding:
-  // BuildProgressionBoard's <h2> now reads the Plan-01-patched
-  // `shellCopyEs.progression.railHeading` ('Progresión 1-20') — a static
-  // heading, not a per-level title. The per-level class heading moves into
-  // the expanded-row slot in Plan 04. Active-level binding is still locked
-  // by Suites B + D in this file (store semantics) and by
-  // tests/phase-12.6/level-progression-scan.spec.tsx Suite C (Plan 04).
-  describe.skip('Suite C — title binds to active level (B8 fold-in)', () => {
-    it('title reads "nivel 1" initially', () => {
+  describe('Suite C — title stays on the static progression range', () => {
+    it('title reads "Progresión 1-20" initially', () => {
       render(createElement(BuildProgressionBoard));
-      // The copy is "Selecciona la clase del nivel" + " " + level; we match case-insensitively.
-      expect(screen.getByRole('heading', { name: /nivel 1\b/i })).not.toBeNull();
+      expect(screen.getByRole('heading', { name: 'Progresión 1-20' })).not.toBeNull();
     });
 
-    it('flipping activeLevel to 3 updates the rendered title to "nivel 3"', () => {
+    it('flipping activeLevel to 3 keeps the board title stable', () => {
       const { rerender } = render(createElement(BuildProgressionBoard));
 
       act(() => {
@@ -225,9 +216,7 @@ describe('Phase 12.3-02 — multiclass active-level switching (UAT B2 + B8 + B9)
       });
       rerender(createElement(BuildProgressionBoard));
 
-      expect(screen.getByRole('heading', { name: /nivel 3\b/i })).not.toBeNull();
-      // And the old L1 title must be gone.
-      expect(screen.queryByRole('heading', { name: /nivel 1\b/i })).toBeNull();
+      expect(screen.getByRole('heading', { name: 'Progresión 1-20' })).not.toBeNull();
     });
   });
 

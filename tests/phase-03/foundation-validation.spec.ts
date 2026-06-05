@@ -93,11 +93,9 @@ describe('phase 03 foundation validation helpers', () => {
   });
 
   it('rejects a subrace outside the selected race', () => {
-    // Phase 12.1-02: foundation-fixture.ts no longer hand-authors
-    // subrace:moon-elf — the extractor does not emit subraces yet (CONTEXT
-    // deferred). Inline a minimal test subrace with parentRaceId = 'race:elf'
-    // so the rules-engine's parent-mismatch branch stays covered without
-    // coupling this spec to extractor output.
+    // Inline an Elfo-only subrace so the rules-engine's parent-mismatch
+    // branch stays covered independently from the current curated Humano
+    // subrace list.
     const testMoonElf = {
       allowedAlignmentIds: phase03FoundationFixture.alignments.map((a) => a.id),
       id: 'subrace:test-moon-elf' as CanonicalId,

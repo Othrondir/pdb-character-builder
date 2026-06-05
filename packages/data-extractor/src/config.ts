@@ -12,53 +12,103 @@ import { fileURLToPath } from 'node:url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(__dirname, '..', '..', '..');
 
+function envPath(name: string, fallback: string): string {
+  const value = process.env[name]?.trim();
+  return value ? value : fallback;
+}
+
+const HOME_DIR = process.env.HOME?.trim() ?? '';
+
+const DEFAULT_NWSYNC_DIR = process.platform === 'win32'
+  ? path.join(
+    'C:',
+    'Users',
+    'pzhly',
+    'Documents',
+    'Neverwinter Nights',
+    'nwsync',
+  )
+  : path.join(
+    HOME_DIR,
+    '.local',
+    'share',
+    'Neverwinter Nights',
+    'nwsync',
+  );
+
+const DEFAULT_BASE_GAME_DIR = process.platform === 'win32'
+  ? path.join(
+    'C:',
+    'Program Files (x86)',
+    'Steam',
+    'steamapps',
+    'common',
+    'Neverwinter Nights',
+  )
+  : path.join(
+    HOME_DIR,
+    '.local',
+    'share',
+    'Steam',
+    'steamapps',
+    'common',
+    'Neverwinter Nights',
+  );
+
 // ---------------------------------------------------------------------------
 // nwsync database paths (D-01)
 // ---------------------------------------------------------------------------
 
 /** Root nwsync directory from the local NWN EE installation. */
-export const NWSYNC_DIR = path.join(
-  'C:',
-  'Users',
-  'pzhly',
-  'Documents',
-  'Neverwinter Nights',
-  'nwsync',
+export const NWSYNC_DIR = envPath(
+  'NWN_NWSYNC_DIR',
+  DEFAULT_NWSYNC_DIR,
 );
 
 /** nwsync metadata database (manifests and resource references). */
-export const NWSYNC_META_DB = path.join(NWSYNC_DIR, 'nwsyncmeta.sqlite3');
+export const NWSYNC_META_DB = envPath(
+  'NWN_NWSYNC_META_DB',
+  path.join(NWSYNC_DIR, 'nwsyncmeta.sqlite3'),
+);
 
 /** nwsync data database (compressed resource blobs). */
-export const NWSYNC_DATA_DB = path.join(NWSYNC_DIR, 'nwsyncdata_0.sqlite3');
+export const NWSYNC_DATA_DB = envPath(
+  'NWN_NWSYNC_DATA_DB',
+  path.join(NWSYNC_DIR, 'nwsyncdata_0.sqlite3'),
+);
 
 // ---------------------------------------------------------------------------
 // Base game paths (D-03, D-05)
 // ---------------------------------------------------------------------------
 
 /** Root directory of the Steam NWN EE installation. */
-export const BASE_GAME_DIR = path.join(
-  'C:',
-  'Program Files (x86)',
-  'Steam',
-  'steamapps',
-  'common',
-  'Neverwinter Nights',
+export const BASE_GAME_DIR = envPath(
+  'NWN_BASE_GAME_DIR',
+  DEFAULT_BASE_GAME_DIR,
 );
 
 /** KEY file that indexes base-game BIF resources. */
-export const BASE_GAME_KEY = path.join(BASE_GAME_DIR, 'data', 'nwn_base.key');
+export const BASE_GAME_KEY = envPath(
+  'NWN_BASE_GAME_KEY',
+  path.join(BASE_GAME_DIR, 'data', 'nwn_base.key'),
+);
 
 /** BIF file containing base-game 2DA resources. */
-export const BASE_GAME_BIF_2DA = path.join(BASE_GAME_DIR, 'data', 'base_2da.bif');
+export const BASE_GAME_BIF_2DA = envPath(
+  'NWN_BASE_GAME_BIF_2DA',
+  path.join(BASE_GAME_DIR, 'data', 'base_2da.bif'),
+);
 
 /** Base game TLK file (Spanish locale, per D-05). */
-export const BASE_GAME_TLK = path.join(
-  BASE_GAME_DIR,
-  'lang',
-  'es',
-  'data',
-  'dialog.tlk',
+export const BASE_GAME_TLK = envPath(
+  'NWN_BASE_GAME_TLK',
+  path.join(
+    BASE_GAME_DIR,
+    'lang',
+    'es',
+    'data',
+    'dialog.tlk',
+  ),
 );
 
 // ---------------------------------------------------------------------------

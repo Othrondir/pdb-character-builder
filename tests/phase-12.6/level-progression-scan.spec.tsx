@@ -4,8 +4,8 @@
  * Phase 12.6 (PROG-04 R5+R6) — 20-row level progression scan surface.
  *
  * Plan 03 Suites A + B — CSS contract + DOM structure.
- * Plan 04 Suite C — expansion mechanics + legality transitions (it.todo).
- * Plan 05 Suite D — level-rail deletion invariant (it.todo).
+ * Plan 04 Suite C — expansion mechanics + legality transitions.
+ * Plan 05 Suite D — level-rail deletion invariant.
  *
  * Hybrid jsdom pattern (Pitfall 3 — NEVER assert
  * `container.scrollHeight === container.clientHeight` under jsdom because
@@ -457,7 +457,7 @@ describe('Phase 12.6 P5 — 20-row scan surface (Plan 03 Suites A+B)', () => {
   });
 
   // ----------------------------------------------------------------
-  // Suite D — level-rail deletion invariant (Plan 05 owns — it.todo).
+  // Suite D — level-rail deletion invariant.
   // ----------------------------------------------------------------
 
   it('D1: [data-testid="advance-to-level-{N+1}"] selector preserved (12.4-09 invariant); Phase 12.7-01 hoisted it out of the expanded row', () => {

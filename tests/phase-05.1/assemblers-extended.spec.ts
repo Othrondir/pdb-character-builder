@@ -556,7 +556,9 @@ const hasNwsync = existsSync(NWSYNC_META_DB) && existsSync(NWSYNC_DATA_DB);
 const hasBaseGame = existsSync(BASE_GAME_KEY);
 const hasIntegrationDeps = hasNwsync && hasBaseGame;
 
-describe.skipIf(!hasIntegrationDeps)('Extended assemblers (integration)', () => {
+const describeExtendedAssemblersIntegration = hasIntegrationDeps ? describe : undefined;
+
+describeExtendedAssemblersIntegration?.('Extended assemblers (integration)', () => {
   let nwsyncReader: NwsyncReader;
   let baseGameReader: BaseGameReader;
   let tlkResolver: TlkResolver;

@@ -15,7 +15,16 @@ import {
 // ---------------------------------------------------------------------------
 const hasNwsync = existsSync(NWSYNC_META_DB) && existsSync(NWSYNC_DATA_DB);
 
-describe.skipIf(!hasNwsync)('NwsyncReader (integration)', () => {
+describe('NwsyncReader integration configuration', () => {
+  it('documents the local sqlite paths required for the real integration suite', () => {
+    expect(NWSYNC_META_DB.endsWith('nwsyncmeta.sqlite3')).toBe(true);
+    expect(NWSYNC_DATA_DB.endsWith('nwsyncdata_0.sqlite3')).toBe(true);
+  });
+});
+
+const describeNwsyncIntegration = hasNwsync ? describe : undefined;
+
+describeNwsyncIntegration?.('NwsyncReader (integration)', () => {
   let reader: NwsyncReader;
 
   // Open before all and close after all to avoid per-test DB overhead

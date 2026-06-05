@@ -105,6 +105,18 @@ Tests:
 corepack pnpm test
 ```
 
+Integraciones del extractor con datos reales de NWN/Puerta:
+
+```bash
+NWN_NWSYNC_DIR="/ruta/a/Neverwinter Nights/nwsync" \
+NWN_BASE_GAME_DIR="/ruta/a/Neverwinter Nights" \
+corepack pnpm test
+```
+
+También se pueden fijar rutas más concretas con `NWN_NWSYNC_META_DB`,
+`NWN_NWSYNC_DATA_DB`, `NWN_BASE_GAME_KEY`, `NWN_BASE_GAME_BIF_2DA` y
+`NWN_BASE_GAME_TLK`. Estos datos no se versionan en el repo.
+
 ## Idea del proyecto
 
 La meta es simple: que un jugador de **Puerta de Baldur** pueda preparar una ficha completa con confianza, detectar errores antes de entrar al servidor y compartir esa build de forma cómoda con otra persona.

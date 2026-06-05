@@ -3,7 +3,7 @@ import type {
   CompiledRace,
   CompiledSubrace,
 } from '@data-extractor/contracts/race-catalog';
-import { compiledRaceCatalog } from '@planner/data/compiled-races';
+import { plannerRaceCatalog } from '@planner/data/race-catalog';
 import { CURRENT_DATASET_ID } from '@planner/data/ruleset-version';
 
 export const ATTRIBUTE_KEYS = [
@@ -230,8 +230,8 @@ export const phase03FoundationFixture: Phase03FoundationFixture = {
     minimum: 8,
   },
   datasetId: CURRENT_DATASET_ID,
-  races: dedupeByCanonicalId(compiledRaceCatalog.races.map(projectCompiledRace)),
+  races: dedupeByCanonicalId(plannerRaceCatalog.races.map(projectCompiledRace)),
   subraces: dedupeByCanonicalId(
-    compiledRaceCatalog.subraces.map(projectCompiledSubrace),
+    plannerRaceCatalog.subraces.map(projectCompiledSubrace),
   ),
 };

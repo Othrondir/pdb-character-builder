@@ -85,10 +85,9 @@ describe('Phase 12.7-04 — L2..L20 skill budget formula verification (R6 verify
     const classRow = compiledClassCatalog.classes.find((c) => c.id === classId);
 
     if (!classRow) {
-      // Roster presence is a Phase 12.1 / 12.2 concern, not R6 scope.
-      // Skip loudly rather than silently so future class-catalog edits
-      // surface the gap instead of silently zeroing coverage.
-      it.skip(`${classId} missing from compiled-classes catalog — roster issue, out of R6 scope`, () => {});
+      it(`${classId} is present in compiled-classes catalog`, () => {
+        expect(classRow, `${classId} missing from compiled-classes catalog`).toBeDefined();
+      });
       continue;
     }
 

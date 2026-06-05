@@ -419,13 +419,15 @@ const hasNwsync = existsSync(NWSYNC_META_DB) && existsSync(NWSYNC_DATA_DB);
 const hasBaseGame = existsSync(BASE_GAME_KEY);
 const hasIntegrationDeps = hasNwsync && hasBaseGame;
 
-describe.skipIf(!hasIntegrationDeps)('Assemblers (integration)', () => {
+const describeAssemblersIntegration = hasIntegrationDeps ? describe : undefined;
+
+describeAssemblersIntegration?.('Assemblers (integration)', () => {
   let nwsyncReader: NwsyncReader;
   let baseGameReader: BaseGameReader;
   let tlkResolver: TlkResolver;
 
   beforeAll(async () => {
-    // Dynamic import to avoid loading better-sqlite3 when skipped
+    // Dynamic import to avoid loading better-sqlite3 when the integration suite is not registered.
     const { BaseGameReader: BGReader } = await import(
       '@data-extractor/readers/base-game-reader'
     );

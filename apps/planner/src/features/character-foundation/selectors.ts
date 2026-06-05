@@ -10,7 +10,7 @@ import {
   getAllowedSubraces,
 } from '@rules-engine/foundation/origin-rules';
 import { groupRacesByParent } from '@rules-engine/foundation/group-races-by-parent';
-import { compiledRaceCatalog } from '@planner/data/compiled-races';
+import { plannerRaceCatalog } from '@planner/data/race-catalog';
 import { shellCopyEs } from '@planner/lib/copy/es';
 
 import {
@@ -52,9 +52,9 @@ export interface FoundationSummaryView {
 /**
  * Phase 17 (ATTR-02) — per-race point-buy curve resolution.
  *
- * Reads `compiledRaceCatalog.races[].abilitiesPointBuyNumber` (sourced from
- * `racialtypes.2da:AbilitiesPointBuyNumber` at extract time per Plan 17-01)
- * and composes with `NWN1_POINT_BUY_COST_TABLE` via `deriveAbilityBudgetRules`.
+ * Reads `plannerRaceCatalog.races[].abilitiesPointBuyNumber`, sourced from
+ * `racialtypes.2da:AbilitiesPointBuyNumber` through the compiled catalog, and
+ * composes with `NWN1_POINT_BUY_COST_TABLE` via `deriveAbilityBudgetRules`.
  * Returns null when raceId is null OR unknown OR the race's
  * `abilitiesPointBuyNumber` is null. Null routes through
  * `calculateAbilityBudgetSnapshot`'s null branch (Phase 12.6 D-05),
@@ -64,7 +64,7 @@ export function selectAbilityBudgetRulesForRace(
   raceId: CanonicalId | null,
 ): AbilityBudgetRules | null {
   if (!raceId) return null;
-  const race = compiledRaceCatalog.races.find((r) => r.id === raceId);
+  const race = plannerRaceCatalog.races.find((r) => r.id === raceId);
   if (!race) return null;
   return deriveAbilityBudgetRules(race);
 }
@@ -175,8 +175,8 @@ export function selectOriginOptions(state: CharacterFoundationStoreState) {
   // through `getAllowedSubraces` below — the tree only scopes which subraces
   // are candidates for the currently selected parent.
   const raceTree = groupRacesByParent(
-    compiledRaceCatalog.races,
-    compiledRaceCatalog.subraces,
+    plannerRaceCatalog.races,
+    plannerRaceCatalog.subraces,
   );
   const childrenOfSelectedParent = state.raceId
     ? (raceTree.get(state.raceId)?.subraces ?? [])
