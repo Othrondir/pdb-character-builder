@@ -17,6 +17,58 @@ interface OriginBoardProps {
   activeStep?: 'race' | 'alignment';
 }
 
+type OriginRaceGroupKey = 'basic' | 'intermediate' | 'major' | 'minor';
+
+interface OriginRaceGroup {
+  heading: string;
+  items: OptionItem[];
+  key: OriginRaceGroupKey;
+}
+
+const ORIGIN_RACE_GROUPS: Array<{
+  key: OriginRaceGroupKey;
+  heading: string;
+}> = [
+  { key: 'basic', heading: shellCopyEs.foundation.raceGroups.basic },
+  { key: 'minor', heading: shellCopyEs.foundation.raceGroups.minorSubraces },
+  {
+    key: 'intermediate',
+    heading: shellCopyEs.foundation.raceGroups.intermediateSubraces,
+  },
+  { key: 'major', heading: shellCopyEs.foundation.raceGroups.majorSubraces },
+];
+
+const RACE_SOURCE_ROWS_BY_ID = new Map(
+  phase03FoundationFixture.races.map((race) => [race.id, race.sourceRow]),
+);
+
+function getOriginRaceGroupKey(sourceRow: number): OriginRaceGroupKey {
+  if (sourceRow >= 240) return 'major';
+  if (sourceRow >= 220) return 'intermediate';
+  if (sourceRow >= 160) return 'minor';
+  return 'basic';
+}
+
+function groupOriginRaceItems(items: OptionItem[]): OriginRaceGroup[] {
+  const groups = new Map<OriginRaceGroupKey, OriginRaceGroup>(
+    ORIGIN_RACE_GROUPS.map((group) => [
+      group.key,
+      { heading: group.heading, items: [], key: group.key },
+    ]),
+  );
+
+  for (const item of items) {
+    const sourceRow = RACE_SOURCE_ROWS_BY_ID.get(item.id as CanonicalId);
+    const groupKey =
+      sourceRow === undefined ? 'minor' : getOriginRaceGroupKey(sourceRow);
+    groups.get(groupKey)?.items.push(item);
+  }
+
+  return ORIGIN_RACE_GROUPS.map((group) => groups.get(group.key)).filter(
+    (group): group is OriginRaceGroup => Boolean(group && group.items.length > 0),
+  );
+}
+
 export function OriginBoard({ activeStep = 'race' }: OriginBoardProps) {
   const foundationState = useCharacterFoundationStore();
   const foundationValidation = selectFoundationValidation(foundationState);
@@ -53,6 +105,12 @@ export function OriginBoard({ activeStep = 'race' }: OriginBoardProps) {
       ? phase03FoundationFixture.races.find((r) => r.id === selectedOption.id)
           ?.description ?? null
       : null;
+  const selectedSubrace =
+    activeStep === 'race' && foundationState.subraceId
+      ? phase03FoundationFixture.subraces.find(
+          (s) => s.id === foundationState.subraceId,
+        ) ?? null
+      : null;
 
   const items: OptionItem[] = config.options.map((o) => ({
     blocked: o.blocked,
@@ -77,16 +135,29 @@ export function OriginBoard({ activeStep = 'race' }: OriginBoardProps) {
         />
       }
     >
-      <OptionList
-        items={items}
-        onSelect={(id) => config.onSelect(id as CanonicalId)}
-      />
+      {activeStep === 'race' ? (
+        <OriginRacePicker
+          items={items}
+          onSelect={(id) => config.onSelect(id as CanonicalId)}
+        />
+      ) : (
+        <OptionList
+          items={items}
+          onSelect={(id) => config.onSelect(id as CanonicalId)}
+        />
+      )}
       <DetailPanel
-        title={selectedOption?.label}
+        title={
+          selectedSubrace && selectedOption
+            ? `${selectedOption.label} · ${selectedSubrace.label}`
+            : selectedOption?.label
+        }
         body={
           config.issue
             ? config.issue
-            : selectedRaceDescription
+            : selectedSubrace?.description
+              ? selectedSubrace.description
+              : selectedRaceDescription
               ? selectedRaceDescription
               : selectedOption
                 ? `${selectedOption.label} seleccionado.`
@@ -110,5 +181,62 @@ export function OriginBoard({ activeStep = 'race' }: OriginBoardProps) {
         )}
       </DetailPanel>
     </SelectionScreen>
+  );
+}
+
+interface OriginRacePickerProps {
+  items: OptionItem[];
+  onSelect: (id: string) => void;
+}
+
+function OriginRacePicker({ items, onSelect }: OriginRacePickerProps) {
+  const groups = groupOriginRaceItems(items);
+
+  return (
+    <div
+      aria-label={shellCopyEs.foundation.steps.race}
+      className="origin-race-picker"
+      role="listbox"
+    >
+      {groups.map((group) => {
+        const headingId = `origin-race-picker-${group.key}`;
+
+        return (
+          <div
+            aria-labelledby={headingId}
+            className="origin-race-picker__group"
+            key={group.key}
+            role="group"
+          >
+            <h3 className="origin-race-picker__heading" id={headingId}>
+              {group.heading}
+            </h3>
+            <div className="origin-race-picker__items">
+              {group.items.map((item) => (
+                <button
+                  aria-disabled={item.disabled || undefined}
+                  aria-selected={item.selected || undefined}
+                  className={`option-list__item${
+                    item.selected ? ' is-selected' : ''
+                  }${item.blocked ? ' is-blocked' : ''}`}
+                  disabled={item.disabled}
+                  key={item.id}
+                  onClick={() => onSelect(item.id)}
+                  role="option"
+                  type="button"
+                >
+                  <span className="option-list__label">{item.label}</span>
+                  {item.secondary && (
+                    <span className="option-list__secondary">
+                      {item.secondary}
+                    </span>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+        );
+      })}
+    </div>
   );
 }

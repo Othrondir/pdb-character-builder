@@ -34,6 +34,7 @@ export interface SkillBudgetSnapshot {
 }
 
 export interface SkillPointBudgetInput {
+  bonusSkillPointsAtFirstLevel?: number;
   bonusSkillPointsPerLevel?: number;
   carriedPoints?: number;
   intelligenceModifier: number;
@@ -65,11 +66,15 @@ export function getRequiredSkillPointAdjustment(remainingPoints: number): number
 
 export function getSkillPointBaseBudget(input: SkillPointBudgetInput): number {
   const bonusSkillPointsPerLevel = input.bonusSkillPointsPerLevel ?? 0;
+  const bonusSkillPointsAtFirstLevel =
+    input.bonusSkillPointsAtFirstLevel ?? bonusSkillPointsPerLevel * 4;
   const base = Math.max(1, input.skillPointsBase + input.intelligenceModifier);
 
   return (
     (input.level === 1 ? base * 4 : base)
-    + bonusSkillPointsPerLevel * (input.level === 1 ? 4 : 1)
+    + (input.level === 1
+      ? bonusSkillPointsAtFirstLevel
+      : bonusSkillPointsPerLevel)
   );
 }
 

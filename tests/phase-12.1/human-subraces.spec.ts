@@ -1,9 +1,15 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
 
-import { plannerRaceCatalog } from '@planner/data/race-catalog';
+import {
+  plannerRaceCatalog,
+  plannerSubraceMechanicsById,
+} from '@planner/data/race-catalog';
 import { phase03FoundationFixture } from '@planner/features/character-foundation/foundation-fixture';
-import { selectFoundationSummary, selectOriginOptions } from '@planner/features/character-foundation/selectors';
+import {
+  selectFoundationSummary,
+  selectOriginOptions,
+} from '@planner/features/character-foundation/selectors';
 import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
 import type { CharacterFoundationStoreState } from '@planner/features/character-foundation/store';
 
@@ -11,6 +17,7 @@ const HUMAN_SUBRACE_IDS = [
   'subrace:liche',
   'subrace:licantropo',
   'subrace:tumulario',
+  'subrace:umbra',
   'subrace:vampiro',
   'subrace:engendro-vampirico',
 ] as const;
@@ -19,8 +26,25 @@ const HUMAN_SUBRACE_LABELS = [
   'Liche',
   'Licántropo',
   'Tumulario',
+  'Umbra',
   'Vampiro',
-  'Engendro vampírico',
+  'Engendro',
+] as const;
+
+const BASIC_SUBRACE_PARENT_RACE_IDS = [
+  'race:human',
+  'race:halfelf',
+  'race:halforc',
+  'race:elfo-solar',
+  'race:elf',
+  'race:elfo-silvano',
+  'race:duergar',
+  'race:enano-dorado',
+  'race:draconido',
+  'race:halfling',
+  'race:mediano-fortecor',
+  'race:gnome',
+  'race:tiefling',
 ] as const;
 
 function createFoundationState(
@@ -44,7 +68,7 @@ function createFoundationState(
   };
 }
 
-describe('quick 260605-d4e — human subraces', () => {
+describe('quick 260605-d4e / 260606-f6g — curated basic-race subraces', () => {
   beforeEach(() => {
     useCharacterFoundationStore.getState().resetFoundation();
   });
@@ -62,7 +86,7 @@ describe('quick 260605-d4e — human subraces', () => {
     );
   });
 
-  it('projects all curated human subraces into the foundation fixture', () => {
+  it('projects all curated human-compatible subraces into the foundation fixture', () => {
     const fixtureHumanSubraces = phase03FoundationFixture.subraces.filter(
       (subrace) => subrace.parentRaceId === 'race:human',
     );
@@ -72,7 +96,20 @@ describe('quick 260605-d4e — human subraces', () => {
     );
   });
 
-  it('shows the five curated subraces after selecting Humano', () => {
+  it('adds all six curated subrace labels under each applicable parent race', () => {
+    for (const raceId of BASIC_SUBRACE_PARENT_RACE_IDS) {
+      const subraces = plannerRaceCatalog.subraces.filter(
+        (subrace) => subrace.parentRaceId === raceId,
+      );
+
+      expect(
+        subraces.map((subrace) => subrace.label),
+        `missing subraces for ${raceId}`,
+      ).toEqual(expect.arrayContaining([...HUMAN_SUBRACE_LABELS]));
+    }
+  });
+
+  it('shows the six curated subraces after selecting Humano', () => {
     const options = selectOriginOptions(
       createFoundationState({ raceId: 'race:human' as CanonicalId }),
     );
@@ -82,14 +119,50 @@ describe('quick 260605-d4e — human subraces', () => {
     );
   });
 
-  it('does not show human subraces under Elfo', () => {
+  it('shows parent-specific subrace ids under Elfo, not the human ids', () => {
     const options = selectOriginOptions(
       createFoundationState({ raceId: 'race:elf' as CanonicalId }),
     );
 
     for (const subraceId of HUMAN_SUBRACE_IDS) {
-      expect(options.subraces.some((subrace) => subrace.id === subraceId)).toBe(false);
+      expect(
+        options.subraces.some((subrace) => subrace.id === subraceId),
+      ).toBe(false);
     }
+    expect(options.subraces.map((subrace) => subrace.id)).toEqual(
+      expect.arrayContaining([
+        'subrace:elfo-lythari',
+        'subrace:elf-liche',
+        'subrace:elf-licantropo',
+        'subrace:elf-tumulario',
+        'subrace:elf-umbra',
+        'subrace:elf-vampiro',
+        'subrace:elf-engendro',
+      ]),
+    );
+  });
+
+  it('adds Elfo Lythari as a curated Elfo subrace without invented ability modifiers', () => {
+    const lythari = plannerRaceCatalog.subraces.find(
+      (subrace) => subrace.id === 'subrace:elfo-lythari',
+    );
+
+    expect(lythari).toMatchObject({
+      label: 'Elfo Lythari',
+      parentRaceId: 'race:elf',
+    });
+    expect(lythari?.description).toContain('Voluntad de hierro');
+    expect(
+      plannerSubraceMechanicsById.get('subrace:elfo-lythari')
+        ?.abilityAdjustments,
+    ).toEqual({
+      cha: 0,
+      con: 0,
+      dex: 0,
+      int: 0,
+      str: 0,
+      wis: 0,
+    });
   });
 
   it('accepts a matching human subrace and drops it when the parent race changes', () => {
@@ -97,11 +170,45 @@ describe('quick 260605-d4e — human subraces', () => {
     store.setRace('race:human' as CanonicalId);
     store.setSubrace('subrace:vampiro' as CanonicalId);
 
-    expect(useCharacterFoundationStore.getState().subraceId).toBe('subrace:vampiro');
-    expect(selectFoundationSummary(useCharacterFoundationStore.getState()).selectedSubraceLabel).toBe('Vampiro');
+    expect(useCharacterFoundationStore.getState().subraceId).toBe(
+      'subrace:vampiro',
+    );
+    expect(
+      selectFoundationSummary(useCharacterFoundationStore.getState())
+        .selectedSubraceLabel,
+    ).toBe('Vampiro');
 
     useCharacterFoundationStore.getState().setRace('race:elf' as CanonicalId);
 
     expect(useCharacterFoundationStore.getState().subraceId).toBeNull();
+  });
+
+  it('applies subrace ability modifiers on top of the selected parent race', () => {
+    const store = useCharacterFoundationStore.getState();
+    store.setRace('race:human' as CanonicalId);
+    store.setSubrace('subrace:vampiro' as CanonicalId);
+
+    expect(useCharacterFoundationStore.getState().racialModifiers).toEqual({
+      cha: 4,
+      con: 0,
+      dex: 4,
+      int: 2,
+      str: 6,
+      wis: 2,
+    });
+  });
+
+  it('stores manual mechanics for the generated parent-specific subrace ids', () => {
+    expect(
+      plannerSubraceMechanicsById.get('subrace:halfelf-liche')
+        ?.abilityAdjustments,
+    ).toEqual({
+      cha: 2,
+      con: 0,
+      dex: 0,
+      int: 2,
+      str: 0,
+      wis: 2,
+    });
   });
 });

@@ -16,6 +16,7 @@ import type { CompiledClass } from '@data-extractor/contracts/class-catalog';
  * and the new `raceBonusFeatSlot: boolean` field on FeatSlotsAtLevel. Covers:
  *  - Humano L1 Guerrero — 3 slots all true.
  *  - Mediano Fortecor L1 Guerrero — race-bonus true (D-06 expansion).
+ *  - Oni/Ogro hechicero L1 Guerrero — race-bonus true (quick 260606-g7h).
  *  - Elfo L1 Guerrero — race-bonus false (regression lock for non-allowlist races).
  *  - Humano L2 Guerrero — race-bonus false (only at characterLevel === 1).
  *  - Humano L1 Mago — race + general only. Extractor surfaces `[5,10,15,20]`
@@ -59,6 +60,18 @@ describe('Phase 16-02 — race-aware determineFeatSlots (FEAT-05 + FEAT-06, D-01
     const fighter = compiledClassCatalog.classes.find((c) => c.id === 'class:fighter')!;
     const slots = determineFeatSlots(
       buildL('race:mediano-fortecor', 'class:fighter', 1),
+      compiledFeatCatalog.classFeatLists,
+      fighter,
+    );
+    expect(slots.raceBonusFeatSlot).toBe(true);
+    expect(slots.classBonusFeatSlot).toBe(true);
+    expect(slots.generalFeatSlot).toBe(true);
+  });
+
+  it('Oni L1 Guerrero: raceBonusFeatSlot true from Aprendizaje rápido', () => {
+    const fighter = compiledClassCatalog.classes.find((c) => c.id === 'class:fighter')!;
+    const slots = determineFeatSlots(
+      buildL('race:ogro-hechicero', 'class:fighter', 1),
       compiledFeatCatalog.classFeatLists,
       fighter,
     );

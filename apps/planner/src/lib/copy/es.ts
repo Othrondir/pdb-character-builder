@@ -142,6 +142,12 @@ export const shellCopyEs = {
       race: 'Raza',
       subrace: 'Subraza',
     },
+    raceGroups: {
+      basic: 'Razas básicas',
+      majorSubraces: 'Subrazas mayores',
+      intermediateSubraces: 'Subrazas intermedias',
+      minorSubraces: 'Subrazas menores',
+    },
   },
   attributes: {
     // Phase 12.6 (D-07, UI-SPEC § Copywriting Contract) — ATTR-01 R3 fail-closed

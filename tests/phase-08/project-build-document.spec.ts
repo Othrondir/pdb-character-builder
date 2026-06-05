@@ -34,9 +34,8 @@ describe('projectBuildDocument', () => {
   });
 
   it('projects identity fields from the foundation store', () => {
-    // The runtime catalog currently carries curated human subraces only.
-    // This Elfo fixture intentionally has no matching subrace selection, so
-    // the identity-projection contract stays focused on race/alignment/deity.
+    // No subrace is selected here, so the identity-projection contract stays
+    // focused on race/alignment/deity.
     const foundation = useCharacterFoundationStore.getState();
     foundation.setRace('race:elf');
     foundation.setAlignment('alignment:neutral-good');

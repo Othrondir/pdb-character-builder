@@ -1209,6 +1209,45 @@ a {
 .option-list__label { flex: 1; }
 .option-list__secondary { color: var(--color-text-muted); font-size: 12px; }
 
+/* ── Origin Race Picker ──────────────────────────────────── */
+
+.origin-race-picker {
+  border-right: 1px solid var(--color-panel-edge);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--space-sm);
+}
+.origin-race-picker__group {
+  border: 1px solid var(--color-panel-edge);
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-sm);
+}
+.origin-race-picker__heading {
+  color: var(--color-text);
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  line-height: 1.2;
+  margin: 0 0 var(--space-sm) 0;
+  text-transform: uppercase;
+}
+.origin-race-picker__items {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.origin-race-picker__items .option-list__item {
+  border-color: var(--color-panel-edge);
+}
+.origin-race-picker__items .option-list__item.is-selected {
+  border-color: var(--color-selection-border);
+}
+
 /* ── DetailPanel ─────────────────────────────────────────── */
 
 .detail-panel {

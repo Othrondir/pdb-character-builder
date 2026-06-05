@@ -3,7 +3,10 @@ import type {
   CompiledRace,
   CompiledSubrace,
 } from '@data-extractor/contracts/race-catalog';
-import { plannerRaceCatalog } from '@planner/data/race-catalog';
+import {
+  plannerRaceCatalog,
+  plannerSubraceMechanicsById,
+} from '@planner/data/race-catalog';
 import { CURRENT_DATASET_ID } from '@planner/data/ruleset-version';
 
 export const ATTRIBUTE_KEYS = [
@@ -25,13 +28,16 @@ export interface FoundationRaceOption {
   id: CanonicalId;
   label: string;
   racialModifiers: Record<AttributeKey, number>;
+  sourceRow: number;
 }
 
 export interface FoundationSubraceOption {
   allowedAlignmentIds: CanonicalId[];
+  description: string;
   id: CanonicalId;
   label: string;
   parentRaceId: CanonicalId;
+  racialModifiers: Record<AttributeKey, number>;
 }
 
 export interface FoundationAlignmentOption {
@@ -91,6 +97,7 @@ function projectCompiledRace(compiled: CompiledRace): FoundationRaceOption {
     id: compiled.id as CanonicalId,
     label: compiled.label,
     racialModifiers: projectRacialModifiers(compiled.abilityAdjustments),
+    sourceRow: compiled.sourceRow,
   };
 }
 
@@ -113,11 +120,16 @@ function projectRacialModifiers(
 function projectCompiledSubrace(
   compiled: CompiledSubrace,
 ): FoundationSubraceOption {
+  const mechanics = plannerSubraceMechanicsById.get(compiled.id);
   return {
     allowedAlignmentIds: ALL_ALIGNMENT_IDS,
+    description: compiled.description,
     id: compiled.id as CanonicalId,
     label: compiled.label,
     parentRaceId: compiled.parentRaceId as CanonicalId,
+    racialModifiers: projectRacialModifiers(
+      mechanics?.abilityAdjustments ?? {},
+    ),
   };
 }
 

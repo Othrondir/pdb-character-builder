@@ -21,6 +21,7 @@ export interface SkillAllocationEntry {
 export interface SkillLevelInput {
   allocations: SkillAllocationEntry[];
   armorCategory?: ArmorCategory;
+  bonusSkillPointsAtFirstLevel?: number;
   bonusSkillPointsPerLevel?: number;
   classId: CanonicalId | null;
   intelligenceModifier: number;
@@ -113,6 +114,7 @@ function createIllegalIssue(affectedIds: CanonicalId[]) {
 
 function getAvailablePoints(level: SkillLevelInput, carriedPoints = 0) {
   return getSkillPointBudget({
+    bonusSkillPointsAtFirstLevel: level.bonusSkillPointsAtFirstLevel,
     bonusSkillPointsPerLevel: level.bonusSkillPointsPerLevel,
     carriedPoints,
     intelligenceModifier: level.intelligenceModifier,

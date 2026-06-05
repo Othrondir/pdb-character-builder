@@ -1,8 +1,7 @@
 import { determineFeatSlots } from '../feats/feat-eligibility';
 import {
-  HUMAN_RACE_ID,
-  HUMAN_SKILL_POINT_PER_LEVEL,
   RACE_L1_BONUS_FEATS,
+  getRaceSkillPointBonus,
 } from './race-constants';
 import { getSkillPointBudget } from '../skills/skill-budget';
 
@@ -49,7 +48,8 @@ export interface FeatCatalogInput {
 
 /**
  * Structural race-catalog shape. Currently a reserved parameter slot: the
- * selector hardcodes Humano canon (A1/A2) pending race-assembler enrichment.
+ * selector uses a curated race-bonus allowlist pending race-assembler
+ * enrichment.
  *
  * TODO(race-enrichment-backlog): decode from racialtypes.2da
  *   `ExtraFeatAtFirstLevel` + `ExtraSkillPointsPerLevel` when extractor
@@ -65,10 +65,10 @@ export interface RaceCatalogInput {
 }
 
 /**
- * NWN1 EE canon hardcodes for Humano race bonuses — Phase 16 (D-06) hoisted
- * the constants into `progression/race-constants.ts` so the new
- * `RACE_L1_BONUS_FEATS` allowlist (Humano + Mediano Fortecor) lives next to
- * the skill-point + feat-bonus scalars without forcing a back-import from
+ * NWN1 EE/Puerta canon hardcodes for race bonuses — Phase 16 (D-06) hoisted
+ * the constants into `progression/race-constants.ts` so the
+ * `RACE_L1_BONUS_FEATS` allowlist lives next to the skill-point bonus lookup
+ * without forcing a back-import from
  * `feat-eligibility.ts` (which would create a circular dep).
  *
  * The extractor still does not surface race-level feat/skill bonuses on
@@ -83,7 +83,7 @@ export interface PerLevelBudget {
     general: number;
     /** Class bonus feat slot (class-level cadence per class) */
     classBonus: number;
-    /** Race bonus feat slot (Humano gets +1 at L1) */
+    /** Race bonus feat slot for the Puerta allowlist at L1 */
     raceBonus: number;
     /** Sum of general + classBonus + raceBonus */
     total: number;
@@ -93,7 +93,7 @@ export interface PerLevelBudget {
     remaining: number;
   };
   skillPoints: {
-    /** Full budget (base × 4 at L1, plus Humano +1/level bonus) */
+    /** Full budget (base × 4 at L1, plus race skill-point bonuses) */
     budget: number;
     /** Ranks allocated at this level (sum across skills) */
     spent: number;
@@ -220,16 +220,16 @@ export function computePerLevelBudget(
   // Skill-point budget mirrors skill-allocation.ts::getAvailablePoints:
   //   base = max(1, classSkillPointsPerLevel + intMod)
   //   budget = (level === 1) ? base × 4 : base
-  // Plus Humano +1/level canon (A2): at L1 the +1 is multiplied into the ×4
-  // pass (humano L1 = base × 4 + 4), at L>1 the +1 is a flat add.
+  // Plus curated race skill bonuses: Humano/Semielfo get +4 at L1 and +1 on
+  // later levels, while Oni gets only the sourced +4 at L1.
   const intMod = Math.floor(
     (build.abilityScores.int + build.intAbilityIncreasesBeforeLevel(level) - 10) / 2,
   );
   const classSkillBase = classRow?.skillPointsPerLevel ?? 2;
-  const humanSkillBonus =
-    build.raceId === HUMAN_RACE_ID ? HUMAN_SKILL_POINT_PER_LEVEL : 0;
+  const raceSkillBonus = getRaceSkillPointBonus(build.raceId);
   const skillBudget = getSkillPointBudget({
-    bonusSkillPointsPerLevel: humanSkillBonus,
+    bonusSkillPointsAtFirstLevel: raceSkillBonus.firstLevel,
+    bonusSkillPointsPerLevel: raceSkillBonus.laterLevels,
     carriedPoints: build.skillPointCarryoverBeforeLevel?.(level) ?? 0,
     intelligenceModifier: intMod,
     level,

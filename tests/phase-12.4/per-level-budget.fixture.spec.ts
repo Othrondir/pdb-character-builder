@@ -105,6 +105,30 @@ describe('Phase 12.4-03 — per-level-budget selector (SPEC R3)', () => {
       expect(budget.skillPoints.budget).toBe(8);
     });
 
+    it('L1 Semielfo+Guerrero: skillPoints 12 from fast learning without race bonus feat', () => {
+      const build = buildSnapshot({
+        raceId: 'race:halfelf',
+        classByLevel: { 1: 'class:fighter' },
+      });
+      const budget = computePerLevelBudget(build, 1, classInput, featInput, raceInput);
+
+      expect(budget.featSlots.raceBonus).toBe(0);
+      expect(budget.featSlots.total).toBe(2);
+      expect(budget.skillPoints.budget).toBe(12);
+    });
+
+    it('L1 Oni+Guerrero: race bonus feat and Habilidoso +4 skill points', () => {
+      const build = buildSnapshot({
+        raceId: 'race:ogro-hechicero',
+        classByLevel: { 1: 'class:fighter' },
+      });
+      const budget = computePerLevelBudget(build, 1, classInput, featInput, raceInput);
+
+      expect(budget.featSlots.raceBonus).toBe(1);
+      expect(budget.featSlots.total).toBe(3);
+      expect(budget.skillPoints.budget).toBe(12);
+    });
+
     it('L2 Guerrero non-human: classBonus only, budget 2', () => {
       const build = buildSnapshot({
         classByLevel: { 1: 'class:fighter', 2: 'class:fighter' },
@@ -117,6 +141,28 @@ describe('Phase 12.4-03 — per-level-budget selector (SPEC R3)', () => {
         total: 1,
       });
       expect(budget.skillPoints.budget).toBe(2);
+    });
+
+    it('L2 Oni+Guerrero: no continuing Habilidoso skill bonus after level 1', () => {
+      const build = buildSnapshot({
+        raceId: 'race:ogro-hechicero',
+        classByLevel: { 1: 'class:fighter', 2: 'class:fighter' },
+      });
+      const budget = computePerLevelBudget(build, 2, classInput, featInput, raceInput);
+
+      expect(budget.featSlots.raceBonus).toBe(0);
+      expect(budget.skillPoints.budget).toBe(2);
+    });
+
+    it('L2 Semielfo+Guerrero: skillPoints 3 from +1 per level', () => {
+      const build = buildSnapshot({
+        raceId: 'race:halfelf',
+        classByLevel: { 1: 'class:fighter', 2: 'class:fighter' },
+      });
+      const budget = computePerLevelBudget(build, 2, classInput, featInput, raceInput);
+
+      expect(budget.featSlots.raceBonus).toBe(0);
+      expect(budget.skillPoints.budget).toBe(3);
     });
 
     it('L3 Guerrero: general only', () => {

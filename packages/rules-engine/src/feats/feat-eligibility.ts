@@ -23,7 +23,7 @@ export interface FeatSlotsAtLevel {
   /**
    * Phase 16 (D-04 + D-06) — whether this level grants a race-bonus feat pick.
    * True at characterLevel === 1 when buildState.raceId is in RACE_L1_BONUS_FEATS
-   * (Humano + Mediano Fortecor).
+   * (Puerta-canon allowlist).
    */
   raceBonusFeatSlot: boolean;
   /** Feat IDs auto-granted at this class level */
@@ -237,7 +237,7 @@ export function determineFeatSlots(
   const generalFeatSlot = GENERAL_FEAT_LEVELS.includes(characterLevel);
 
   // Phase 16 (D-04 + D-06) — race-bonus feat at character level 1 for the
-  // Puerta-canon allowlist (Humano + Mediano Fortecor). The allowlist lives
+  // Puerta-canon allowlist. The allowlist lives
   // in progression/race-constants.ts so the per-level-budget consumer can
   // share the single source of truth.
   const raceBonusFeatSlot =

@@ -83,6 +83,7 @@ describe('phase 03 foundation validation helpers', () => {
             id: 'race:test-required-deity',
             label: 'Test race with required deity',
             racialModifiers: { str: 0, dex: 0, con: 0, int: 0, wis: 0, cha: 0 },
+            sourceRow: 900001,
           },
         ],
       }),
@@ -98,9 +99,11 @@ describe('phase 03 foundation validation helpers', () => {
     // subrace list.
     const testMoonElf = {
       allowedAlignmentIds: phase03FoundationFixture.alignments.map((a) => a.id),
+      description: 'Subraza de prueba.',
       id: 'subrace:test-moon-elf' as CanonicalId,
       label: 'Elfo lunar (prueba)',
       parentRaceId: 'race:elf' as CanonicalId,
+      racialModifiers: { str: 0, dex: 0, con: 0, int: 0, wis: 0, cha: 0 },
     };
 
     const evaluation = evaluateOriginSelection(

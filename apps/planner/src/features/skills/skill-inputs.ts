@@ -1,13 +1,11 @@
 import { abilityModifier } from '@rules-engine/foundation';
+import { getRaceSkillPointBonus } from '@rules-engine/progression/race-constants';
 import type { ArmorCategory, SkillLevelInput } from '@rules-engine/skills/skill-allocation';
 import type { CharacterFoundationStoreState } from '@planner/features/character-foundation/store';
 import type { LevelProgressionStoreState } from '@planner/features/level-progression/store';
 import { compiledClassCatalog } from '@planner/data/compiled-classes';
 
 import type { SkillStoreState, SkillLevelRecord } from './store';
-
-const HUMAN_RACE_ID = 'race:human';
-const HUMAN_SKILL_POINT_PER_LEVEL = 1;
 
 const CLASS_SKILL_POINTS: Partial<Record<string, number>> = {
   'class:bard': 6,
@@ -64,12 +62,13 @@ export function createSkillLevelInput(
 ): SkillLevelInput {
   const progressionRecord =
     progressionState.levels.find((record) => record.level === skillRecord.level) ?? null;
+  const raceSkillBonus = getRaceSkillPointBonus(foundationState.raceId);
 
   return {
     allocations: skillRecord.allocations,
     armorCategory: getArmorCategory(progressionState, skillRecord.level),
-    bonusSkillPointsPerLevel:
-      foundationState.raceId === HUMAN_RACE_ID ? HUMAN_SKILL_POINT_PER_LEVEL : 0,
+    bonusSkillPointsAtFirstLevel: raceSkillBonus.firstLevel,
+    bonusSkillPointsPerLevel: raceSkillBonus.laterLevels,
     classId: progressionRecord?.classId ?? null,
     intelligenceModifier: getIntelligenceModifier(
       foundationState,
