@@ -412,6 +412,10 @@ export const shellCopyEs = {
       feats: 'Dotes',
     },
     characterSheetHeading: 'Hoja de personaje',
+    classPortraitAlt: (classLabel: string) => `Icono de clase: ${classLabel}`,
+    classPortraitFallbackAlt: 'Sin clase seleccionada',
+    classPortraitMissingAlt: (classLabel: string) =>
+      `Icono de clase no disponible: ${classLabel}`,
     emptySheetHeading: 'La hoja aun esta vacia',
     emptySheetBody: 'Empieza seleccionando una raza para definir la base de tu personaje.',
     equipmentSimulation: {
@@ -424,6 +428,8 @@ export const shellCopyEs = {
       shieldSmall: 'Escudo pequeño',
       shieldTower: 'Escudo Pavés',
       shieldType: 'Tipo de Escudo',
+      skillBonus: 'Bono de Habilidad',
+      skillBonusValue: (value: number) => `+${value}`,
     },
     blockedStepHint: 'Completa el paso anterior para desbloquear esta opcion.',
     levelEmptyHint: 'Selecciona una clase para empezar este nivel.',

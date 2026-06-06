@@ -1322,11 +1322,26 @@ a {
 }
 .character-sheet__content { flex: 1; overflow-y: auto; padding: var(--space-md); }
 .character-sheet__portrait {
-  background: var(--color-surface);
-  border: 1px solid var(--color-gold);
-  height: 100px;
-  margin: 0 auto var(--space-md);
-  width: 80px;
+  align-items: center;
+  background: transparent;
+  border: 0;
+  display: flex;
+  height: 198px;
+  justify-content: center;
+  margin: 0 auto var(--space-lg);
+  overflow: visible;
+  width: 198px;
+}
+.character-sheet__portrait img {
+  display: block;
+  filter:
+    drop-shadow(1px 0 0 var(--color-text))
+    drop-shadow(-1px 0 0 var(--color-text))
+    drop-shadow(0 1px 0 var(--color-text))
+    drop-shadow(0 -1px 0 var(--color-text));
+  height: 100%;
+  object-fit: contain;
+  width: 100%;
 }
 .character-sheet__stat-grid {
   display: grid;
@@ -1415,10 +1430,33 @@ a {
   font-size: 11px;
   min-height: 32px;
 }
+.character-sheet__skill-bonuses {
+  display: grid;
+  gap: var(--space-xs);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.character-sheet__skill-bonuses li {
+  align-items: center;
+  color: var(--color-text-muted);
+  display: flex;
+  font-size: 11px;
+  gap: var(--space-xs);
+  justify-content: space-between;
+}
+.character-sheet__skill-bonuses li span:last-child {
+  color: var(--color-text);
+  font-family: var(--font-display);
+  font-weight: 600;
+}
 .character-sheet-equipment-dialog {
   max-width: 320px;
   padding: var(--space-lg);
   width: 90vw;
+}
+.character-sheet-equipment-dialog--skills {
+  max-width: 420px;
 }
 .character-sheet-equipment-dialog::backdrop {
   background: rgba(0, 0, 0, 0.7);
@@ -1446,6 +1484,35 @@ a {
   background: var(--color-selection);
   border-color: var(--color-gold);
   color: var(--color-text);
+}
+.character-sheet-skill-bonus-dialog__options {
+  display: grid;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-lg);
+  max-height: min(60vh, 440px);
+  overflow-y: auto;
+  padding-right: var(--space-xs);
+}
+.character-sheet-skill-bonus-dialog__option {
+  align-items: center;
+  display: flex;
+  font-size: 12px;
+  gap: var(--space-sm);
+  justify-content: space-between;
+  min-height: 36px;
+  text-align: left;
+  width: 100%;
+}
+.character-sheet-skill-bonus-dialog__option.is-selected {
+  background: var(--color-selection);
+  border-color: var(--color-gold);
+  color: var(--color-text);
+}
+.character-sheet-skill-bonus-dialog__bonus {
+  color: var(--color-text);
+  flex: 0 0 auto;
+  font-family: var(--font-display);
+  font-weight: 600;
 }
 .character-sheet-equipment-dialog__actions {
   display: flex;
