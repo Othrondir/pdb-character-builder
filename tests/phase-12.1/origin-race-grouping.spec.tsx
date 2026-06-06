@@ -11,10 +11,19 @@ import {
 import { createElement } from 'react';
 
 import { OriginBoard } from '@planner/features/character-foundation/origin-board';
+import { phase03FoundationFixture } from '@planner/features/character-foundation/foundation-fixture';
 import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
 import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
 
-describe('quick 260606-e5f / 260606-f6g — grouped origin race picker', () => {
+const RACE_IDS_WITH_SUBRACES = new Set(
+  phase03FoundationFixture.subraces.map((subrace) => subrace.parentRaceId),
+);
+
+const RACE_LABELS_WITH_SUBRACES = phase03FoundationFixture.races
+  .filter((race) => RACE_IDS_WITH_SUBRACES.has(race.id))
+  .map((race) => race.label);
+
+describe('quick 260606-e5f / 260606-f6g / 260606-k1m — grouped origin race picker', () => {
   beforeEach(() => {
     document.body.innerHTML = '';
     useCharacterFoundationStore.getState().resetFoundation();
@@ -36,7 +45,7 @@ describe('quick 260606-e5f / 260606-f6g — grouped origin race picker', () => {
       within(basic).getByRole('option', { name: 'Humano' }),
     ).toBeInTheDocument();
     expect(
-      within(minor).getByRole('option', { name: 'Mediano Fortecor' }),
+      within(minor).getByRole('option', { name: 'Aasimar' }),
     ).toBeInTheDocument();
     expect(
       within(intermediate).getByRole('option', { name: 'Tanarukk' }),
@@ -44,6 +53,23 @@ describe('quick 260606-e5f / 260606-f6g — grouped origin race picker', () => {
     expect(
       within(major).getByRole('option', { name: 'Ogro hechicero' }),
     ).toBeInTheDocument();
+  });
+
+  it('puts every race that can select a subrace under basic races', () => {
+    render(createElement(OriginBoard, { activeStep: 'race' }));
+
+    const basic = screen.getByRole('group', { name: 'Razas básicas' });
+    const minor = screen.getByRole('group', { name: 'Subrazas menores' });
+
+    for (const raceLabel of RACE_LABELS_WITH_SUBRACES) {
+      expect(
+        within(basic).getByRole('option', { name: raceLabel }),
+      ).toBeInTheDocument();
+    }
+
+    expect(
+      within(minor).queryByRole('option', { name: 'Mediano Fortecor' }),
+    ).not.toBeInTheDocument();
   });
 
   it('keeps race selection wired to the original race id', () => {

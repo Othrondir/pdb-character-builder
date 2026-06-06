@@ -42,6 +42,10 @@ const RACE_SOURCE_ROWS_BY_ID = new Map(
   phase03FoundationFixture.races.map((race) => [race.id, race.sourceRow]),
 );
 
+const RACE_IDS_WITH_SUBRACES = new Set<string>(
+  phase03FoundationFixture.subraces.map((subrace) => subrace.parentRaceId),
+);
+
 function getOriginRaceGroupKey(sourceRow: number): OriginRaceGroupKey {
   if (sourceRow >= 240) return 'major';
   if (sourceRow >= 220) return 'intermediate';
@@ -60,7 +64,11 @@ function groupOriginRaceItems(items: OptionItem[]): OriginRaceGroup[] {
   for (const item of items) {
     const sourceRow = RACE_SOURCE_ROWS_BY_ID.get(item.id as CanonicalId);
     const groupKey =
-      sourceRow === undefined ? 'minor' : getOriginRaceGroupKey(sourceRow);
+      RACE_IDS_WITH_SUBRACES.has(item.id)
+        ? 'basic'
+        : sourceRow === undefined
+          ? 'minor'
+          : getOriginRaceGroupKey(sourceRow);
     groups.get(groupKey)?.items.push(item);
   }
 

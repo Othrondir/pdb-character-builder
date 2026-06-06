@@ -2,13 +2,25 @@
 
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { createElement } from 'react';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { CharacterSheet } from '@planner/components/shell/character-sheet';
 import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
 import { useLevelProgressionStore } from '@planner/features/level-progression/store';
 import { usePlannerShellStore } from '@planner/state/planner-shell';
 import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
 import type { ProgressionLevel } from '@planner/features/level-progression/progression-fixture';
+
+function getArmorClassValue(): string | null | undefined {
+  return screen.getByText('CA').closest('div')?.querySelector('dd')?.textContent;
+}
+
+function getArmorClassNumber(): number {
+  const value = getArmorClassValue();
+  if (value == null) {
+    throw new Error('Missing visible armor class value');
+  }
+  return Number(value);
+}
 
 describe('phase 05.2 character sheet', () => {
   beforeEach(() => {
@@ -124,5 +136,37 @@ describe('phase 05.2 character sheet', () => {
 
     expect(babCell?.querySelector('dd')?.textContent).toBe('+6');
     expect(attacksCell?.querySelector('dd')?.textContent).toBe('+6 / +1');
+  });
+
+  it('adds simulated equipment, armor, and shield bonuses to the visible AC', () => {
+    useCharacterFoundationStore.getState().setRace('race:human' as any);
+
+    render(createElement(CharacterSheet));
+
+    const baseArmorClass = getArmorClassNumber();
+
+    fireEvent.click(
+      screen.getByRole('button', { name: 'Simular Equipo nivel 12' }),
+    );
+    expect(getArmorClassNumber()).toBe(baseArmorClass + 15);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Tipo de Armadura' }));
+    expect(
+      screen.getByRole('dialog', { name: 'Tipo de Armadura' }),
+    ).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'CA 8' }));
+    expect(getArmorClassNumber()).toBe(baseArmorClass + 15 + 8);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Tipo de Escudo' }));
+    expect(
+      screen.getByRole('dialog', { name: 'Tipo de Escudo' }),
+    ).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Escudo Pavés' }));
+    expect(getArmorClassNumber()).toBe(baseArmorClass + 15 + 8 + 3);
+
+    fireEvent.click(
+      screen.getByRole('button', { name: 'Simular Equipo nivel 16' }),
+    );
+    expect(getArmorClassNumber()).toBe(baseArmorClass + 19 + 8 + 3);
   });
 });
