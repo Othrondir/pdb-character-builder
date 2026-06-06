@@ -11,9 +11,11 @@ const ABILITY_KEYS = ['str', 'dex', 'con', 'int', 'wis', 'cha'] as const;
 
 type AbilityKey = (typeof ABILITY_KEYS)[number];
 export type PlannerSubraceAbilityAdjustments = Record<AbilityKey, number>;
+export type PlannerSkillBonuses = Partial<Record<string, number>>;
 
 export interface PlannerSubraceMechanics {
   abilityAdjustments: PlannerSubraceAbilityAdjustments;
+  skillBonuses: PlannerSkillBonuses;
 }
 
 interface CuratedSubraceTemplate {
@@ -22,6 +24,7 @@ interface CuratedSubraceTemplate {
   humanId: string;
   key: string;
   label: string;
+  skillBonuses: PlannerSkillBonuses;
   sourceRow: number;
 }
 
@@ -35,6 +38,7 @@ interface CuratedStandaloneSubrace {
   id: string;
   label: string;
   parentRaceId: string;
+  skillBonuses: PlannerSkillBonuses;
   sourceRow: number;
 }
 
@@ -50,6 +54,135 @@ const ZERO_ABILITY_ADJUSTMENTS: PlannerSubraceAbilityAdjustments = {
   int: 0,
   str: 0,
   wis: 0,
+};
+
+const RACE_SKILL_BONUSES_BY_ID: Record<string, PlannerSkillBonuses> = {
+  'race:aasimar': {
+    'skill:avistar': 2,
+    'skill:escuchar': 2,
+  },
+  'race:azerblood': {
+    'skill:artesania': 2,
+    'skill:tasacion': 2,
+  },
+  'race:drow': {
+    'skill:avistar': 2,
+    'skill:buscar': 2,
+    'skill:escuchar': 2,
+  },
+  'race:duergar': {
+    'skill:avistar': 1,
+    'skill:escuchar': 1,
+    'skill:moversesigilosamente': 4,
+    'skill:saberarcano': 2,
+  },
+  'race:dwarf': {
+    'skill:saberarcano': 2,
+  },
+  'race:elf': {
+    'skill:avistar': 2,
+    'skill:buscar': 2,
+    'skill:escuchar': 2,
+  },
+  'race:elfo-avariel': {
+    'skill:avistar': 2,
+    'skill:buscar': 2,
+    'skill:escuchar': 2,
+    'skill:piruetas': 4,
+  },
+  'race:elfo-estrellas': {
+    'skill:avistar': 2,
+    'skill:buscar': 2,
+    'skill:escuchar': 2,
+  },
+  'race:elfo-salvaje': {
+    'skill:avistar': 2,
+    'skill:buscar': 2,
+    'skill:escuchar': 2,
+  },
+  'race:elfo-silvano': {
+    'skill:avistar': 2,
+    'skill:buscar': 2,
+    'skill:escuchar': 2,
+  },
+  'race:elfo-solar': {
+    'skill:avistar': 2,
+    'skill:buscar': 2,
+    'skill:escuchar': 2,
+  },
+  'race:enano-artico': {
+    'skill:esconderse': 4,
+  },
+  'race:enano-dorado': {
+    'skill:saberarcano': 2,
+  },
+  'race:gnome': {
+    'skill:concentracion': 2,
+    'skill:escuchar': 2,
+  },
+  'race:goliat': {
+    'skill:averiguarintenciones': 2,
+    'skill:equilibrio': 4,
+    'skill:trepar': 4,
+  },
+  'race:gran-trasgo': {
+    'skill:moversesigilosamente': 2,
+  },
+  'race:halfelf': {
+    'skill:avistar': 1,
+    'skill:buscar': 1,
+    'skill:diplomacia': 2,
+    'skill:escuchar': 1,
+    'skill:reunirinformacion': 2,
+  },
+  'race:halfling': {
+    'skill:esconderse': 4,
+    'skill:escuchar': 2,
+    'skill:moversesigilosamente': 2,
+  },
+  'race:kenku': {
+    'skill:esconderse': 2,
+    'skill:moversesigilosamente': 2,
+  },
+  'race:kobold': {
+    'skill:artesania': 2,
+    'skill:buscar': 2,
+    'skill:esconderse': 8,
+  },
+  'race:mediano-fortecor': {
+    'skill:escuchar': 2,
+    'skill:moversesigilosamente': 2,
+  },
+  'race:minotauro': {
+    'skill:avistar': 4,
+    'skill:buscar': 4,
+    'skill:escuchar': 4,
+    'skill:esconderse': -4,
+  },
+  'race:ogro': {
+    'skill:esconderse': -4,
+  },
+  'race:ogro-hechicero': {
+    'skill:esconderse': -4,
+  },
+  'race:osgo': {
+    'skill:moversesigilosamente': 4,
+  },
+  'race:semiogro': {
+    'skill:esconderse': -4,
+  },
+  'race:shadarkai': {
+    'skill:avistar': 2,
+    'skill:buscar': 2,
+    'skill:escuchar': 2,
+  },
+  'race:trasgo': {
+    'skill:esconderse': 4,
+    'skill:moversesigilosamente': 2,
+  },
+  'race:yuanti': {
+    'skill:disfrazarse': 5,
+  },
 };
 
 const RACE_TRAIT_OVERRIDES_BY_ID: Record<string, RaceTraitOverride> = {
@@ -131,6 +264,14 @@ const CURATED_SUBRACE_TEMPLATES: CuratedSubraceTemplate[] = [
     humanId: 'subrace:liche',
     key: 'liche',
     label: 'Liche',
+    skillBonuses: {
+      'skill:averiguarintenciones': 8,
+      'skill:avistar': 8,
+      'skill:buscar': 8,
+      'skill:escuchar': 8,
+      'skill:esconderse': 8,
+      'skill:moversesigilosamente': 8,
+    },
     sourceRow: 900001,
   },
   {
@@ -144,6 +285,9 @@ const CURATED_SUBRACE_TEMPLATES: CuratedSubraceTemplate[] = [
     humanId: 'subrace:licantropo',
     key: 'licantropo',
     label: 'Licántropo',
+    skillBonuses: {
+      'skill:buscar': 2,
+    },
     sourceRow: 900002,
   },
   {
@@ -156,6 +300,9 @@ const CURATED_SUBRACE_TEMPLATES: CuratedSubraceTemplate[] = [
     humanId: 'subrace:tumulario',
     key: 'tumulario',
     label: 'Tumulario',
+    skillBonuses: {
+      'skill:moversesigilosamente': 8,
+    },
     sourceRow: 900003,
   },
   {
@@ -169,6 +316,12 @@ const CURATED_SUBRACE_TEMPLATES: CuratedSubraceTemplate[] = [
     humanId: 'subrace:umbra',
     key: 'umbra',
     label: 'Umbra',
+    skillBonuses: {
+      'skill:avistar': 4,
+      'skill:escuchar': 4,
+      'skill:esconderse': 8,
+      'skill:moversesigilosamente': 8,
+    },
     sourceRow: 900006,
   },
   {
@@ -185,6 +338,7 @@ const CURATED_SUBRACE_TEMPLATES: CuratedSubraceTemplate[] = [
     humanId: 'subrace:vampiro',
     key: 'vampiro',
     label: 'Vampiro',
+    skillBonuses: {},
     sourceRow: 900004,
   },
   {
@@ -194,6 +348,15 @@ const CURATED_SUBRACE_TEMPLATES: CuratedSubraceTemplate[] = [
     humanId: 'subrace:engendro-vampirico',
     key: 'engendro',
     label: 'Engendro',
+    skillBonuses: {
+      'skill:averiguarintenciones': 2,
+      'skill:avistar': 2,
+      'skill:buscar': 2,
+      'skill:engaar': 2,
+      'skill:escuchar': 2,
+      'skill:esconderse': 2,
+      'skill:moversesigilosamente': 2,
+    },
     sourceRow: 900005,
   },
 ];
@@ -206,6 +369,11 @@ const CURATED_STANDALONE_SUBRACES: CuratedStandaloneSubrace[] = [
     id: 'subrace:elfo-lythari',
     label: 'Elfo Lythari',
     parentRaceId: 'race:elf',
+    skillBonuses: {
+      'skill:avistar': 2,
+      'skill:buscar': 4,
+      'skill:escuchar': 2,
+    },
     sourceRow: 901900,
   },
 ];
@@ -240,6 +408,7 @@ function createCuratedSubraces() {
       });
       mechanics.set(id, {
         abilityAdjustments: { ...template.abilityAdjustments },
+        skillBonuses: { ...template.skillBonuses },
       });
     });
   });
@@ -255,6 +424,7 @@ function createCuratedSubraces() {
     });
     mechanics.set(subrace.id, {
       abilityAdjustments: { ...subrace.abilityAdjustments },
+      skillBonuses: { ...subrace.skillBonuses },
     });
   });
 
@@ -267,6 +437,16 @@ export const plannerSubraceMechanicsById: ReadonlyMap<
   string,
   PlannerSubraceMechanics
 > = CURATED_BASIC_SUBRACES.mechanics;
+
+export const plannerRaceSkillBonusesById: ReadonlyMap<
+  string,
+  PlannerSkillBonuses
+> = new Map(
+  Object.entries(RACE_SKILL_BONUSES_BY_ID).map(([raceId, skillBonuses]) => [
+    raceId,
+    { ...skillBonuses },
+  ]),
+);
 
 function mergeSubraces(
   extracted: readonly CompiledSubrace[],

@@ -1,9 +1,14 @@
 import { abilityModifier } from '@rules-engine/foundation';
 import { getRaceSkillPointBonus } from '@rules-engine/progression/race-constants';
+import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
 import type { ArmorCategory, SkillLevelInput } from '@rules-engine/skills/skill-allocation';
 import type { CharacterFoundationStoreState } from '@planner/features/character-foundation/store';
 import type { LevelProgressionStoreState } from '@planner/features/level-progression/store';
 import { compiledClassCatalog } from '@planner/data/compiled-classes';
+import {
+  plannerRaceSkillBonusesById,
+  plannerSubraceMechanicsById,
+} from '@planner/data/race-catalog';
 
 import type { SkillStoreState, SkillLevelRecord } from './store';
 
@@ -55,6 +60,44 @@ function getIntelligenceModifier(
   return abilityModifier(baseIntelligence + racialIntelligence + intelligenceIncreases);
 }
 
+function addSkillBonuses(
+  target: Partial<Record<CanonicalId, number>>,
+  source: Readonly<Partial<Record<string, number>>> | undefined,
+) {
+  if (!source) {
+    return;
+  }
+
+  for (const [skillId, bonus] of Object.entries(source)) {
+    if (bonus == null || bonus === 0) {
+      continue;
+    }
+    const canonicalSkillId = skillId as CanonicalId;
+    target[canonicalSkillId] = (target[canonicalSkillId] ?? 0) + bonus;
+  }
+}
+
+export function getFoundationSkillBonuses(
+  foundationState: CharacterFoundationStoreState,
+): Partial<Record<CanonicalId, number>> {
+  const bonuses: Partial<Record<CanonicalId, number>> = {};
+
+  addSkillBonuses(
+    bonuses,
+    foundationState.raceId
+      ? plannerRaceSkillBonusesById.get(foundationState.raceId)
+      : undefined,
+  );
+  addSkillBonuses(
+    bonuses,
+    foundationState.subraceId
+      ? plannerSubraceMechanicsById.get(foundationState.subraceId)?.skillBonuses
+      : undefined,
+  );
+
+  return bonuses;
+}
+
 export function createSkillLevelInput(
   skillRecord: SkillLevelRecord,
   progressionState: LevelProgressionStoreState,
@@ -76,6 +119,7 @@ export function createSkillLevelInput(
       skillRecord.level,
     ),
     level: skillRecord.level,
+    skillBonuses: getFoundationSkillBonuses(foundationState),
     skillPointsBase: getSkillPointsBase(progressionRecord?.classId ?? null),
   };
 }

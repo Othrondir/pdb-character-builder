@@ -26,6 +26,7 @@ export interface SkillLevelInput {
   classId: CanonicalId | null;
   intelligenceModifier: number;
   level: number;
+  skillBonuses?: Partial<Record<CanonicalId, number>>;
   skillPointsBase: number;
 }
 

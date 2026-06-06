@@ -8,6 +8,7 @@ import { compiledSkillCatalog } from '@planner/data/compiled-skills';
 import { compiledFeatCatalog } from '@planner/data/compiled-feats';
 import { phase03FoundationFixture } from '@planner/features/character-foundation/foundation-fixture';
 import { computeFinalAttributeTotals } from '@planner/features/character-foundation/final-attributes';
+import { getFoundationSkillBonuses } from '@planner/features/skills/skill-inputs';
 import { formatDatasetLabel } from '@planner/data/ruleset-version';
 import { shellCopyEs } from '@planner/lib/copy/es';
 import {
@@ -17,6 +18,7 @@ import {
   computeWillSave,
 } from '@rules-engine/feats/bab-calculator';
 import { abilityModifier } from '@rules-engine/foundation';
+import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
 import type { AttributeKey } from '@planner/features/character-foundation/foundation-fixture';
 import type { ProgressionLevel } from '@planner/lib/sections';
 
@@ -160,6 +162,7 @@ export function useResumenViewModel(): ResumenViewModel {
     foundation.racialModifiers,
     progression.levels,
   );
+  const skillBonuses = getFoundationSkillBonuses(foundation);
 
   const rankByskillId = new Map<string, number>();
   for (const lvSkill of skills.levels) {
@@ -175,12 +178,13 @@ export function useResumenViewModel(): ResumenViewModel {
       const ranks = rankByskillId.get(skill.id) ?? 0;
       const abilityScore = abilityTotalByKey[skill.abilityKey as AttributeKey] ?? 10;
       const abilityMod = abilityModifier(abilityScore);
+      const skillBonus = skillBonuses[skill.id as CanonicalId] ?? 0;
       return {
         skillId: skill.id,
         skillLabel: skill.label,
         ranks,
         abilityMod,
-        total: ranks + abilityMod,
+        total: ranks + abilityMod + skillBonus,
       };
     });
 

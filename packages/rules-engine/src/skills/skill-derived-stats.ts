@@ -64,6 +64,10 @@ function getCurrentRank(
   );
 }
 
+function getSkillBonus(levelInput: SkillLevelInput, skillId: CanonicalId): number {
+  return levelInput.skillBonuses?.[skillId] ?? 0;
+}
+
 function buildCapCostRow(
   catalog: SkillCatalog,
   levelInput: SkillLevelInput,
@@ -85,6 +89,7 @@ function buildCapCostRow(
     (levelInput.allocations
       .filter((entry) => entry.skillId === skillId)
       .reduce((total, entry) => total + entry.rank, 0));
+  const skillBonus = getSkillBonus(levelInput, skillId);
   const priorTotal = currentTotal - currentRank;
   const cap = allocation?.cap ?? getCap(levelInput.level, costType);
 
@@ -92,7 +97,7 @@ function buildCapCostRow(
     cap,
     costType,
     currentRank,
-    currentTotal,
+    currentTotal: currentTotal + skillBonus,
     label: skillRecord.label,
     maxAssignableRank: Math.max(0, cap - priorTotal),
     nextCost: getNextCost(costType),

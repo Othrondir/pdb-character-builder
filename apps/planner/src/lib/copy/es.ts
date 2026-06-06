@@ -268,7 +268,7 @@ export const shellCopyEs = {
       'Completa una progresión válida en Construcción para repartir rangos por nivel.',
     nextCostLabel: 'Siguiente coste',
     railHeading: 'Habilidades 1-16',
-    rankLabel: 'Rango',
+    rankLabel: 'Total',
     remainingPointsLabel: 'Puntos restantes',
     repairCallout:
       'Este nivel conserva sus rangos, pero depende de corregir decisiones anteriores.',

@@ -76,6 +76,7 @@ export interface SkillSheetRowView {
   maxAssignableRank: number;
   nextCost: number;
   nextCostLabel: string;
+  racialBonus: number;
   skillId: CanonicalId;
   status: SkillEvaluationStatus;
   step: number;
@@ -215,6 +216,10 @@ function formatCapLabel(value: number) {
 
 function formatCurrentTotalLabel(value: number) {
   return `${shellCopyEs.skills.rankLabel}: ${formatNumericValue(value)}`;
+}
+
+function getSkillBonus(levelInput: SkillLevelInput, skillId: CanonicalId): number {
+  return levelInput.skillBonuses?.[skillId] ?? 0;
 }
 
 function selectBoardArtifacts(
@@ -398,6 +403,7 @@ function buildActiveSkillRows(
       const maxAssignableRank = Math.max(0, cap - priorRank);
       const step = 1;
       const status = allocation?.status ?? 'pending';
+      const racialBonus = getSkillBonus(levelInput, skill.id as CanonicalId);
 
       return {
         cap,
@@ -408,7 +414,7 @@ function buildActiveSkillRows(
             ? shellCopyEs.skills.classSkillLabel
             : shellCopyEs.skills.crossClassSkillLabel,
         currentRank,
-        currentTotal: priorRank + currentRank,
+        currentTotal: priorRank + currentRank + racialBonus,
         disabled: !levelInput.classId,
         issues:
           allocation?.issues.map((issue, issueIndex) => ({
@@ -419,6 +425,7 @@ function buildActiveSkillRows(
         maxAssignableRank,
         nextCost: costType === 'class' ? 1 : 2,
         nextCostLabel: formatNextCostLabel(costType, 1),
+        racialBonus,
         skillId: skill.id as CanonicalId,
         status,
         step,
