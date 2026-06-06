@@ -16,6 +16,7 @@ describe('phase 05.2 stepper states', () => {
     usePlannerShellStore.setState({
       activeOriginStep: 'race',
       activeLevelSubStep: null,
+      activeView: 'creation',
       characterSheetTab: 'stats',
       datasetId: 'dataset:pendiente',
       expandedLevel: null,
@@ -59,4 +60,18 @@ describe('phase 05.2 stepper states', () => {
     expect(alignmentButton).not.toHaveAttribute('aria-current');
   });
 
+  it('keeps level sub-steps visible while Resumen is active', () => {
+    usePlannerShellStore.setState({
+      activeOriginStep: null,
+      activeLevelSubStep: 'class',
+      activeView: 'resumen',
+      expandedLevel: 1,
+    });
+
+    render(createElement(CreationStepper));
+
+    expect(screen.getByRole('button', { name: 'Clase' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Habilidades' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Dotes' })).toBeInTheDocument();
+  });
 });

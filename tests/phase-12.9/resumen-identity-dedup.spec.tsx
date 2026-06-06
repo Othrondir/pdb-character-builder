@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 
 /**
- * Phase 12.9 R2 — Identidad dedup + single compact header line.
+ * Phase 12.9 R2 — Identidad dedup + single details header line.
  *
  * Uses createElement (not JSX) per phase-12.x convention — Vitest default
  * esbuild does not auto-inject the React runtime.
@@ -16,6 +16,7 @@ import { useCharacterFoundationStore } from '@planner/features/character-foundat
 import { useLevelProgressionStore } from '@planner/features/level-progression/store';
 import { useFeatStore } from '@planner/features/feats/store';
 import { useSkillStore } from '@planner/features/skills/store';
+import { shellCopyEs } from '@planner/lib/copy/es';
 import type { ProgressionLevel } from '@planner/features/level-progression/progression-fixture';
 import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
 
@@ -55,14 +56,11 @@ describe('Phase 12.9 — Identidad dedup (SPEC R2)', () => {
     ).toBe(1);
   });
 
-  it('R2: identity-header textContent has at least 3 U+00B7 middot separators', () => {
+  it('R2: identity-header renders only the Detalles label', () => {
     setupElfoNeutralGuerreroL1();
     const { container } = render(createElement(ResumenBoard));
     const header = container.querySelector('.resumen-table__identity-header');
     expect(header).not.toBeNull();
-    const middotCount = (header!.textContent!.match(/·/g) ?? []).length;
-    // 4 pieces (name · race · alignment · dataset) ⇒ 3 middots when subrace is null.
-    // Elfo parent fixture has no subrace wired; assertion is >= 3.
-    expect(middotCount).toBeGreaterThanOrEqual(3);
+    expect(header!.textContent).toBe(shellCopyEs.resumen.detailsHeading);
   });
 });

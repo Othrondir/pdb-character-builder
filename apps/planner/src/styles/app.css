@@ -2870,3 +2870,166 @@ a {
   gap: var(--space-md);
   padding: var(--space-lg);
 }
+
+/* Mobile safety layer: append-only so desktop and tablet rules stay intact. */
+@media (max-width: 767px) {
+  .planner-shell {
+    height: auto;
+    max-width: none;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: var(--space-sm);
+    padding-top: calc(var(--space-sm) + 3.5rem);
+  }
+
+  .planner-layout {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    height: auto;
+    min-height: 0;
+  }
+
+  .planner-layout__center,
+  .character-sheet,
+  .selection-screen {
+    height: auto;
+    min-width: 0;
+    overflow: visible;
+  }
+
+  .character-sheet__content {
+    overflow-y: visible;
+  }
+
+  .foundation-board__layout,
+  .progression-board {
+    gap: var(--space-md);
+    padding: var(--space-sm);
+  }
+
+  .selection-screen__content {
+    grid-template-columns: 1fr;
+    overflow-x: auto;
+    overflow-y: visible;
+  }
+
+  .option-list,
+  .origin-race-picker,
+  .feat-board__main {
+    border-bottom: 1px solid var(--color-panel-edge);
+    border-right: 0;
+    max-height: none;
+    overflow-y: visible;
+  }
+
+  .detail-panel,
+  .feat-sheet {
+    max-height: none;
+    min-width: 0;
+    overflow-y: visible;
+  }
+
+  .attributes-editor {
+    gap: var(--space-sm);
+    padding: var(--space-md);
+  }
+
+  .action-bar,
+  .resumen-board__actions,
+  .version-mismatch-dialog__actions,
+  .save-slot-dialog__actions,
+  .load-slot-dialog__actions,
+  .confirm-dialog__actions {
+    align-items: stretch;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  .action-bar__left {
+    flex-basis: 100%;
+    margin-right: 0;
+  }
+
+  .action-bar .nwn-button,
+  .resumen-board__actions .nwn-button {
+    flex: 1 1 10rem;
+  }
+
+  .resumen-board {
+    height: auto;
+    overflow-y: visible;
+    padding: var(--space-sm);
+  }
+
+  .resumen-board__header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .resumen-table {
+    grid-template-columns: 1fr;
+  }
+
+  .resumen-table__identity-header {
+    overflow-wrap: anywhere;
+  }
+
+  .resumen-table__block {
+    max-width: 100%;
+    overflow-x: auto;
+    padding: var(--space-sm);
+  }
+
+  .resumen-table table {
+    min-width: max-content;
+  }
+
+  .level-progression-row__header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    padding: 6px var(--space-sm);
+  }
+
+  .level-row__pill--class {
+    flex: 1 1 8rem;
+    max-width: 100%;
+  }
+
+  .level-row__pill--feats,
+  .level-row__pill--skills {
+    min-width: 0;
+  }
+
+  .level-progression-row__expanded {
+    padding: var(--space-md);
+  }
+
+  .skill-board .skill-sheet__row-label h4 {
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+
+  .skill-board .skill-sheet__controls {
+    flex-wrap: wrap;
+  }
+
+  .toast {
+    max-width: calc(100vw - 2rem);
+    width: max-content;
+  }
+
+  .save-slot-dialog,
+  .load-slot-dialog,
+  .version-mismatch-dialog {
+    max-width: calc(100vw - 2rem);
+    min-width: 0;
+    width: calc(100vw - 2rem);
+  }
+
+  .version-mismatch-dialog__diff {
+    grid-template-columns: 1fr;
+  }
+}

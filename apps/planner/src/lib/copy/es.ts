@@ -7,6 +7,7 @@ export const shellCopyEs = {
     datasetHeadingAria: 'Versión del ruleset y del dataset de esta build',
     progressionBlockHeading: 'Progresión',
     skillsBlockHeading: 'Habilidades',
+    detailsHeading: 'Detalles',
     // Phase 12.9-02 / R6 tidy: the old identity-block heading key, the attribute
     // column-label keys, and the ability-label subtree were dropped alongside the
     // identity + attrs table deletion (D-03 + D-08). Repo-wide grep confirmed zero

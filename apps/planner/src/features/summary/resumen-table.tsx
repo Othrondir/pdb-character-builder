@@ -10,16 +10,13 @@ interface ResumenTableProps {
 /**
  * Phase 12.9: Compact ficha layout.
  *
- *   1. Compact identity header  ({name} · {race}{subrace?} · {alignment} · <span>{dataset}</span>)
+ *   1. Details header           (single label above the framed data blocks)
  *   2. Progresión block         (20-row × 9-col table, full-width via --progresion modifier)
  *   3. Habilidades block        (39-row × 4-col table, full-width via --habilidades modifier)
  *
- * Identity was collapsed from the prior definition-list + attribute table surfaces (R2/D-03) because
- * the creation-stepper summary bar already surfaces labeled identity + atributo chips.
+ * Identity was removed from this header because the surrounding shell already surfaces
+ * character identity and dataset context; this screen label should stay terse.
  * Keeping the compact header inside <ResumenTable> preserves the ficha handoff self-containment.
- *
- * Middot separator: U+00B7 '·' matching .character-sheet__stat-mod precedent.
- * Dataset span color tint via .resumen-table__identity-header__dataset CSS class (no inline style).
  *
  * All derived-stat cells render `copy.notAvailable` ('—') when the rules-engine helper is
  * unavailable. NEVER substitute `0` (SHAR-01 carry-over).
@@ -30,18 +27,9 @@ export function ResumenTable({ model, onEditLevel }: ResumenTableProps) {
 
   return (
     <div className="resumen-table">
-      {/* Compact identity header (replaces the prior identity + attribute surfaces) */}
+      {/* Compact section header (replaces the prior identity + attribute surfaces) */}
       <header className="resumen-table__identity-header">
-        {model.identity.name}
-        {' · '}
-        {model.identity.raceLabel}
-        {model.identity.subraceLabel ? ` · ${model.identity.subraceLabel}` : ''}
-        {' · '}
-        {model.identity.alignmentLabel}
-        {' · '}
-        <span className="resumen-table__identity-header__dataset">
-          {model.identity.datasetLabel}
-        </span>
+        {copy.detailsHeading}
       </header>
 
       {/* Block 1: Progresión (20 rows × 9 cols — full-width via BEM modifier) */}

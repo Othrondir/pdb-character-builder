@@ -97,9 +97,9 @@ describe('ResumenBoard', () => {
       document.querySelector('[aria-labelledby="resumen-skills-heading"]'),
     ).toBeInTheDocument();
     // Compact identity header is present as a plain <header> landmark.
-    expect(
-      document.querySelector('.resumen-table__identity-header'),
-    ).toBeInTheDocument();
+    const detailsHeader = document.querySelector('.resumen-table__identity-header');
+    expect(detailsHeader).toBeInTheDocument();
+    expect(detailsHeader).toHaveTextContent(shellCopyEs.resumen.detailsHeading);
   });
 
   it('renders only Exportar JSON, Importar JSON, and Compartir actions', () => {

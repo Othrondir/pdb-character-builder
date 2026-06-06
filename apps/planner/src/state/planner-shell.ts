@@ -46,14 +46,26 @@ export const usePlannerShellStore = create<PlannerShellState>((set) => ({
   setActiveLevelSubStep: (activeLevelSubStep) =>
     set({ activeLevelSubStep, activeOriginStep: null, activeView: 'creation' }),
   setActiveView: (activeView) =>
-    set({
-      activeView,
-      // Non-creation views must clear the creation cursors so center-content routes
-      // cleanly. Creation view restores the default Raza step.
-      activeOriginStep: activeView === 'creation' ? 'race' : null,
-      activeLevelSubStep: null,
-      expandedLevel: null,
-      mobileNavOpen: false,
+    set(() => {
+      if (activeView === 'resumen') {
+        return {
+          activeView,
+          // Resumen owns the center column, but the stepper still needs the
+          // current progression cursor so L1 sub-options do not disappear.
+          activeOriginStep: null,
+          mobileNavOpen: false,
+        };
+      }
+
+      return {
+        activeView,
+        // Explicitly returning to creation via this top-level action means
+        // "creation root"; sub-step buttons use setActiveLevelSubStep instead.
+        activeOriginStep: 'race',
+        activeLevelSubStep: null,
+        expandedLevel: null,
+        mobileNavOpen: false,
+      };
     }),
   setCharacterSheetTab: (characterSheetTab) => set({ characterSheetTab }),
   setExpandedLevel: (expandedLevel) =>
