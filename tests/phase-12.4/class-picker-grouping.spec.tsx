@@ -95,6 +95,15 @@ describe('Phase 12.4-06 — ClassPicker grouping + prestige gate (SPEC R1 / CLAS
     }
   });
 
+  it('allows selecting Mago at INT 8 because characteristics are not class prerequisites', () => {
+    setupL1Humano();
+    render(createElement(ClassPicker));
+
+    const wizardRow = document.querySelector('[data-class-id="class:wizard"]');
+    expect(wizardRow, 'Mago row must exist in base section').not.toBeNull();
+    expect(wizardRow?.getAttribute('aria-disabled')).toBe('false');
+  });
+
   it('CLAS-03: illegal base-class rows render aria-disabled="true"', () => {
     setupL1Humano('alignment:lawful-good' as CanonicalId);
     render(createElement(ClassPicker));

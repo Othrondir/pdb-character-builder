@@ -7,14 +7,8 @@ import {
 import { evaluateClassEntry } from './class-entry-rules';
 import { evaluateMulticlassLegality } from './multiclass-rules';
 
-interface MinimumAbilityScore {
-  key: string;
-  score: number;
-}
-
 interface ImplementedRequirements {
   allowedAlignmentIds?: CanonicalId[];
-  minimumAbilityScores?: MinimumAbilityScore[];
   requiresDeity?: boolean;
 }
 

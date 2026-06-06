@@ -5,14 +5,8 @@ import {
   resolveValidationOutcome,
 } from '../contracts/validation-outcome';
 
-interface MinimumAbilityScore {
-  key: string;
-  score: number;
-}
-
 interface ImplementedRequirements {
   allowedAlignmentIds?: CanonicalId[];
-  minimumAbilityScores?: MinimumAbilityScore[];
   requiresDeity?: boolean;
 }
 
@@ -62,15 +56,6 @@ export interface EvaluateClassEntryInput {
 
 const ALIGNMENT_LABELS: Record<string, string> = {
   'alignment:lawful-good': 'Alineamiento: Legal bueno',
-};
-
-const ABILITY_LABELS: Record<string, string> = {
-  cha: 'CAR',
-  con: 'CON',
-  dex: 'DES',
-  int: 'INT',
-  str: 'FUE',
-  wis: 'SAB',
 };
 
 function pushIssue(
@@ -127,22 +112,6 @@ export function evaluateClassEntry(
       status: 'blocked',
     });
     pushIssue(issues, 'blocked', [input.classRecord.id]);
-  }
-
-  for (const abilityRequirement of input.classRecord.implementedRequirements
-    .minimumAbilityScores ?? []) {
-    const currentScore = input.foundation.baseAttributes[abilityRequirement.key] ?? 0;
-    const status: ValidationStatus =
-      currentScore >= abilityRequirement.score ? 'legal' : 'illegal';
-
-    requirementRows.push({
-      label: `${ABILITY_LABELS[abilityRequirement.key] ?? abilityRequirement.key.toUpperCase()} ${abilityRequirement.score}`,
-      status,
-    });
-
-    if (status !== 'legal') {
-      pushIssue(issues, status, [input.classRecord.id]);
-    }
   }
 
   if (input.classRecord.implementedRequirements.requiresDeity) {

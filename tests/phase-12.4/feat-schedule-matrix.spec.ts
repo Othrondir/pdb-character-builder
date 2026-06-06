@@ -92,6 +92,7 @@ function emptyFoundation(): CharacterFoundationStoreState {
     datasetId: 'dataset:test',
     raceId: null,
     racialModifiers: null,
+    resetBaseAttributes: noop,
     resetFoundation: noop,
     setAlignment: noopAny,
     setBaseAttribute: noopAny,

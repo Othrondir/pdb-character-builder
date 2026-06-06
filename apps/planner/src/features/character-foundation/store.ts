@@ -20,6 +20,7 @@ export interface CharacterFoundationStoreState {
   datasetId: string;
   raceId: CanonicalId | null;
   racialModifiers: Record<AttributeKey, number> | null;
+  resetBaseAttributes: () => void;
   resetFoundation: () => void;
   setAlignment: (alignmentId: CanonicalId | null) => void;
   setBaseAttribute: (key: AttributeKey, value: number) => void;
@@ -114,6 +115,7 @@ function lookupRacialModifiers(
 export const useCharacterFoundationStore = create<CharacterFoundationStoreState>(
   (set) => ({
     ...createInitialFoundationState(),
+    resetBaseAttributes: () => set({ baseAttributes: createBaseAttributes() }),
     resetFoundation: () => set(createInitialFoundationState()),
     setAlignment: (alignmentId) => set({ alignmentId }),
     setBaseAttribute: (key, value) =>

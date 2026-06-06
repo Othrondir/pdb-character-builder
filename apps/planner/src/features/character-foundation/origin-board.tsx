@@ -113,6 +113,12 @@ export function OriginBoard({ activeStep = 'race' }: OriginBoardProps) {
       ? phase03FoundationFixture.races.find((r) => r.id === selectedOption.id)
           ?.description ?? null
       : null;
+  const selectedAlignmentDescription =
+    activeStep === 'alignment' && selectedOption
+      ? phase03FoundationFixture.alignments.find(
+          (alignment) => alignment.id === selectedOption.id,
+        )?.description ?? null
+      : null;
   const selectedSubrace =
     activeStep === 'race' && foundationState.subraceId
       ? phase03FoundationFixture.subraces.find(
@@ -167,9 +173,11 @@ export function OriginBoard({ activeStep = 'race' }: OriginBoardProps) {
               ? selectedSubrace.description
               : selectedRaceDescription
               ? selectedRaceDescription
+              : selectedAlignmentDescription
+              ? selectedAlignmentDescription
               : selectedOption
                 ? `${selectedOption.label} seleccionado.`
-                : 'Selecciona una opcion para ver su descripcion.'
+                : 'Selecciona una opción para ver su descripción.'
         }
       >
         {hasSubraces && (

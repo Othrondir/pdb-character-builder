@@ -242,7 +242,6 @@ const BASIC_SUBRACE_PARENT_RACES: CuratedSubraceParentRace[] = [
   { id: 'race:elfo-solar' },
   { id: 'race:elf' },
   { id: 'race:elfo-silvano' },
-  { id: 'race:duergar' },
   { id: 'race:enano-dorado' },
   { id: 'race:draconido' },
   { id: 'race:halfling' },

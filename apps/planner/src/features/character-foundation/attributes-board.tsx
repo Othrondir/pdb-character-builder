@@ -44,8 +44,8 @@ export function AttributesBoard() {
   const foundationState = useCharacterFoundationStore();
   const attributeBudget = selectAttributeBudgetSnapshot(foundationState);
   const foundationValidation = selectFoundationValidation(foundationState);
-  const resetFoundation = useCharacterFoundationStore(
-    (state) => state.resetFoundation,
+  const resetBaseAttributes = useCharacterFoundationStore(
+    (state) => state.resetBaseAttributes,
   );
   const setBaseAttribute = useCharacterFoundationStore(
     (state) => state.setBaseAttribute,
@@ -193,7 +193,7 @@ export function AttributesBoard() {
         ) : null}
 
         <div className="attributes-editor__actions">
-          <NwnButton onClick={resetFoundation} variant="secondary">
+          <NwnButton onClick={resetBaseAttributes} variant="secondary">
             Reiniciar base
           </NwnButton>
         </div>

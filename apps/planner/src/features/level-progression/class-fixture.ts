@@ -8,17 +8,10 @@ import { compiledClassCatalog } from '@planner/data/compiled-classes';
 
 import { PRESTIGE_PREREQ_OVERRIDES } from './prestige-prereq-data';
 
-export type PlannerAbilityKey = 'cha' | 'con' | 'dex' | 'int' | 'str' | 'wis';
 export type PlannerClassKind = 'base' | 'prestige';
-
-export interface PlannerClassAbilityRequirement {
-  key: PlannerAbilityKey;
-  score: number;
-}
 
 export interface PlannerClassImplementedRequirements {
   allowedAlignmentIds?: CanonicalId[];
-  minimumAbilityScores?: PlannerClassAbilityRequirement[];
   requiresDeity?: boolean;
 }
 
@@ -60,7 +53,7 @@ export interface Phase04ClassFixture {
  *  - `minimumClassCommitment`: Puerta de Baldur multiclass commitment rules.
  *  - `exceptionOverrides`: server-specific prestige-entry bridges
  *    (e.g. `puerta.shadowdancer-rogue-bridge`).
- *  - `implementedRequirements`: alignment / ability / deity gates that
+ *  - `implementedRequirements`: alignment / deity gates that
  *    `evaluateClassEntry` reads.
  *
  * The overlay is scoped to known server rules. Future extractor enrichment
@@ -204,15 +197,12 @@ const ISBASE_FORCED: ReadonlySet<string> = new Set([
 const DEFERRED_LABEL_PRESTIGE =
   'Pendiente de dotes o habilidades de fases posteriores.';
 const DEFERRED_LABEL_UNVETTED_BASE =
-  'Prerrequisitos específicos del servidor. Revisa las dotes, nivel de lanzador o atributos requeridos.';
+  'Prerrequisitos específicos del servidor. Revisa las dotes, nivel de lanzador u otros requisitos no documentados.';
 
 const CLASS_SERVER_RULE_OVERLAY: Record<string, ClassServerRuleOverlay> = {
   'class:fighter': { tags: ['martial'] },
   'class:rogue': { minimumClassCommitment: 2, tags: ['skillful'] },
-  'class:wizard': {
-    implementedRequirements: { minimumAbilityScores: [{ key: 'int', score: 11 }] },
-    tags: ['arcane'],
-  },
+  'class:wizard': { tags: ['arcane'] },
   'class:cleric': {
     // UAT-2026-04-20 P1-b. Puerta maneja deidades via scripts (Phase 05.1
     // decision: "Deity catalog emitted as null"). foundation.deityId stays
@@ -266,8 +256,7 @@ function projectCompiledClass(compiled: CompiledClass): PlannerClassRecord {
   );
 
   // Merge implementedRequirements: decoded first, overlay last so the
-  // hand-authored server-rule overlay wins per-field (paladin LG-only,
-  // cleric requiresDeity, wizard INT 11 stay intact).
+  // hand-authored server-rule overlay wins per-field (paladin LG-only, etc.).
   const implementedRequirements: PlannerClassImplementedRequirements = {
     ...(decodedAlignmentIds ? { allowedAlignmentIds: decodedAlignmentIds } : {}),
     ...(overlay.implementedRequirements ?? {}),

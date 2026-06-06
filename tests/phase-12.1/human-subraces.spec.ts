@@ -38,7 +38,6 @@ const BASIC_SUBRACE_PARENT_RACE_IDS = [
   'race:elfo-solar',
   'race:elf',
   'race:elfo-silvano',
-  'race:duergar',
   'race:enano-dorado',
   'race:draconido',
   'race:halfling',
@@ -57,6 +56,7 @@ function createFoundationState(
     datasetId: 'test',
     raceId: null,
     racialModifiers: null,
+    resetBaseAttributes: () => undefined,
     resetFoundation: () => undefined,
     setAlignment: () => undefined,
     setBaseAttribute: () => undefined,
@@ -106,6 +106,17 @@ describe('quick 260605-d4e / 260606-f6g — curated basic-race subraces', () => 
         subraces.map((subrace) => subrace.label),
         `missing subraces for ${raceId}`,
       ).toEqual(expect.arrayContaining([...HUMAN_SUBRACE_LABELS]));
+    }
+  });
+
+  it('does not generate curated subraces under Duergar', () => {
+    const duergarSubraces = plannerRaceCatalog.subraces.filter(
+      (subrace) => subrace.parentRaceId === 'race:duergar',
+    );
+    const duergarSubraceLabels = duergarSubraces.map((subrace) => subrace.label);
+
+    for (const label of HUMAN_SUBRACE_LABELS) {
+      expect(duergarSubraceLabels).not.toContain(label);
     }
   });
 

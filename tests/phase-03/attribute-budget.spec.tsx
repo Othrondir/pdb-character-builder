@@ -89,4 +89,23 @@ describe('phase 03 attribute budget board', () => {
       ),
     ).toBeInTheDocument();
   });
+
+  it('reinicia solo las caracteristicas base sin borrar el origen seleccionado', () => {
+    primeOrigin();
+    useCharacterFoundationStore.getState().setBaseAttribute('str', 15);
+
+    render(createElement(PlannerShellFrame));
+
+    expect(screen.getByLabelText('Total de Fuerza')).toHaveTextContent('15');
+
+    fireEvent.click(screen.getByRole('button', { name: 'Reiniciar base' }));
+
+    const foundation = useCharacterFoundationStore.getState();
+    expect(foundation.raceId).toBe('race:human');
+    expect(foundation.alignmentId).toBe('alignment:neutral-good');
+    expect(foundation.baseAttributes.str).toBe(8);
+    expect(screen.queryByTestId('point-buy-missing-callout')).not.toBeInTheDocument();
+    expect(screen.getByLabelText('Total de Fuerza')).toHaveTextContent('8');
+    expect(getBudgetValue('Puntos restantes')).toBe('30');
+  });
 });

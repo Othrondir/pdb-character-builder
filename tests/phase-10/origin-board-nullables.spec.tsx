@@ -52,4 +52,17 @@ describe('origin-board Cancelar dispatches null (Phase 10 integration fix)', () 
 
     expect(useCharacterFoundationStore.getState().alignmentId).toBeNull();
   });
+
+  it('shows the selected alignment description in the detail panel', () => {
+    useCharacterFoundationStore.getState().setRace('race:human' as CanonicalId);
+
+    render(createElement(OriginBoard, { activeStep: 'alignment' }));
+    fireEvent.click(screen.getByRole('option', { name: 'Legal bueno' }));
+
+    expect(
+      screen.getByRole('heading', { name: 'Legal bueno' }),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/Legal bueno; "el cruzado":/)).toBeInTheDocument();
+    expect(screen.getByText(/honor y la compasión/)).toBeInTheDocument();
+  });
 });

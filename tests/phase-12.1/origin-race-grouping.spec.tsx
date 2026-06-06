@@ -48,6 +48,9 @@ describe('quick 260606-e5f / 260606-f6g / 260606-k1m — grouped origin race pic
       within(minor).getByRole('option', { name: 'Aasimar' }),
     ).toBeInTheDocument();
     expect(
+      within(minor).getByRole('option', { name: 'Duergar' }),
+    ).toBeInTheDocument();
+    expect(
       within(intermediate).getByRole('option', { name: 'Tanarukk' }),
     ).toBeInTheDocument();
     expect(
@@ -67,6 +70,9 @@ describe('quick 260606-e5f / 260606-f6g / 260606-k1m — grouped origin race pic
       ).toBeInTheDocument();
     }
 
+    expect(
+      within(basic).queryByRole('option', { name: 'Duergar' }),
+    ).not.toBeInTheDocument();
     expect(
       within(minor).queryByRole('option', { name: 'Mediano Fortecor' }),
     ).not.toBeInTheDocument();

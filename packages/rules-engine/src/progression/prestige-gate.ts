@@ -207,8 +207,8 @@ export function reachableAtLevelN(input: PrestigeGateInput): PrestigeGateResult 
   const { classRow, level, bab, skillRanks, featIds, classLevels, enriched } =
     input;
 
-  // Branch 1 — base class: always reachable. Foundation-gate (alignment,
-  // ability minimums, etc.) is handled by class-entry-rules/evaluateClassEntry,
+  // Branch 1 — base class: always reachable. Foundation gates such as
+  // alignment are handled by class-entry-rules/evaluateClassEntry,
   // not here.
   if (classRow.isBase) {
     return { reachable: true, blockers: [] };
