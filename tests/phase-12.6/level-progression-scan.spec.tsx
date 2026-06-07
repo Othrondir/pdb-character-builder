@@ -183,6 +183,15 @@ describe('Phase 12.6 P5 — 20-row scan surface (Plan 03 Suites A+B)', () => {
     );
   });
 
+  it('A5: ability-increase buttons have a distinct unselected visual state', () => {
+    expect(appCss).toMatch(
+      /\.ability-increase-control__button\s*\{[^}]*background\s*:\s*transparent[^}]*border\s*:\s*1px\s+solid\s+var\(--color-panel-edge\)/s,
+    );
+    expect(appCss).toMatch(
+      /\.ability-increase-control__button\.is-selected\s*\{[^}]*background\s*:\s*var\(--color-selection\)[^}]*border-color\s*:\s*var\(--color-selection-border\)/s,
+    );
+  });
+
   // ----------------------------------------------------------------
   // Suite B — DOM structure (20 rows + 4 pills each).
   // ----------------------------------------------------------------
@@ -454,6 +463,34 @@ describe('Phase 12.6 P5 — 20-row scan surface (Plan 03 Suites A+B)', () => {
     expect(directChildren.indexOf(abilitySection as Element)).toBeLessThan(
       directChildren.indexOf(classPicker as Element),
     );
+  });
+
+  it('C6: L4 marks only the chosen ability-increase button as selected', () => {
+    setupElfoReadyForL4Ability();
+    useLevelProgressionStore
+      .getState()
+      .setLevelAbilityIncrease(4 as ProgressionLevel, 'str');
+    render(createElement(BuildProgressionBoard));
+
+    const buttons = Array.from(
+      document.querySelectorAll<HTMLButtonElement>(
+        '[data-testid="level-row-4-expanded"] .ability-increase-control__button',
+      ),
+    );
+
+    expect(buttons).toHaveLength(6);
+    expect(
+      buttons.filter((button) => button.classList.contains('is-selected')),
+    ).toHaveLength(1);
+    expect(
+      buttons.filter((button) => button.getAttribute('aria-pressed') === 'true'),
+    ).toHaveLength(1);
+
+    const selected = buttons.find((button) =>
+      button.classList.contains('is-selected'),
+    );
+    expect(selected?.textContent).toBe('FUE');
+    expect(selected?.getAttribute('aria-pressed')).toBe('true');
   });
 
   // ----------------------------------------------------------------

@@ -12,6 +12,7 @@ import {
 import { CharacterSheet } from '@planner/components/shell/character-sheet';
 import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
 import { useLevelProgressionStore } from '@planner/features/level-progression/store';
+import { useFeatStore } from '@planner/features/feats/store';
 import { usePlannerShellStore } from '@planner/state/planner-shell';
 import { compiledSkillCatalog } from '@planner/data/compiled-skills';
 import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
@@ -46,6 +47,10 @@ function getAttacksValue(): string | null | undefined {
     ?.textContent;
 }
 
+function getDerivedValue(label: string): string | null | undefined {
+  return screen.getByText(label).closest('div')?.querySelector('dd')?.textContent;
+}
+
 function getAttributeNumber(label: (typeof ATTRIBUTE_LABELS)[number]): number {
   const value = screen
     .getByText(label)
@@ -68,15 +73,34 @@ function getClassPortraitSrc(): string | null {
     .getAttribute('src');
 }
 
+function setupScreenshotWarlock16(): void {
+  const foundation = useCharacterFoundationStore.getState();
+  foundation.setRace('race:human' as CanonicalId);
+  foundation.setBaseAttribute('str', 16);
+  foundation.setBaseAttribute('dex', 14);
+  foundation.setBaseAttribute('con', 12);
+  foundation.setBaseAttribute('int', 12);
+  foundation.setBaseAttribute('wis', 8);
+  foundation.setBaseAttribute('cha', 18);
+
+  for (let level = 1; level <= 16; level += 1) {
+    useLevelProgressionStore
+      .getState()
+      .setLevelClassId(level as ProgressionLevel, 'class:warlock' as CanonicalId);
+  }
+}
+
 describe('phase 05.2 character sheet', () => {
   beforeEach(() => {
     useCharacterFoundationStore.getState().resetFoundation();
     useLevelProgressionStore.getState().resetProgression();
+    useFeatStore.getState().resetFeatSelections();
     usePlannerShellStore.setState({ characterSheetTab: 'stats' });
   });
 
   afterEach(() => {
     cleanup();
+    useFeatStore.getState().resetFeatSelections();
   });
 
   it('renders an aside with aria-label "Hoja de personaje"', () => {
@@ -174,7 +198,9 @@ describe('phase 05.2 character sheet', () => {
   });
 
   it('shows real BAB and iterative attacks per round under BAB', () => {
-    useCharacterFoundationStore.getState().setRace('race:human' as any);
+    const foundation = useCharacterFoundationStore.getState();
+    foundation.setRace('race:human' as any);
+    foundation.setBaseAttribute('str', 10);
     for (let level = 1; level <= 6; level += 1) {
       useLevelProgressionStore
         .getState()
@@ -193,8 +219,115 @@ describe('phase 05.2 character sheet', () => {
     expect(attacksCell?.querySelector('dd')?.textContent).toBe('+6 / +1');
   });
 
-  it('adds the simulated equipment attack bonus and toggles presets off', () => {
-    useCharacterFoundationStore.getState().setRace('race:human' as any);
+  it('adds the final Strength modifier to visible attacks', () => {
+    const foundation = useCharacterFoundationStore.getState();
+    foundation.setRace('race:human' as any);
+    foundation.setBaseAttribute('str', 14);
+    for (let level = 1; level <= 6; level += 1) {
+      useLevelProgressionStore
+        .getState()
+        .setLevelClassId(
+          level as ProgressionLevel,
+          'class:fighter' as CanonicalId,
+        );
+    }
+
+    render(createElement(CharacterSheet));
+
+    expect(getDerivedValue('BAB')).toBe('+6');
+    expect(getAttacksValue()).toBe('+8 / +3');
+  });
+
+  it('shows final saving throws from class progression plus ability modifiers', () => {
+    setupScreenshotWarlock16();
+
+    render(createElement(CharacterSheet));
+
+    expect(getDerivedValue('Fortaleza')).toBe('6');
+    expect(getDerivedValue('Reflejos')).toBe('7');
+    expect(getDerivedValue('Voluntad')).toBe('9');
+  });
+
+  it('adds equipment save bonuses on top of final ability-modified saving throws', () => {
+    setupScreenshotWarlock16();
+
+    render(createElement(CharacterSheet));
+
+    fireEvent.click(
+      screen.getByRole('button', { name: 'Simular Equipo nivel 16' }),
+    );
+
+    expect(getDerivedValue('Fortaleza')).toBe('15');
+    expect(getDerivedValue('Reflejos')).toBe('16');
+    expect(getDerivedValue('Voluntad')).toBe('18');
+  });
+
+  it('shows PG 128 for the reference Brujo 16 when Dureza is selected', () => {
+    setupScreenshotWarlock16();
+    useFeatStore
+      .getState()
+      .setGeneralFeat(1 as ProgressionLevel, 'feat:dureza' as CanonicalId);
+
+    render(createElement(CharacterSheet));
+
+    expect(getDerivedValue('PG')).toBe('128');
+  });
+
+  it('applies simulated CON bonuses retroactively to visible PG', () => {
+    setupScreenshotWarlock16();
+    useFeatStore
+      .getState()
+      .setGeneralFeat(1 as ProgressionLevel, 'feat:dureza' as CanonicalId);
+
+    render(createElement(CharacterSheet));
+
+    expect(getDerivedValue('PG')).toBe('128');
+
+    fireEvent.click(
+      screen.getByRole('button', { name: 'Simular Equipo nivel 16' }),
+    );
+
+    expect(getDerivedValue('PG')).toBe('176');
+  });
+
+  it('shows CA 13 for the reference Brujo 16 before simulated equipment', () => {
+    setupScreenshotWarlock16();
+
+    render(createElement(CharacterSheet));
+
+    expect(getArmorClassValue()).toBe('13');
+  });
+
+  it('shows CA 39 for the reference Brujo 16 with simulated level 16 equipment and CA 3 armor', () => {
+    setupScreenshotWarlock16();
+
+    render(createElement(CharacterSheet));
+
+    fireEvent.click(
+      screen.getByRole('button', { name: 'Simular Equipo nivel 16' }),
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Tipo de Armadura' }));
+    fireEvent.click(screen.getByRole('button', { name: 'CA 3' }));
+
+    expect(getArmorClassValue()).toBe('39');
+  });
+
+  it('shows +23 / +18 / +13 attacks for the reference Brujo 16 with final Strength 22 and equipment attack bonus', () => {
+    setupScreenshotWarlock16();
+
+    render(createElement(CharacterSheet));
+
+    fireEvent.click(
+      screen.getByRole('button', { name: 'Simular Equipo nivel 16' }),
+    );
+
+    expect(getAttacksValue()).toBe('+23 / +18 / +13');
+  });
+
+  it('derives attacks from simulated Strength and equipment attack bonuses, then toggles presets off', () => {
+    const foundation = useCharacterFoundationStore.getState();
+    foundation.setRace('race:human' as any);
+    foundation.setBaseAttribute('str', 10);
     for (let level = 1; level <= 6; level += 1) {
       useLevelProgressionStore
         .getState()
@@ -212,7 +345,7 @@ describe('phase 05.2 character sheet', () => {
       name: 'Simular Equipo nivel 12',
     });
     fireEvent.click(level12Button);
-    expect(getAttacksValue()).toBe('+11 / +6');
+    expect(getAttacksValue()).toBe('+13 / +8');
     expect(level12Button).toHaveAttribute('aria-pressed', 'true');
 
     fireEvent.click(level12Button);
@@ -223,7 +356,7 @@ describe('phase 05.2 character sheet', () => {
       name: 'Simular Equipo nivel 16',
     });
     fireEvent.click(level16Button);
-    expect(getAttacksValue()).toBe('+11 / +6');
+    expect(getAttacksValue()).toBe('+14 / +9');
     expect(level16Button).toHaveAttribute('aria-pressed', 'true');
 
     fireEvent.click(level16Button);
@@ -317,7 +450,7 @@ describe('phase 05.2 character sheet', () => {
       screen.getByRole('button', { name: 'Simular Equipo nivel 16' }),
     );
     expect(getArmorClassNumber()).toBe(
-      baseArmorClass + 19 + level16DexterityModifierDelta + 8 + 3,
+      baseArmorClass + 20 + level16DexterityModifierDelta + 8 + 3,
     );
   });
 

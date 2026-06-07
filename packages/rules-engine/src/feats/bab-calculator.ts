@@ -1,4 +1,5 @@
 import type { ClassCatalog } from '@data-extractor/contracts/class-catalog';
+import { abilityModifier } from '../foundation/ability-modifier';
 
 /**
  * BAB progression formulas per class type.
@@ -18,6 +19,18 @@ const SAVE_PER_LEVEL: Record<string, (classLevel: number) => number> = {
   high: (level) => 2 + Math.floor(level / 2),
   low: (level) => Math.floor(level / 3),
 };
+
+export interface SavingThrowAbilityScores {
+  con: number;
+  dex: number;
+  wis: number;
+}
+
+export interface SavingThrowTotals {
+  fortitude: number;
+  reflex: number;
+  will: number;
+}
 
 /**
  * Compute total BAB from multiclass progression.
@@ -123,4 +136,22 @@ export function computeWillSave(
   }
 
   return total;
+}
+
+/**
+ * Compute displayed saving throws: class progression base + ability modifier.
+ */
+export function computeSavingThrowTotals(
+  classLevels: Record<string, number>,
+  classCatalog: ClassCatalog,
+  abilityScores: SavingThrowAbilityScores,
+): SavingThrowTotals {
+  return {
+    fortitude:
+      computeFortSave(classLevels, classCatalog) + abilityModifier(abilityScores.con),
+    reflex:
+      computeRefSave(classLevels, classCatalog) + abilityModifier(abilityScores.dex),
+    will:
+      computeWillSave(classLevels, classCatalog) + abilityModifier(abilityScores.wis),
+  };
 }

@@ -12,10 +12,8 @@ import { getFoundationSkillBonuses } from '@planner/features/skills/skill-inputs
 import { formatDatasetLabel } from '@planner/data/ruleset-version';
 import { shellCopyEs } from '@planner/lib/copy/es';
 import {
+  computeSavingThrowTotals,
   computeTotalBab,
-  computeFortSave,
-  computeRefSave,
-  computeWillSave,
 } from '@rules-engine/feats/bab-calculator';
 import { abilityModifier } from '@rules-engine/foundation';
 import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
@@ -132,9 +130,18 @@ export function useResumenViewModel(): ResumenViewModel {
     // Skip derived-stat calc when there's no class chain yet — render em-dash instead of 0.
     const hasAnyClass = Object.keys(classLevels).length > 0;
     const bab = hasAnyClass ? computeTotalBab(classLevels, compiledClassCatalog) : null;
-    const fort = hasAnyClass ? computeFortSave(classLevels, compiledClassCatalog) : null;
-    const ref = hasAnyClass ? computeRefSave(classLevels, compiledClassCatalog) : null;
-    const will = hasAnyClass ? computeWillSave(classLevels, compiledClassCatalog) : null;
+    const abilityTotalsAtLevel = computeFinalAttributeTotals(
+      foundation.baseAttributes,
+      foundation.racialModifiers,
+      progression.levels.filter((record) => record.level <= lv.level),
+    );
+    const saves = hasAnyClass
+      ? computeSavingThrowTotals(
+          classLevels,
+          compiledClassCatalog,
+          abilityTotalsAtLevel,
+        )
+      : null;
 
     const featRow = feats.levels.find((f) => f.level === lv.level);
 
@@ -142,9 +149,9 @@ export function useResumenViewModel(): ResumenViewModel {
       level: lv.level,
       classLabel: findClassLabel(lv.classId),
       cumulativeBab: bab,
-      cumulativeFort: fort,
-      cumulativeRef: ref,
-      cumulativeWill: will,
+      cumulativeFort: saves?.fortitude ?? null,
+      cumulativeRef: saves?.reflex ?? null,
+      cumulativeWill: saves?.will ?? null,
       generalFeatLabel:
         getGeneralFeatIds(featRow)
           .map((featId) => findFeatLabel(featId) ?? featId)

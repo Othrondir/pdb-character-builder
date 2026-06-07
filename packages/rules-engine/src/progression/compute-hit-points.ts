@@ -7,24 +7,22 @@ import type { ClassCatalog } from '@data-extractor/contracts/class-catalog';
  * permanently rendered as `--`. The StatsPanel now reads this selector's
  * output against the live progression + foundation stores.
  *
- * Formula (Puerta de Baldur server convention, matching NWN1 Aurora):
- *   - First configured level: hitDie + conModifier (max roll — L1 convention).
- *   - Every subsequent configured level: floor(hitDie / 2) + 1 + conModifier
- *     (average roll rounded up — server rule, no random per-level rolls).
+ * Formula (Puerta de Baldur server convention):
+ *   - Every configured level: hitDie + conModifier (max roll on every level-up).
  *   - Each configured level uses its OWN class's hit die (multiclass-aware).
  *   - Each level's contribution floors at 1 (NWN per-level minimum; prevents
  *     nonsense negative HP with very low CON).
+ *   - Dureza adds +1 HP per configured level and is retroactive.
+ *   - Dureza epica adds +20 HP per selected epic toughness feat.
  *
  * Empty / gapped progression handling:
  *   - Unconfigured levels (classId === null) contribute 0.
- *   - A gap before the first configured level does NOT preserve the max-roll
- *     for that level — the L2+ formula applies once we're past position 1 in
- *     the ordinal progression. This matches how progression-revalidation
- *     treats inheritance from upstream configured levels.
+ *   - A gap before the first configured level does not change the formula; the
+ *     first configured class level still uses its class hit die at maximum.
  *
  * Framework-agnostic: no React, no store reads, no browser APIs.
  *
- * Regression coverage: tests/phase-12.3/hit-points-selector.spec.ts (15 cases).
+ * Regression coverage: tests/phase-12.3/hit-points-selector.spec.ts (18 cases).
  */
 export interface ProgressionLevelRecordLike {
   classId: string | null;
@@ -35,13 +33,14 @@ export function computeHitPoints(
   levels: ProgressionLevelRecordLike[],
   classCatalog: ClassCatalog,
   conModifier: number,
+  selectedFeatIds: readonly string[] = [],
 ): number {
   const sorted = [...levels].sort((a, b) => a.level - b.level);
 
   let total = 0;
+  let configuredLevelCount = 0;
 
-  for (let index = 0; index < sorted.length; index += 1) {
-    const record = sorted[index];
+  for (const record of sorted) {
     if (!record || record.classId === null) {
       continue;
     }
@@ -52,12 +51,21 @@ export function computeHitPoints(
     }
 
     const hitDie = classEntry.hitDie;
-    const isFirstOrdinalLevel = index === 0;
-    const contribution = isFirstOrdinalLevel
-      ? hitDie + conModifier
-      : Math.floor(hitDie / 2) + 1 + conModifier;
+    const contribution = hitDie + conModifier;
 
     total += Math.max(1, contribution);
+    configuredLevelCount += 1;
+  }
+
+  const featIdSet = new Set(selectedFeatIds);
+  if (featIdSet.has('feat:dureza')) {
+    total += configuredLevelCount;
+  }
+
+  for (const featId of featIdSet) {
+    if (/^feat:feat-epic-toughness-\d+$/.test(featId)) {
+      total += 20;
+    }
   }
 
   return total;

@@ -436,7 +436,7 @@ export const shellCopyEs = {
         {
           label: 'Simular Equipo nivel 12',
           body:
-            'Activa o desactiva un paquete de referencia para nivel 12: bono de CA, ataque y atributos esperados por equipo.',
+            'Activa o desactiva un paquete de referencia para nivel 12: bono de CA, ataque, salvaciones y atributos esperados por equipo.',
         },
         {
           label: 'Simular Equipo nivel 16',

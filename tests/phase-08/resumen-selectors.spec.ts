@@ -65,6 +65,30 @@ describe('useResumenViewModel', () => {
     expect(result.current.progression[1].cumulativeBab).toBe(1);
   });
 
+  it('computes cumulative saving throws as class progression plus ability modifiers', () => {
+    const foundation = useCharacterFoundationStore.getState();
+    foundation.setRace('race:human');
+    foundation.setAlignment('alignment:chaotic-evil');
+    foundation.setBaseAttribute('str', 16);
+    foundation.setBaseAttribute('dex', 14);
+    foundation.setBaseAttribute('con', 12);
+    foundation.setBaseAttribute('int', 12);
+    foundation.setBaseAttribute('wis', 8);
+    foundation.setBaseAttribute('cha', 18);
+
+    const progression = useLevelProgressionStore.getState();
+    for (let level = 1; level <= 16; level += 1) {
+      progression.setLevelClassId(level as any, 'class:warlock');
+    }
+
+    const { result } = renderHook(() => useResumenViewModel());
+    const level16 = result.current.progression[15];
+
+    expect(level16.cumulativeFort).toBe(6);
+    expect(level16.cumulativeRef).toBe(7);
+    expect(level16.cumulativeWill).toBe(9);
+  });
+
   it('emits a skill row for every compiled skill, sorted alphabetically', () => {
     const { result } = renderHook(() => useResumenViewModel());
     expect(result.current.skills.length).toBeGreaterThan(0);

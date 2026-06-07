@@ -4,6 +4,7 @@ import { NwnButton } from '@planner/components/ui/nwn-button';
 import { useCharacterFoundationStore } from '@planner/features/character-foundation/store';
 import { computeFinalAttributeTotals } from '@planner/features/character-foundation/final-attributes';
 import { useLevelProgressionStore } from '@planner/features/level-progression/store';
+import { getChosenFeatIds, useFeatStore } from '@planner/features/feats/store';
 import { abilityModifier } from '@rules-engine/foundation';
 import { computeHitPoints } from '@rules-engine/progression/compute-hit-points';
 import { compiledClassCatalog } from '@planner/data/compiled-classes';
@@ -13,7 +14,10 @@ import {
   ATTRIBUTE_KEYS,
   type AttributeKey,
 } from '@planner/features/character-foundation/foundation-fixture';
-import { computeTotalBab } from '@rules-engine/feats/bab-calculator';
+import {
+  computeSavingThrowTotals,
+  computeTotalBab,
+} from '@rules-engine/feats/bab-calculator';
 import { useBodyScrollLock } from '@planner/lib/a11y/use-body-scroll-lock';
 
 const ATTRIBUTE_LABELS: Record<AttributeKey, string> = {
@@ -47,6 +51,7 @@ interface EquipmentPreset {
   attackBonus: number;
   attributeBonus: number;
   label: string;
+  savingThrowBonus: number;
 }
 
 const EQUIPMENT_PRESETS: EquipmentPreset[] = [
@@ -55,12 +60,14 @@ const EQUIPMENT_PRESETS: EquipmentPreset[] = [
     attackBonus: 5,
     attributeBonus: 4,
     label: shellCopyEs.stepper.equipmentSimulation.level12,
+    savingThrowBonus: 6,
   },
   {
-    armorClassBonus: 19,
+    armorClassBonus: 20,
     attackBonus: 5,
     attributeBonus: 6,
     label: shellCopyEs.stepper.equipmentSimulation.level16,
+    savingThrowBonus: 6,
   },
 ];
 
@@ -541,11 +548,14 @@ function StatsPanel() {
     useState<EquipmentDialogKind | null>(null);
   const foundationState = useCharacterFoundationStore();
   const progressionState = useLevelProgressionStore();
+  const featState = useFeatStore();
   const activeEquipmentPreset = EQUIPMENT_PRESETS.find(
     (preset) => preset.armorClassBonus === equipmentPresetBonus,
   );
   const equipmentAttackBonus = activeEquipmentPreset?.attackBonus ?? 0;
   const equipmentAttributeBonus = activeEquipmentPreset?.attributeBonus ?? 0;
+  const equipmentSavingThrowBonus =
+    activeEquipmentPreset?.savingThrowBonus ?? 0;
   const baseFinalAttributes = computeFinalAttributeTotals(
     foundationState.baseAttributes,
     foundationState.racialModifiers,
@@ -555,11 +565,13 @@ function StatsPanel() {
     baseFinalAttributes,
     equipmentAttributeBonus,
   );
+  const selectedFeatIds = featState.levels.flatMap(getChosenFeatIds);
   const conModifier = abilityModifier(finalAttributes.con);
   const hitPoints = computeHitPoints(
     progressionState.levels,
     compiledClassCatalog,
     conModifier,
+    selectedFeatIds,
   );
   const hitPointsDisplay = hitPoints > 0 ? String(hitPoints) : '--';
   const classLevels = buildClassLevels(progressionState.levels);
@@ -568,9 +580,23 @@ function StatsPanel() {
     ? computeTotalBab(classLevels, compiledClassCatalog)
     : null;
   const babDisplay = bab === null ? '--' : formatSigned(bab);
+  const savingThrows = hasAnyClass
+    ? computeSavingThrowTotals(classLevels, compiledClassCatalog, finalAttributes)
+    : null;
+  const displayedSavingThrows =
+    savingThrows === null
+      ? null
+      : {
+          fortitude: savingThrows.fortitude + equipmentSavingThrowBonus,
+          reflex: savingThrows.reflex + equipmentSavingThrowBonus,
+          will: savingThrows.will + equipmentSavingThrowBonus,
+        };
+  const attackAbilityBonus = abilityModifier(finalAttributes.str);
   const attacksDisplay =
-    bab === null ? '--' : formatAttackSequence(bab, equipmentAttackBonus);
-  const baseArmorClass = 10 + abilityModifier(finalAttributes.dex);
+    bab === null
+      ? '--'
+      : formatAttackSequence(bab, attackAbilityBonus + equipmentAttackBonus);
+  const baseArmorClass = 11 + abilityModifier(finalAttributes.dex);
   const armorClass =
     baseArmorClass + equipmentPresetBonus + shieldBonus + armorBonus;
   const selectedSkillBonuses = SKILL_BONUS_OPTIONS.filter((skill) =>
@@ -646,15 +672,25 @@ function StatsPanel() {
         </div>
         <div>
           <dt>{DERIVED_STAT_LABELS.fortitude}</dt>
-          <dd>{abilityModifier(finalAttributes.con)}</dd>
+          <dd>
+            {displayedSavingThrows === null
+              ? '--'
+              : displayedSavingThrows.fortitude}
+          </dd>
         </div>
         <div>
           <dt>{DERIVED_STAT_LABELS.reflex}</dt>
-          <dd>{abilityModifier(finalAttributes.dex)}</dd>
+          <dd>
+            {displayedSavingThrows === null
+              ? '--'
+              : displayedSavingThrows.reflex}
+          </dd>
         </div>
         <div>
           <dt>{DERIVED_STAT_LABELS.will}</dt>
-          <dd>{abilityModifier(finalAttributes.wis)}</dd>
+          <dd>
+            {displayedSavingThrows === null ? '--' : displayedSavingThrows.will}
+          </dd>
         </div>
       </dl>
 

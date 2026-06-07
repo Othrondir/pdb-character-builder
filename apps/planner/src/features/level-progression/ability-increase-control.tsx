@@ -27,11 +27,11 @@ export function AbilityIncreaseControl({
   );
 
   return (
-    <div className="level-sheet__class-options">
+    <div className="ability-increase-control">
       {ATTRIBUTE_KEYS.map((key) => (
         <button
           aria-pressed={value === key}
-          className={`class-option${value === key ? ' is-selected' : ''}`}
+          className={`ability-increase-control__button${value === key ? ' is-selected' : ''}`}
           key={key}
           onClick={() => setLevelAbilityIncrease(level, key)}
           type="button"

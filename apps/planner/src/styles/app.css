@@ -871,11 +871,42 @@ a {
   padding: 12px 14px;
 }
 
-/* ── Level Sheet Class Options ───────────────────────────── */
-.level-sheet__class-options {
+/* ── Ability Increase Control ────────────────────────────── */
+.ability-increase-control {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-sm);
+}
+
+.ability-increase-control__button {
+  align-items: center;
+  background: transparent;
+  border: 1px solid var(--color-panel-edge);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  display: inline-flex;
+  font-family: var(--font-display);
+  justify-content: center;
+  min-height: 36px;
+  min-width: 52px;
+  padding: 8px 12px;
+}
+
+.ability-increase-control__button:hover {
+  background: color-mix(in srgb, var(--color-selection) 55%, transparent);
+  border-color: var(--color-gold-dark);
+  color: var(--color-text);
+}
+
+.ability-increase-control__button.is-selected {
+  background: var(--color-selection);
+  border-color: var(--color-selection-border);
+  color: var(--color-text);
+}
+
+.ability-increase-control__button:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
 }
 
 /* ── Locked Abilities Panel ──────────────────────────────── */
@@ -890,27 +921,6 @@ a {
   text-transform: uppercase;
 }
 .locked-abilities-panel__callout { padding: var(--space-lg); }
-
-/* ── Class Option ─────────────────────────────────────────── */
-
-.class-option {
-  align-items: center;
-  background: var(--color-selection);
-  border: 1px solid var(--color-selection-border);
-  color: var(--color-text);
-  cursor: pointer;
-  display: inline-flex;
-  justify-content: center;
-}
-
-.class-option.is-selected {
-  background: var(--color-selection);
-  border-color: var(--color-selection-border);
-}
-
-.class-option.is-illegal {
-  border-color: var(--color-destructive);
-}
 
 /* ── Mobile overlays ──────────────────────────────────────── */
 

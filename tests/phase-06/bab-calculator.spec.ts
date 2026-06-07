@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { compiledClassCatalog } from '@planner/data/compiled-classes';
 import {
+  computeSavingThrowTotals,
   computeTotalBab,
   computeFortSave,
   computeRefSave,
@@ -111,5 +112,19 @@ describe('phase 06 BAB calculator', () => {
 
     // Wizard has high will: 2 + floor(4/2) = 4
     expect(will).toBe(4);
+  });
+
+  it('computes displayed saving throws as base progression plus ability modifiers', () => {
+    const saves = computeSavingThrowTotals(
+      { 'class:warlock': 16 },
+      compiledClassCatalog,
+      { con: 12, dex: 14, wis: 8 },
+    );
+
+    expect(saves).toEqual({
+      fortitude: 6,
+      reflex: 7,
+      will: 9,
+    });
   });
 });
