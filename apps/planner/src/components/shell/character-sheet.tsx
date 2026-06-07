@@ -8,6 +8,7 @@ import { getChosenFeatIds, useFeatStore } from '@planner/features/feats/store';
 import { abilityModifier } from '@rules-engine/foundation';
 import { computeHitPoints } from '@rules-engine/progression/compute-hit-points';
 import { compiledClassCatalog } from '@planner/data/compiled-classes';
+import { compiledFeatCatalog } from '@planner/data/compiled-feats';
 import { compiledSkillCatalog } from '@planner/data/compiled-skills';
 import { shellCopyEs } from '@planner/lib/copy/es';
 import {
@@ -221,6 +222,15 @@ const CLASS_LABEL_BY_ID = new Map(
   ]),
 );
 
+const WEAPON_FOCUS_FEAT_IDS = new Set(
+  compiledFeatCatalog.feats
+    .filter(
+      (feat) =>
+        feat.parameterizedFeatFamily?.canonicalId === 'feat:weapon-focus',
+    )
+    .map((feat) => feat.id),
+);
+
 // Phase 14-05 — local `computeModifier(score)` (formerly inlined the
 // magic-10 formula) deleted; all call sites below resolve to the
 // canonical `abilityModifier` import from `@rules-engine/foundation`.
@@ -312,6 +322,10 @@ function formatAttackSequence(bab: number, attackBonus = 0): string {
   }
 
   return attacks.map((attack) => formatSigned(attack + attackBonus)).join(' / ');
+}
+
+function hasWeaponFocusFeat(featIds: string[]): boolean {
+  return featIds.some((featId) => WEAPON_FOCUS_FEAT_IDS.has(featId));
 }
 
 interface EquipmentOptionDialogProps {
@@ -592,10 +606,14 @@ function StatsPanel() {
           will: savingThrows.will + equipmentSavingThrowBonus,
         };
   const attackAbilityBonus = abilityModifier(finalAttributes.str);
+  const weaponFocusAttackBonus = hasWeaponFocusFeat(selectedFeatIds) ? 1 : 0;
   const attacksDisplay =
     bab === null
       ? '--'
-      : formatAttackSequence(bab, attackAbilityBonus + equipmentAttackBonus);
+      : formatAttackSequence(
+          bab,
+          attackAbilityBonus + equipmentAttackBonus + weaponFocusAttackBonus,
+        );
   const baseArmorClass = 11 + abilityModifier(finalAttributes.dex);
   const armorClass =
     baseArmorClass + equipmentPresetBonus + shieldBonus + armorBonus;

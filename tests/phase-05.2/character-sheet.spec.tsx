@@ -238,6 +238,34 @@ describe('phase 05.2 character sheet', () => {
     expect(getAttacksValue()).toBe('+8 / +3');
   });
 
+  it('adds a single weapon focus bonus to every visible attack', () => {
+    const foundation = useCharacterFoundationStore.getState();
+    foundation.setRace('race:human' as any);
+    foundation.setBaseAttribute('str', 10);
+    for (let level = 1; level <= 6; level += 1) {
+      useLevelProgressionStore
+        .getState()
+        .setLevelClassId(
+          level as ProgressionLevel,
+          'class:fighter' as CanonicalId,
+        );
+    }
+    useFeatStore
+      .getState()
+      .setGeneralFeat(1 as ProgressionLevel, 'feat:weapfoclsw' as CanonicalId);
+    useFeatStore
+      .getState()
+      .setGeneralFeat(
+        3 as ProgressionLevel,
+        'feat:weapfocdagger' as CanonicalId,
+      );
+
+    render(createElement(CharacterSheet));
+
+    expect(getDerivedValue('BAB')).toBe('+6');
+    expect(getAttacksValue()).toBe('+7 / +2');
+  });
+
   it('shows final saving throws from class progression plus ability modifiers', () => {
     setupScreenshotWarlock16();
 
