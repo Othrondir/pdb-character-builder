@@ -1430,6 +1430,16 @@ a {
   font-size: 11px;
   min-height: 32px;
 }
+.character-sheet__equipment-help-action {
+  display: flex;
+  justify-content: center;
+}
+.character-sheet__equipment-help-button {
+  font-size: 10px;
+  min-height: 28px;
+  padding: var(--space-xs) var(--space-sm);
+  width: auto;
+}
 .character-sheet__skill-bonuses {
   display: grid;
   gap: var(--space-xs);
@@ -1457,6 +1467,9 @@ a {
 }
 .character-sheet-equipment-dialog--skills {
   max-width: 420px;
+}
+.character-sheet-equipment-dialog--help {
+  max-width: 460px;
 }
 .character-sheet-equipment-dialog::backdrop {
   background: rgba(0, 0, 0, 0.7);
@@ -1513,6 +1526,28 @@ a {
   flex: 0 0 auto;
   font-family: var(--font-display);
   font-weight: 600;
+}
+.character-sheet-equipment-help {
+  display: grid;
+  gap: var(--space-sm);
+  margin: 0 0 var(--space-lg);
+}
+.character-sheet-equipment-help__item {
+  display: grid;
+  gap: 2px;
+}
+.character-sheet-equipment-help dt {
+  color: var(--color-text);
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0;
+}
+.character-sheet-equipment-help dd {
+  color: var(--color-text-muted);
+  font-size: 12px;
+  line-height: 1.45;
+  margin: 0;
 }
 .character-sheet-equipment-dialog__actions {
   display: flex;

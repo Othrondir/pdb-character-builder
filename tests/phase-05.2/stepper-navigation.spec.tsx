@@ -16,6 +16,7 @@ describe('phase 05.2 stepper navigation', () => {
     usePlannerShellStore.setState({
       activeOriginStep: 'race',
       activeLevelSubStep: null,
+      activeView: 'creation',
       characterSheetTab: 'stats',
       datasetId: 'dataset:pendiente',
       expandedLevel: null,
@@ -86,6 +87,44 @@ describe('phase 05.2 stepper navigation', () => {
     expect(
       screen.getByRole('button', { name: 'Ir a Raza' }),
     ).toBeInTheDocument();
+  });
+
+  it('keeps progression sub-step buttons visible once origin and attributes unlock progression', () => {
+    useCharacterFoundationStore.getState().setRace('race:human');
+    useCharacterFoundationStore.getState().setAlignment('alignment:true-neutral');
+    usePlannerShellStore.setState({
+      activeOriginStep: 'attributes',
+      activeLevelSubStep: null,
+      activeView: 'creation',
+      expandedLevel: null,
+    });
+
+    render(createElement(CreationStepper));
+
+    expect(screen.queryByTestId('progression-unlock-card')).toBeNull();
+    expect(
+      screen.getByRole('group', { name: 'Sub-pasos del nivel 1' }),
+    ).toBeInTheDocument();
+    expect(document.querySelector('[data-substep="class"]')).toBeInTheDocument();
+    expect(document.querySelector('[data-substep="skills"]')).toBeInTheDocument();
+    expect(document.querySelector('[data-substep="feats"]')).toBeInTheDocument();
+  });
+
+  it('keeps progression sub-step buttons visible after progression starts even without an expanded level', () => {
+    useLevelProgressionStore.getState().setLevelClassId(1, 'class:fighter');
+    usePlannerShellStore.setState({
+      activeOriginStep: 'race',
+      activeLevelSubStep: null,
+      activeView: 'creation',
+      expandedLevel: null,
+    });
+
+    render(createElement(CreationStepper));
+
+    expect(screen.queryByTestId('progression-unlock-card')).toBeNull();
+    expect(document.querySelector('[data-substep="class"]')).toBeInTheDocument();
+    expect(document.querySelector('[data-substep="skills"]')).toBeInTheDocument();
+    expect(document.querySelector('[data-substep="feats"]')).toBeInTheDocument();
   });
 
   it('routes the helper CTA to the next blocked origin step', () => {

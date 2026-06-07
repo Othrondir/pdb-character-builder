@@ -395,4 +395,33 @@ describe('phase 05.2 character sheet', () => {
     fireEvent.click(skillButton);
     expect(skillButton).toHaveAttribute('aria-pressed', 'false');
   });
+
+  it('opens equipment simulation help from the small button below skill bonus', () => {
+    useCharacterFoundationStore.getState().setRace('race:human' as any);
+
+    render(createElement(CharacterSheet));
+
+    const skillBonusButton = screen.getByRole('button', {
+      name: 'Bono de Habilidad',
+    });
+    const helpButton = screen.getByRole('button', {
+      name: '¿Qué son estos botones?',
+    });
+    expect(
+      skillBonusButton.compareDocumentPosition(helpButton) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+
+    fireEvent.click(helpButton);
+
+    const dialog = screen.getByRole('dialog', {
+      name: '¿Qué son estos botones?',
+    });
+    expect(within(dialog).getByText('Simular Equipo nivel 12')).toBeInTheDocument();
+    expect(within(dialog).getByText('Simular Equipo nivel 16')).toBeInTheDocument();
+    expect(within(dialog).getByText('Tipo de Escudo')).toBeInTheDocument();
+    expect(within(dialog).getByText('Tipo de Armadura')).toBeInTheDocument();
+    expect(within(dialog).getByText('Bono de Habilidad')).toBeInTheDocument();
+    expect(within(dialog).getByText(/\+7/)).toBeInTheDocument();
+  });
 });

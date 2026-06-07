@@ -431,6 +431,34 @@ export const shellCopyEs = {
       shieldType: 'Tipo de Escudo',
       skillBonus: 'Bono de Habilidad',
       skillBonusValue: (value: number) => `+${value}`,
+      helpButton: '¿Qué son estos botones?',
+      helpItems: [
+        {
+          label: 'Simular Equipo nivel 12',
+          body:
+            'Activa o desactiva un paquete de referencia para nivel 12: bono de CA, ataque y atributos esperados por equipo.',
+        },
+        {
+          label: 'Simular Equipo nivel 16',
+          body:
+            'Activa o desactiva el paquete de referencia de nivel 16. Sustituye al paquete de nivel 12 si estaba activo.',
+        },
+        {
+          label: 'Tipo de Escudo',
+          body:
+            'Añade a la CA el bono del escudo elegido. Elegir el mismo escudo otra vez lo quita.',
+        },
+        {
+          label: 'Tipo de Armadura',
+          body:
+            'Añade a la CA el bono de armadura seleccionado. Elegir la misma armadura otra vez la quita.',
+        },
+        {
+          label: 'Bono de Habilidad',
+          body:
+            'Permite marcar habilidades concretas para simular un bono de equipo de +7 en cada una.',
+        },
+      ],
     },
     blockedStepHint: 'Completa el paso anterior para desbloquear esta opcion.',
     levelEmptyHint: 'Selecciona una clase para empezar este nivel.',

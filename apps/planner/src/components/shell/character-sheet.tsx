@@ -35,7 +35,7 @@ const DERIVED_STAT_LABELS = {
   will: 'Voluntad',
 } as const;
 
-type EquipmentDialogKind = 'armor' | 'shield' | 'skills';
+type EquipmentDialogKind = 'armor' | 'help' | 'shield' | 'skills';
 
 interface EquipmentOption {
   bonus: number;
@@ -450,6 +450,55 @@ function SkillBonusDialog({
   );
 }
 
+interface EquipmentHelpDialogProps {
+  onClose: () => void;
+  open: boolean;
+}
+
+function EquipmentHelpDialog({ onClose, open }: EquipmentHelpDialogProps) {
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const titleId = useId();
+  const helpCopy = shellCopyEs.stepper.equipmentSimulation;
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+    if (open && !dialog.open) {
+      dialog.showModal();
+    } else if (!open && dialog.open) {
+      dialog.close();
+    }
+  }, [open]);
+
+  useBodyScrollLock(open);
+
+  return (
+    <dialog
+      aria-labelledby={titleId}
+      className="nwn-frame character-sheet-equipment-dialog character-sheet-equipment-dialog--help"
+      onCancel={onClose}
+      ref={dialogRef}
+    >
+      <h2 className="character-sheet-equipment-dialog__title" id={titleId}>
+        {helpCopy.helpButton}
+      </h2>
+      <dl className="character-sheet-equipment-help">
+        {helpCopy.helpItems.map((item) => (
+          <div className="character-sheet-equipment-help__item" key={item.label}>
+            <dt>{item.label}</dt>
+            <dd>{item.body}</dd>
+          </div>
+        ))}
+      </dl>
+      <div className="character-sheet-equipment-dialog__actions">
+        <NwnButton onClick={onClose} variant="secondary">
+          {helpCopy.cancel}
+        </NwnButton>
+      </div>
+    </dialog>
+  );
+}
+
 function CharacterClassPortrait() {
   const progressionState = useLevelProgressionStore();
   const dominantClassId = findDominantClassId(progressionState.levels);
@@ -659,6 +708,15 @@ function StatsPanel() {
             {shellCopyEs.stepper.equipmentSimulation.skillBonus}
           </NwnButton>
         </div>
+        <div className="character-sheet__equipment-help-action">
+          <NwnButton
+            className="character-sheet__equipment-help-button"
+            onClick={() => setEquipmentDialog('help')}
+            variant="auxiliary"
+          >
+            {shellCopyEs.stepper.equipmentSimulation.helpButton}
+          </NwnButton>
+        </div>
         {selectedSkillBonuses.length > 0 ? (
           <ul className="character-sheet__skill-bonuses">
             {selectedSkillBonuses.map((skill) => (
@@ -690,6 +748,10 @@ function StatsPanel() {
         onToggleSkill={toggleSkillBonus}
         open={equipmentDialog === 'skills'}
         selectedSkillIds={selectedSkillBonusIds}
+      />
+      <EquipmentHelpDialog
+        onClose={() => setEquipmentDialog(null)}
+        open={equipmentDialog === 'help'}
       />
     </div>
   );

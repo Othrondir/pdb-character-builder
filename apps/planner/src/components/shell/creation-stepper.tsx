@@ -143,10 +143,29 @@ export function CreationStepper() {
   const expandedLevel = usePlannerShellStore((state) => state.expandedLevel);
   const activeView = usePlannerShellStore((state) => state.activeView);
   const setActiveView = usePlannerShellStore((state) => state.setActiveView);
+  const activeLevel = useLevelProgressionStore((state) => state.activeLevel);
   const progressionStarted = useLevelProgressionStore((state) =>
     state.levels.some((level) => level.classId !== null),
   );
-  const showProgression = expandedLevel !== null || progressionStarted;
+  const raceId = useCharacterFoundationStore((state) => state.raceId);
+  const subraceId = useCharacterFoundationStore((state) => state.subraceId);
+  const alignmentId = useCharacterFoundationStore((state) => state.alignmentId);
+  const baseAttributes = useCharacterFoundationStore((state) => state.baseAttributes);
+  // Keep the progression section reactive to every field that can lock or
+  // unlock the first level, while preserving the narrow-selector pattern used
+  // by the origin steps above.
+  void raceId;
+  void subraceId;
+  void alignmentId;
+  void baseAttributes;
+
+  const foundationState = useCharacterFoundationStore.getState();
+  const progressionUnlocked =
+    selectOriginReadyForAbilities(foundationState) &&
+    selectAttributeBudgetSnapshot(foundationState).status === 'legal';
+  const showProgression =
+    expandedLevel !== null || progressionStarted || progressionUnlocked;
+  const visibleProgressionLevel = expandedLevel ?? activeLevel;
 
   return (
     <NwnFrame as="nav" className="creation-stepper" aria-label={shellCopyEs.stepper.heading}>
@@ -176,7 +195,7 @@ export function CreationStepper() {
           {shellCopyEs.stepper.progressionHeading}
         </h3>
         {showProgression ? (
-          expandedLevel ? <LevelSubSteps level={expandedLevel} /> : null
+          <LevelSubSteps level={visibleProgressionLevel} />
         ) : (
           <ProgressionUnlockCard />
         )}
