@@ -73,6 +73,46 @@ describe('Phase 12.8-02 — prestige overrides regression snapshot (L2 Elfo Guer
     });
   });
 
+  describe('Maestro de múltiples formas — lanzador compatible cerrado', () => {
+    const REQUIRED_MMF_FEATS = new Set(['feat:alertness', 'feat:aguante']);
+
+    function maestroFormasInput(classLevels: Record<string, number>) {
+      return {
+        classRow: {
+          id: 'class:maestro-formas',
+          isBase: false,
+          decodedPrereqs: PRESTIGE_PREREQ_OVERRIDES['class:maestro-formas'],
+        },
+        ...L2_ELFO_GUERRERO_BAB_2,
+        level: 7,
+        featIds: REQUIRED_MMF_FEATS,
+        classLevels,
+      };
+    }
+
+    it.each([
+      ['Mago 5', { 'class:wizard': 5 }],
+      ['Druida 5', { 'class:druid': 5 }],
+      ['Hechicero 6', { 'class:sorcerer': 6 }],
+    ])('%s cumple el requisito de clase lanzadora', (_label, classLevels) => {
+      const result = reachableAtLevelN(maestroFormasInput(classLevels));
+      expect(
+        result.blockers.find((b) => b.kind === 'any-class-level'),
+      ).toBeUndefined();
+      expect(result.reachable).toBe(true);
+    });
+
+    it.each([
+      ['Hechicero 5', { 'class:sorcerer': 5 }],
+      ['Bardo 8', { 'class:bard': 8 }],
+      ['Clérigo 5', { 'class:cleric': 5 }],
+    ])('%s no cumple el requisito de clase lanzadora', (_label, classLevels) => {
+      const result = reachableAtLevelN(maestroFormasInput(classLevels));
+      expect(result.blockers.map((b) => b.kind)).toContain('any-class-level');
+      expect(result.reachable).toBe(false);
+    });
+  });
+
   describe('Regression lock — existing-gated rows continue to emit at least one blocker', () => {
     const PRESTIGE_WITH_OVERRIDE = Object.keys(PRESTIGE_PREREQ_OVERRIDES);
 

@@ -420,10 +420,14 @@ export const PRESTIGE_PREREQ_OVERRIDES: Partial<
     ],
   },
   'class:maestro-formas': {
-    minSpellLevel: 5,
     requiredFeats: [
       feat('feat:alertness', 'Alerta'),
       feat('feat:aguante', 'Aguante'),
+    ],
+    requiredAnyClassLevels: [
+      classLevel('class:wizard', 'Mago', 5),
+      classLevel('class:druid', 'Druida', 5),
+      classLevel('class:sorcerer', 'Hechicero', 6),
     ],
   },
   // Quick-260422-h9k — 3 new prestige overrides (harper + campeondivino +
