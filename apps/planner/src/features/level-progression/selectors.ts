@@ -31,10 +31,9 @@ import {
   selectOriginReadyForAbilities,
 } from '@planner/features/character-foundation/selectors';
 import type { CharacterFoundationStoreState } from '@planner/features/character-foundation/store';
-import { compiledClassCatalog } from '@planner/data/compiled-classes';
-import { compiledFeatCatalog } from '@planner/data/compiled-feats';
 import { compiledRaceCatalog } from '@planner/data/compiled-races';
 import { compiledSkillCatalog } from '@planner/features/skills/compiled-skill-catalog';
+import { compiledFeatCatalog } from '@planner/features/feats/compiled-feat-catalog';
 import {
   getChosenFeatIds,
   type FeatStoreState,
@@ -45,8 +44,10 @@ import type { SkillStoreState } from '@planner/features/skills/store';
 import {
   getPhase04ClassRecord,
   phase04ClassFixture,
+  plannerClassCatalog,
   type PlannerClassKind,
 } from './class-fixture';
+import { resolveLegacyPlannerClassId } from './class-id-aliases';
 import type { LevelProgressionStoreState } from './store';
 import type { ProgressionLevel, ProgressionStatus } from './progression-fixture';
 
@@ -217,11 +218,12 @@ export function selectClassOptionsForLevel(
 ): ClassOptionView[] {
   const selectedClassId =
     progressionState.levels.find((record) => record.level === level)?.classId ?? null;
+  const normalizedSelectedClassId = resolveLegacyPlannerClassId(selectedClassId);
 
   return collectVisibleClassOptions({
     classes: phase04ClassFixture.classes,
     foundation: createFoundationSnapshot(foundationState),
-    selectedClassId,
+    selectedClassId: normalizedSelectedClassId,
   }).map((option) => {
     const classRecord = getPhase04ClassRecord(option.id);
     const multiclassStatus = classRecord
@@ -373,7 +375,7 @@ export function selectProgressionSummary(
  * pass reuses the same projected array (structural equality friendly).
  */
 const CLASS_CATALOG_INPUT: ClassCatalogInput = {
-  classes: compiledClassCatalog.classes.map((c) => ({
+  classes: plannerClassCatalog.classes.map((c) => ({
     bonusFeatSchedule: c.bonusFeatSchedule,
     id: c.id,
     skillPointsPerLevel: c.skillPointsPerLevel,
@@ -400,7 +402,7 @@ function buildSnapshotFromStores(
 ): BuildSnapshot {
   const classByLevel: Record<number, string | null> = {};
   for (const record of progressionState.levels) {
-    classByLevel[record.level] = record.classId;
+    classByLevel[record.level] = resolveLegacyPlannerClassId(record.classId);
   }
 
   const skillInputs = createSkillLevelInputs(
@@ -598,7 +600,9 @@ export function selectLevelCompletionState(
   const classLabel =
     classId === null
       ? null
-      : (compiledClassCatalog.classes.find((c) => c.id === classId)?.label ?? null);
+      : (plannerClassCatalog.classes.find(
+          (c) => c.id === resolveLegacyPlannerClassId(classId),
+        )?.label ?? null);
 
   return {
     level,

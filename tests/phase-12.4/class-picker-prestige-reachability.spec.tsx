@@ -168,7 +168,7 @@ describe('Quick-260422-g7s — ClassPicker prestige reachability cabled to build
 
   // ----------------------------------------------------------------------
   // Quick-260422-h9k — integration coverage for the 3 new overrides
-  // (class:harper / class:campeondivino / class:weaponmaster). These cases
+  // (class:harper-arcane / class:campeondivino / class:weaponmaster). These cases
   // depend on PRESTIGE_PREREQ_OVERRIDES containing the new entries; they
   // FAIL in RED (plan Task 1) and PASS in GREEN (plan Task 2).
   //
@@ -177,11 +177,11 @@ describe('Quick-260422-g7s — ClassPicker prestige reachability cabled to build
   // until a future cross-package plan introduces BlockerKind 'server-gate'.
   // ----------------------------------------------------------------------
 
-  it('L9 con Guerrero 8 niveles: fila class:harper muestra blocker específico (no "Requisitos en revisión")', () => {
+  it('L9 con Guerrero 8 niveles: fila class:harper-arcane muestra blocker específico (no "Requisitos en revisión")', () => {
     setupL9WithClassProgression('class:fighter' as CanonicalId);
     render(createElement(ClassPicker));
 
-    const row = document.querySelector('[data-class-id="class:harper"]');
+    const row = document.querySelector('[data-class-id="class:harper-arcane"]');
     expect(row, 'Agente Custodio row must exist in prestige section').not.toBeNull();
 
     const text = row?.textContent ?? '';
@@ -192,6 +192,26 @@ describe('Quick-260422-g7s — ClassPicker prestige reachability cabled to build
     expect(text).toMatch(
       /Requiere 6 rangos de Engañar|Requiere 4 rangos de Buscar|Requiere 6 rangos de Saber \(otros\)|Requiere dote: Alerta|Requiere dote: Voluntad de hierro/,
     );
+  });
+
+  it('L9 con Guerrero 8 niveles: Adepto Sombrio Arcano no pide Clérigo, Divino sí', () => {
+    setupL9WithClassProgression('class:fighter' as CanonicalId);
+    render(createElement(ClassPicker));
+
+    const arcaneRow = document.querySelector(
+      '[data-class-id="class:shadowadept-arcane"]',
+    );
+    const divineRow = document.querySelector(
+      '[data-class-id="class:shadowadept-divine"]',
+    );
+    expect(arcaneRow, 'Adepto Sombrio Arcano row must exist').not.toBeNull();
+    expect(divineRow, 'Adepto Sombrio Divino row must exist').not.toBeNull();
+
+    const arcaneText = arcaneRow?.textContent ?? '';
+    const divineText = divineRow?.textContent ?? '';
+    expect(arcaneText).not.toMatch(/Clérigo/);
+    expect(arcaneText).toMatch(/Requiere lanzar conjuros arcanos de nivel 3/);
+    expect(divineText).toMatch(/Requiere 5 niveles de Clérigo/);
   });
 
   it('L9 con Guerrero 8 niveles: fila class:campeondivino muestra blocker templateado (no "Requisitos en revisión")', () => {

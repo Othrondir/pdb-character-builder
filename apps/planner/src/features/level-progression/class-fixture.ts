@@ -6,6 +6,10 @@ import type {
 
 import { compiledClassCatalog } from '@planner/data/compiled-classes';
 
+import {
+  getPlannerClassIdForCompiledClass,
+  resolveLegacyPlannerClassId,
+} from './class-id-aliases';
 import { PRESTIGE_PREREQ_OVERRIDES } from './prestige-prereq-data';
 
 export type PlannerClassKind = 'base' | 'prestige';
@@ -293,18 +297,23 @@ function projectCompiledClass(compiled: CompiledClass): PlannerClassRecord {
 }
 
 /**
- * Phase 12.2-04 (D-05) — fixture-level first-wins dedupe. Mirrors the
- * race-fixture pattern at apps/planner/src/features/character-foundation/
- * foundation-fixture.ts:135-146. The compiled class catalog currently emits
- * duplicate canonical IDs for prestige variants that collapse to the same
- * slug (`class:harper` at sourceRows 28 + 54 for Arcano/Divino; and
- * `class:shadowadept` at sourceRows 46 + 55). First-wins keeps the lowest-
- * sourceRow occurrence; a console.warn records the dropped row so the
- * extractor backlog stays visible.
- *
- * Long-term fix: extractor emits slug-disambiguated IDs (class:harper-arcane,
- * class:harper-divine). Tracked in 12.2-CONTEXT.md `<deferred>`.
+ * Project duplicate extractor IDs into planner-unique variant IDs before the
+ * picker sees them. The generated dataset still emits `class:harper` and
+ * `class:shadowadept` twice; the planner surface needs the Arcano/Divino rows
+ * as separate choices until the extractor owns slug disambiguation.
  */
+function projectCompiledClassCatalog(catalog: ClassCatalog): ClassCatalog {
+  const projected = catalog.classes.map((entry) => ({
+    ...entry,
+    id: getPlannerClassIdForCompiledClass(entry),
+  }));
+
+  return {
+    ...catalog,
+    classes: dedupeCompiledClassesByCanonicalId(projected),
+  };
+}
+
 function dedupeCompiledClassesByCanonicalId(
   entries: readonly CompiledClass[],
 ): CompiledClass[] {
@@ -313,7 +322,7 @@ function dedupeCompiledClassesByCanonicalId(
   for (const entry of entries) {
     if (seen.has(entry.id)) {
       console.warn(
-        `[12.2-04] Dropped duplicate class id \`${entry.id}\` from compiled-classes.ts (sourceRow=${entry.sourceRow}). Upstream extractor slug-disambiguation tracked in 12.2-CONTEXT.md deferred.`,
+        `Dropped duplicate projected class id \`${entry.id}\` from compiled-classes.ts (sourceRow=${entry.sourceRow}). Upstream extractor slug-disambiguation remains deferred.`,
       );
       continue;
     }
@@ -329,9 +338,12 @@ function projectCompiledClasses(catalog: ClassCatalog): PlannerClassRecord[] {
   );
 }
 
+export const plannerClassCatalog: ClassCatalog =
+  projectCompiledClassCatalog(compiledClassCatalog);
+
 export const phase04ClassFixture: Phase04ClassFixture = {
   abilityIncreaseLevels: [4, 8, 12, 16, 20],
-  classes: projectCompiledClasses(compiledClassCatalog),
+  classes: projectCompiledClasses(plannerClassCatalog),
 };
 
 export function getPhase04ClassRecord(classId: CanonicalId | null) {
@@ -339,5 +351,9 @@ export function getPhase04ClassRecord(classId: CanonicalId | null) {
     return null;
   }
 
-  return phase04ClassFixture.classes.find((entry) => entry.id === classId) ?? null;
+  const normalizedClassId = resolveLegacyPlannerClassId(classId);
+  return (
+    phase04ClassFixture.classes.find((entry) => entry.id === normalizedClassId) ??
+    null
+  );
 }

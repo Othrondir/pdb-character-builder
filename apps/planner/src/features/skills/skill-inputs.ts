@@ -4,7 +4,7 @@ import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
 import type { ArmorCategory, SkillLevelInput } from '@rules-engine/skills/skill-allocation';
 import type { CharacterFoundationStoreState } from '@planner/features/character-foundation/store';
 import type { LevelProgressionStoreState } from '@planner/features/level-progression/store';
-import { compiledClassCatalog } from '@planner/data/compiled-classes';
+import { plannerClassCatalog } from '@planner/features/level-progression/class-fixture';
 import {
   plannerRaceSkillBonusesById,
   plannerSubraceMechanicsById,
@@ -31,7 +31,7 @@ function getSkillPointsBase(classId: string | null) {
     return 0;
   }
 
-  const compiled = compiledClassCatalog.classes.find((entry) => entry.id === classId);
+  const compiled = plannerClassCatalog.classes.find((entry) => entry.id === classId);
   if (compiled?.skillPointsPerLevel !== undefined) {
     return compiled.skillPointsPerLevel;
   }

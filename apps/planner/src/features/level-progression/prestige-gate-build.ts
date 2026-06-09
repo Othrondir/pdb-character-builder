@@ -3,8 +3,10 @@ import { computeTotalBab } from '@rules-engine/feats/bab-calculator';
 import { determineFeatSlots } from '@rules-engine/feats/feat-eligibility';
 import { expandFeatIdsWithImplications } from '@rules-engine/feats/feat-implications';
 
-import { compiledClassCatalog } from '@planner/data/compiled-classes';
-import { compiledFeatCatalog } from '@planner/data/compiled-feats';
+import {
+  compiledClassCatalog,
+  compiledFeatCatalog,
+} from '@planner/features/feats/compiled-feat-catalog';
 import type { CharacterFoundationStoreState } from '@planner/features/character-foundation/store';
 import {
   getGeneralFeatIds,

@@ -7,9 +7,10 @@ import { useLevelProgressionStore } from '@planner/features/level-progression/st
 import { getChosenFeatIds, useFeatStore } from '@planner/features/feats/store';
 import { abilityModifier } from '@rules-engine/foundation';
 import { computeHitPoints } from '@rules-engine/progression/compute-hit-points';
-import { compiledClassCatalog } from '@planner/data/compiled-classes';
-import { compiledFeatCatalog } from '@planner/data/compiled-feats';
-import { compiledSkillCatalog } from '@planner/data/compiled-skills';
+import { plannerClassCatalog } from '@planner/features/level-progression/class-fixture';
+import { resolveLegacyPlannerClassId } from '@planner/features/level-progression/class-id-aliases';
+import { compiledFeatCatalog } from '@planner/features/feats/compiled-feat-catalog';
+import { compiledSkillCatalog } from '@planner/features/skills/compiled-skill-catalog';
 import { shellCopyEs } from '@planner/lib/copy/es';
 import {
   ATTRIBUTE_KEYS,
@@ -153,6 +154,14 @@ const CLASS_ICON_BY_ID: Record<string, string> = {
     '../../../../../class_icon/harper.png',
     import.meta.url,
   ).href,
+  'class:harper-arcane': new URL(
+    '../../../../../class_icon/harper.png',
+    import.meta.url,
+  ).href,
+  'class:harper-divine': new URL(
+    '../../../../../class_icon/harper.png',
+    import.meta.url,
+  ).href,
   'class:ladron-sombras-amn': new URL(
     '../../../../../class_icon/ladron-sombras-amn.png',
     import.meta.url,
@@ -216,7 +225,7 @@ const CLASS_ICON_BY_ID: Record<string, string> = {
 };
 
 const CLASS_LABEL_BY_ID = new Map(
-  compiledClassCatalog.classes.map((classRecord) => [
+  plannerClassCatalog.classes.map((classRecord) => [
     classRecord.id,
     classRecord.label,
   ]),
@@ -523,16 +532,18 @@ function EquipmentHelpDialog({ onClose, open }: EquipmentHelpDialogProps) {
 function CharacterClassPortrait() {
   const progressionState = useLevelProgressionStore();
   const dominantClassId = findDominantClassId(progressionState.levels);
+  const normalizedDominantClassId = resolveLegacyPlannerClassId(dominantClassId);
   const dominantClassLabel =
-    dominantClassId === null
+    normalizedDominantClassId === null
       ? null
-      : (CLASS_LABEL_BY_ID.get(dominantClassId) ?? dominantClassId);
+      : (CLASS_LABEL_BY_ID.get(normalizedDominantClassId) ?? dominantClassId);
   const hasSpecificClassIcon =
-    dominantClassId !== null && CLASS_ICON_BY_ID[dominantClassId] !== undefined;
+    normalizedDominantClassId !== null &&
+    CLASS_ICON_BY_ID[normalizedDominantClassId] !== undefined;
   const classPortraitSrc =
-    dominantClassId === null
+    normalizedDominantClassId === null
       ? NO_CLASS_ICON_SRC
-      : (CLASS_ICON_BY_ID[dominantClassId] ?? NO_CLASS_ICON_SRC);
+      : (CLASS_ICON_BY_ID[normalizedDominantClassId] ?? NO_CLASS_ICON_SRC);
   const classPortraitAlt =
     dominantClassLabel === null
       ? shellCopyEs.stepper.classPortraitFallbackAlt
@@ -583,7 +594,7 @@ function StatsPanel() {
   const conModifier = abilityModifier(finalAttributes.con);
   const hitPoints = computeHitPoints(
     progressionState.levels,
-    compiledClassCatalog,
+    plannerClassCatalog,
     conModifier,
     selectedFeatIds,
   );
@@ -591,11 +602,11 @@ function StatsPanel() {
   const classLevels = buildClassLevels(progressionState.levels);
   const hasAnyClass = Object.keys(classLevels).length > 0;
   const bab = hasAnyClass
-    ? computeTotalBab(classLevels, compiledClassCatalog)
+    ? computeTotalBab(classLevels, plannerClassCatalog)
     : null;
   const babDisplay = bab === null ? '--' : formatSigned(bab);
   const savingThrows = hasAnyClass
-    ? computeSavingThrowTotals(classLevels, compiledClassCatalog, finalAttributes)
+    ? computeSavingThrowTotals(classLevels, plannerClassCatalog, finalAttributes)
     : null;
   const displayedSavingThrows =
     savingThrows === null

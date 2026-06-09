@@ -2,10 +2,10 @@ import { useCharacterFoundationStore } from '@planner/features/character-foundat
 import { useLevelProgressionStore } from '@planner/features/level-progression/store';
 import { useSkillStore } from '@planner/features/skills/store';
 import { getGeneralFeatIds, useFeatStore } from '@planner/features/feats/store';
-import { compiledClassCatalog } from '@planner/data/compiled-classes';
 import { compiledRaceCatalog } from '@planner/data/compiled-races';
-import { compiledSkillCatalog } from '@planner/data/compiled-skills';
-import { compiledFeatCatalog } from '@planner/data/compiled-feats';
+import { plannerClassCatalog } from '@planner/features/level-progression/class-fixture';
+import { compiledSkillCatalog } from '@planner/features/skills/compiled-skill-catalog';
+import { compiledFeatCatalog } from '@planner/features/feats/compiled-feat-catalog';
 import { phase03FoundationFixture } from '@planner/features/character-foundation/foundation-fixture';
 import { computeFinalAttributeTotals } from '@planner/features/character-foundation/final-attributes';
 import { getFoundationSkillBonuses } from '@planner/features/skills/skill-inputs';
@@ -81,7 +81,7 @@ function findAlignmentLabel(alignmentId: string | null): string {
 
 function findClassLabel(classId: string | null): string | null {
   if (!classId) return null;
-  return compiledClassCatalog.classes.find((c) => c.id === classId)?.label ?? null;
+  return plannerClassCatalog.classes.find((c) => c.id === classId)?.label ?? null;
 }
 
 function findFeatLabel(featId: string | null): string | null {
@@ -129,7 +129,7 @@ export function useResumenViewModel(): ResumenViewModel {
     );
     // Skip derived-stat calc when there's no class chain yet — render em-dash instead of 0.
     const hasAnyClass = Object.keys(classLevels).length > 0;
-    const bab = hasAnyClass ? computeTotalBab(classLevels, compiledClassCatalog) : null;
+    const bab = hasAnyClass ? computeTotalBab(classLevels, plannerClassCatalog) : null;
     const abilityTotalsAtLevel = computeFinalAttributeTotals(
       foundation.baseAttributes,
       foundation.racialModifiers,
@@ -138,7 +138,7 @@ export function useResumenViewModel(): ResumenViewModel {
     const saves = hasAnyClass
       ? computeSavingThrowTotals(
           classLevels,
-          compiledClassCatalog,
+          plannerClassCatalog,
           abilityTotalsAtLevel,
         )
       : null;

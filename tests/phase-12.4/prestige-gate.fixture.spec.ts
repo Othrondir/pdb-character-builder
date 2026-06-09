@@ -298,13 +298,13 @@ describe('Phase 12.4-06 — reachableAtLevelN (SPEC R1 / D-02)', () => {
     (entry) => entry.featId !== 'feat:weapfocunarm',
   );
 
-  it('harper override: emite blockers skill + feat con copy exacto templateado', () => {
+  it('harper arcane override: emite blockers skill + feat con copy exacto templateado', () => {
     const result = reachableAtLevelN(
       baseInput({
         level: 5,
         enriched: true,
         classRow: {
-          id: 'class:harper',
+          id: 'class:harper-arcane',
           isBase: false,
           decodedPrereqs: {
             minSkillRanks: [

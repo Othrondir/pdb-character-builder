@@ -1,6 +1,8 @@
 import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
 import type { ClassPrereqInput } from '@rules-engine/progression/prestige-gate';
 
+import { resolveLegacyPlannerClassId } from './class-id-aliases';
+
 type DecodedPrereqs = NonNullable<ClassPrereqInput['decodedPrereqs']>;
 
 function feat(featId: string, featName: string) {
@@ -358,7 +360,17 @@ export const PRESTIGE_PREREQ_OVERRIDES: Partial<
     minArcaneSpellLevel: 5,
     requiredFeats: [...MARTIAL_WEAPON_PROFICIENCIES],
   },
-  'class:shadowadept': {
+  'class:shadowadept-arcane': {
+    minArcaneSpellLevel: 3,
+    minSkillRanks: [
+      skill('skill:saberarcano', 8, 'Saber (arcano)'),
+      skill('skill:conocimientoconjuros', 8, 'Conocimiento de conjuros'),
+    ],
+    requiredFeats: [
+      feat('feat:feat-shadowweave', 'Magia Urdimbre Sombria'),
+    ],
+  },
+  'class:shadowadept-divine': {
     minSkillRanks: [
       skill('skill:saberarcano', 8, 'Saber (arcano)'),
       skill('skill:conocimientoconjuros', 8, 'Conocimiento de conjuros'),
@@ -438,7 +450,7 @@ export const PRESTIGE_PREREQ_OVERRIDES: Partial<
   // "strict validation — illegal server builds blocked, not warned". Both
   // stay fail-closed to 'Requisitos en revisión' until a future cross-package
   // plan introduces BlockerKind 'server-gate' (rules-engine + copy change).
-  'class:harper': {
+  'class:harper-arcane': {
     minSkillRanks: [
       skill('skill:engaar', 6, 'Engañar'),
       skill('skill:buscar', 4, 'Buscar'),
@@ -453,9 +465,22 @@ export const PRESTIGE_PREREQ_OVERRIDES: Partial<
     ],
     // NOTE: ScriptVar X1_AllowHarper (server gate) + CLASSNOT 75-78 (Harper_Mage/
     // Priest/Paragon/Master, NPC-only) omitidas — no reachable desde planner state.
-    // KNOWN LIMITATION: compiled-classes.ts emite class:harper dos veces (Arcano
-    // sourceRow 28, Divino sourceRow 54); first-wins dedupe en class-fixture.ts
-    // mantiene sólo Arcano. Override aplica a Arcano únicamente (D-05).
+  },
+  'class:harper-divine': {
+    minSkillRanks: [
+      skill('skill:engaar', 6, 'Engañar'),
+      skill('skill:buscar', 4, 'Buscar'),
+      skill('skill:saberotros', 6, 'Saber (otros)'),
+      // TODO(product): SKILL 3 (Discipline/Disciplina) omitida — no existe
+      // skill:disciplina en el catálogo player de Puerta (38 skills). Pre-D-03
+      // OPEN-QUESTION: reinstaurar en extractor vs dropear permanentemente.
+    ],
+    requiredFeats: [
+      feat('feat:alertness', 'Alerta'),
+      feat('feat:ironwill', 'Voluntad de hierro'),
+    ],
+    // NOTE: Same PreReqTable as Arcano. Mago/Clérigo affects spell progression
+    // benefit text, not a separate entry gate in the decoded table.
   },
   'class:campeondivino': {
     minBab: 7,
@@ -486,5 +511,6 @@ export function getPrestigeDecodedPrereqs(classId: CanonicalId | null) {
     return undefined;
   }
 
-  return PRESTIGE_PREREQ_OVERRIDES[classId];
+  const normalizedClassId = resolveLegacyPlannerClassId(classId);
+  return normalizedClassId ? PRESTIGE_PREREQ_OVERRIDES[normalizedClassId] : undefined;
 }
