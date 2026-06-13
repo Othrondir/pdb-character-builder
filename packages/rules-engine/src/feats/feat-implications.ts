@@ -1,4 +1,6 @@
 const IMPLIED_FEAT_IDS_BY_FEAT_ID: Record<string, readonly string[]> = {
+  'feat:competenciaarmaduraintermedia': ['feat:competenciaarmaduraligera'],
+  'feat:competenciaarmadurapesada': ['feat:competenciaarmaduraintermedia'],
   'feat:twoweap': ['feat:ambidex'],
   'feat:estilodecombatearco': ['feat:disparorapido'],
   'feat:estilodecombatedosarmas': ['feat:twoweap'],

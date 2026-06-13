@@ -34,6 +34,7 @@ import type { CompiledFeat } from '@data-extractor/contracts/feat-catalog';
 
 import { shellCopyEs } from '@planner/lib/copy/es';
 import type { CharacterFoundationStoreState } from '@planner/features/character-foundation/store';
+import { computeFinalAttributeTotals } from '@planner/features/character-foundation/final-attributes';
 import type { ProgressionLevel } from '@planner/features/level-progression/progression-fixture';
 import type { LevelProgressionStoreState } from '@planner/features/level-progression/store';
 import type { SkillStoreState } from '@planner/features/skills/store';
@@ -303,15 +304,18 @@ export function computeBuildStateAtLevel(
   skillState: SkillStoreState,
   featState: FeatStoreState,
 ): BuildStateAtLevel {
-  // 1. Ability scores: base + ability increases from progression
-  const abilityScores: Record<string, number> = { ...foundationState.baseAttributes };
-
-  for (const rec of progressionState.levels) {
-    if (rec.level <= level && rec.abilityIncrease) {
-      abilityScores[rec.abilityIncrease] =
-        (abilityScores[rec.abilityIncrease] ?? 0) + 1;
-    }
-  }
+  // 1. Ability scores: base race applies at level 1; matching subrace ability
+  // modifiers apply from level 2 onward.
+  const abilityScores: Record<string, number> = computeFinalAttributeTotals(
+    foundationState.baseAttributes,
+    foundationState.racialModifiers,
+    progressionState.levels.filter((record) => record.level <= level),
+    {
+      characterLevel: level,
+      raceId: foundationState.raceId,
+      subraceId: foundationState.subraceId,
+    },
+  );
 
   // 2. Class levels: count levels per class up to current level
   const classLevels: Record<string, number> = {};
@@ -437,7 +441,7 @@ function collectAutoGrantedFeatIdsThroughLevel(
     }
   }
 
-  return autoGrantedFeatIds;
+  return expandFeatIdsWithImplications(autoGrantedFeatIds);
 }
 
 // ---------------------------------------------------------------------------
@@ -610,12 +614,29 @@ function buildSnapshotForBudget(
     classByLevel[rec.level] = rec.classId;
   }
 
+  const levelOneAttributes = computeFinalAttributeTotals(
+    foundationState.baseAttributes,
+    foundationState.racialModifiers,
+    [],
+    {
+      characterLevel: 1,
+      raceId: foundationState.raceId,
+      subraceId: foundationState.subraceId,
+    },
+  );
   const intAbilityIncreasesBeforeLevel = (level: number): number => {
-    let count = 0;
-    for (const rec of progressionState.levels) {
-      if (rec.level < level && rec.abilityIncrease === 'int') count += 1;
-    }
-    return count;
+    const attributesBeforeLevel = computeFinalAttributeTotals(
+      foundationState.baseAttributes,
+      foundationState.racialModifiers,
+      progressionState.levels.filter((record) => record.level < level),
+      {
+        characterLevel: level,
+        raceId: foundationState.raceId,
+        subraceId: foundationState.subraceId,
+      },
+    );
+
+    return attributesBeforeLevel.int - levelOneAttributes.int;
   };
 
   const chosenFeatIdsAtLevel = (level: number): string[] => {
@@ -633,9 +654,7 @@ function buildSnapshotForBudget(
     raceId: foundationState.raceId,
     classByLevel,
     abilityScores: {
-      int:
-        foundationState.baseAttributes.int +
-        (foundationState.racialModifiers?.int ?? 0),
+      int: levelOneAttributes.int,
     },
     intAbilityIncreasesBeforeLevel,
     chosenFeatIdsAtLevel,

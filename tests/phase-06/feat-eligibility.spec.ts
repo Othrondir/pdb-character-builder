@@ -5,6 +5,7 @@ import {
   determineFeatSlots,
   getEligibleFeats,
 } from '@rules-engine/feats/feat-eligibility';
+import type { CanonicalId } from '@rules-engine/contracts/canonical-id';
 import type { BuildStateAtLevel } from '@rules-engine/feats/feat-prerequisite';
 
 function createBuildState(
@@ -500,6 +501,92 @@ describe('phase 06 feat eligibility filtering', () => {
     expect(
       result.generalFeats.some((f) => f.id === 'feat:competenciaarmaduraligera'),
     ).toBe(false);
+  });
+
+  it('treats Maestro de múltiples formas class-granted medium armor as owning light armor', () => {
+    const result = getEligibleFeats(
+      createBuildState({
+        characterLevel: 1,
+        classLevels: { 'class:maestro-formas': 1 },
+        activeClassIdAtLevel: 'class:maestro-formas',
+      }),
+      'class:maestro-formas',
+      1,
+      compiledFeatCatalog,
+      compiledClassCatalog,
+    );
+
+    expect(
+      result.generalFeats.some((f) => f.id === 'feat:competenciaarmaduraligera'),
+    ).toBe(false);
+    expect(
+      result.generalFeats.some(
+        (f) => f.id === 'feat:competenciaarmaduraintermedia',
+      ),
+    ).toBe(false);
+    expect(
+      result.generalFeats.some((f) => f.id === 'feat:competenciaarmadurapesada'),
+    ).toBe(true);
+  });
+
+  it('excludes every class auto-granted feat from selectable pools through level 16', () => {
+    const failures: string[] = [];
+    const autoGrantedFeatIdsByClassLevel = new Map<
+      string,
+      { classId: CanonicalId; featIds: string[]; level: number }
+    >();
+
+    for (const [classId, entries] of Object.entries(
+      compiledFeatCatalog.classFeatLists,
+    )) {
+      const canonicalClassId = classId as CanonicalId;
+      for (const entry of entries) {
+        if (
+          entry.list !== 3 ||
+          entry.grantedOnLevel == null ||
+          entry.grantedOnLevel > 16
+        ) {
+          continue;
+        }
+
+        const key = `${classId}@${entry.grantedOnLevel}`;
+        const classLevelEntry =
+          autoGrantedFeatIdsByClassLevel.get(key) ??
+          {
+            classId: canonicalClassId,
+            featIds: [],
+            level: entry.grantedOnLevel,
+          };
+        classLevelEntry.featIds.push(entry.featId);
+        autoGrantedFeatIdsByClassLevel.set(key, classLevelEntry);
+      }
+    }
+
+    for (const { classId, featIds, level } of autoGrantedFeatIdsByClassLevel.values()) {
+      const result = getEligibleFeats(
+        createBuildState({
+          characterLevel: level,
+          classLevels: { [classId]: level },
+          activeClassIdAtLevel: classId,
+        }),
+        classId,
+        level,
+        compiledFeatCatalog,
+        compiledClassCatalog,
+      );
+      const selectableFeatIds = new Set([
+        ...result.classBonusFeats.map((f) => f.id),
+        ...result.generalFeats.map((f) => f.id),
+      ]);
+
+      for (const featId of featIds) {
+        if (selectableFeatIds.has(featId)) {
+          failures.push(`${classId}@${level}: ${featId}`);
+        }
+      }
+    }
+
+    expect(failures).toEqual([]);
   });
 
   it('includes Soltura Aptitud Sortilega in Brujo selectable pools', () => {

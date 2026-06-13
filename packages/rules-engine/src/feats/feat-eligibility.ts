@@ -301,17 +301,20 @@ export function getEligibleFeats(
 ): EligibleFeatSet {
   const classBonusFeats: CompiledFeat[] = [];
   const generalFeats: CompiledFeat[] = [];
+  const currentClassAutoGrantedFeatIds = getAutoGrantedFeatIdsThroughClassLevel(
+    classId,
+    classLevelInClass,
+    featCatalog.classFeatLists,
+  );
   const selectedFeatIds = expandFeatIdsWithImplications(
-    buildState.selectedFeatIds,
+    [...buildState.selectedFeatIds, ...currentClassAutoGrantedFeatIds],
   );
   const effectiveBuildState: BuildStateAtLevel = {
     ...buildState,
     selectedFeatIds,
   };
-  const currentClassAutoGrantedFeatIds = getAutoGrantedFeatIdsThroughClassLevel(
-    classId,
-    classLevelInClass,
-    featCatalog.classFeatLists,
+  const effectiveAutoGrantedFeatIds = expandFeatIdsWithImplications(
+    currentClassAutoGrantedFeatIds,
   );
 
   // Build a set of class bonus feat IDs for the current class
@@ -330,7 +333,7 @@ export function getEligibleFeats(
       continue;
     }
 
-    if (currentClassAutoGrantedFeatIds.has(feat.id)) {
+    if (effectiveAutoGrantedFeatIds.has(feat.id)) {
       continue;
     }
 

@@ -30,6 +30,7 @@ import {
   selectFoundationSummary,
   selectOriginReadyForAbilities,
 } from '@planner/features/character-foundation/selectors';
+import { computeFinalAttributeTotals } from '@planner/features/character-foundation/final-attributes';
 import type { CharacterFoundationStoreState } from '@planner/features/character-foundation/store';
 import { compiledRaceCatalog } from '@planner/data/compiled-races';
 import { compiledSkillCatalog } from '@planner/features/skills/compiled-skill-catalog';
@@ -428,17 +429,36 @@ function buildSnapshotFromStores(
         : 0,
     );
   });
+  const levelOneAttributes = computeFinalAttributeTotals(
+    foundationState.baseAttributes,
+    foundationState.racialModifiers,
+    [],
+    {
+      characterLevel: 1,
+      raceId: foundationState.raceId,
+      subraceId: foundationState.subraceId,
+    },
+  );
 
   return {
     raceId: foundationState.raceId,
     classByLevel,
     abilityScores: {
-      int: foundationState.baseAttributes.int + (foundationState.racialModifiers?.int ?? 0),
+      int: levelOneAttributes.int,
     },
-    intAbilityIncreasesBeforeLevel: (lvl) =>
-      progressionState.levels.filter(
-        (r) => r.level < lvl && r.abilityIncrease === 'int',
-      ).length,
+    intAbilityIncreasesBeforeLevel: (lvl) => {
+      const attributesBeforeLevel = computeFinalAttributeTotals(
+        foundationState.baseAttributes,
+        foundationState.racialModifiers,
+        progressionState.levels.filter((record) => record.level < lvl),
+        {
+          characterLevel: lvl,
+          raceId: foundationState.raceId,
+          subraceId: foundationState.subraceId,
+        },
+      );
+      return attributesBeforeLevel.int - levelOneAttributes.int;
+    },
     chosenFeatIdsAtLevel: (lvl) => {
       const featRecord = featState.levels.find((r) => r.level === lvl);
       return getChosenFeatIds(featRecord);

@@ -88,8 +88,24 @@ describe('quick 260606-i9j — racial and subrace skill bonuses', () => {
     expect(bluffRow?.textContent).not.toContain('racial');
   });
 
-  it('includes racial and subrace skill bonuses in the summary totals', () => {
+  it('keeps subrace ability modifiers out of level-1 summary skill totals', () => {
     setupL1Rogue('race:human' as CanonicalId, 'subrace:liche' as CanonicalId);
+
+    const { result } = renderHook(() => useResumenViewModel());
+    const search = result.current.skills.find((row) => row.skillId === 'skill:buscar');
+
+    expect(search).toMatchObject({
+      abilityMod: -1,
+      ranks: 0,
+      total: 7,
+    });
+  });
+
+  it('includes subrace ability modifiers in summary skill totals from level 2', () => {
+    setupL1Rogue('race:human' as CanonicalId, 'subrace:liche' as CanonicalId);
+    useLevelProgressionStore
+      .getState()
+      .setLevelClassId(2, 'class:rogue' as CanonicalId);
 
     const { result } = renderHook(() => useResumenViewModel());
     const search = result.current.skills.find((row) => row.skillId === 'skill:buscar');

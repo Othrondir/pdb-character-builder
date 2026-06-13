@@ -5,6 +5,7 @@ import type { ArmorCategory, SkillLevelInput } from '@rules-engine/skills/skill-
 import type { CharacterFoundationStoreState } from '@planner/features/character-foundation/store';
 import type { LevelProgressionStoreState } from '@planner/features/level-progression/store';
 import { plannerClassCatalog } from '@planner/features/level-progression/class-fixture';
+import { computeFinalAttributeTotals } from '@planner/features/character-foundation/final-attributes';
 import {
   plannerRaceSkillBonusesById,
   plannerSubraceMechanicsById,
@@ -51,13 +52,18 @@ function getIntelligenceModifier(
   progressionState: LevelProgressionStoreState,
   level: number,
 ) {
-  const baseIntelligence = foundationState.baseAttributes.int;
-  const racialIntelligence = foundationState.racialModifiers?.int ?? 0;
-  const intelligenceIncreases = progressionState.levels.filter(
-    (record) => record.level < level && record.abilityIncrease === 'int',
-  ).length;
+  const attributesBeforeLevel = computeFinalAttributeTotals(
+    foundationState.baseAttributes,
+    foundationState.racialModifiers,
+    progressionState.levels.filter((record) => record.level < level),
+    {
+      characterLevel: level,
+      raceId: foundationState.raceId,
+      subraceId: foundationState.subraceId,
+    },
+  );
 
-  return abilityModifier(baseIntelligence + racialIntelligence + intelligenceIncreases);
+  return abilityModifier(attributesBeforeLevel.int);
 }
 
 function addSkillBonuses(

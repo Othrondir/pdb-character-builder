@@ -585,6 +585,10 @@ function StatsPanel() {
     foundationState.baseAttributes,
     foundationState.racialModifiers,
     progressionState.levels,
+    {
+      raceId: foundationState.raceId,
+      subraceId: foundationState.subraceId,
+    },
   );
   const finalAttributes = applyAttributeBonus(
     baseFinalAttributes,

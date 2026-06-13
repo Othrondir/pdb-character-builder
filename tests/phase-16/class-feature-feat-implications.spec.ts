@@ -65,6 +65,19 @@ describe('Phase 16 — class feature feats count for later prerequisites', () =>
     expect(featIds.has('feat:ambidex')).toBe(true);
   });
 
+  it('armor proficiency grants carry their prerequisite proficiencies', () => {
+    const mediumArmor = expandFeatIdsWithImplications([
+      'feat:competenciaarmaduraintermedia',
+    ]);
+    const heavyArmor = expandFeatIdsWithImplications([
+      'feat:competenciaarmadurapesada',
+    ]);
+
+    expect(mediumArmor.has('feat:competenciaarmaduraligera')).toBe(true);
+    expect(heavyArmor.has('feat:competenciaarmaduraintermedia')).toBe(true);
+    expect(heavyArmor.has('feat:competenciaarmaduraligera')).toBe(true);
+  });
+
   it('Explorador combat style two-weapon variant unlocks later two-weapon feats', () => {
     setClassPath('class:ranger' as CanonicalId, 3);
     useCharacterFoundationStore.getState().setBaseAttribute('dex', 15);
@@ -118,5 +131,40 @@ describe('Phase 16 — class feature feats count for later prerequisites', () =>
     expect(extraMusic?.rowState).toBe('selectable');
     expect(lingeringSong?.rowState).toBe('selectable');
     expect(curseSong?.rowState).toBe('selectable');
+  });
+
+  it('Maestro de múltiples formas counts class-granted medium armor before showing armor feats', () => {
+    for (let level = 1; level <= 6; level++) {
+      useLevelProgressionStore
+        .getState()
+        .setLevelClassId(level as ProgressionLevel, 'class:sorcerer' as CanonicalId);
+    }
+    for (let level = 7; level <= 9; level++) {
+      useLevelProgressionStore
+        .getState()
+        .setLevelClassId(
+          level as ProgressionLevel,
+          'class:maestro-formas' as CanonicalId,
+        );
+    }
+
+    activateLevel(9);
+    const board = snapshotBoardView();
+    const lightArmor = findOption(
+      board.generalEntries,
+      'feat:competenciaarmaduraligera',
+    );
+    const mediumArmor = findOption(
+      board.generalEntries,
+      'feat:competenciaarmaduraintermedia',
+    );
+    const heavyArmor = findOption(
+      board.generalEntries,
+      'feat:competenciaarmadurapesada',
+    );
+
+    expect(lightArmor).toBeNull();
+    expect(mediumArmor).toBeNull();
+    expect(heavyArmor?.rowState).toBe('selectable');
   });
 });

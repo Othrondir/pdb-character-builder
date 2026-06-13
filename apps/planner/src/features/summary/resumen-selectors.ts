@@ -134,6 +134,11 @@ export function useResumenViewModel(): ResumenViewModel {
       foundation.baseAttributes,
       foundation.racialModifiers,
       progression.levels.filter((record) => record.level <= lv.level),
+      {
+        characterLevel: lv.level,
+        raceId: foundation.raceId,
+        subraceId: foundation.subraceId,
+      },
     );
     const saves = hasAnyClass
       ? computeSavingThrowTotals(
@@ -168,6 +173,10 @@ export function useResumenViewModel(): ResumenViewModel {
     foundation.baseAttributes,
     foundation.racialModifiers,
     progression.levels,
+    {
+      raceId: foundation.raceId,
+      subraceId: foundation.subraceId,
+    },
   );
   const skillBonuses = getFoundationSkillBonuses(foundation);
 

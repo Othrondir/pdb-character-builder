@@ -195,37 +195,84 @@ describe('quick 260605-d4e / 260606-f6g — curated basic-race subraces', () => 
     expect(useCharacterFoundationStore.getState().subraceId).toBeNull();
   });
 
-  it('applies subrace ability modifiers on top of the selected parent race', () => {
+  it('keeps subrace ability modifiers out of level-1 attribute assignment', () => {
     const store = useCharacterFoundationStore.getState();
     store.setRace('race:human' as CanonicalId);
     store.setSubrace('subrace:vampiro' as CanonicalId);
 
-    expect(useCharacterFoundationStore.getState().racialModifiers).toEqual({
-      cha: 4,
+    const state = useCharacterFoundationStore.getState();
+    expect(state.racialModifiers).toEqual({
+      cha: 0,
       con: 0,
-      dex: 4,
-      int: 2,
-      str: 6,
-      wis: 2,
+      dex: 0,
+      int: 0,
+      str: 0,
+      wis: 0,
+    });
+    expect(
+      computeFinalAttributeTotals(state.baseAttributes, state.racialModifiers, [], {
+        characterLevel: 1,
+        raceId: state.raceId,
+        subraceId: state.subraceId,
+      }),
+    ).toEqual({
+      cha: 8,
+      con: 8,
+      dex: 8,
+      int: 8,
+      str: 8,
+      wis: 8,
+    });
+    expect(
+      computeFinalAttributeTotals(state.baseAttributes, state.racialModifiers, [], {
+        characterLevel: 2,
+        raceId: state.raceId,
+        subraceId: state.subraceId,
+      }),
+    ).toEqual({
+      cha: 12,
+      con: 8,
+      dex: 12,
+      int: 10,
+      str: 14,
+      wis: 10,
     });
   });
 
-  it('applies generated subrace ability modifiers after the basic parent race modifiers', () => {
+  it('applies generated subrace ability modifiers from level 2 after the basic parent race modifiers', () => {
     const store = useCharacterFoundationStore.getState();
     store.setRace('race:elf' as CanonicalId);
     store.setSubrace('subrace:elf-liche' as CanonicalId);
 
     const state = useCharacterFoundationStore.getState();
     expect(state.racialModifiers).toEqual({
-      cha: 2,
+      cha: 0,
       con: -2,
       dex: 2,
-      int: 2,
+      int: 0,
       str: 0,
-      wis: 2,
+      wis: 0,
     });
     expect(
-      computeFinalAttributeTotals(state.baseAttributes, state.racialModifiers, []),
+      computeFinalAttributeTotals(state.baseAttributes, state.racialModifiers, [], {
+        characterLevel: 1,
+        raceId: state.raceId,
+        subraceId: state.subraceId,
+      }),
+    ).toEqual({
+      cha: 8,
+      con: 6,
+      dex: 10,
+      int: 8,
+      str: 8,
+      wis: 8,
+    });
+    expect(
+      computeFinalAttributeTotals(state.baseAttributes, state.racialModifiers, [], {
+        characterLevel: 2,
+        raceId: state.raceId,
+        subraceId: state.subraceId,
+      }),
     ).toEqual({
       cha: 10,
       con: 6,

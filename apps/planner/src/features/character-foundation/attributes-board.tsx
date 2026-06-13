@@ -83,6 +83,11 @@ export function AttributesBoard() {
     foundationState.baseAttributes,
     foundationState.racialModifiers,
     progressionLevels,
+    {
+      characterLevel: 1,
+      raceId: foundationState.raceId,
+      subraceId: foundationState.subraceId,
+    },
   );
 
   const canAdvance = attributeBudget.status === 'legal';

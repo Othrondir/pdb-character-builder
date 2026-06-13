@@ -64,31 +64,11 @@ function subraceMatchesRace(
   );
 }
 
-function createZeroRacialModifiers(): Record<AttributeKey, number> {
-  return ATTRIBUTE_KEYS.reduce((modifiers, key) => {
-    modifiers[key] = 0;
-    return modifiers;
-  }, {} as Record<AttributeKey, number>);
-}
-
-function addRacialModifiers(
-  first: Record<AttributeKey, number>,
-  second: Record<AttributeKey, number>,
-): Record<AttributeKey, number> {
-  const combined = createZeroRacialModifiers();
-  for (const key of ATTRIBUTE_KEYS) {
-    combined[key] = first[key] + second[key];
-  }
-  return combined;
-}
-
 /**
  * Phase 12.2-02 — look up the projected race option's `racialModifiers` by id.
- * Quick 260606-f6g composes matching subrace modifiers into the same state
- * field so existing attribute, skill, feat, and summary selectors keep their
- * current input contract. Composition order is parent race first, then subrace:
- * a generated basic-race subrace such as Elfo + Liche keeps the Elfo base
- * adjustments before applying the Liche adjustments.
+ * The foundation store keeps only the parent/base race modifiers here. Curated
+ * basic-race subrace ability modifiers are delayed until character level 2 and
+ * are applied by level-aware selectors in `final-attributes.ts`.
  *
  * Returns null when `raceId` is null or the id does not match any projected
  * race (defensive: the planner's fixture dedupes + projects the full catalog,
@@ -96,7 +76,6 @@ function addRacialModifiers(
  */
 function lookupRacialModifiers(
   raceId: CanonicalId | null,
-  subraceId: CanonicalId | null = null,
 ): Record<AttributeKey, number> | null {
   if (!raceId) {
     return null;
@@ -105,13 +84,8 @@ function lookupRacialModifiers(
   if (!race) {
     return null;
   }
-  const subrace = subraceMatchesRace(raceId, subraceId)
-    ? phase03FoundationFixture.subraces.find((s) => s.id === subraceId)
-    : null;
 
-  return subrace
-    ? addRacialModifiers(race.racialModifiers, subrace.racialModifiers)
-    : { ...race.racialModifiers };
+  return { ...race.racialModifiers };
 }
 
 export const useCharacterFoundationStore = create<CharacterFoundationStoreState>(
@@ -135,7 +109,7 @@ export const useCharacterFoundationStore = create<CharacterFoundationStoreState>
           : null;
         return {
           raceId,
-          racialModifiers: lookupRacialModifiers(raceId, subraceId),
+          racialModifiers: lookupRacialModifiers(raceId),
           subraceId,
         };
       }),
@@ -145,7 +119,7 @@ export const useCharacterFoundationStore = create<CharacterFoundationStoreState>
           ? subraceId
           : null;
         return {
-          racialModifiers: lookupRacialModifiers(state.raceId, nextSubraceId),
+          racialModifiers: lookupRacialModifiers(state.raceId),
           subraceId: nextSubraceId,
         };
       }),

@@ -7,6 +7,7 @@ import {
   compiledClassCatalog,
   compiledFeatCatalog,
 } from '@planner/features/feats/compiled-feat-catalog';
+import { computeFinalAttributeTotals } from '@planner/features/character-foundation/final-attributes';
 import type { CharacterFoundationStoreState } from '@planner/features/character-foundation/store';
 import {
   getGeneralFeatIds,
@@ -310,37 +311,16 @@ function buildAbilityScores(
   progressionState: LevelProgressionStoreState,
   level: ProgressionLevel,
 ) {
-  const abilityScores: Record<string, number> = {
-    cha:
-      foundationState.baseAttributes.cha +
-      (foundationState.racialModifiers?.cha ?? 0),
-    con:
-      foundationState.baseAttributes.con +
-      (foundationState.racialModifiers?.con ?? 0),
-    dex:
-      foundationState.baseAttributes.dex +
-      (foundationState.racialModifiers?.dex ?? 0),
-    int:
-      foundationState.baseAttributes.int +
-      (foundationState.racialModifiers?.int ?? 0),
-    str:
-      foundationState.baseAttributes.str +
-      (foundationState.racialModifiers?.str ?? 0),
-    wis:
-      foundationState.baseAttributes.wis +
-      (foundationState.racialModifiers?.wis ?? 0),
-  };
-
-  for (const record of progressionState.levels) {
-    if (record.level >= level || record.abilityIncrease === null) {
-      continue;
-    }
-
-    abilityScores[record.abilityIncrease] =
-      (abilityScores[record.abilityIncrease] ?? 0) + 1;
-  }
-
-  return abilityScores;
+  return computeFinalAttributeTotals(
+    foundationState.baseAttributes,
+    foundationState.racialModifiers,
+    progressionState.levels.filter((record) => record.level < level),
+    {
+      characterLevel: level,
+      raceId: foundationState.raceId,
+      subraceId: foundationState.subraceId,
+    },
+  );
 }
 
 function computeHighestSpellLevel(
