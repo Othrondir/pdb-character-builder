@@ -6,6 +6,7 @@ import {
   plannerSubraceMechanicsById,
 } from '@planner/data/race-catalog';
 import { phase03FoundationFixture } from '@planner/features/character-foundation/foundation-fixture';
+import { computeFinalAttributeTotals } from '@planner/features/character-foundation/final-attributes';
 import {
   selectFoundationSummary,
   selectOriginOptions,
@@ -206,6 +207,32 @@ describe('quick 260605-d4e / 260606-f6g — curated basic-race subraces', () => 
       int: 2,
       str: 6,
       wis: 2,
+    });
+  });
+
+  it('applies generated subrace ability modifiers after the basic parent race modifiers', () => {
+    const store = useCharacterFoundationStore.getState();
+    store.setRace('race:elf' as CanonicalId);
+    store.setSubrace('subrace:elf-liche' as CanonicalId);
+
+    const state = useCharacterFoundationStore.getState();
+    expect(state.racialModifiers).toEqual({
+      cha: 2,
+      con: -2,
+      dex: 2,
+      int: 2,
+      str: 0,
+      wis: 2,
+    });
+    expect(
+      computeFinalAttributeTotals(state.baseAttributes, state.racialModifiers, []),
+    ).toEqual({
+      cha: 10,
+      con: 6,
+      dex: 10,
+      int: 10,
+      str: 8,
+      wis: 10,
     });
   });
 

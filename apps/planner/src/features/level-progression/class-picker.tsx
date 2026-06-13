@@ -238,12 +238,11 @@ function buildPrestigeRequirementViews(
   }
 
   if (prereqs.minSpellLevel !== undefined) {
-    requirements.push({
+    addRequirement(requirements, {
       key: `${classRow.id}:spell`,
       label: spellLevelLabel(prereqs.minSpellLevel),
-      status: 'unmet',
-      statusLabel: 'Falta',
-      valueLabel: null,
+      met: gateBuildState.highestSpellLevel >= prereqs.minSpellLevel,
+      valueLabel: `${gateBuildState.highestSpellLevel}/${prereqs.minSpellLevel}`,
     });
   }
 

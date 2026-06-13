@@ -48,8 +48,8 @@ describe('Phase 12.8-02 — new evaluator branches', () => {
     });
   });
 
-  describe('minSpellLevel (always fail-closed per Phase 07.2 magic descope)', () => {
-    it('emits spell-level blocker regardless of input', () => {
+  describe('minSpellLevel', () => {
+    it('blocks when highestSpellLevel is undefined', () => {
       const input = baseInput({
         classRow: {
           id: 'class:shifter',
@@ -59,6 +59,19 @@ describe('Phase 12.8-02 — new evaluator branches', () => {
       });
       const result = reachableAtLevelN(input);
       expect(result.blockers.map((b) => b.kind)).toContain('spell-level');
+    });
+
+    it('passes when highestSpellLevel meets threshold', () => {
+      const input = baseInput({
+        classRow: {
+          id: 'class:shifter',
+          isBase: false,
+          decodedPrereqs: { minSpellLevel: 3 },
+        },
+        highestSpellLevel: 3,
+      });
+      const result = reachableAtLevelN(input);
+      expect(result.blockers.find((b) => b.kind === 'spell-level')).toBeUndefined();
     });
   });
 

@@ -244,6 +244,64 @@ describe('phase 06 feat eligibility filtering', () => {
     }
   });
 
+  it('includes bard-specific song feats as Bardo general feat choices', () => {
+    const result = getEligibleFeats(
+      createBuildState({
+        characterLevel: 1,
+        classLevels: { 'class:bard': 1 },
+        activeClassIdAtLevel: 'class:bard',
+      }),
+      'class:bard',
+      1,
+      compiledFeatCatalog,
+      compiledClassCatalog,
+    );
+    const generalFeatIds = new Set(result.generalFeats.map((f) => f.id));
+
+    expect(generalFeatIds.has('feat:extramusic')).toBe(true);
+    expect(generalFeatIds.has('feat:lingeringsong')).toBe(true);
+    expect(generalFeatIds.has('feat:feat-curse-song')).toBe(true);
+  });
+
+  it('gates custom Bardo song feats by Bardo level and Interpretar ranks', () => {
+    const locked = getEligibleFeats(
+      createBuildState({
+        characterLevel: 10,
+        classLevels: { 'class:bard': 10 },
+        activeClassIdAtLevel: 'class:bard',
+      }),
+      'class:bard',
+      10,
+      compiledFeatCatalog,
+      compiledClassCatalog,
+    );
+    const unlocked = getEligibleFeats(
+      createBuildState({
+        characterLevel: 10,
+        classLevels: { 'class:bard': 10 },
+        activeClassIdAtLevel: 'class:bard',
+        skillRanks: { 'skill:interpretar': 13 },
+      }),
+      'class:bard',
+      10,
+      compiledFeatCatalog,
+      compiledClassCatalog,
+    );
+
+    expect(
+      locked.generalFeats.some((f) => f.id === 'feat:bardo-cancionjebkiah'),
+    ).toBe(false);
+    expect(
+      unlocked.generalFeats.some((f) => f.id === 'feat:bardo-cancionjebkiah'),
+    ).toBe(true);
+    expect(
+      unlocked.generalFeats.some((f) => f.id === 'feat:bardo-cancionmilcantes'),
+    ).toBe(true);
+    expect(
+      unlocked.generalFeats.some((f) => f.id === 'feat:bardo-cancionmirlac'),
+    ).toBe(true);
+  });
+
   it('excludes feats when prerequisites are not met', () => {
     // feat:cleave requires minStr=13 and requiredFeat1=feat:ataquepoderoso
     const result = getEligibleFeats(

@@ -107,9 +107,9 @@ export interface PrestigeGateInput {
   highestArcaneSpellLevel?: number;
   /**
    * Phase 12.8-02 (D-08) — highest spell level the character can cast across
-   * any class (arcane or divine). Reserved for future caller wiring; the
-   * `minSpellLevel` evaluator branch currently fail-closes regardless per
-   * Phase 07.2 magic descope (see evaluator inline comment).
+   * any class (arcane or divine). Undefined is treated as 0 so any
+   * `minSpellLevel` override fails closed until callers surface runtime
+   * spell-level state.
    */
   highestSpellLevel?: number;
   /**
@@ -295,13 +295,14 @@ export function reachableAtLevelN(input: PrestigeGateInput): PrestigeGateResult 
   }
 
   if (p.minSpellLevel !== undefined) {
-    // Per Phase 07.2 magic descope, no spell-level runtime tracking exists.
-    // Fail-closed — any override declaring this field blocks until caller surfaces a value.
-    blockers.push({
-      kind: 'spell-level',
-      threshold: p.minSpellLevel,
-      label: spellLevelLabel(p.minSpellLevel),
-    });
+    const spellLevel = input.highestSpellLevel ?? 0;
+    if (spellLevel < p.minSpellLevel) {
+      blockers.push({
+        kind: 'spell-level',
+        threshold: p.minSpellLevel,
+        label: spellLevelLabel(p.minSpellLevel),
+      });
+    }
   }
 
   for (const excluded of p.excludedClassIds ?? []) {

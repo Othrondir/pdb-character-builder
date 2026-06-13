@@ -104,4 +104,19 @@ describe('Phase 16 — class feature feats count for later prerequisites', () =>
     expect(board.activeSheet.hasClassBonusSlot).toBe(true);
     expect(clubFocus?.rowState).toBe('selectable');
   });
+
+  it('Bardo level 1 offers bard-specific song feats as general feats', () => {
+    setClassPath('class:bard' as CanonicalId, 1);
+
+    activateLevel(1);
+    const board = snapshotBoardView();
+    const extraMusic = findOption(board.generalEntries, 'feat:extramusic');
+    const lingeringSong = findOption(board.generalEntries, 'feat:lingeringsong');
+    const curseSong = findOption(board.generalEntries, 'feat:feat-curse-song');
+
+    expect(board.activeSheet.hasGeneralSlot).toBe(true);
+    expect(extraMusic?.rowState).toBe('selectable');
+    expect(lingeringSong?.rowState).toBe('selectable');
+    expect(curseSong?.rowState).toBe('selectable');
+  });
 });

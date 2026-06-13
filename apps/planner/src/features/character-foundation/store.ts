@@ -86,7 +86,9 @@ function addRacialModifiers(
  * Phase 12.2-02 — look up the projected race option's `racialModifiers` by id.
  * Quick 260606-f6g composes matching subrace modifiers into the same state
  * field so existing attribute, skill, feat, and summary selectors keep their
- * current input contract.
+ * current input contract. Composition order is parent race first, then subrace:
+ * a generated basic-race subrace such as Elfo + Liche keeps the Elfo base
+ * adjustments before applying the Liche adjustments.
  *
  * Returns null when `raceId` is null or the id does not match any projected
  * race (defensive: the planner's fixture dedupes + projects the full catalog,

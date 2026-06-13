@@ -57,6 +57,14 @@ const MANUAL_SELECTION_BLOCKED_FEAT_IDS = new Set<string>([
  * `ALLCLASSESCANUSE` / `list=0,onMenu=true`.
  */
 const RESTRICTED_GENERAL_FEAT_ALLOWLIST: Record<string, Set<string>> = {
+  'class:bard': new Set([
+    'feat:bardo-cancionjebkiah',
+    'feat:bardo-cancionmilcantes',
+    'feat:bardo-cancionmirlac',
+    'feat:extramusic',
+    'feat:feat-curse-song',
+    'feat:lingeringsong',
+  ]),
   'class:warlock': new Set([
     'feat:feat-craft-wand',
     'feat:maximizaraptitud-sortilega',

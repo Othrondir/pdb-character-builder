@@ -87,6 +87,21 @@ export const ABILITY_PREREQ_MAP: Record<string, string> = {
  * Remove entries once the compiled catalog is regenerated with matching data.
  */
 const FEAT_PREREQUISITE_OVERRIDES: Record<string, Partial<FeatPrerequisites>> = {
+  'feat:bardo-cancionjebkiah': {
+    minLevel: 5,
+    minLevelClass: 'class:bard',
+    requiredSkill: { id: 'skill:interpretar', minRanks: 8 },
+  },
+  'feat:bardo-cancionmilcantes': {
+    minLevel: 9,
+    minLevelClass: 'class:bard',
+    requiredSkill: { id: 'skill:interpretar', minRanks: 12 },
+  },
+  'feat:bardo-cancionmirlac': {
+    minLevel: 10,
+    minLevelClass: 'class:bard',
+    requiredSkill: { id: 'skill:interpretar', minRanks: 13 },
+  },
   'feat:feat-craft-wand': {
     minLevel: 5,
   },

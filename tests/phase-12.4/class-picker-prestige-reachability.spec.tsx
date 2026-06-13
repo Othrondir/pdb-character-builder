@@ -65,6 +65,27 @@ function setupL9WithClassProgression(classId: CanonicalId): void {
   useLevelProgressionStore.getState().setActiveLevel(9 as ProgressionLevel);
 }
 
+function setupL7WithSorcerer6AndMaestroFormasFeats(): void {
+  useCharacterFoundationStore.getState().setRace('race:human' as CanonicalId);
+  useCharacterFoundationStore
+    .getState()
+    .setAlignment('alignment:true-neutral' as CanonicalId);
+
+  for (let level = 1; level <= 6; level += 1) {
+    useLevelProgressionStore
+      .getState()
+      .setLevelClassId(level as ProgressionLevel, 'class:sorcerer' as CanonicalId);
+  }
+
+  useFeatStore
+    .getState()
+    .setGeneralFeat(1 as ProgressionLevel, 'feat:alertness' as CanonicalId);
+  useFeatStore
+    .getState()
+    .setGeneralFeat(3 as ProgressionLevel, 'feat:aguante' as CanonicalId);
+  useLevelProgressionStore.getState().setActiveLevel(7 as ProgressionLevel);
+}
+
 function setupL1Humano(): void {
   useCharacterFoundationStore.getState().setRace('race:human' as CanonicalId);
   useCharacterFoundationStore
@@ -267,5 +288,41 @@ describe('Quick-260422-g7s — ClassPicker prestige reachability cabled to build
     expect(text).toMatch(
       /Requiere 4 rangos de Intimidar|Requiere dote: Esquiva|Requiere dote: Movilidad|Requiere dote: Pericia en combate|Requiere dote: Ataque de torbellino|Requiere una de estas dotes: /,
     );
+  });
+
+  it('L7 con Hechicero 6 + Alerta + Aguante: Maestro de múltiples formas queda seleccionable', () => {
+    setupL7WithSorcerer6AndMaestroFormasFeats();
+    render(createElement(ClassPicker));
+
+    const row = document.querySelector('[data-class-id="class:maestro-formas"]');
+    expect(
+      row,
+      'Maestro de múltiples formas row must exist in prestige section',
+    ).not.toBeNull();
+
+    const text = row?.textContent ?? '';
+    expect(text).not.toMatch(/Requisitos en revisión/);
+    expect(text).toMatch(/6 niveles de Hechicero/);
+    expect(row?.getAttribute('aria-disabled')).toBe('false');
+  });
+
+  it('L7 con Hechicero 6: Cambiante marca conjuros de nivel 3 como cumplido', () => {
+    setupL7WithSorcerer6AndMaestroFormasFeats();
+    render(createElement(ClassPicker));
+
+    const row = document.querySelector('[data-class-id="class:shifter"]');
+    expect(row, 'Cambiante row must exist in prestige section').not.toBeNull();
+
+    const spellRequirement = Array.from(
+      row?.querySelectorAll('[data-requirement-status]') ?? [],
+    ).find((requirement) =>
+      (requirement.textContent ?? '').includes(
+        'Requiere lanzar conjuros de nivel 3',
+      ),
+    );
+
+    expect(spellRequirement).not.toBeUndefined();
+    expect(spellRequirement?.getAttribute('data-requirement-status')).toBe('met');
+    expect(spellRequirement?.textContent ?? '').toContain('3/3');
   });
 });
